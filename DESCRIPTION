@@ -1,0 +1,13 @@
+Package: AzureSM
+Type: Package
+Title: Package for Interacting with Azure Services (HDInsight(Spark,Hive),VMs,BLOB)
+Version: 0.1
+Date: 2016-07-01
+Author: Alan Weaver
+Maintainer: Alan Weaver <alanwe@microsoft.com>
+Description: Helps users to manage Azure Services and Objects from within an R Session. Requires that an Active Directory application and service principal has been configured to access Azure resources
+License: GPL-3
+LazyData: TRUE
+RoxygenNote: 5.0.1
+NeedsCompilation: no
+Imports: httr, jsonlite, XML,plyr
