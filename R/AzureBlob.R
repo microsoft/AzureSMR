@@ -21,7 +21,7 @@ GetSig <- function(AzureActiveContext,url, verb, key, StorageAccount,Headers=NUL
 #' @param StorageAccount StorageAccount
 #' @param Token Token Object (or use AzureActiveContext)
 #' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
-#' @param Verbose Print Tracing information (Default False)
+#' @param verbose Print Tracing information (Default False)
 #' @rdname AzureSAGetKey
 #' @export
 AzureSAGetKey <- function(AzureActiveContext,StorageAccount,AzToken,ResourceGroup,SubscriptionID,verbose = FALSE) {
@@ -56,7 +56,7 @@ AzureSAGetKey <- function(AzureActiveContext,StorageAccount,AzToken,ResourceGrou
 #' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
 #' @param Token Token Object (or use AzureActiveContext)
 #' @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
-#' @param Verbose Print Tracing information (Default False)
+#' @param verbose Print Tracing information (Default False)
 #' @rdname AzureListSAContainers
 #' @export
 AzureListSAContainers <- function(AzureActiveContext,StorageAccount,StorageKey,ResourceGroup,AzToken,SubscriptionID,verbose = FALSE) {
@@ -121,7 +121,7 @@ AzureListSAContainers <- function(AzureActiveContext,StorageAccount,StorageKey,R
 #' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
 #' @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
 #' @param AzToken Token Object (or use AzureActiveContext)
-#' @param Verbose Print Tracing information (Default False)
+#' @param verbose Print Tracing information (Default False)
 #' @rdname AzureListSABlobs
 #' @export
 AzureListSABlobs <- function(AzureActiveContext,StorageAccount,StorageKey,Container,ResourceGroup,SubscriptionID,AzToken) {
@@ -189,13 +189,13 @@ AzureListSABlobs <- function(AzureActiveContext,StorageAccount,StorageKey,Contai
 #' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
 #' @param Token Token Object (or use AzureActiveContext)
 #' @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
-#' @param Verbose Print Tracing information (Default False)
+#' @param verbose Print Tracing information (Default False)
 #' @rdname AzureGetBlob
 #' @export
 #' @importFrom digest hmac
 #' @importFrom base64enc base64encode base64decode
 
-AzureGetBlob <- function(AzureActiveContext,StorageAccount,StorageKey,Container,Blob, Type="Text",ResourceGroup,SubscriptionID,AzToken,Verbose=TRUE) {
+AzureGetBlob <- function(AzureActiveContext,StorageAccount,StorageKey,Container,Blob, Type="Text",ResourceGroup,SubscriptionID,AzToken,verbose=TRUE) {
 
   if(missing(SubscriptionID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SubscriptionID)
   if(missing(AzToken)) {ATI <- AzureActiveContext$Token} else (ATI = AzToken)
@@ -247,10 +247,10 @@ AzureGetBlob <- function(AzureActiveContext,StorageAccount,StorageKey,Container,
 #' @param File - Local FileName to Store in Azure Blob
 #' @param Token - Token Object (or use AzureActiveContext)
 #' @param SubscriptionID - SubscriptionID Object (or use AzureActiveContext)
-#' @param Verbose - Print Tracing information (Default False)
+#' @param verbose - Print Tracing information (Default False)
 #' @rdname AzurePutBlob
 #' @export
-AzurePutBlob <- function(AzureActiveContext,StorageAccount,StorageKey,Container,Blob,ResourceGroup, Contents="",File="",SubscriptionID,AzToken,Verbose=TRUE) {
+AzurePutBlob <- function(AzureActiveContext,StorageAccount,StorageKey,Container,Blob,ResourceGroup, Contents="",File="",SubscriptionID,AzToken,verbose=TRUE) {
 
   if(missing(SubscriptionID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SubscriptionID)
   if(missing(AzToken)) {ATI <- AzureActiveContext$Token} else (ATI = AzToken)

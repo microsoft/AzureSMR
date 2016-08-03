@@ -6,7 +6,7 @@
 \title{Stop a Virtual Machine}
 \usage{
 AzureStopVM(AzureActiveContext, ResourceGroup, VMName, Mode = "Sync",
-  SubscriptionID, AzToken, Verbose = FALSE)
+  SubscriptionID, AzToken, verbose = FALSE)
 }
 \arguments{
 \item{AzureActiveContext}{Azure Context Object}
@@ -17,10 +17,10 @@ AzureStopVM(AzureActiveContext, ResourceGroup, VMName, Mode = "Sync",
 
 \item{SubscriptionID}{SubscriptionID Object (or use AzureActiveContext)}
 
-\item{Verbose}{Print Tracing information (Default False)}
-
 \item{Sync}{- Wait for operation to complete "Sync" (Default)}
 
 \item{Token}{Token Object (or use AzureActiveContext)}
+
+\item{Verbose}{Print Tracing information (Default False)}
 }
 

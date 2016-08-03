@@ -7,7 +7,7 @@
 #' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
 #' @param Token Token Object (or use AzureActiveContext)
 #' @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
-#' @param Verbose Print Tracing information (Default False)
+#' @param verbose Print Tracing information (Default False)
 #' @rdname AzureDeployTemplate
 #' @export
 AzureDeployTemplate <- function(DeplName,TemplateURL,ParamURL,ParamJSON,Mode="Sync",ResourceGroup,SubscriptionID,AzToken, verbose = FALSE) {

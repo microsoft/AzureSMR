@@ -5,7 +5,7 @@
 #' @param HDIAdmin HDIAdmin - HDinsight Administrator Name
 #' @param HDIPassword HDinsight Administrator Name
 #' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
-#' @param Verbose Print Tracing information (Default False)
+#' @param verbose Print Tracing information (Default False)
 #' @rdname AzureHiveStatus
 #' @export
 AzureHiveStatus <- function(AzureActiveContext,ClusterName,HDIAdmin,HDIPassword,verbose = FALSE) {

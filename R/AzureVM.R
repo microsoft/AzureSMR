@@ -5,10 +5,10 @@
 #' @param Location Azure Resource Location
 #' @param Token Token Object (or use AzureActiveContext)
 #' @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
-#' @param Verbose Print Tracing information (Default False)
+#' @param verbose Print Tracing information (Default False)
 #' @rdname AzureListVM
 #' @export
-AzureListVM <- function(AzureActiveContext,ResourceGroup, Location,SubscriptionID,AzToken,Verbose=FALSE) {
+AzureListVM <- function(AzureActiveContext,ResourceGroup, Location,SubscriptionID,AzToken,verbose=FALSE) {
   if(missing(AzToken)) {AT <- AzureActiveContext$Token} else (AT = AzToken)
   if(missing(SubscriptionID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SubscriptionID)
   if(missing(ResourceGroup)) {RGI <- AzureActiveContext$ResourceGroup} else (RGI = ResourceGroup)
@@ -58,7 +58,7 @@ AzureListVM <- function(AzureActiveContext,ResourceGroup, Location,SubscriptionI
 #' @param Verbose Print Tracing information (Default False)
 #' @rdname AzureStartVM
 #' @export
-AzureStartVM <- function(AzureActiveContext,ResourceGroup, VMName, Mode="Sync",SubscriptionID,AzToken,Verbose=FALSE) {
+AzureStartVM <- function(AzureActiveContext,ResourceGroup, VMName, Mode="Sync",SubscriptionID,AzToken,verbose=FALSE) {
   if(missing(AzToken)) {AT <- AzureActiveContext$Token} else (AT = AzToken)
   if(missing(SubscriptionID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SubscriptionID)
   if(missing(ResourceGroup)) {RGI <- AzureActiveContext$ResourceGroup} else (RGI = ResourceGroup)
@@ -133,7 +133,7 @@ AzureStartVM <- function(AzureActiveContext,ResourceGroup, VMName, Mode="Sync",S
 #' @param Verbose Print Tracing information (Default False)
 #' @rdname AzureStopVM
 #' @export
-AzureStopVM <- function(AzureActiveContext,ResourceGroup, VMName,Mode="Sync",SubscriptionID,AzToken,Verbose=FALSE) {
+AzureStopVM <- function(AzureActiveContext,ResourceGroup, VMName,Mode="Sync",SubscriptionID,AzToken,verbose=FALSE) {
   if(missing(AzToken)) {AT <- AzureActiveContext$Token} else (AT = AzToken)
   if(missing(SubscriptionID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SubscriptionID)
   if(missing(ResourceGroup)) {RGI <- AzureActiveContext$ResourceGroup} else (RGI = ResourceGroup)
@@ -206,7 +206,7 @@ AzureStopVM <- function(AzureActiveContext,ResourceGroup, VMName,Mode="Sync",Sub
 #' @param Verbose Print Tracing information (Default False)
 #' @rdname AzureVMStatus
 #' @export
-AzureVMStatus <- function(AzureActiveContext,ResourceGroup, VMName,SubscriptionID,AzToken,Ignore="N",Verbose=FALSE) {
+AzureVMStatus <- function(AzureActiveContext,ResourceGroup, VMName,SubscriptionID,AzToken,Ignore="N",verbose=FALSE) {
   if(missing(AzToken)) {AT <- AzureActiveContext$Token} else (AT = AzToken)
   if(missing(SubscriptionID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SubscriptionID)
   if(missing(ResourceGroup)) {RGI <- AzureActiveContext$ResourceGroup} else (RGI = ResourceGroup)
@@ -248,7 +248,7 @@ AzureVMStatus <- function(AzureActiveContext,ResourceGroup, VMName,SubscriptionI
 #' @param Verbose Print Tracing information (Default False)
 #' @rdname AzureDeleteVM
 #' @export
-AzureDeleteVM <- function(AzureActiveContext,ResourceGroup, VMName,SubscriptionID,AzToken,Mode="Sync",Verbose=FALSE) {
+AzureDeleteVM <- function(AzureActiveContext,ResourceGroup, VMName,SubscriptionID,AzToken,Mode="Sync",verbose=FALSE) {
   if(missing(AzToken)) {AT <- AzureActiveContext$Token} else (AT = AzToken)
   if(missing(SubscriptionID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SubscriptionID)
   if(missing(ResourceGroup)) {RGI <- AzureActiveContext$ResourceGroup} else (RGI = ResourceGroup)

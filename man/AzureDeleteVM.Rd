@@ -6,7 +6,7 @@
 \title{Delete a Virtual Machine}
 \usage{
 AzureDeleteVM(AzureActiveContext, ResourceGroup, VMName, SubscriptionID,
-  AzToken, Mode = "Sync", Verbose = FALSE)
+  AzToken, Mode = "Sync", verbose = FALSE)
 }
 \arguments{
 \item{AzureActiveContext}{Azure Context Object}
@@ -17,8 +17,8 @@ AzureDeleteVM(AzureActiveContext, ResourceGroup, VMName, SubscriptionID,
 
 \item{SubscriptionID}{SubscriptionID Object (or use AzureActiveContext)}
 
-\item{Verbose}{Print Tracing information (Default False)}
-
 \item{Token}{Token Object (or use AzureActiveContext)}
+
+\item{Verbose}{Print Tracing information (Default False)}
 }
 

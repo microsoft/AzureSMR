@@ -5,7 +5,7 @@
 #' @param ClusterName ResourceGroup Object (or use AzureActiveContext)
 #' @param Token Token Object (or use AzureActiveContext)
 #' @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
-#' @param Verbose Print Tracing information (Default False)
+#' @param verbose Print Tracing information (Default False)
 #' @rdname AzureListHDI
 #' @return Returns Dataframe of HDInsight Clusters
 #' @export
@@ -101,7 +101,7 @@ AzureListHDI <- function(AzureActiveContext,ResourceGroup,ClusterName="*",SUBID,
 #' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
 #' @param Token Token Object (or use AzureActiveContext)
 #' @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
-#' @param Verbose Print Tracing information (Default False)
+#' @param verbose Print Tracing information (Default False)
 #' @rdname AzureHDIConf
 #' @return Returns Dataframe of HDInsight Clusters information
 #' @export
@@ -158,7 +158,7 @@ AzureHDIConf <- function(AzureActiveContext,ClusterName,ResourceGroup,SUBID,ATI,
 #' @param Token Token Object (or use AzureActiveContext)
 #' @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
 #' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
-#' @param Verbose Print Tracing information (Default False)
+#' @param verbose Print Tracing information (Default False)
 #' @rdname AzureResizeHDI
 #' @export
 AzureResizeHDI <- function(AzureActiveContext,ClusterName, Role="worker", Size=2, Mode="Sync",AzToken, SubscriptionID,ResourceGroup,verbose = FALSE) {
@@ -231,7 +231,7 @@ AzureResizeHDI <- function(AzureActiveContext,ClusterName, Role="worker", Size=2
 #' @param Token Token Object (or use AzureActiveContext)
 #' @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
 #' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
-#' @param Verbose Print Tracing information (Default False)
+#' @param verbose Print Tracing information (Default False)
 #' @rdname AzureDeleteHDI
 #' @return Returns Dataframe of HDInsight Clusters information
 #' @export

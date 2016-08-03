@@ -5,7 +5,7 @@
 #' @param HDIAdmin HDIAdmin - HDinsight Administrator Name
 #' @param HDIPassword HDinsight Administrator Name
 #' @param Kind Kind Spark/PySpark/Spark
-#' @param Verbose Print Tracing information (Default False)
+#' @param verbose Print Tracing information (Default False)
 #' @rdname AzureSparkNewSession
 #' @export
 AzureSparkNewSession <- function(AzureActiveContext,ClusterName,HDIAdmin,HDIPassword,Kind = "spark",verbose = FALSE) {

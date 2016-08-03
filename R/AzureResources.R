@@ -4,7 +4,7 @@
 #' @param TID Tenant ID Object
 #' @param CID Client ID Object
 #' @param KEY Authentication KEY Object
-#' @param Verbose Print Tracing information (Default False)
+#' @param verbose Print Tracing information (Default False)
 #' @note See \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/} to learn how to set up an Active Directory application
 #' @references \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/}
 #' @rdname AzureAuthenticate

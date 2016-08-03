@@ -6,7 +6,7 @@
 \title{Get Status of a Virtual Machine}
 \usage{
 AzureVMStatus(AzureActiveContext, ResourceGroup, VMName, SubscriptionID,
-  AzToken, Ignore = "N", Verbose = FALSE)
+  AzToken, Ignore = "N", verbose = FALSE)
 }
 \arguments{
 \item{AzureActiveContext}{Azure Context Object}
@@ -17,8 +17,8 @@ AzureVMStatus(AzureActiveContext, ResourceGroup, VMName, SubscriptionID,
 
 \item{SubscriptionID}{SubscriptionID Object (or use AzureActiveContext)}
 
-\item{Verbose}{Print Tracing information (Default False)}
-
 \item{Token}{Token Object (or use AzureActiveContext)}
+
+\item{Verbose}{Print Tracing information (Default False)}
 }
 
