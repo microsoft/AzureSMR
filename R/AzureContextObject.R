@@ -14,7 +14,9 @@ suppressWarnings(library(digest))
 #' @export
 CreateAzureContext <- function(){
   AzEnv <- new.env(parent = globalenv())
-  AzEnv$foo <- "bah"
+  AzEnv$TID <- "xxx"
+  AzEnv$CID <- "xxx"
+  AzEnv$KEY <- "xxx"
   return(AzEnv)
   return(1)
 }
