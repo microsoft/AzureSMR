@@ -1,14 +1,7 @@
----
+
 title: "Getting Authorised with the AzureSMR Package"
 date: "`r Sys.Date()`"
-output:
 
-  html_document: 
-    keep_md: yes
-vignette: >
-  %\VignetteIndexEntry{Getting Authorised with the AzureSMR Package}
-  %\VignetteEngine{knitr::rmarkdown}
----
 
 # Configuration instructions
 
@@ -107,12 +100,15 @@ Alternatively you can access control at Subscription Level
 
      21. We are now done. We can test this with the following R code.
 
+```r
 SetAzureContext(sc,TID="{TID}",
                 CID="{CID}",
                 KEY= "{KEY}")
 
 AzureAuthenticate(sc)
 RGS <- AzureListRG(sc) ; View(RGS)
+```
 
+For further information Check out the following Tutorial 
 
-For further information on 
+https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/
