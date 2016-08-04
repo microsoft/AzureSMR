@@ -1,7 +1,5 @@
 
-title: "Getting Authorised with the AzureSMR Package"
-date: "`r Sys.Date()`"
-
+# Getting Authorised for the AzureSMR Package
 
 # Configuration instructions
 
