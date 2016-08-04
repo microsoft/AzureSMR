@@ -35,44 +35,74 @@ The main functions address the following Azure Services:
 - AzureHive: Run Hive queries against a HDInsight Cluster
 - AzureSpark: List and create Spark jobs/Sessions against a HDInsight Cluster(Livy) - EXPERIMENTAL
 
-## Getting Started
+## Getting Authorisation configured
 
-To get started, please refer to the Authorisation tutorial.
+To get started, please refer to the Authorisation tutorial. https://github.com/Microsoft/AzureSMR/blob/master/vignettes/Authentication.Rmd
 
+
+## AzureContext
+
+The AzureAPIs require lots of parameters to be managed. Rather than supplying all the paramters for each function call AzureSMR implements an AzureContext Variable which caches the last time a paramters is used so that it doesnt need to be repeatedly supplied.
+
+To create an AzureContext variable
 
 ```r
-head(datasets(ws))     # Or, equivalently: head(ws$datasets)
+sc <- CreateAzureContext()
+```
+To manually set AzureContext Variables use the SetAzureContext function and supply the AzureContext and the variables.
+
+```r
+SetAzureContext(sc,TID="{TID}",
+                CID="{CID}",
+                KEY= "{KEY}")
 ```
 
-```
-##                                               Name DataTypeId      Size
-## 1 Flight_On_Time_Performance_July_October_2013.csv GenericCSV 100506313
-## 2                                 TestReadFromBlob    Dataset      8102
-## 3                                 New York weather GenericCSV    116989
-## 4                                       airquality GenericTSV      2901
-## 5         dataset-test-upload-2015-11-17--22-12-47 GenericTSV      2901
-## 6         dataset-test-upload-2015-11-17--22-14-37 GenericTSV      2901
-##   ...
-## 1 ...
-## 2 ...
-## 3 ...
-## 4 ...
-## 5 ...
-## 6 ...
-## ----------------------------------------------
-## AzureML datasets data.frame variables include:
-##  [1] "VisualizeEndPoint"    "SchemaEndPoint"       "SchemaStatus"        
-##  [4] "Id"                   "DataTypeId"           "Name"                
-##  [7] "Description"          "FamilyId"             "ResourceUploadId"    
-## [10] "SourceOrigin"         "Size"                 "CreatedDate"         
-## [13] "Owner"                "ExperimentId"         "ClientVersion"       
-## [16] "PromotedFrom"         "UploadedFromFilename" "ServiceVersion"      
-## [19] "IsLatest"             "Category"             "DownloadLocation"    
-## [22] "IsDeprecated"         "Culture"              "Batch"               
-## [25] "CreatedDateTicks"
-```
+To get an Authorisation Token use AzureAuthenticate. Note this Token will time our after a period and therefore you need to run it again occasionally. TIP: Use AzureAuthenticate before a long running task.
 
-The list of datasets is presented as an a R data frame with class `Datasets`.
-Its print method shows a summary of the datasets, along with all of the
+## Authorisation
 
-If you have any questions or feature requests please contact me at alanwe@microsoft.com
+```r
+AzureAuthenticate(sc)
+
+AzureAuthenticate(sc,TID="{TID}",CID="{CID}",KEY= "{KEY}")
+
+```
+## Manage resource Groups
+
+```r
+RGS <- AzureListRG(sc) ; View(RGS)
+
+RS <- AzureListAllRecources(sc)
+
+RS <- AzureListAllRecources(sc,Location="northeurope")
+
+RS <- AzureListAllRecources(sc, Type="Microsoft.Sql/servers",Location="northeurope"); View(RS)
+
+RS <- AzureListAllRecources(sc,ResourceGroup ="Analytics")
+View(RS)
+
+AzureCreateResourceGroup(sc,"testme","northeurope")
+
+AzureDeleteResourceGroup(sc,"testme")
+
+AzureListRG(sc)$Name
+
+```
+## [1] AnalyticsRG                                                             
+## [2] BiData1RG                                                          
+## [3] Analytics         
+
+```
+## Manage Virtual Machines
+Use these functions to List, Start and Stop Virtual Machines (see templates for Creation)
+
+```
+AzureListVM(sc,ResourceGroup="AWHDIRG")
+
+##            Name    Location                             Type    OS     State  Admin
+## 1         DSVM1 northeurope Microsoft.Compute/virtualMachines Linux Succeeded alanwe
+
+AzureStartVM(sc,VMName="DSVM1")
+AzureStopVM(sc,VMName="DSVM1")
+
+```
