@@ -35,6 +35,9 @@ The main functions address the following Azure Services:
 - AzureHive: Run Hive queries against a HDInsight Cluster
 - AzureSpark: List and create Spark jobs/Sessions against a HDInsight Cluster(Livy) - EXPERIMENTAL
 
+
+For a detailed list of AzureSM functions and their syntax please refer to the Help pages.
+
 ## Getting Authorisation configured
 
 To get started, please refer to the Authorisation tutorial. https://github.com/Microsoft/AzureSMR/blob/master/vignettes/Authentication.Rmd
@@ -53,8 +56,12 @@ To manually set AzureContext Variables use the SetAzureContext function and supp
 
 ```r
 SetAzureContext(sc,TID="{TID}",
-                CID="{CID}",
-                KEY= "{KEY}")
+                   CID="{CID}",
+                   KEY="{KEY}")
+```
+To see the contents of an AzureContext use DumpAzureContext()
+```
+DumpAzureContext(sc)
 ```
 
 To get an Authorisation Token use AzureAuthenticate. Note this Token will time our after a period and therefore you need to run it again occasionally. TIP: Use AzureAuthenticate before a long running task.
@@ -88,21 +95,90 @@ AzureDeleteResourceGroup(sc,"testme")
 AzureListRG(sc)$Name
 
 ```
+
+```
 ## [1] AnalyticsRG                                                             
 ## [2] BiData1RG                                                          
 ## [3] Analytics         
-
 ```
+
 ## Manage Virtual Machines
 Use these functions to List, Start and Stop Virtual Machines (see templates for Creation)
 
 ```
 AzureListVM(sc,ResourceGroup="AWHDIRG")
+```
 
+```
 ##            Name    Location                             Type    OS     State  Admin
 ## 1         DSVM1 northeurope Microsoft.Compute/virtualMachines Linux Succeeded alanwe
+```
 
+```
 AzureStartVM(sc,VMName="DSVM1")
 AzureStopVM(sc,VMName="DSVM1")
 
 ```
+
+## Access Storage Blobs
+
+In order to access Storage Blobs you need to have a key. Use AzureSAGetKey to get a Key or alternatively supply your own key. When you provide your own key you no longer need to use AzureAuthenticate() as the API uses a diferent authentication approach.
+
+```
+sKEY <- AzureSAGetKey(sc,ResourceGroup = "Analytics",StorageAccount = "analyticsfiles")
+```
+
+To List Containers in a Storage Account use azListContainers
+
+```
+AL <- azListContainers(sc, StorageAccount="analyticsfiles",Containers="Test")
+```
+
+
+To List Blobs in a container use AzureListSABlobs
+
+```
+AzureListSABlobs(sc,StorageAccount="analyticsfiles",Container = "test")
+```
+
+To Write a Blobs use AzurePutBlob
+
+```
+OUT<- AzurePutBlob(sc,StorageAccount="analyticsfiles",Container="test",Contents="Hello World",Blob="HELLO") 
+```
+
+To Read a Blob in a container use AzureGetBlob
+
+```
+OUT<- AzureGetBlob(sc,StorageAccount="analyticsfiles",Container="test",Blob="HELLO",Type="text") 
+```
+
+
+## Manage HDInsight Clusters
+
+use AzureListHDI to list available Clusters
+
+```
+AzureListHDI(sc)
+AzureListHDI(sc,ResourceGroup ="Analytics")
+
+```
+
+## Manage HDInsight Clusters
+
+use AzureResizeHDI to resize a Clusters
+
+```
+AzureResizeHDI(ResourceGroup="Analytics",ClusterName = "awcluster3", Role="workernode",Size=2)
+```
+
+```
+## AzureResizeHDI: Request Submitted:  2016-06-23 18:50:57
+## Resizing(R), Succeeded(S)
+## RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR## RRRRRRRRRRRRRRRRRRS
+## Finished Resizing Sucessfully:  2016-06-23 19:04:43
+## Finished:  2016-06-23 19:04:43
+##                                                                                                                        ## Information 
+## " headnode ( 2 * Standard_D3_v2 ) workernode ( 5 * Standard_D3_v2 ) zookeepernode ( 3 * Medium ) edgenode0 ( 1 * Standard_D4_v2 )" 
+```
+
