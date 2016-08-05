@@ -195,7 +195,7 @@ AzureListSABlobs <- function(AzureActiveContext,StorageAccount,StorageKey,Contai
 #' @importFrom digest hmac
 #' @importFrom base64enc base64encode base64decode
 
-AzureGetBlob <- function(AzureActiveContext,StorageAccount,StorageKey,Container,Blob, Type="Text",ResourceGroup,SubscriptionID,AzToken,verbose=TRUE) {
+AzureGetBlob <- function(AzureActiveContext,StorageAccount,StorageKey,Container,Blob, Type="text",ResourceGroup,SubscriptionID,AzToken,verbose=FALSE) {
 
   if(missing(SubscriptionID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SubscriptionID)
   if(missing(AzToken)) {ATI <- AzureActiveContext$Token} else (ATI = AzToken)

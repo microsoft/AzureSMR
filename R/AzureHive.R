@@ -34,15 +34,15 @@ AzureHiveStatus <- function(AzureActiveContext,ClusterName,HDIAdmin,HDIPassword,
 #' @name AzureSM: AzureHiveSQL
 #' @title Submit SQL command to Hive Service
 #' @param AzureActiveContext Azure Context Object
+#' @param CMD SQl COmmand String
 #' @param ClusterName ClusterName
 #' @param HDIAdmin HDIAdmin - HDinsight Administrator Name
 #' @param HDIPassword HDinsight Administrator Name
-#' @param CMD SQl COmmand String
 #' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
 #' @param Verbose Print Tracing information (Default False)
 #' @rdname AzureHiveSQL
 #' @export
-AzureHiveSQL <- function(AzureActiveContext,CMD,ClusterName,HDIAdmin,HDIPassword,verbose = FALSE) {
+AzureHiveSQL <- function(AzureActiveContext,CMD,ClusterName,HDIAdmin,HDIPassword,Path="wasb:///tmp/",verbose = FALSE) {
   HA = ""
   if(missing(ClusterName)) {CN <- AzureActiveContext$ClusterName} else (CN = ClusterName)
   if(missing(HDIAdmin)) {HA <- AzureActiveContext$HDIAdmin} else (HA = HDIAdmin)
@@ -61,10 +61,10 @@ AzureHiveSQL <- function(AzureActiveContext,CMD,ClusterName,HDIAdmin,HDIPassword
   #bodyI <- list(user.name = HA, execute = CMD, statusdir="wasb:///tmp/" )
   #bodyI <- "{execute=\"show tables\";statusdir=\"HiveJobStatusFeb3\";enabloelog=\"false\";}"
 
-  bodyI <- paste("user.name=",HA,"&execute=",CMD,"&statusdir=wasb:///tmp/",sep="")
-  print(bodyI)
+  bodyI <- paste("user.name=",HA,"&execute=",CMD,"&statusdir=",Path,sep="")
+#  print(bodyI)
   #  bodyI <- "user.name=admin&execute=SHOW TABLES&statusdir=wasb:///tmp/"
-  print(bodyI)
+#  print(bodyI)
 
   URL <- paste("https://",CN,".azurehdinsight.net/templeton/v1/hive?user.name=",HA,"&execute=",CMD,"&statusdir=wasb:///tmp/",sep="")
   URL <- paste("https://",CN,".azurehdinsight.net/templeton/v1/hive?user.name=",HA,sep="")
@@ -73,7 +73,7 @@ AzureHiveSQL <- function(AzureActiveContext,CMD,ClusterName,HDIAdmin,HDIPassword
   #,authenticate("admin", "Summer2014!")
   rl <- content(r,"text",encoding="UTF-8")
   df <- fromJSON(rl)
-  print(df$id)
+#  print(df$id)
   URL <- paste("https://",CN,".azurehdinsight.net/templeton/v1/jobs/",df$id,sep="")
 
   Sys.sleep(2)
@@ -84,14 +84,14 @@ AzureHiveSQL <- function(AzureActiveContext,CMD,ClusterName,HDIAdmin,HDIPassword
   writeLines(paste("CMD Running: ",Sys.time()))
   writeLines("Prep(P), Running(R), Completed(C)")
   DUR <- 2
-  print(df$status$state)
+#  print(df$status$state)
   while (df$status$state == "RUNNING" | df$status$state == "PREP" )
   {
     Sys.sleep(DUR)
     if (DUR < 5) DUR <- DUR +1
     if (df$status$state == "PREP") cat("P")
     if (df$status$state == "RUNNING") cat("R")
-    print(df$status$state)
+#    print(df$status$state)
 
     r <- GET(URL,add_headers(.headers = c("Content-Type" = "application/json")),authenticate(HA,HP))
     rl <- content(r,"text",encoding="UTF-8")
