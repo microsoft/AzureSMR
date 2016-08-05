@@ -104,6 +104,7 @@ AzureListRG(sc)$Name
 
 ## Manage Virtual Machines
 Use these functions to List, Start and Stop Virtual Machines (see templates for Creation)
+To Create VMs please refer to Resource Templates below
 
 ```
 AzureListVM(sc,ResourceGroup="AWHDIRG")
@@ -164,12 +165,10 @@ AzureListHDI(sc,ResourceGroup ="Analytics")
 
 ```
 
-## Manage HDInsight Clusters
-
 use AzureResizeHDI to resize a Clusters
 
 ```
-AzureResizeHDI(ResourceGroup="Analytics",ClusterName = "awcluster3", Role="workernode",Size=2)
+AzureResizeHDI(sc,ResourceGroup="Analytics",ClusterName = "awcluster3", Role="workernode",Size=2)
 ```
 
 ```
@@ -180,5 +179,88 @@ AzureResizeHDI(ResourceGroup="Analytics",ClusterName = "awcluster3", Role="worke
 ## Finished:  2016-06-23 19:04:43
 ##                                                                                                                        ## Information 
 ## " headnode ( 2 * Standard_D3_v2 ) workernode ( 5 * Standard_D3_v2 ) zookeepernode ( 3 * Medium ) edgenode0 ( 1 * Standard_D4_v2 )" 
+```
+
+## Resource Templates - Create Azure Resources
+
+The easiest way to create resources on Azure is to use Azure Templates. To create Azure Resources such as HDInsight clusters there can a large quantity of parameters. Resource templates can be built be creating a resource in the Azure Portal and then going into Settings > Automation scripts. Example templates can be found at this URL https://github.com/Azure/AzureStack-QuickStart-Templates.
+
+To create a resource using a template in AzureSM use AzureDeployTemplate. The Template and Paramters must be available in a public URL (Azure Blob). It may be worth getting the Azure Administrator to build a working template.
+
+```
+AzureDeployTemplate(sc,ResourceGroup="Analytics",DeplName="Deploy1",TemplateURL="{TEMPLATEURL}",ParamURL="{PARAMURL}")
+```
+```
+## AzureDeployTemplate: Request Submitted:  2016-06-23 18:50:57
+## Resizing(R), Succeeded(S)
+## RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR## RRRRRRRRRRRRRRRRRRS
+## Finished Deployed Sucessfully:  2016-06-23 19:04:43
+## Finished:  2016-06-23 19:04:43
+```
+
+ADMIN TIP: If a deployment fails. Go to the Azure Portal and look at Actvity logs and look for failed deployments which should explain why the deployment failed.
+
+## Hive Functions
+These functions facilitate the use of hive jobs on a HDInsight Cluster
+
+```
+AzureHiveStatus(sc,ClusterName = "{hdicluster}",HDIAdmin = "admin", HDIPassword = "********")
+AzureHiveSQL(sc, CMD="select * from airports", Path="wasb://{container}@{hdicluster}.blob.core.windows.net/")
+stdout <- AzureGetBlob(sc, Container = "test", Blob = "stdout")
+ 
+airports <- read.table(text=stdout,  sep="\t", header=TRUE,fill=TRUE)
+adf <- data.frame(airports)
+```
+
+
+## Spark functions (EXPERIMENTAL)
+
+AzureSM provides some functions that allow HDInsight Spark Sessions and jobs to be managed within an R Session
+
+To Create a new Spark Session (Via Livy) use AzureSparkNewSession
+
+```
+AzureSparkNewSession(sc, ClusterName = "{hdicluster}", HDIAdmin = "admin", HDIPassword = "********",Kind="pyspark")
+```
+
+To view the status of sessions use AzureSparkListSessions
+
+```
+AzureSparkListSessions(sc,ClusterName = "{hdicluster}")
+```
+
+To send a command to the Spark Session use AzureSparkCMD. In this case it submits a Python routine
+
+```
+PYCMD <- '
+from pyspark import SparkContext
+from operator import add
+import sys
+from random import random
+partitions = 1
+n = 20000000 * partitions
+def f(_):
+  x = random() * 2 - 1
+  y = random() * 2 - 1
+  return 1 if x ** 2 + y ** 2 < 1 else 0
+ 
+count = sc.parallelize(range(1, n + 1), partitions).map(f).reduce(add)
+Pi = (4.0 * count / n)
+print("Pi is roughly %f" % Pi)'                   # SAMPLE PYSPARK SCRIPT TO CALCULATE PI
+ 
+AzureSparkCMD(sc,CMD=PYCMD,SessionID="5")
+```
+
+```
+## [1] "Pi is roughly 3.140285"
+```
+
+Check Session variables are retained
+```
+AzureSparkCMD(sc, ClusterName = "{hdicluster}",CMD="print Pi",SessionID="5")
+```
+
+```
+#[1] "3.1422"
 ```
 
