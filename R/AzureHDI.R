@@ -170,7 +170,7 @@ AzureResizeHDI <- function(AzureActiveContext,ClusterName, Role="worker", Size=2
 
   if (!length(RGI)) {stop("Error: No ResourceGroup provided: Use ResourceGroup argument or set in AzureContext")}
   if (!length(ClusterName)) {stop("Error: No ClusterName provided")}
-  if (!length(ROle)) {stop("Error: No Role Provided")}
+  if (!length(Role)) {stop("Error: No Role Provided")}
   if (!length(RGI)) {stop("Error: No New role Size provided")}
   verbosity <- if(verbose) httr::verbose(TRUE) else NULL
 
