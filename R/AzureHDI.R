@@ -195,7 +195,7 @@ AzureResizeHDI <- function(AzureActiveContext,ClusterName, Role="worker", Size=2
     a=1
     while (a>0)
     {
-      rc <- AzureListHDI(ClusterName=ClusterName)
+      rc <- AzureListHDI(AzureActiveContext,ClusterName=ClusterName)
       rc1 <- rc[8,1]
       #      cat(paste(rc," "))
       if (rc1 == "Succeeded"){
