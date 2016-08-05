@@ -157,7 +157,10 @@ OUT<- AzureGetBlob(sc,StorageAccount="analyticsfiles",Container="test",Blob="HEL
 
 ## Manage HDInsight Clusters
 
-use AzureListHDI to list available Clusters
+AzureSM can be used to manage Azure HDInsight clusters. To create clusters use Resource Templates (See below).
+Also see functions for submitting Hive and Spark jobs.
+
+Use AzureListHDI to list available Clusters
 
 ```
 AzureListHDI(sc)
@@ -168,7 +171,7 @@ AzureListHDI(sc,ResourceGroup ="Analytics")
 use AzureResizeHDI to resize a Clusters
 
 ```
-AzureResizeHDI(sc,ResourceGroup="Analytics",ClusterName = "awcluster3", Role="workernode",Size=2)
+AzureResizeHDI(sc,ResourceGroup="Analytics",ClusterName = "{HDIClusterName}", Role="workernode",Size=2)
 ```
 
 ```
