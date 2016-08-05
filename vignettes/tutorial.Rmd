@@ -10,6 +10,7 @@ Install the development version of the package directly from GitHub with:
 # Install devtools
 if(!require("devtools")) install.packages("devtools")
 devtools::install_github("Microsoft/AzureSMR")
+library(AzureSM)
 ```
 
 httr, jsonlite, XML ,plyr, base64enc
@@ -64,14 +65,17 @@ To see the contents of an AzureContext use DumpAzureContext()
 DumpAzureContext(sc)
 ```
 
-To get an Authorisation Token use AzureAuthenticate. Note this Token will time our after a period and therefore you need to run it again occasionally. TIP: Use AzureAuthenticate before a long running task.
-
 ## Authorisation
+
+To get an Authorisation Token use AzureAuthenticate. Note this Token will time our after a period and therefore you need to run it again occasionally. TIP: Use AzureAuthenticate before a long running task.
+AzureListSubscriptions() lists all the available subscriptions. If you only have one it sets the default Subscription in the AzureContext to that SubscriptionID.
+
 
 ```r
 AzureAuthenticate(sc)
 
 AzureAuthenticate(sc,TID="{TID}",CID="{CID}",KEY= "{KEY}")
+SUBS<-AzureListSubscriptions(sc); 
 
 ```
 ## Manage resource Groups
