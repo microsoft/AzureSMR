@@ -9,6 +9,7 @@
 #' @rdname AzureListVM
 #' @export
 AzureListVM <- function(AzureActiveContext,ResourceGroup, Location,SubscriptionID,AzToken,verbose=FALSE) {
+  AzureCheckToken(AzureActiveContext)
   if(missing(AzToken)) {AT <- AzureActiveContext$Token} else (AT = AzToken)
   if(missing(SubscriptionID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SubscriptionID)
   if(missing(ResourceGroup)) {RGI <- AzureActiveContext$ResourceGroup} else (RGI = ResourceGroup)
@@ -17,7 +18,6 @@ AzureListVM <- function(AzureActiveContext,ResourceGroup, Location,SubscriptionI
   if (!length(RGI)) {stop("Error: No ResourceGroup provided: Use ResourceGroup argument or set in AzureContext")}
   if (!length(SUBIDI)) {stop("Error: No SubscriptionID provided: Use SUBID argument or set in AzureContext")}
   if (!length(AT)) {stop("Error: No Token / Not currently Authenticated")}
-
 
   URL <- paste("https://management.azure.com/subscriptions/",SUBIDI,"/resourceGroups/",RGI,"/providers/Microsoft.Compute/virtualmachines?api-version=2015-05-01-preview",sep="")
 
@@ -59,6 +59,7 @@ AzureListVM <- function(AzureActiveContext,ResourceGroup, Location,SubscriptionI
 #' @rdname AzureStartVM
 #' @export
 AzureStartVM <- function(AzureActiveContext,ResourceGroup, VMName, Mode="Sync",SubscriptionID,AzToken,verbose=FALSE) {
+  AzureCheckToken(AzureActiveContext)
   if(missing(AzToken)) {AT <- AzureActiveContext$Token} else (AT = AzToken)
   if(missing(SubscriptionID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SubscriptionID)
   if(missing(ResourceGroup)) {RGI <- AzureActiveContext$ResourceGroup} else (RGI = ResourceGroup)
@@ -134,6 +135,8 @@ AzureStartVM <- function(AzureActiveContext,ResourceGroup, VMName, Mode="Sync",S
 #' @rdname AzureStopVM
 #' @export
 AzureStopVM <- function(AzureActiveContext,ResourceGroup, VMName,Mode="Sync",SubscriptionID,AzToken,verbose=FALSE) {
+  AzureCheckToken(AzureActiveContext)
+
   if(missing(AzToken)) {AT <- AzureActiveContext$Token} else (AT = AzToken)
   if(missing(SubscriptionID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SubscriptionID)
   if(missing(ResourceGroup)) {RGI <- AzureActiveContext$ResourceGroup} else (RGI = ResourceGroup)
@@ -144,7 +147,6 @@ AzureStopVM <- function(AzureActiveContext,ResourceGroup, VMName,Mode="Sync",Sub
   if (!length(SUBIDI)) {stop("Error: No SubscriptionID provided: Use SUBID argument or set in AzureContext")}
   if (!length(AT)) {stop("Error: No Token / Not currently Authenticated")}
   if (!length(VMNameI)) {stop("No VM Name provided")}
-
 
   URL <- paste("https://management.azure.com/subscriptions/",SUBIDI,"/resourceGroups/",RGI,"/providers/Microsoft.Compute/virtualmachines/",VMNameI,"/deallocate?api-version=2015-05-01-preview",sep="")
   # print(URL)
@@ -207,6 +209,8 @@ AzureStopVM <- function(AzureActiveContext,ResourceGroup, VMName,Mode="Sync",Sub
 #' @rdname AzureVMStatus
 #' @export
 AzureVMStatus <- function(AzureActiveContext,ResourceGroup, VMName,SubscriptionID,AzToken,Ignore="N",verbose=FALSE) {
+  AzureCheckToken(AzureActiveContext)
+
   if(missing(AzToken)) {AT <- AzureActiveContext$Token} else (AT = AzToken)
   if(missing(SubscriptionID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SubscriptionID)
   if(missing(ResourceGroup)) {RGI <- AzureActiveContext$ResourceGroup} else (RGI = ResourceGroup)
@@ -217,7 +221,6 @@ AzureVMStatus <- function(AzureActiveContext,ResourceGroup, VMName,SubscriptionI
   if (!length(SUBIDI)) {stop("Error: No SubscriptionID provided: Use SUBID argument or set in AzureContext")}
   if (!length(AT)) {stop("Error: No Token / Not currently Authenticated")}
   if (!length(VMNameI)) {stop("No VM Name provided")}
-
 
   URL <- paste("https://management.azure.com/subscriptions/",SUBIDI,"/resourceGroups/",RGI,"/providers/Microsoft.Compute/virtualmachines/",VMNameI,"/InstanceView?api-version=2015-05-01-preview",sep="")
   #  print(URL)
@@ -249,6 +252,7 @@ AzureVMStatus <- function(AzureActiveContext,ResourceGroup, VMName,SubscriptionI
 #' @rdname AzureDeleteVM
 #' @export
 AzureDeleteVM <- function(AzureActiveContext,ResourceGroup, VMName,SubscriptionID,AzToken,Mode="Sync",verbose=FALSE) {
+  AzureCheckToken(AzureActiveContext)
   if(missing(AzToken)) {AT <- AzureActiveContext$Token} else (AT = AzToken)
   if(missing(SubscriptionID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SubscriptionID)
   if(missing(ResourceGroup)) {RGI <- AzureActiveContext$ResourceGroup} else (RGI = ResourceGroup)

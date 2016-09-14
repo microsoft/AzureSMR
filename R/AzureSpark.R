@@ -106,6 +106,8 @@ AzureSparkListSessions <- function(AzureActiveContext,ClusterName,HDIAdmin,HDIPa
 #' @export
 AzureSparkStopSession <- function(AzureActiveContext,ClusterName,HDIAdmin,HDIPassword,SessionID,verbose = FALSE) {
 
+  AzureCheckToken(AzureActiveContext)
+
   if(missing(ClusterName)) {CN <- AzureActiveContext$ClusterName} else (CN = ClusterName)
   if(missing(HDIAdmin)) {HA <- AzureActiveContext$HDIAdmin} else (HA = HDIAdmin)
   if(missing(HDIPassword)) {HP <- AzureActiveContext$HDIPassword} else (HP = HDIPassword)

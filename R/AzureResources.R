@@ -33,8 +33,24 @@ AzureAuthenticate <- function(AzureActiveContext,TID, CID, KEY,verbose = FALSE) 
   AzureActiveContext$TID <- ATID
   AzureActiveContext$CID <- ACID
   AzureActiveContext$KEY <- AKEY
-  #AzureListSubscriptions(AzureActiveContext)
+  AzureActiveContext$EXPIRY <- Sys.time() + 3598
+  SUBS <- AzureListSubscriptions(AzureActiveContext)
   return("Authentication Suceeded : Key Obtained")
+}
+
+#' @name AzureSM: AzureCheckToken
+#' @title Check the timestamp of a Token and Renew if needed.
+#' @param AzureActiveContext Azure Context Object
+#' @export
+AzureCheckToken <- function(AzureActiveContext) {
+  if (is.null(AzureActiveContext$EXPIRY)) print (stop("Not Authenticated: Use AzureAuthenticate"))
+
+  if (AzureActiveContext$EXPIRY < Sys.time())
+  {
+    print("Azure Token Expired: Attempting automatic renewal")
+    AzureAuthenticate(AzureActiveContext)
+  }
+  return("OK")
 }
 
 #' @name AzureSM: AzureListSubscriptions
@@ -60,7 +76,6 @@ AzureListSubscriptions <- function(AzureActiveContext,ATI,verbose = FALSE) {
   typeof(dfs)
   df1 <- rbind.fill(dfs)
   if (nrow(df1) == 1) AzureActiveContext$SubscriptionID <- df1[,2]
-
   return(df1)
 }
 
@@ -74,6 +89,7 @@ AzureListSubscriptions <- function(AzureActiveContext,ATI,verbose = FALSE) {
 #' @return Returns Dataframe of ResourceGroups
 #' @export
 AzureListRG <- function(AzureActiveContext,SUBID,AT,verbose = FALSE) {
+  AzureCheckToken(AzureActiveContext)
   if(missing(AT)) {ATI <- AzureActiveContext$Token} else (ATI = AT)
   if(missing(SUBID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SUBID)
   if (!length(ATI)) {stop("Error: No Token / Not currently Authenticated.")}
@@ -83,6 +99,7 @@ AzureListRG <- function(AzureActiveContext,SUBID,AT,verbose = FALSE) {
   URLRG <- paste("https://management.azure.com/subscriptions/",SUBIDI,"/resourcegroups?api-version=2015-01-01",sep="")
 
   r <- GET(URLRG,add_headers(.headers = c("Host" = "management.azure.com" ,"Authorization" = ATI, "Content-Type" = "application/json")),verbosity)
+  if (status_code(r) != 200) {stop(paste("Error: Return code",status_code(r) ))}
 
   rl <- content(r,"text",encoding="UTF-8")
   df <- fromJSON(rl)
@@ -107,6 +124,8 @@ AzureListRG <- function(AzureActiveContext,SUBID,AT,verbose = FALSE) {
 #' @return Returns Dataframe of Resources
 #' @export
 AzureListAllRecources <- function(AzureActiveContext,ResourceGroup,SUBID,AT,Name, Type, Location,verbose = FALSE) {
+
+  AzureCheckToken(AzureActiveContext)
 
   if(missing(AT)) {ATI <- AzureActiveContext$Token} else (ATI = AT)
   if(missing(SUBID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SUBID)
@@ -165,6 +184,7 @@ AzureListAllRecources <- function(AzureActiveContext,ResourceGroup,SUBID,AT,Name
 #' @return Returns Dataframe of Resources
 #' @export
 AzureCreateResourceGroup <- function(AzureActiveContext,ResourceGroup,Location,SUBID,AT,verbose=FALSE) {
+  AzureCheckToken(AzureActiveContext)
   if(missing(AT)) {ATI <- AzureActiveContext$Token} else (ATI = AT)
   if(missing(SUBID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SUBID)
   #  if (ATI == "") stop("Token not provided")
@@ -202,6 +222,7 @@ AzureCreateResourceGroup <- function(AzureActiveContext,ResourceGroup,Location,S
 #' @return Returns Dataframe of Resources
 #' @export
 AzureDeleteResourceGroup <- function(AzureActiveContext,ResourceGroup,SUBID,AT, Type,verbose=FALSE) {
+  AzureCheckToken(AzureActiveContext)
 
   if(missing(AT)) {ATI <- AzureActiveContext$Token} else (ATI = AT)
   if(missing(SUBID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SUBID)
@@ -226,3 +247,5 @@ AzureDeleteResourceGroup <- function(AzureActiveContext,ResourceGroup,SUBID,AT, 
   }
   return("Delete Request Submitted")
 }
+
+

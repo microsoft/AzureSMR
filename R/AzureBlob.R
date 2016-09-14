@@ -25,6 +25,8 @@ GetSig <- function(AzureActiveContext,url, verb, key, StorageAccount,Headers=NUL
 #' @rdname AzureSAGetKey
 #' @export
 AzureSAGetKey <- function(AzureActiveContext,StorageAccount,AzToken,ResourceGroup,SubscriptionID,verbose = FALSE) {
+  AzureCheckToken(AzureActiveContext)
+
   if(missing(ResourceGroup)) {RGI <- AzureActiveContext$ResourceGroup} else (RGI = ResourceGroup)
   if(missing(AzToken)) {ATI <- AzureActiveContext$Token} else (ATI = AzToken)
 
@@ -48,6 +50,102 @@ AzureSAGetKey <- function(AzureActiveContext,StorageAccount,AzToken,ResourceGrou
   return(AzureActiveContext$StorageKey)
 }
 
+#' @name AzureSM: AzureCreateStorageAccount
+#' @title Create an Azure Storage Account
+#' @param AzureActiveContext Azure Context Object
+#' @param StorageAccount StorageAccount
+#' @param Token Token Object (or use AzureActiveContext)
+#' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
+#' @param verbose Print Tracing information (Default False)
+#' @rdname AzureSAGetKey
+#' @export
+AzureCreateStorageAccount <- function(AzureActiveContext,StorageAccount,AzToken,ResourceGroup,SubscriptionID,verbose = FALSE) {
+  AzureCheckToken(AzureActiveContext)
+
+  if(missing(ResourceGroup)) {RGI <- AzureActiveContext$ResourceGroup} else (RGI = ResourceGroup)
+  if(missing(AzToken)) {ATI <- AzureActiveContext$Token} else (ATI = AzToken)
+
+  if(missing(SubscriptionID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SubscriptionID)
+  if (!length(StorageAccount)) {stop("Error: No Valid StorageAccount provided")}
+  if (length(RGI)<1) {stop("Error: No ResourceGroup provided: Use ResourceGroup argument or set in AzureContext")}
+  if (!length(ATI)) {stop("Error: No Token / Not currently Authenticated.")}
+  if (!length(SUBIDI)) {stop("Error: No SubscriptionID provided: Use SUBID argument or set in AzureContext")}
+  verbosity <- if(verbose) httr::verbose(TRUE) else NULL
+
+  #https://management.azure.com/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Storage/storageAccounts/{accountName}?api-version={api-version}
+
+  bodyI = '
+      {
+   	"location": "northeurope",
+  "tags": {
+  "key1": "value1"
+  },
+  "properties": {
+  "accessTier": "Hot"
+  },
+  "sku": {
+  "name": "Standard_LRS"
+  },
+  "kind": "Storage"
+}'
+
+  bodyI <- '{
+   	"location": "northeurope",
+  "sku": {
+  "name": "Standard_LRS"
+  }}'
+
+  URL <- paste("https://management.azure.com/subscriptions/",SUBIDI,"/resourceGroups/",RGI,"/providers/Microsoft.Storage/storageAccounts/",StorageAccount,"?api-version=2016-01-01",sep="")
+
+  r <- PUT(URL,add_headers(.headers = c("Host" = "management.azure.com" ,"Authorization" = ATI, "Content-Type" = "application/json")),body = bodyI, encode = "json",verbosity)
+
+  if (status_code(r) == 200) {print("Account already exists with the same properties")}
+  else
+    if (status_code(r) != 202) {stop(paste0("Error: Return code(",status_code(r),")" ))}
+
+  rl <- content(r,"text",encoding="UTF-8")
+  AzureActiveContext$StorageAccount <- StorageAccount
+  AzureActiveContext$ResourceGroup <- ResourceGroup
+  return("Accepted")
+}
+
+#' @name AzureSM: AzureDeleteStorageAccount
+#' @title Delete an Azure Storage Account
+#' @param AzureActiveContext Azure Context Object
+#' @param StorageAccount StorageAccount
+#' @param Token Token Object (or use AzureActiveContext)
+#' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
+#' @param verbose Print Tracing information (Default False)
+#' @rdname AzureSAGetKey
+#' @export
+AzureDeleteStorageAccount <- function(AzureActiveContext,StorageAccount,AzToken,ResourceGroup,SubscriptionID,verbose = FALSE) {
+  AzureCheckToken(AzureActiveContext)
+
+  if(missing(ResourceGroup)) {RGI <- AzureActiveContext$ResourceGroup} else (RGI = ResourceGroup)
+  if(missing(AzToken)) {ATI <- AzureActiveContext$Token} else (ATI = AzToken)
+
+  if(missing(SubscriptionID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SubscriptionID)
+  if (!length(StorageAccount)) {stop("Error: No Valid StorageAccount provided")}
+  if (length(RGI)<1) {stop("Error: No ResourceGroup provided: Use ResourceGroup argument or set in AzureContext")}
+  if (!length(ATI)) {stop("Error: No Token / Not currently Authenticated.")}
+  if (!length(SUBIDI)) {stop("Error: No SubscriptionID provided: Use SUBID argument or set in AzureContext")}
+  verbosity <- if(verbose) httr::verbose(TRUE) else NULL
+
+
+  URL <- paste("https://management.azure.com/subscriptions/",SUBIDI,"/resourceGroups/",RGI,"/providers/Microsoft.Storage/storageAccounts/",StorageAccount,"?api-version=2016-01-01",sep="")
+
+  r <- DELETE(URL,add_headers(.headers = c("Host" = "management.azure.com" ,"Authorization" = ATI, "Content-Type" = "application/json")),verbosity)
+
+  if (status_code(r) == 204) {stop(paste0("Error: Storage Account not found" ))}
+  if (status_code(r) == 409) {stop(paste0("Error: An operation for the storage account is in progress." ))}
+  if (status_code(r) != 200) {stop(paste0("Error: Return code(",status_code(r),")" ))}
+
+  rl <- content(r,"text",encoding="UTF-8")
+  AzureActiveContext$StorageAccount <- StorageAccount
+  AzureActiveContext$ResourceGroup <- ResourceGroup
+  return("Done")
+  }
+
 #' @name AzureSM: AzureListSAContainers
 #' @title List Storage Containers for Specified Storage Account
 #' @param AzureActiveContext Azure Context Object
@@ -60,6 +158,7 @@ AzureSAGetKey <- function(AzureActiveContext,StorageAccount,AzToken,ResourceGrou
 #' @rdname AzureListSAContainers
 #' @export
 AzureListSAContainers <- function(AzureActiveContext,StorageAccount,StorageKey,ResourceGroup,AzToken,SubscriptionID,verbose = FALSE) {
+  AzureCheckToken(AzureActiveContext)
 
   if(missing(SubscriptionID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SubscriptionID)
   if(missing(AzToken)) {ATI <- AzureActiveContext$Token} else (ATI = AzToken)
@@ -76,7 +175,7 @@ AzureListSAContainers <- function(AzureActiveContext,StorageAccount,StorageKey,R
 
 #  r<-OLDazureBlobCall(AzureActiveContext,URL, "GET", key=STK)
 
-  D1 <- Sys.getlocale("LC_TIME"); Sys.setlocale("LC_TIME", "us")
+  D1 <- Sys.getlocale("LC_TIME"); Sys.setlocale("LC_TIME", "C")
   `x-ms-date` <- format(Sys.time(),"%a, %d %b %Y %H:%M:%S %Z", tz="GMT")
   Sys.setlocale("LC_TIME", D1)
   D1 <- format(Sys.time(),"%a, %d %b %Y %H:%M:%S %Z", tz="GMT")
@@ -125,6 +224,7 @@ AzureListSAContainers <- function(AzureActiveContext,StorageAccount,StorageKey,R
 #' @rdname AzureListSABlobs
 #' @export
 AzureListSABlobs <- function(AzureActiveContext,StorageAccount,StorageKey,Container,ResourceGroup,SubscriptionID,AzToken) {
+  AzureCheckToken(AzureActiveContext)
 
   if(missing(SubscriptionID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SubscriptionID)
   if(missing(AzToken)) {ATI <- AzureActiveContext$Token} else (ATI = AzToken)
@@ -196,7 +296,7 @@ AzureListSABlobs <- function(AzureActiveContext,StorageAccount,StorageKey,Contai
 #' @importFrom base64enc base64encode base64decode
 
 AzureGetBlob <- function(AzureActiveContext,StorageAccount,StorageKey,Container,Blob, Type="text",ResourceGroup,SubscriptionID,AzToken,verbose=FALSE) {
-
+  AzureCheckToken(AzureActiveContext)
   if(missing(SubscriptionID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SubscriptionID)
   if(missing(AzToken)) {ATI <- AzureActiveContext$Token} else (ATI = AzToken)
   if(missing(ResourceGroup)) {RGI <- AzureActiveContext$ResourceGroup} else (RGI = ResourceGroup)
@@ -214,7 +314,7 @@ AzureGetBlob <- function(AzureActiveContext,StorageAccount,StorageKey,Container,
 
   URL <- paste("http://",SAI,".blob.core.windows.net/",CNTR,"/",BLOBI,sep="")
 
-  D1 <- Sys.getlocale("LC_TIME"); Sys.setlocale("LC_TIME", "us")
+  D1 <- Sys.getlocale("LC_TIME"); Sys.setlocale("LC_TIME", "C")
   #`x-ms-date` <- format(Sys.time(),"%a, %d %b %Y %H:%M:%S %Z", tz="GMT")
   Sys.setlocale("LC_TIME", D1)
   D1 <- format(Sys.time(),"%a, %d %b %Y %H:%M:%S %Z", tz="GMT")
@@ -252,6 +352,8 @@ AzureGetBlob <- function(AzureActiveContext,StorageAccount,StorageKey,Container,
 #' @export
 AzurePutBlob <- function(AzureActiveContext,StorageAccount,StorageKey,Container,Blob,ResourceGroup, Contents="",File="",SubscriptionID,AzToken,verbose=TRUE) {
 
+  AzureCheckToken(AzureActiveContext)
+
   if(missing(SubscriptionID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SubscriptionID)
   if(missing(AzToken)) {ATI <- AzureActiveContext$Token} else (ATI = AzToken)
   if(missing(ResourceGroup)) {RGI <- AzureActiveContext$ResourceGroup} else (RGI = ResourceGroup)
@@ -271,7 +373,7 @@ AzurePutBlob <- function(AzureActiveContext,StorageAccount,StorageKey,Container,
 
   URL <- paste("http://",SAI,".blob.core.windows.net/",CNTR,"/",BLOBI,sep="")
 
-  D1 <- Sys.getlocale("LC_TIME"); Sys.setlocale("LC_TIME", "us")
+  D1 <- Sys.getlocale("LC_TIME"); Sys.setlocale("LC_TIME", "C")
 #  `x-ms-date` <- format(Sys.time(),"%a, %d %b %Y %H:%M:%S %Z", tz="GMT")
   Sys.setlocale("LC_TIME", D1)
   D1 <- format(Sys.time(),"%a, %d %b %Y %H:%M:%S %Z", tz="GMT")

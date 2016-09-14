@@ -11,6 +11,8 @@
 #' @rdname AzureDeployTemplate
 #' @export
 AzureDeployTemplate <- function(AzureActiveContext,DeplName,TemplateURL,ParamURL,ParamJSON,Mode="Sync",ResourceGroup,SubscriptionID,AzToken, verbose = FALSE) {
+  AzureCheckToken(AzureActiveContext)
+
   if(missing(AzToken)) {AT <- AzureActiveContext$Token} else (AT = AzToken)
   if(missing(SubscriptionID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SubscriptionID)
   if(missing(ResourceGroup)) {RGI <- AzureActiveContext$ResourceGroup} else (RGI = ResourceGroup)
@@ -24,6 +26,7 @@ AzureDeployTemplate <- function(AzureActiveContext,DeplName,TemplateURL,ParamURL
 
   URL <- paste("https://management.azure.com/subscriptions/",SUBIDI,"/resourceGroups/",RGI,"/providers/microsoft.resources/deployments/",DeplName,"?api-version=2016-06-01",sep="")
  # print(URL)
+
 
   if (missing(ParamURL))
   {
@@ -96,6 +99,7 @@ AzureDeployTemplate <- function(AzureActiveContext,DeplName,TemplateURL,ParamURL
 #' @param Verbose Print Tracing information (Default False)
 #' @export
 AzureDeployStatus <- function(AzureActiveContext,DeplName,ResourceGroup, SubscriptionID,AzToken,verbose = FALSE) {
+  AzureCheckToken(AzureActiveContext)
   if(missing(AzToken)) {AT <- AzureActiveContext$Token} else (AT = AzToken)
   if(missing(SubscriptionID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SubscriptionID)
   if(missing(ResourceGroup)) {RGI <- AzureActiveContext$ResourceGroup} else (RGI = ResourceGroup)
@@ -127,6 +131,8 @@ AzureDeployStatus <- function(AzureActiveContext,DeplName,ResourceGroup, Subscri
 #' @param Verbose Print Tracing information (Default False)
 #' @export
 AzureDeleteDeploy <- function(AzureActiveContext,DeplName,ResourceGroup,SubscriptionID,AzToken,verbose = FALSE) {
+  AzureCheckToken(AzureActiveContext)
+
   if(missing(AzToken)) {AT <- AzureActiveContext$Token} else (AT = AzToken)
   if(missing(SubscriptionID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SubscriptionID)
   if(missing(ResourceGroup)) {RGI <- AzureActiveContext$ResourceGroup} else (RGI = ResourceGroup)
@@ -136,9 +142,6 @@ AzureDeleteDeploy <- function(AzureActiveContext,DeplName,ResourceGroup,Subscrip
   if (!length(SUBIDI)) {stop("Error: No SubscriptionID provided: Use SUBID argument or set in AzureContext")}
   if (!length(AT)) {stop("Error: No Token / Not currently Authenticated")}
   if (!length(DeplName)) {stop("No DeplName provided")}
-
-
-
 
   URL <- paste("https://management.azure.com/subscriptions/",SUBIDI,"/resourceGroups/",RGI,"/providers/microsoft.resources/deployments/",DeplName,"?api-version=2016-06-01",sep="")
   #  print(URL)
@@ -153,6 +156,9 @@ AzureDeleteDeploy <- function(AzureActiveContext,DeplName,ResourceGroup,Subscrip
 }
 
 AzureCancelDeploy <- function(AzureActiveContext,DeplName,ResourceGroup, SubscriptionID,AzToken,verbose = FALSE) {
+
+  AzureCheckToken(AzureActiveContext)
+
   if(missing(AzToken)) {AT <- AzureActiveContext$Token} else (AT = AzToken)
   if(missing(SubscriptionID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SubscriptionID)
   if(missing(ResourceGroup)) {RGI <- AzureActiveContext$ResourceGroup} else (RGI = ResourceGroup)
