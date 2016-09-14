@@ -175,11 +175,11 @@ AzureListAllRecources <- function(AzureActiveContext,ResourceGroup,SUBID,AT,Name
 
 #' @name AzureCreateResourceGroup: AzureListAllRecources
 #' @title Create a ResourceGroup
-#' @param AzureActiveContext Azure Context Object
-#' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
-#' @param Token Token Object (or use AzureActiveContext)
-#' @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
-#' @param Verbose Print Tracing information (Default False)
+#' @param AzureActiveContext - Azure Context Object
+#' @param ResourceGroup - ResourceGroup Object (or use AzureActiveContext)
+#' @param AT - Token Object (or use AzureActiveContext)
+#' @param SUBID - SubscriptionID Object (or use AzureActiveContext)
+#' @param Verbose - Print Tracing information (Default False)
 #' @rdname AzureCreateResourceGroup
 #' @return Returns Dataframe of Resources
 #' @export
