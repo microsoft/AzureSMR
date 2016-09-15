@@ -10,7 +10,7 @@
 #' @param verbose Print Tracing information (Default False)
 #' @rdname AzureDeployTemplate
 #' @export
-AzureDeployTemplate <- function(AzureActiveContext,DeplName,TemplateURL,ParamURL,ParamJSON,Mode="Sync",ResourceGroup,SubscriptionID,AzToken, verbose = FALSE) {
+AzureDeployTemplate <- function(AzureActiveContext,DeplName,TemplateURL,ParamURL,TemplateJSON,ParamJSON,Mode="Sync",ResourceGroup,SubscriptionID,AzToken, verbose = FALSE) {
   AzureCheckToken(AzureActiveContext)
 
   if(missing(AzToken)) {AT <- AzureActiveContext$Token} else (AT = AzToken)
@@ -21,30 +21,40 @@ AzureDeployTemplate <- function(AzureActiveContext,DeplName,TemplateURL,ParamURL
   if (!length(SUBIDI)) {stop("Error: No SubscriptionID provided: Use SUBID argument or set in AzureContext")}
   if (!length(AT)) {stop("Error: No Token / Not currently Authenticated")}
   if (!length(DeplName)) {stop("No DeplName provided")}
-  if (!length(TemplateURL)) {stop("No TemplateURL provided")}
-  verbosity <- if(verbose) httr::verbose(TRUE) else NULL
+
+  if (missing(TemplateURL) && missing(TemplateJSON))
+    {stop("No TemplateURL or TemplateJSON provided")}
+
+    verbosity <- if(verbose) httr::verbose(TRUE) else NULL
 
   URL <- paste("https://management.azure.com/subscriptions/",SUBIDI,"/resourceGroups/",RGI,"/providers/microsoft.resources/deployments/",DeplName,"?api-version=2016-06-01",sep="")
  # print(URL)
 
-
-  if (missing(ParamURL))
+  if (missing(TemplateJSON))
   {
-    if (missing(ParamJSON))
+    if (missing(ParamURL))
     {
-    bodyI <- paste("{\"properties\": {\"templateLink\": { \"uri\": \"",TemplateURL,"\",\"contentVersion\": \"1.0.0.0\"},\"mode\": \"Incremental\",\"debugSetting\": {\"detailLevel\": \"requestContent, responseContent\"}}}",sep="")
+      if (missing(ParamJSON))
+        bodyI <- paste("{\"properties\": {\"templateLink\": { \"uri\": \"",TemplateURL,"\",\"contentVersion\": \"1.0.0.0\"},\"mode\": \"Incremental\",\"debugSetting\": {\"detailLevel\": \"requestContent, responseContent\"}}}",sep="")
+      else
+        bodyI <- paste("{\"properties\": {",ParamJSON,",\"templateLink\": { \"uri\": \"",TemplateURL,"\",\"contentVersion\": \"1.0.0.0\"},\"mode\": \"Incremental\",\"debugSetting\": {\"detailLevel\": \"requestContent, responseContent\"}}}",sep="")
     }
     else
-    {
-      bodyI <- paste("{\"properties\": {",ParamJSON,",\"templateLink\": { \"uri\": \"",TemplateURL,"\",\"contentVersion\": \"1.0.0.0\"},\"mode\": \"Incremental\",\"debugSetting\": {\"detailLevel\": \"requestContent, responseContent\"}}}",sep="")
-    }
+        bodyI <- paste("{\"properties\": {\"templateLink\": { \"uri\": \"",TemplateURL,"\",\"contentVersion\": \"1.0.0.0\"},  \"mode\": \"Incremental\",  \"parametersLink\": {\"uri\": \"",ParamURL,"\",\"contentVersion\": \"1.0.0.0\"},\"debugSetting\": {\"detailLevel\": \"requestContent, responseContent\"}}}",sep="")
   }
   else
   {
-      bodyI <- paste("{\"properties\": {\"templateLink\": { \"uri\": \"",TemplateURL,"\",\"contentVersion\": \"1.0.0.0\"},  \"mode\": \"Incremental\",  \"parametersLink\": {\"uri\": \"",ParamURL,"\",\"contentVersion\": \"1.0.0.0\"},\"debugSetting\": {\"detailLevel\": \"requestContent, responseContent\"}}}",sep="")
-  }
-#  print (bodyI)
-#  return("OK")
+    if (missing(ParamURL))
+    {
+      if (missing(ParamJSON))
+        bodyI <- paste("{\"properties\": {\"template\": ",TemplateJSON,",\"mode\": \"Incremental\",\"debugSetting\": {\"detailLevel\": \"requestContent, responseContent\"}}}",sep="")
+      else
+        bodyI <- paste("{\"properties\": {",ParamJSON,",\"template\": ",TemplateJSON,",\"mode\": \"Incremental\",\"debugSetting\": {\"detailLevel\": \"requestContent, responseContent\"}}}",sep="")
+    }
+    else
+      bodyI <- paste("{\"properties\": {\"template\": ",TemplateJSON,",  \"mode\": \"Incremental\",  \"parametersLink\": {\"uri\": \"",ParamURL,"\",\"contentVersion\": \"1.0.0.0\"},\"debugSetting\": {\"detailLevel\": \"requestContent, responseContent\"}}}",sep="")
+}
+
   r <- PUT(URL,add_headers(.headers = c("Host" = "management.azure.com" ,"Authorization" = AT, "Content-Type" = "application/json")),body=bodyI,verbosity)
 #  print(paste(DeplName,"Submitted"))
   if (status_code(r) != 200 && status_code(r) != 202 ) {stop(paste("Error: Return code",status_code(r) ))}

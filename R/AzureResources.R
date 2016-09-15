@@ -247,5 +247,3 @@ AzureDeleteResourceGroup <- function(AzureActiveContext,ResourceGroup,SUBID,AT, 
   }
   return("Delete Request Submitted")
 }
-
-
