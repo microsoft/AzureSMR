@@ -31,7 +31,7 @@ AzureListVM <- function(AzureActiveContext,ResourceGroup, Location,SubscriptionI
   if (clust < 1)
   {
     warning("No Virtual Machines found")
-    return("")
+    return(NULL)
   }
   dfn[1:clust,1] <- df$value$name
   dfn[1:clust,2] <- df$value$location
