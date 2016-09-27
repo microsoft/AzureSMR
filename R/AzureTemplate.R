@@ -57,7 +57,7 @@ AzureDeployTemplate <- function(AzureActiveContext,DeplName,TemplateURL,ParamURL
 
   r <- PUT(URL,add_headers(.headers = c("Host" = "management.azure.com" ,"Authorization" = AT, "Content-Type" = "application/json")),body=bodyI,verbosity)
 #  print(paste(DeplName,"Submitted"))
-  if (status_code(r) != 200 && status_code(r) != 202 ) {stop(paste("Error: Return code",status_code(r) ))}
+  if (status_code(r) != 200 && status_code(r) != 201 && status_code(r) != 202 ) {stop(paste("Error: Return code",status_code(r) ))}
     rl <- content(r,"text",encoding="UTF-8")
 #  print (rl)
   df <- fromJSON(rl)
