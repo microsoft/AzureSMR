@@ -28,6 +28,8 @@ AzureAuthenticate <- function(AzureActiveContext,TID, CID, KEY,verbose = FALSE) 
 
   r <- httr::POST(URLGT,add_headers(.headers = c("Cache-Control" = "no-cache", "Content-Type" = "application/x-www-form-urlencoded")),body=bodyGT,verbosity)
   j1 <- content(r, "parsed",encoding="UTF-8")
+  if (status_code(r) != 200) {stop(paste("Error: Return code",status_code(r) ))}
+
   AT <- paste("Bearer",j1$access_token)
 
   AzureActiveContext$Token <- AT
