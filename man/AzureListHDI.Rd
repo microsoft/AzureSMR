@@ -3,12 +3,29 @@
 \name{AzureSM: AzureListHDI}
 \alias{AzureListHDI}
 \alias{AzureSM: AzureListHDI}
+\alias{AzureSM: AzureScriptActionHistory}
+\alias{AzureScriptActionHistory}
 \title{Get all HDInsight Clusters in default Subscription or details for a specified ClusterName}
 \usage{
 AzureListHDI(AzureActiveContext, ResourceGroup, ClusterName = "*", SUBID, ATI,
   Name, Type, Location, verbose = FALSE)
+
+AzureScriptActionHistory(AzureActiveContext, ResourceGroup, ClusterName = "*",
+  SUBID, ATI, Name, Type, verbose = FALSE)
 }
 \arguments{
+\item{AzureActiveContext}{Azure Context Object}
+
+\item{ResourceGroup}{ResourceGroup Object (or use AzureActiveContext)}
+
+\item{ClusterName}{ResourceGroup Object (or use AzureActiveContext)}
+
+\item{verbose}{Print Tracing information (Default False)}
+
+\item{Token}{Token Object (or use AzureActiveContext)}
+
+\item{SubscriptionID}{SubscriptionID Object (or use AzureActiveContext)}
+
 \item{AzureActiveContext}{Azure Context Object}
 
 \item{ResourceGroup}{ResourceGroup Object (or use AzureActiveContext)}
@@ -19,9 +36,11 @@ AzureListHDI(AzureActiveContext, ResourceGroup, ClusterName = "*", SUBID, ATI,
 
 \item{SubscriptionID}{SubscriptionID Object (or use AzureActiveContext)}
 
-\item{Verbose}{Print Tracing information (Default False)}
+\item{verbose}{Print Tracing information (Default False)}
 }
 \value{
+Returns Dataframe of HDInsight Clusters
+
 Returns Dataframe of HDInsight Clusters
 }
 

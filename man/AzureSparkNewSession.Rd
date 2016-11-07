@@ -19,6 +19,6 @@ AzureSparkNewSession(AzureActiveContext, ClusterName, HDIAdmin, HDIPassword,
 
 \item{Kind}{Kind Spark/PySpark/Spark}
 
-\item{Verbose}{Print Tracing information (Default False)}
+\item{verbose}{Print Tracing information (Default False)}
 }
 

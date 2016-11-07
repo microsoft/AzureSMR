@@ -21,10 +21,10 @@ AzureResizeHDI(AzureActiveContext, ClusterName, Role = "worker", Size = 2,
 
 \item{ResourceGroup}{ResourceGroup Object (or use AzureActiveContext)}
 
+\item{verbose}{Print Tracing information (Default False)}
+
 \item{MODE}{MODE Sync/Async}
 
 \item{Token}{Token Object (or use AzureActiveContext)}
-
-\item{Verbose}{Print Tracing information (Default False)}
 }
 

@@ -5,12 +5,20 @@
 \alias{AzureSM: AzurePutBlob}
 \title{Write contents to a specifed Storage Blob}
 \usage{
-AzurePutBlob(AzureActiveContext, StorageAccount, StorageKey, Container, Blob,
-  ResourceGroup, Contents = "", File = "", SubscriptionID, AzToken,
-  Verbose = TRUE)
+AzurePutBlob(AzureActiveContext, Blob, Contents = "", File = "", Directory,
+  StorageAccount, StorageKey, Container, ResourceGroup, SubscriptionID, AzToken,
+  verbose = FALSE)
 }
 \arguments{
 \item{AzureActiveContext}{-Azure Context Object}
+
+\item{Blob}{- Blob Name}
+
+\item{Contents}{- Object to Store or Value}
+
+\item{File}{- Local FileName to Store in Azure Blob}
+
+\item{Directory}{- Directory location (leave for current directory)}
 
 \item{StorageAccount}{- StorageAccount}
 
@@ -18,17 +26,11 @@ AzurePutBlob(AzureActiveContext, StorageAccount, StorageKey, Container, Blob,
 
 \item{Container}{- Storage Container}
 
-\item{Blob}{- Blob Name}
-
 \item{ResourceGroup}{ResourceGroup Object (or use AzureActiveContext)}
-
-\item{Contents}{- Object to Store or Value}
-
-\item{File}{- Local FileName to Store in Azure Blob}
 
 \item{SubscriptionID}{- SubscriptionID Object (or use AzureActiveContext)}
 
-\item{Verbose}{- Print Tracing information (Default False)}
+\item{verbose}{- Print Tracing information (Default False)}
 
 \item{Token}{- Token Object (or use AzureActiveContext)}
 }

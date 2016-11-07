@@ -5,16 +5,17 @@
 \alias{AzureSM: AzureDeployStatus}
 \title{Check Template DeployStatus}
 \usage{
-AzureDeployStatus(SubscriptionID, AzToken, ResourceGroup, DeplName)
+AzureDeployStatus(AzureActiveContext, DeplName, ResourceGroup, SubscriptionID,
+  AzToken, verbose = FALSE)
 }
 \arguments{
-\item{SubscriptionID}{SubscriptionID Object (or use AzureActiveContext)}
-
-\item{ResourceGroup}{ResourceGroup Object (or use AzureActiveContext)}
+\item{AzureActiveContext}{Azure Context Object}
 
 \item{DeplName}{DeplName}
 
-\item{AzureActiveContext}{Azure Context Object}
+\item{ResourceGroup}{ResourceGroup Object (or use AzureActiveContext)}
+
+\item{SubscriptionID}{SubscriptionID Object (or use AzureActiveContext)}
 
 \item{Token}{Token Object (or use AzureActiveContext)}
 

@@ -17,8 +17,8 @@ AzureListVM(AzureActiveContext, ResourceGroup, Location, SubscriptionID,
 
 \item{SubscriptionID}{SubscriptionID Object (or use AzureActiveContext)}
 
-\item{Token}{Token Object (or use AzureActiveContext)}
+\item{verbose}{Print Tracing information (Default False)}
 
-\item{Verbose}{Print Tracing information (Default False)}
+\item{Token}{Token Object (or use AzureActiveContext)}
 }
 

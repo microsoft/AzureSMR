@@ -17,8 +17,8 @@ AzureHiveStatus(AzureActiveContext, ClusterName, HDIAdmin, HDIPassword,
 
 \item{HDIPassword}{HDinsight Administrator Name}
 
-\item{ResourceGroup}{ResourceGroup Object (or use AzureActiveContext)}
+\item{verbose}{Print Tracing information (Default False)}
 
-\item{Verbose}{Print Tracing information (Default False)}
+\item{ResourceGroup}{ResourceGroup Object (or use AzureActiveContext)}
 }
 

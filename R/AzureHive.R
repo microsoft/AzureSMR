@@ -26,6 +26,10 @@ AzureHiveStatus <- function(AzureActiveContext,ClusterName,HDIAdmin,HDIPassword,
   URL <- paste("https://",CN,".azurehdinsight.net/templeton/v1/status",sep="")
 
   r <- GET(URL,add_headers(.headers = c("Content-Type" = "application/json")),authenticate(HA,HP),verbosity)
+  if (status_code(r) != 200 && status_code(r) != 201) {
+    stop(paste0("Error: Return code(",status_code(r),")" ))
+  }
+
   rl <- content(r,"text",encoding="UTF-8")
   df <- fromJSON(rl)
   return(paste("Status:",df$status," Version:",df$version))
@@ -105,5 +109,5 @@ AzureHiveSQL <- function(AzureActiveContext,CMD,ClusterName,HDIAdmin,HDIPassword
   writeLines("")
   writeLines(paste("Finished Running statement: ",Sys.time()))
 #  print(df)
-  return("dfn")
+  return("Done")
 }

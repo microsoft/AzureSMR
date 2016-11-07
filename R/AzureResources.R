@@ -26,9 +26,10 @@ AzureAuthenticate <- function(AzureActiveContext,TID, CID, KEY,verbose = FALSE) 
 
   bodyGT <- paste("grant_type=client_credentials&resource=https%3A%2F%2Fmanagement.azure.com%2F&client_id=",ACID,"&client_secret=",AKEY,sep="")
 
-  r <- POST(URLGT,add_headers(.headers = c("Cache-Control" = "no-cache", "Content-Type" = "application/x-www-form-urlencoded")),body=bodyGT,verbosity)
+  r <- httr::POST(URLGT,add_headers(.headers = c("Cache-Control" = "no-cache", "Content-Type" = "application/x-www-form-urlencoded")),body=bodyGT,verbosity)
   j1 <- content(r, "parsed",encoding="UTF-8")
   AT <- paste("Bearer",j1$access_token)
+
   AzureActiveContext$Token <- AT
   AzureActiveContext$TID <- ATID
   AzureActiveContext$CID <- ACID
@@ -228,6 +229,7 @@ AzureDeleteResourceGroup <- function(AzureActiveContext,ResourceGroup,SUBID,AT, 
   if(missing(SUBID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SUBID)
   #  if (ATI == "") stop("Token not provided")
   #  if (SUBIDI == "") stop("Subscription not provided")
+  if(missing(ResourceGroup)) stop("Please supply Resource Group to Confirm")
   if(missing(ResourceGroup)) {RGI <- AzureActiveContext$ResourceGroup} else (RGI = ResourceGroup)
   verbosity <- if(verbose) httr::verbose(TRUE) else NULL
 

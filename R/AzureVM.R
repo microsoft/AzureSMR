@@ -24,8 +24,7 @@ AzureListVM <- function(AzureActiveContext,ResourceGroup, Location,SubscriptionI
   r <- GET(URL,add_headers(.headers = c("Host" = "management.azure.com" ,"Authorization" = AT, "Content-Type" = "application/json")),verbosity)
   rl <- content(r,"text",encoding="UTF-8")
   df <- fromJSON(rl)
-  #
-  #print(df)
+  # print(df)
   dfn <- as.data.frame(df$value$name)
   clust <- nrow(dfn)
   if (clust < 1)
@@ -98,7 +97,7 @@ AzureStartVM <- function(AzureActiveContext,ResourceGroup, VMName, Mode="Sync",S
     Sys.sleep(5)
     while (a>0)
     {
-      rc1 <- AzureVMStatus()
+      rc1 <- AzureVMStatus(AzureActiveContext)
       #rc1 <- rc$displayStatus[2]
 #      print(rc)
 #      print(rc1)
@@ -175,7 +174,7 @@ AzureStopVM <- function(AzureActiveContext,ResourceGroup, VMName,Mode="Sync",Sub
     a=1
     while (a>0)
     {
-      rc1 <- AzureVMStatus()
+      rc1 <- AzureVMStatus(AzureActiveContext)
 #      rc1 <- rc$displayStatus[2]
       #      cat(paste(rc," "))
       if (grepl("deallocated",rc1)) {

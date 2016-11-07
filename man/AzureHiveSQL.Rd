@@ -6,7 +6,7 @@
 \title{Submit SQL command to Hive Service}
 \usage{
 AzureHiveSQL(AzureActiveContext, CMD, ClusterName, HDIAdmin, HDIPassword,
-  verbose = FALSE)
+  Path = "wasb:///tmp/", verbose = FALSE)
 }
 \arguments{
 \item{AzureActiveContext}{Azure Context Object}

@@ -15,11 +15,11 @@ AzureHDIConf(AzureActiveContext, ClusterName, ResourceGroup, SUBID, ATI, Name,
 
 \item{ResourceGroup}{ResourceGroup Object (or use AzureActiveContext)}
 
+\item{verbose}{Print Tracing information (Default False)}
+
 \item{Token}{Token Object (or use AzureActiveContext)}
 
 \item{SubscriptionID}{SubscriptionID Object (or use AzureActiveContext)}
-
-\item{Verbose}{Print Tracing information (Default False)}
 }
 \value{
 Returns Dataframe of HDInsight Clusters information

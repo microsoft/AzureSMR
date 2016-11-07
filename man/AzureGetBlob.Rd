@@ -5,11 +5,14 @@
 \alias{AzureSM: AzureGetBlob}
 \title{Get contents from a specifed Storage Blob}
 \usage{
-AzureGetBlob(AzureActiveContext, StorageAccount, StorageKey, Container, Blob,
-  Type = "Text", ResourceGroup, SubscriptionID, AzToken, Verbose = TRUE)
+AzureGetBlob(AzureActiveContext, Blob, Directory, Type = "text",
+  StorageAccount, StorageKey, Container, ResourceGroup, SubscriptionID, AzToken,
+  verbose = FALSE)
 }
 \arguments{
 \item{AzureActiveContext}{Azure Context Object}
+
+\item{Blob}{Blob Directory (leave for current directory)}
 
 \item{StorageAccount}{StorageAccount}
 
@@ -17,13 +20,13 @@ AzureGetBlob(AzureActiveContext, StorageAccount, StorageKey, Container, Blob,
 
 \item{Container}{Storage Container}
 
-\item{Blob}{Blob Name}
-
 \item{ResourceGroup}{ResourceGroup Object (or use AzureActiveContext)}
 
 \item{SubscriptionID}{SubscriptionID Object (or use AzureActiveContext)}
 
-\item{Verbose}{Print Tracing information (Default False)}
+\item{verbose}{Print Tracing information (Default False)}
+
+\item{Blob}{Blob Name}
 
 \item{Blob}{Type ("Text" or "Raw")}
 

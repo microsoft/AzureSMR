@@ -16,7 +16,7 @@ AzureAuthenticate(AzureActiveContext, TID, CID, KEY, verbose = FALSE)
 
 \item{KEY}{Authentication KEY Object}
 
-\item{Verbose}{Print Tracing information (Default False)}
+\item{verbose}{Print Tracing information (Default False)}
 }
 \value{
 Retunrs Azure Tokem and sets AzureContext Token

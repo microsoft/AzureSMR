@@ -5,17 +5,17 @@
 \alias{AzureSM: AzureDeleteDeploy}
 \title{Delete Template Deployment}
 \usage{
-AzureDeleteDeploy(SubscriptionID, AzToken, ResourceGroup, DeplName,
-  verbose = FALSE)
+AzureDeleteDeploy(AzureActiveContext, DeplName, ResourceGroup, SubscriptionID,
+  AzToken, verbose = FALSE)
 }
 \arguments{
-\item{SubscriptionID}{SubscriptionID Object (or use AzureActiveContext)}
-
-\item{ResourceGroup}{ResourceGroup Object (or use AzureActiveContext)}
+\item{AzureActiveContext}{Azure Context Object}
 
 \item{DeplName}{DeplName}
 
-\item{AzureActiveContext}{Azure Context Object}
+\item{ResourceGroup}{ResourceGroup Object (or use AzureActiveContext)}
+
+\item{SubscriptionID}{SubscriptionID Object (or use AzureActiveContext)}
 
 \item{Token}{Token Object (or use AzureActiveContext)}
 

@@ -13,8 +13,6 @@ devtools::install_github("Microsoft/AzureSMR")
 library(AzureSM)
 ```
 
-httr, jsonlite, XML ,plyr, base64enc
-
 The package depends on:
 
 - `jsonlite`

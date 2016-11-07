@@ -5,10 +5,13 @@
 \alias{AzureSM: AzureDeployTemplate}
 \title{Submit a Azure Resource ManagerTemplate}
 \usage{
-AzureDeployTemplate(DeplName, TemplateURL, ParamURL, ParamJSON, Mode = "Sync",
-  ResourceGroup, SubscriptionID, AzToken, verbose = FALSE)
+AzureDeployTemplate(AzureActiveContext, DeplName, TemplateURL, ParamURL,
+  TemplateJSON, ParamJSON, Mode = "Sync", ResourceGroup, SubscriptionID,
+  AzToken, verbose = FALSE)
 }
 \arguments{
+\item{AzureActiveContext}{Azure Context Object}
+
 \item{DeplName}{DeplName}
 
 \item{TemplateURL}{TemplateURL}
@@ -19,10 +22,8 @@ AzureDeployTemplate(DeplName, TemplateURL, ParamURL, ParamJSON, Mode = "Sync",
 
 \item{SubscriptionID}{SubscriptionID Object (or use AzureActiveContext)}
 
-\item{AzureActiveContext}{Azure Context Object}
+\item{verbose}{Print Tracing information (Default False)}
 
 \item{Token}{Token Object (or use AzureActiveContext)}
-
-\item{Verbose}{Print Tracing information (Default False)}
 }
 

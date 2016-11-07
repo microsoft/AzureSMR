@@ -185,7 +185,6 @@ AzureSparkCMD <- function(AzureActiveContext,CMD,ClusterName,HDIAdmin,HDIPasswor
 
   rl <- content(r,"text",encoding="UTF-8")
   rh <- headers(r)
-  print(rl)
 
   if (status_code(r) == "404")
     stop(paste("SessionID not found (",status_code(r),")"))
@@ -196,15 +195,18 @@ AzureSparkCMD <- function(AzureActiveContext,CMD,ClusterName,HDIAdmin,HDIPasswor
   df <- fromJSON(rl)
   #  print(df$sessions$appId)
   if (df$state == "available")
-    return(df$output$data)
+  {
+    RET <- df$output$data
+    return(toString(RET))
+  }
   DUR <- 2
   URL <- paste("https://",CN,".azurehdinsight.net/livy/",rh$location,sep="")
   #  print(URL)
-  while (df$state == "running")
-  {
-    writeLines(paste("CMD Running: ",Sys.time()))
-    writeLines("Running(R), Completed(C)")
+  writeLines(paste("CMD Running: ",Sys.time()))
+  writeLines("Running(R), Completed(C)")
 
+    while (df$state == "running")
+  {
     Sys.sleep(DUR)
     if (DUR < 5) DUR <- DUR +1
     cat("R")
@@ -217,7 +219,10 @@ AzureSparkCMD <- function(AzureActiveContext,CMD,ClusterName,HDIAdmin,HDIPasswor
   cat("C")
   writeLines("")
   writeLines(paste("Finished Running statement: ",Sys.time()))
-  return(df$output$data)
+  RET <- df$output$data[1]
+  #rownames(RET) <- "Return Value"
+  return(toString(RET))
+
 }
 
 #' @name AzureSM: AzureSparkJob

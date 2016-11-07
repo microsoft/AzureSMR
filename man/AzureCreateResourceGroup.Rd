@@ -9,15 +9,15 @@ AzureCreateResourceGroup(AzureActiveContext, ResourceGroup, Location, SUBID, AT,
   verbose = FALSE)
 }
 \arguments{
-\item{AzureActiveContext}{Azure Context Object}
+\item{AzureActiveContext}{- Azure Context Object}
 
-\item{ResourceGroup}{ResourceGroup Object (or use AzureActiveContext)}
+\item{ResourceGroup}{- ResourceGroup Object (or use AzureActiveContext)}
 
-\item{Token}{Token Object (or use AzureActiveContext)}
+\item{SUBID}{- SubscriptionID Object (or use AzureActiveContext)}
 
-\item{SubscriptionID}{SubscriptionID Object (or use AzureActiveContext)}
+\item{AT}{- Token Object (or use AzureActiveContext)}
 
-\item{Verbose}{Print Tracing information (Default False)}
+\item{Verbose}{- Print Tracing information (Default False)}
 }
 \value{
 Returns Dataframe of Resources
