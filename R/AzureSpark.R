@@ -1,12 +1,14 @@
-#' @name AzureSM: AzureSparkNewSession
-#' @title Create new Spark Session
-#' @param AzureActiveContext Azure Context Object
+#' Create new Spark Session.
+#'
+#' @inheritParams SetAzureContext
+#'
 #' @param ClusterName ClusterName
 #' @param HDIAdmin HDIAdmin - HDinsight Administrator Name
 #' @param HDIPassword HDinsight Administrator Name
 #' @param Kind Kind Spark/PySpark/Spark
 #' @param verbose Print Tracing information (Default False)
-#' @rdname AzureSparkNewSession
+#'
+#' @family Spark
 #' @export
 AzureSparkNewSession <- function(AzureActiveContext,ClusterName,HDIAdmin,HDIPassword,Kind = "spark",verbose = FALSE) {
 
@@ -47,14 +49,13 @@ AzureSparkNewSession <- function(AzureActiveContext,ClusterName,HDIAdmin,HDIPass
   return(df$id)
 }
 
-#' @name AzureSM: AzureSparkListSessions
-#' @title List Spark Sessions
-#' @param AzureActiveContext Azure Context Object
-#' @param ClusterName ClusterName
-#' @param HDIAdmin HDIAdmin - HDinsight Administrator Name
-#' @param HDIPassword HDinsight Administrator Name
-#' @param Verbose Print Tracing information (Default False)
-#' @rdname AzureSparkListSessions
+
+#' List Spark Sessions.
+#'
+#' @inheritParams SetAzureContext
+#' @inheritParams AzureSparkNewSession
+#'
+#' @family Spark
 #' @export
 AzureSparkListSessions <- function(AzureActiveContext,ClusterName,HDIAdmin,HDIPassword,verbose = FALSE) {
   HA = ""
@@ -94,15 +95,14 @@ AzureSparkListSessions <- function(AzureActiveContext,ClusterName,HDIAdmin,HDIPa
 
   return(dfn)
 }
-#' @name AzureSM: AzureSparkStopSession
-#' @title Stop a Spark Sessions
-#' @param AzureActiveContext Azure Context Object
-#' @param ClusterName ClusterName
-#' @param HDIAdmin HDIAdmin - HDinsight Administrator Name
-#' @param HDIPassword HDinsight Administrator Name
-#' @param SessionID SessionID see AzureSparkListSessions)
-#' @param Verbose Print Tracing information (Default False)
-#' @rdname AzureSparkStopSession
+
+
+#' Stop a Spark Sessions.
+#'
+#' @inheritParams SetAzureContext
+#' @inheritParams AzureSparkNewSession
+#'
+#' @family Spark
 #' @export
 AzureSparkStopSession <- function(AzureActiveContext,ClusterName,HDIAdmin,HDIPassword,SessionID,verbose = FALSE) {
 
@@ -142,16 +142,13 @@ AzureSparkStopSession <- function(AzureActiveContext,ClusterName,HDIAdmin,HDIPas
   return("Done")
 }
 
-#' @name AzureSM: AzureSparkCMD
-#' @title Send Spark Statements/comamnds (REPL/Interactive mode)
-#' @param AzureActiveContext Azure Context Object
-#' @param ClusterName ClusterName
-#' @param HDIAdmin HDIAdmin - HDinsight Administrator Name
-#' @param HDIPassword HDinsight Administrator Name
-#' @param SessionID SessionID
-#' @param CMD CMD
-#' @param Verbose Print Tracing information (Default False)
-#' @rdname AzureSparkCMD
+
+#' Send Spark Statements/comamnds (REPL/Interactive mode).
+#'
+#' @inheritParams SetAzureContext
+#' @inheritParams AzureSparkNewSession
+#'
+#' @family Spark
 #' @export
 AzureSparkCMD <- function(AzureActiveContext,CMD,ClusterName,HDIAdmin,HDIPassword,SessionID,verbose = FALSE) {
 
@@ -225,15 +222,13 @@ AzureSparkCMD <- function(AzureActiveContext,CMD,ClusterName,HDIAdmin,HDIPasswor
 
 }
 
-#' @name AzureSM: AzureSparkJob
-#' @title Submit Spark Job (Batch mode)
-#' @param AzureActiveContext Azure Context Object
-#' @param ClusterName ClusterName
-#' @param HDIAdmin HDIAdmin - HDinsight Administrator Name
-#' @param HDIPassword HDinsight Administrator Name
-#' @param FILE FILE
-#' @param Verbose Print Tracing information (Default False)
-#' @rdname AzureSparkJob
+
+#' Submit Spark Job (Batch mode).
+#'
+#' @inheritParams SetAzureContext
+#' @inheritParams AzureSparkNewSession
+#'
+#' @family Spark
 #' @export
 AzureSparkJob <- function(AzureActiveContext,FILE,ClusterName,HDIAdmin,HDIPassword, Log="URL",verbose = FALSE) {
 
@@ -322,14 +317,13 @@ AzureSparkJob <- function(AzureActiveContext,FILE,ClusterName,HDIAdmin,HDIPasswo
   return(STATE)
 }
 
-#' @name AzureSM: AzureSparkListJobs
-#' @title List Spark Jobs (Batch mode)
-#' @param AzureActiveContext Azure Context Object
-#' @param ClusterName ClusterName
-#' @param HDIAdmin HDIAdmin - HDinsight Administrator Name
-#' @param HDIPassword HDinsight Administrator Name
-#' @param Verbose Print Tracing information (Default False)
-#' @rdname AzureSparkListJobs
+
+#' List Spark Jobs (Batch mode).
+#'
+#' @inheritParams SetAzureContext
+#' @inheritParams AzureSparkNewSession
+#'
+#' @family Spark
 #' @return (manually direct output to Blob fule /SQL in script)
 #' @export
 AzureSparkListJobs <- function(AzureActiveContext,ClusterName,HDIAdmin,HDIPassword,KIND,verbose = FALSE) {
@@ -371,11 +365,14 @@ AzureSparkListJobs <- function(AzureActiveContext,ClusterName,HDIAdmin,HDIPasswo
   return(dfn)
 }
 
-#' @name AzureSM: AzureSparkShowURL
-#' @title Show Spark Log Output
-#' @param AzureActiveContext Azure Context Object
-#' @param URL (From Batch Job)
-#' @rdname AzureSparkShowURL
+
+#' Show Spark Log Output.
+#'
+#' @inheritParams SetAzureContext
+#' @inheritParams AzureSparkNewSession
+#'
+#' @family Spark
+#'
 #' @return Show Log in Browser
 #' @export
 AzureSparkShowURL <- function(AzureActiveContext,URL) {

@@ -2,17 +2,17 @@
 % Please edit documentation in R/AzureContextObject.R
 \name{DumpAzureContext}
 \alias{DumpAzureContext}
-\title{AzureSM: Dumps the contents of the AzureContext}
+\title{Dumps the contents of the AzureContext.}
 \usage{
-DumpAzureContext(AzEnv)
+DumpAzureContext(AzureActiveContext)
 }
 \arguments{
-\item{Azure}{Context Object}
+\item{AzureActiveContext}{Context Object}
 }
 \description{
-DumpAzureContext
+Dumps the contents of the AzureContext.
 }
-\details{
-Dumps the contents of the AzureContext
+\seealso{
+Other Context Object: \code{\link{CreateAzureContext}}
 }
 

@@ -1,14 +1,16 @@
-#' @name AzureSM: AzureListVM
-#' @title List VMs in a Subscription
-#' @param AzureActiveContext Azure Context Object
+#' List VMs in a Subscription.
+#'
+#' @inheritParams SetAzureContext
 #' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
 #' @param Location Azure Resource Location
-#' @param Token Token Object (or use AzureActiveContext)
+#' @param AzToken Token Object (or use AzureActiveContext)
 #' @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
 #' @param verbose Print Tracing information (Default False)
-#' @rdname AzureListVM
+#'
+#' @family Virtual Machine
 #' @export
-AzureListVM <- function(AzureActiveContext,ResourceGroup, Location,SubscriptionID,AzToken,verbose=FALSE) {
+AzureListVM <- function(AzureActiveContext,ResourceGroup, Location,SubscriptionID,
+                        AzToken,verbose=FALSE) {
   AzureCheckToken(AzureActiveContext)
   if(missing(AzToken)) {AT <- AzureActiveContext$Token} else (AT = AzToken)
   if(missing(SubscriptionID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SubscriptionID)
@@ -50,16 +52,15 @@ AzureListVM <- function(AzureActiveContext,ResourceGroup, Location,SubscriptionI
 
   return(dfn)
 }
-#' @name AzureSM: AzureListVM
-#' @title Start a Virtual Machine
-#' @param AzureActiveContext Azure Context Object
-#' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
+
+
+#' Start a Virtual Machine.
+#'
+#' @inheritParams AzureListVM
 #' @param VMName Virtual Machine Name
-#' @param Sync - Wait for operation to complete "Sync" (Default)
-#' @param Token Token Object (or use AzureActiveContext)
-#' @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
-#' @param Verbose Print Tracing information (Default False)
-#' @rdname AzureStartVM
+#' @param Mode Wait for operation to complete "Sync" (Default)
+#'
+#' @family Virtual Machine
 #' @export
 AzureStartVM <- function(AzureActiveContext,ResourceGroup, VMName, Mode="Sync",SubscriptionID,AzToken,verbose=FALSE) {
   AzureCheckToken(AzureActiveContext)
@@ -126,16 +127,14 @@ AzureStartVM <- function(AzureActiveContext,ResourceGroup, VMName, Mode="Sync",S
   return("Done")
 }
 
-#' @name AzureSM: AzureStopVM
-#' @title Stop a Virtual Machine
-#' @param AzureActiveContext Azure Context Object
-#' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
-#' @param VMName Virtual Machine Name
-#' @param Sync - Wait for operation to complete "Sync" (Default)
-#' @param Token Token Object (or use AzureActiveContext)
-#' @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
-#' @param Verbose Print Tracing information (Default False)
-#' @rdname AzureStopVM
+
+#' Stop a Virtual Machine.
+#'
+#' @inheritParams SetAzureContext
+#' @inheritParams AzureListVM
+#' @inheritParams AzureStartVM
+#'
+#' @family Virtual Machine
 #' @export
 AzureStopVM <- function(AzureActiveContext,ResourceGroup, VMName,Mode="Sync",SubscriptionID,AzToken,verbose=FALSE) {
   AzureCheckToken(AzureActiveContext)
@@ -201,17 +200,17 @@ AzureStopVM <- function(AzureActiveContext,ResourceGroup, VMName,Mode="Sync",Sub
   return(rc1)
 }
 
-#' @name AzureSM: AzureVMStatus
-#' @title Get Status of a Virtual Machine
-#' @param AzureActiveContext Azure Context Object
-#' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
-#' @param VMName Virtual Machine Name
-#' @param Token Token Object (or use AzureActiveContext)
-#' @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
-#' @param Verbose Print Tracing information (Default False)
-#' @rdname AzureVMStatus
+
+#' Get Status of a Virtual Machine.
+#'
+#' @inheritParams SetAzureContext
+#' @inheritParams AzureListVM
+#' @inheritParams AzureStartVM
+#'
+#' @family Virtual Machine
 #' @export
-AzureVMStatus <- function(AzureActiveContext,ResourceGroup, VMName,SubscriptionID,AzToken,Ignore="N",verbose=FALSE) {
+AzureVMStatus <- function(AzureActiveContext,ResourceGroup, VMName,
+                          SubscriptionID,AzToken,Ignore="N",verbose=FALSE) {
   AzureCheckToken(AzureActiveContext)
 
   if(missing(AzToken)) {AT <- AzureActiveContext$Token} else (AT = AzToken)
@@ -244,15 +243,13 @@ AzureVMStatus <- function(AzureActiveContext,ResourceGroup, VMName,SubscriptionI
 
   return("Submitted")
 }
-#' @name AzureSM: AzureDeleteVM
-#' @title Delete a Virtual Machine
-#' @param AzureActiveContext Azure Context Object
-#' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
-#' @param VMName Virtual Machine Name
-#' @param Token Token Object (or use AzureActiveContext)
-#' @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
-#' @param Verbose Print Tracing information (Default False)
-#' @rdname AzureDeleteVM
+
+
+#' Delete a Virtual Machine.
+#'
+#' @inheritParams AzureListVM
+#' @inheritParams AzureStartVM
+#' @family Virtual Machine
 #' @export
 AzureDeleteVM <- function(AzureActiveContext,ResourceGroup, VMName,SubscriptionID,AzToken,Mode="Sync",verbose=FALSE) {
   AzureCheckToken(AzureActiveContext)

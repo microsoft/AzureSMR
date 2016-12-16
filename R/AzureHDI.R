@@ -1,19 +1,20 @@
-#' @name AzureSM: AzureListHDI
-#' @title Get all HDInsight Clusters in default Subscription or details for a specified ClusterName
-#' @param AzureActiveContext Azure Context Object
-#' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
+#' Get all HDInsight Clusters in default Subscription or details for a specified ClusterName.
+#'
+#' @inheritParams SetAzureContext
 #' @param ClusterName ResourceGroup Object (or use AzureActiveContext)
-#' @param Token Token Object (or use AzureActiveContext)
-#' @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
+# @param Token Token Object (or use AzureActiveContext)
 #' @param verbose Print Tracing information (Default False)
-#' @rdname AzureListHDI
+#'
+#' @family HDInsight
+#'
 #' @return Returns Dataframe of HDInsight Clusters
 #' @export
-AzureListHDI <- function(AzureActiveContext,ResourceGroup,ClusterName="*",SUBID,ATI,Name, Type,Location,verbose = FALSE) {
+AzureListHDI <- function(AzureActiveContext,ResourceGroup,ClusterName="*",
+                         SubscriptionID,ATI,Name, Type,Location,verbose = FALSE) {
 
   AzureCheckToken(AzureActiveContext)
   if(missing(ATI)) {AT <- AzureActiveContext$Token} else (AT = ATI)
-  if(missing(SUBID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SUBID)
+  if(missing(SubscriptionID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SubscriptionID)
   if(missing(ResourceGroup)) {RGI <- AzureActiveContext$ResourceGroup} else (RGI = ResourceGroup)
   verbosity <- if(verbose) httr::verbose(TRUE) else NULL
 
@@ -99,15 +100,14 @@ AzureListHDI <- function(AzureActiveContext,ResourceGroup,ClusterName="*",SUBID,
   return(t(dfn))
 }
 
-#' @name AzureSM: AzureHDIConf
-#' @title Get Configuration Information for a specified ClusterName
-#' @param AzureActiveContext Azure Context Object
-#' @param ClusterName ResourceGroup Object (or use AzureActiveContext)
-#' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
-#' @param Token Token Object (or use AzureActiveContext)
-#' @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
-#' @param verbose Print Tracing information (Default False)
-#' @rdname AzureHDIConf
+
+#' Get Configuration Information for a specified ClusterName.
+#'
+#' @inheritParams SetAzureContext
+#' @inheritParams AzureListHDI
+#'
+#' @family HDInsight
+#'
 #' @return Returns Dataframe of HDInsight Clusters information
 #' @export
 AzureHDIConf <- function(AzureActiveContext,ClusterName,ResourceGroup,SUBID,ATI,Name, Type,Location,verbose = FALSE) {
@@ -154,18 +154,24 @@ AzureHDIConf <- function(AzureActiveContext,ClusterName,ResourceGroup,SUBID,ATI,
 
   return(t(dfn))
 }
-#' @name AzureSM: AzureResizeHDI
-#' @title Resize a HDInsight CLuster Role
-#' @param AzureActiveContext Azure Context Object
-#' @param ClusterName ResourceGroup Object (or use AzureActiveContext)
-#' @param Role Role Type (Worker, Head, Edge)
-#' @param Size Desired size of Role Type
-#' @param MODE MODE Sync/Async
-#' @param Token Token Object (or use AzureActiveContext)
-#' @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
-#' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
-#' @param verbose Print Tracing information (Default False)
-#' @rdname AzureResizeHDI
+
+
+#' Resize a HDInsight CLuster Role.
+#'
+#' @inheritParams SetAzureContext
+#' @inheritParams AzureListHDI
+#'
+#' @family HDInsight
+# @param AzureActiveContext Azure Context Object
+# @param ClusterName ResourceGroup Object (or use AzureActiveContext)
+# @param Role Role Type (Worker, Head, Edge)
+# @param Size Desired size of Role Type
+# @param MODE MODE Sync/Async
+# @param Token Token Object (or use AzureActiveContext)
+# @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
+# @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
+# @param verbose Print Tracing information (Default False)
+#'
 #' @export
 AzureResizeHDI <- function(AzureActiveContext,ClusterName, Role="worker", Size=2, Mode="Sync",AzToken, SubscriptionID,ResourceGroup,verbose = FALSE) {
   AzureCheckToken(AzureActiveContext)
@@ -235,15 +241,14 @@ AzureResizeHDI <- function(AzureActiveContext,ClusterName, Role="worker", Size=2
   return("Done")
 }
 
-#' @name AzureSM: AzureDeleteHDI
-#' @title Delete Specifed HDInsight Cluster
-#' @param AzureActiveContext Azure Context Object
-#' @param ClusterName ResourceGroup Object (or use AzureActiveContext)
-#' @param Token Token Object (or use AzureActiveContext)
-#' @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
-#' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
-#' @param verbose Print Tracing information (Default False)
-#' @rdname AzureDeleteHDI
+
+#' Delete Specifed HDInsight Cluster.
+#'
+#' @inheritParams SetAzureContext
+#' @inheritParams AzureListHDI
+#'
+#' @family HDInsight
+#'
 #' @return Returns Dataframe of HDInsight Clusters information
 #' @export
 AzureDeleteHDI <- function(AzureActiveContext,ClusterName,AzToken, SubscriptionID,ResourceGroup,verbose = FALSE) {
@@ -271,23 +276,34 @@ AzureDeleteHDI <- function(AzureActiveContext,ClusterName,AzToken, SubscriptionI
   return("Delete Request Accepted")
 }
 
-#' @name AzureSM:
-#' @title Create Specifed HDInsight Cluster
-#' @param AzureActiveContext - Azure Context Object
-#' @param ClusterName - ResourceGroup Object (or use AzureActiveContext)
+
+#' Create Specifed HDInsight Cluster.
+#'
+#' @inheritParams SetAzureContext
+#' @inheritParams AzureListHDI
+#'
+#' @family HDInsight
+# @param AzureActiveContext - Azure Context Object
+# @param ClusterName - ResourceGroup Object (or use AzureActiveContext)
 #' @param Location - Location String
 #' @param Kind - Kind (spark/hadoop) DEFAULT{spark}
-#' @param StorageAcc - Storage Account Name
-#' @param SKey - Storage Key
+# @param StorageAcc - Storage Account Name
+# @param SKey - Storage Key
 #' @param Workers - # of Workers (Default 2)
-#' @param ResourceGroup - ResourceGroup Object (or use AzureActiveContext)
-#' @param AzToken - Token Object (or use AzureActiveContext)
-#' @param SubscriptionID - SubscriptionID Object (or use AzureActiveContext)
-#' @param verbose - Print Tracing information (Default False)
-#' @rdname AzureCreateHDI
+# @param ResourceGroup - ResourceGroup Object (or use AzureActiveContext)
+# @param AzToken - Token Object (or use AzureActiveContext)
+# @param SubscriptionID - SubscriptionID Object (or use AzureActiveContext)
+# @param verbose - Print Tracing information (Default False)
+#'
 #' @return Returns Success Message
 #' @export
-AzureCreateHDI <- function(AzureActiveContext,ClusterName,Location,Kind = "spark", StorageAcc, SKey, Version="3.4", Workers=2,AdminUser,AdminPassword,SSHUser,SSHPassword,HiveServer,HiveDB,HiveUser,HivePassword,ResourceGroup,AzToken, SubscriptionID,Mode="Sync",verbose = FALSE) {
+AzureCreateHDI <- function(AzureActiveContext,ClusterName,
+                           Location,Kind = "spark",
+                           StorageAcc, SKey, Version="3.4", Workers=2,
+                           AdminUser,AdminPassword,
+                           SSHUser,SSHPassword,
+                           HiveServer,HiveDB,HiveUser,HivePassword,
+                           ResourceGroup,AzToken, SubscriptionID,Mode="Sync",verbose = FALSE) {
   AzureCheckToken(AzureActiveContext)
 
   if(missing(ResourceGroup)) {RGI <- AzureActiveContext$ResourceGroup} else (RGI = ResourceGroup)
@@ -488,24 +504,27 @@ AzureCreateHDI <- function(AzureActiveContext,ClusterName,Location,Kind = "spark
   return("Done")
 }
 
-#' @name AzureSM: AzureRunScriptAction
-#' @title Run Script Action on HDI Cluster
-#' @param AzureActiveContext - Azure Context Object
+
+#' Run Script Action on HDI Cluster.
+#'
+#' @inheritParams SetAzureContext
+#' @inheritParams AzureListHDI
+#' @inheritParams AzureListVM
+#'
 #' @param ScriptName - Identifier for Custom action scrript operation
 #' @param ScriptURL - URL to custom action script (Sring)
-#' @param Roles - Specificy the Roles to apply action string (workernode,headnode,edgenode)
+# @param Roles - Specificy the Roles to apply action string (workernode,headnode,edgenode)
 #' @param HeadNode - install on head nodes (default FALSE)
 #' @param WorkerNode - install on worker nodes (default FALSE)
 #' @param EdgeNode - install on worker nodes (default FALSE)
-#' @param ClusterName - ResourceGroup Object (or use AzureActiveContext)
-#' @param ResourceGroup - ResourceGroup Object (or use AzureActiveContext)
-#' @param AzToken - Token Object (or use AzureActiveContext)
-#' @param SubscriptionID - SubscriptionID Object (or use AzureActiveContext)
-#' @param verbose - Print Tracing information (Default False)
-#' @rdname AzureCreateHDI
+#'
+#' @family HDInsight
 #' @return Returns Success Message
 #' @export
-AzureRunScriptAction <- function(AzureActiveContext,ScriptName = "script1",ScriptURL, HeadNode=TRUE,WorkerNode=FALSE,EdgeNode=FALSE,ClusterName,ResourceGroup,Parameters="",AzToken, SubscriptionID,verbose = FALSE) {
+AzureRunScriptAction <- function(AzureActiveContext,ScriptName = "script1",ScriptURL,
+                                 HeadNode=TRUE,WorkerNode=FALSE,EdgeNode=FALSE,
+                                 ClusterName,ResourceGroup,Parameters="",
+                                 AzToken, SubscriptionID,verbose = FALSE) {
   AzureCheckToken(AzureActiveContext)
   if(missing(ClusterName)) {CN <- AzureActiveContext$ClusterName} else (CN = ClusterName)
   if(missing(ResourceGroup)) {RGI <- AzureActiveContext$ResourceGroup} else (RGI = ResourceGroup)
@@ -566,22 +585,23 @@ AzureRunScriptAction <- function(AzureActiveContext,ScriptName = "script1",Scrip
   return("Accepted")
 }
 
-#' @name AzureSM: AzureScriptActionHistory
-#' @title Get all HDInsight Script Action Historyfor a specified ClusterName
-#' @param AzureActiveContext Azure Context Object
-#' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
-#' @param ClusterName ResourceGroup Object (or use AzureActiveContext)
-#' @param Token Token Object (or use AzureActiveContext)
-#' @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
-#' @param verbose Print Tracing information (Default False)
-#' @rdname AzureListHDI
+
+#' Get all HDInsight Script Action Historyfor a specified ClusterName.
+#'
+#' @inheritParams SetAzureContext
+#' @inheritParams AzureListHDI
+#' @inheritParams AzureRunScriptAction
+#'
+#' @family HDInsight
+#'
 #' @return Returns Dataframe of HDInsight Clusters
 #' @export
-AzureScriptActionHistory <- function(AzureActiveContext,ResourceGroup,ClusterName="*",SUBID,ATI,Name, Type,verbose = FALSE) {
+AzureScriptActionHistory <- function(AzureActiveContext,ResourceGroup,
+                                     ClusterName="*",SubscriptionID,ATI,Name, Type,verbose = FALSE) {
     AzureCheckToken(AzureActiveContext)
     if(missing(ATI)) {AT <- AzureActiveContext$Token} else (AT = ATI)
     if(missing(ClusterName)) {CN <- AzureActiveContext$ClusterName} else (CN = ClusterName)
-    if(missing(SUBID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SUBID)
+    if(missing(SubscriptionID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SubscriptionID)
     if(missing(ResourceGroup)) {RGI <- AzureActiveContext$ResourceGroup} else (RGI = ResourceGroup)
     verbosity <- if(verbose) httr::verbose(TRUE) else NULL
 

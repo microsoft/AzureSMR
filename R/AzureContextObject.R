@@ -1,16 +1,8 @@
-suppressWarnings(library(httr))
-suppressWarnings(library(jsonlite))
-suppressWarnings(library(XML))
-suppressWarnings(library(digest))
 
-
-#' CreateAzureContext
 #'
-#' Create an AzureContext
+#' Create an AzureContext.
 #'
-#' @title AzureSM: Create an AzureContext
-#' @name CreateAzureContext
-#' @rdname CreateAzureContext
+#' @family Context Object
 #' @export
 CreateAzureContext <- function(){
   AzEnv <- new.env(parent = globalenv())
@@ -21,26 +13,21 @@ CreateAzureContext <- function(){
   return(1)
 }
 
-#' DumpAzureContext
+
+#' Dumps the contents of the AzureContext.
 #'
-#' Dumps the contents of the AzureContext
-#'
-#' @title AzureSM: Dumps the contents of the AzureContext
-#' @param Azure Context Object
-#' @name DumpAzureContext
-#' @rdname DumpAzureContext
+#' @inheritParams SetAzureContext
+#' @family Context Object
 #' @export
 
-DumpAzureContext <- function(AzEnv)
-{
-  ls.str(envir = AzEnv)
+DumpAzureContext <- function(AzureActiveContext){
+  ls.str(envir = AzureActiveContext)
 }
 
-#' AzureSM: SetAzureContext
+
+#' Updates the value of an AzureContext variable.
 #'
-#' Updates the value of an AzureContext variable
-#' @title AzureSM: Updates the value of an AzureContext variable
-#' @param Azure Context Object
+#' @param AzureActiveContext Context Object
 #' @param TID Tenant ID Object
 #' @param CID Client ID Object
 #' @param KEY Authentication KEY Object
@@ -57,12 +44,16 @@ DumpAzureContext <- function(AzEnv)
 #' @param HDIPassword HDIPassword Object
 #' @param Kind Kind Object
 #' @param Container Container Object
-#' @param Log Log Object#'
-#' @author Alan Weaver
-#' @name SetAzureContext
-#' @rdname SetAzureContext
+#
+# @param Log Log Object#'
+#'
 #' @export
-SetAzureContext <- function(AzureActiveContext,TID, CID, KEY,Token, SubscriptionID,ResourceGroup,StorageKey,StorageAccount,Container,Blob,VMName,HDIAdmin,HDIPassword,ClusterName,Kind,SessionID)
+SetAzureContext <- function(AzureActiveContext,TID, CID, KEY,Token,
+                            SubscriptionID,ResourceGroup,
+                            StorageKey,StorageAccount,
+                            Container,Blob,
+                            VMName,
+                            HDIAdmin,HDIPassword,ClusterName,Kind,SessionID)
 {
   if (!missing(TID)) AzureActiveContext$TID <- TID
   if (!missing(CID)) AzureActiveContext$CID <- CID

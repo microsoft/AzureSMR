@@ -2,14 +2,14 @@
 % Please edit documentation in R/AzureContextObject.R
 \name{CreateAzureContext}
 \alias{CreateAzureContext}
-\title{AzureSM: Create an AzureContext}
+\title{Create an AzureContext.}
 \usage{
 CreateAzureContext()
 }
 \description{
-CreateAzureContext
+Create an AzureContext.
 }
-\details{
-Create an AzureContext
+\seealso{
+Other Context Object: \code{\link{DumpAzureContext}}
 }
 

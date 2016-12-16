@@ -2,13 +2,15 @@
 % Please edit documentation in R/AzureContextObject.R
 \name{SetAzureContext}
 \alias{SetAzureContext}
-\title{AzureSM: Updates the value of an AzureContext variable}
+\title{Updates the value of an AzureContext variable.}
 \usage{
 SetAzureContext(AzureActiveContext, TID, CID, KEY, Token, SubscriptionID,
   ResourceGroup, StorageKey, StorageAccount, Container, Blob, VMName, HDIAdmin,
   HDIPassword, ClusterName, Kind, SessionID)
 }
 \arguments{
+\item{AzureActiveContext}{Context Object}
+
 \item{TID}{Tenant ID Object}
 
 \item{CID}{Client ID Object}
@@ -40,18 +42,8 @@ SetAzureContext(AzureActiveContext, TID, CID, KEY, Token, SubscriptionID,
 \item{Kind}{Kind Object}
 
 \item{SessionID}{SessionID Object}
-
-\item{Azure}{Context Object}
-
-\item{Log}{Log Object#'}
 }
 \description{
-AzureSM: SetAzureContext
-}
-\details{
-Updates the value of an AzureContext variable
-}
-\author{
-Alan Weaver
+Updates the value of an AzureContext variable.
 }
 
