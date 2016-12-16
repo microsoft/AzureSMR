@@ -1,15 +1,13 @@
-#' @name AzureSM: AzureAuthenticate
-#' @title Authenticates against Azure Active Directory application
-#' @param AzureActiveContext Azure Context Object
-#' @param TID Tenant ID Object
-#' @param CID Client ID Object
-#' @param KEY Authentication KEY Object
+#' Authenticates against Azure Active Directory application.
+#'
+#' @inheritParams SetAzureContext
 #' @param verbose Print Tracing information (Default False)
+#'
 #' @note See \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/} to learn how to set up an Active Directory application
 #' @references \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/}
-#' @rdname AzureAuthenticate
-#' @name AzureAuthenticate
+#'
 #' @return Retunrs Azure Tokem and sets AzureContext Token
+#' @family Resources
 #' @export
 AzureAuthenticate <- function(AzureActiveContext,TID, CID, KEY,verbose = FALSE) {
 
@@ -50,9 +48,12 @@ AzureAuthenticate <- function(AzureActiveContext,TID, CID, KEY,verbose = FALSE) 
   return("Authentication Suceeded : Key Obtained")
 }
 
-#' @name AzureSM: AzureCheckToken
-#' @title Check the timestamp of a Token and Renew if needed.
-#' @param AzureActiveContext Azure Context Object
+
+
+#' Check the timestamp of a Token and Renew if needed.
+#'
+#' @inheritParams SetAzureContext
+#' @family Resources
 #' @export
 AzureCheckToken <- function(AzureActiveContext) {
   if (is.null(AzureActiveContext$EXPIRY)) print (stop("Not Authenticated: Use AzureAuthenticate"))
@@ -65,14 +66,16 @@ AzureCheckToken <- function(AzureActiveContext) {
   return("OK")
 }
 
-#' @name AzureSM: AzureListSubscriptions
-#' @title  Get available Subscriptions
+
+#' Get available Subscriptions.
+#'
 #' @description  Get available Subscriptions
 #' @param Azure Context Object
 #' @param Token Token Object (or use AzureActiveContext)
 #' @param Verbose Print Tracing information (Default False)
-#' @rdname AzureListSubscriptions
+#'
 #' @return Returns Dataframe of SubscriptionID sets AzureContext SubscriptionID
+#' @family Resources
 #' @export
 AzureListSubscriptions <- function(AzureActiveContext,ATI,verbose = FALSE) {
   if(missing(ATI)) {AT <- AzureActiveContext$Token} else (AT = ATI)
@@ -91,14 +94,14 @@ AzureListSubscriptions <- function(AzureActiveContext,ATI,verbose = FALSE) {
   return(df1)
 }
 
-#' @name AzureSM: AzureListRG
-#' @title Get all Resource Groups in default Subscription
-#' @param AzureActiveContext Azure Context Object
-#' @param Token Token Object (or use AzureActiveContext)
-#' @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
-#' @param Verbose Print Tracing information (Default False)
-#' @rdname AzureListRG
+
+#' Get all Resource Groups in default Subscription.
+#'
+#' @inheritParams SetAzureContext
+#' @family Resources
+#'
 #' @return Returns Dataframe of ResourceGroups
+#' @family Resources
 #' @export
 AzureListRG <- function(AzureActiveContext,SUBID,AT,verbose = FALSE) {
   AzureCheckToken(AzureActiveContext)
@@ -125,17 +128,20 @@ AzureListRG <- function(AzureActiveContext,SUBID,AT,verbose = FALSE) {
   return(dfn)
 }
 
-#' @name AzureSM: AzureListAllRecources
-#' @title Get all Resource in default Subscription
+
+#' Get all Resource in default Subscription.
+#'
 #' @param AzureActiveContext Azure Context Object
 #' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
 #' @param Token Token Object (or use AzureActiveContext)
 #' @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
 #' @param Verbose Print Tracing information (Default False)
-#' @rdname AzureListAllRecources
+#'
 #' @return Returns Dataframe of Resources
+#' @family Resources
 #' @export
-AzureListAllRecources <- function(AzureActiveContext,ResourceGroup,SUBID,AT,Name, Type, Location,verbose = FALSE) {
+AzureListAllRecources <- function(AzureActiveContext,ResourceGroup,
+                                  SUBID,AT,Name, Type, Location,verbose = FALSE) {
 
   AzureCheckToken(AzureActiveContext)
 
@@ -185,15 +191,19 @@ AzureListAllRecources <- function(AzureActiveContext,ResourceGroup,SUBID,AT,Name
 }
 
 
-#' @name AzureCreateResourceGroup: AzureListAllRecources
-#' @title Create a ResourceGroup
-#' @param AzureActiveContext - Azure Context Object
-#' @param ResourceGroup - ResourceGroup Object (or use AzureActiveContext)
-#' @param AT - Token Object (or use AzureActiveContext)
-#' @param SUBID - SubscriptionID Object (or use AzureActiveContext)
-#' @param Verbose - Print Tracing information (Default False)
-#' @rdname AzureCreateResourceGroup
+#' Create a ResourceGroup.
+#'
+#' @inheritParams SetAzureContext
+#' @family Resources
+#'
+# @param AzureActiveContext - Azure Context Object
+# @param ResourceGroup - ResourceGroup Object (or use AzureActiveContext)
+# @param AT - Token Object (or use AzureActiveContext)
+# @param SUBID - SubscriptionID Object (or use AzureActiveContext)
+# @param Verbose - Print Tracing information (Default False)
+#'
 #' @return Returns Dataframe of Resources
+#' @family Resources
 #' @export
 AzureCreateResourceGroup <- function(AzureActiveContext,ResourceGroup,Location,SUBID,AT,verbose=FALSE) {
   AzureCheckToken(AzureActiveContext)
@@ -223,15 +233,19 @@ AzureCreateResourceGroup <- function(AzureActiveContext,ResourceGroup,Location,S
   return("Create Request Submitted")
 }
 
-#' @name AzureDeleteResourceGroup: AzureListAllRecources
-#' @title Delete a ResourceGroup with all Resources
-#' @param AzureActiveContext Azure Context Object
-#' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
-#' @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
-#' @param Token Token Object (or use AzureActiveContext)
-#' @param Verbose Print Tracing information (Default False)
-#' @rdname AzureDeleteResourceGroup
+
+#' Delete a ResourceGroup with all Resources.
+#'
+#' @inheritParams SetAzureContext
+#' @family Resources
+# @param AzureActiveContext Azure Context Object
+# @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
+# @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
+# @param Token Token Object (or use AzureActiveContext)
+# @param Verbose Print Tracing information (Default False)
+#'
 #' @return Returns Dataframe of Resources
+#' @family Resources
 #' @export
 AzureDeleteResourceGroup <- function(AzureActiveContext,ResourceGroup,SUBID,AT, Type,verbose=FALSE) {
   AzureCheckToken(AzureActiveContext)

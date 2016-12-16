@@ -1,12 +1,12 @@
-#' @name AzureSM: AzureHiveStatus
-#' @title Get Status of a HDI Hive Service/Version
-#' @param AzureActiveContext Azure Context Object
-#' @param ClusterName ClusterName
-#' @param HDIAdmin HDIAdmin - HDinsight Administrator Name
-#' @param HDIPassword HDinsight Administrator Name
-#' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
-#' @param verbose Print Tracing information (Default False)
-#' @rdname AzureHiveStatus
+#' Get Status of a HDI Hive Service/Version.
+#'
+# @param AzureActiveContext Azure Context Object
+# @param ClusterName ClusterName
+# @param HDIAdmin HDIAdmin - HDinsight Administrator Name
+# @param HDIPassword HDinsight Administrator Name
+# @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
+# @param verbose Print Tracing information (Default False)
+#'
 #' @export
 AzureHiveStatus <- function(AzureActiveContext,ClusterName,HDIAdmin,HDIPassword,verbose = FALSE) {
   HA = ""
@@ -35,16 +35,17 @@ AzureHiveStatus <- function(AzureActiveContext,ClusterName,HDIAdmin,HDIPassword,
   return(paste("Status:",df$status," Version:",df$version))
 
 }
-#' @name AzureSM: AzureHiveSQL
-#' @title Submit SQL command to Hive Service
-#' @param AzureActiveContext Azure Context Object
-#' @param CMD SQl COmmand String
-#' @param ClusterName ClusterName
-#' @param HDIAdmin HDIAdmin - HDinsight Administrator Name
-#' @param HDIPassword HDinsight Administrator Name
-#' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
-#' @param Verbose Print Tracing information (Default False)
-#' @rdname AzureHiveSQL
+
+
+#' Submit SQL command to Hive Service.
+# @param AzureActiveContext Azure Context Object
+# @param CMD SQl COmmand String
+# @param ClusterName ClusterName
+# @param HDIAdmin HDIAdmin - HDinsight Administrator Name
+# @param HDIPassword HDinsight Administrator Name
+# @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
+# @param Verbose Print Tracing information (Default False)
+#'
 #' @export
 AzureHiveSQL <- function(AzureActiveContext,CMD,ClusterName,HDIAdmin,HDIPassword,Path="wasb:///tmp/",verbose = FALSE) {
   HA = ""

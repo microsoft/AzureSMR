@@ -1,5 +1,7 @@
 #' @importFrom digest hmac
-GetSig <- function(AzureActiveContext,url, verb, key, StorageAccount,Headers=NULL,Container=NULL,CMD=NULL,Size=NULL,ContentType=NULL,DateS,verbose = FALSE) {
+GetSig <- function(AzureActiveContext,url, verb, key, StorageAccount,
+                   Headers=NULL,Container=NULL,CMD=NULL,Size=NULL,
+                   ContentType=NULL,DateS,verbose = FALSE) {
 
   if (length(Headers))
     ARG1 <- paste0(Headers,"\nx-ms-date:",DateS,"\nx-ms-version:2015-04-05")
@@ -14,16 +16,18 @@ GetSig <- function(AzureActiveContext,url, verb, key, StorageAccount,Headers=NUL
   return (EKEY);
 }
 
-#' @name AzureSM: AzureSAGetKey
-#' @title Get the Storage Keys for Specified Storage Account
-#' @param AzureActiveContext Azure Context Object
+
+#' Get the Storage Keys for Specified Storage Account.
+#'
+#' @inheritParams SetAzureContext
 #' @param StorageAccount StorageAccount
-#' @param Token Token Object (or use AzureActiveContext)
-#' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
-#' @param verbose Print Tracing information (Default False)
-#' @rdname AzureSAGetKey
+#' @param AzToken Token Object (or use AzureActiveContext)
+# @param verbose Print Tracing information (Default False)
+#'
+#' @family Storage account
 #' @export
-AzureSAGetKey <- function(AzureActiveContext,StorageAccount,AzToken,ResourceGroup,SubscriptionID,verbose = FALSE) {
+AzureSAGetKey <- function(AzureActiveContext,StorageAccount,AzToken,ResourceGroup,
+                          SubscriptionID,verbose = FALSE) {
   AzureCheckToken(AzureActiveContext)
 
   if(missing(ResourceGroup)) {RGI <- AzureActiveContext$ResourceGroup} else (RGI = ResourceGroup)
@@ -50,14 +54,20 @@ AzureSAGetKey <- function(AzureActiveContext,StorageAccount,AzToken,ResourceGrou
   return(AzureActiveContext$StorageKey)
 }
 
-#' @name AzureSM: AzureCreateStorageAccount
-#' @title Create an Azure Storage Account
-#' @param AzureActiveContext Azure Context Object
-#' @param StorageAccount StorageAccount
-#' @param Token Token Object (or use AzureActiveContext)
-#' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
-#' @param verbose Print Tracing information (Default False)
-#' @rdname AzureSAGetKey
+
+#' Create an Azure Storage Account.
+#'
+#' @inheritParams SetAzureContext
+#' @inheritParams AzureSAGetKey
+
+#' @family Storage account
+#'
+# @param AzureActiveContext Azure Context Object
+# @param StorageAccount StorageAccount
+# @param Token Token Object (or use AzureActiveContext)
+# @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
+# @param verbose Print Tracing information (Default False)
+#'
 #' @export
 AzureCreateStorageAccount <- function(AzureActiveContext,StorageAccount,AzToken,ResourceGroup,SubscriptionID,verbose = FALSE) {
   AzureCheckToken(AzureActiveContext)
@@ -116,14 +126,20 @@ AzureCreateStorageAccount <- function(AzureActiveContext,StorageAccount,AzToken,
   return("Create request Accepted. It can take a few moments to provision the storage account")
 }
 
-#' @name AzureSM: AzureDeleteStorageAccount
-#' @title Delete an Azure Storage Account
-#' @param AzureActiveContext Azure Context Object
-#' @param StorageAccount StorageAccount
-#' @param Token Token Object (or use AzureActiveContext)
-#' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
-#' @param verbose Print Tracing information (Default False)
-#' @rdname AzureSAGetKey
+
+#' Delete an Azure Storage Account.
+#'
+#' @inheritParams SetAzureContext
+#' @inheritParams AzureSAGetKey
+
+#' @family Storage account
+#'
+# @param AzureActiveContext Azure Context Object
+# @param StorageAccount StorageAccount
+# @param Token Token Object (or use AzureActiveContext)
+# @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
+# @param verbose Print Tracing information (Default False)
+#'
 #' @export
 AzureDeleteStorageAccount <- function(AzureActiveContext,StorageAccount,AzToken,ResourceGroup,SubscriptionID,verbose = FALSE) {
   AzureCheckToken(AzureActiveContext)
@@ -153,16 +169,21 @@ AzureDeleteStorageAccount <- function(AzureActiveContext,StorageAccount,AzToken,
   return("Done")
   }
 
-#' @name AzureSM: AzureListSAContainers
-#' @title List Storage Containers for Specified Storage Account
-#' @param AzureActiveContext Azure Context Object
-#' @param StorageAccount StorageAccount
-#' @param StorageKey StorageKey
-#' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
-#' @param Token Token Object (or use AzureActiveContext)
-#' @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
-#' @param verbose Print Tracing information (Default False)
-#' @rdname AzureListSAContainers
+
+#' List Storage Containers for Specified Storage Account.
+#'
+#' @inheritParams SetAzureContext
+#' @inheritParams AzureSAGetKey
+
+#' @family Storage account
+# @param AzureActiveContext Azure Context Object
+# @param StorageAccount StorageAccount
+# @param StorageKey StorageKey
+# @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
+# @param Token Token Object (or use AzureActiveContext)
+# @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
+# @param verbose Print Tracing information (Default False)
+#'
 #' @export
 AzureListSAContainers <- function(AzureActiveContext,StorageAccount,StorageKey,ResourceGroup,AzToken,SubscriptionID,verbose = FALSE) {
   AzureCheckToken(AzureActiveContext)
@@ -240,17 +261,24 @@ AzureListSAContainers <- function(AzureActiveContext,StorageAccount,StorageKey,R
   AzureActiveContext$StorageKey <- STK
   return(dfn)
 }
-#' @name AzureSM: AzureListSABlobs
-#' @title List Storage Containers for Specified Storage Account
-#' @param AzureActiveContext Azure Context Object
-#' @param StorageAccount StorageAccount
-#' @param StorageKey StorageKey
-#' @param Container Storage Container
-#' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
-#' @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
-#' @param AzToken Token Object (or use AzureActiveContext)
-#' @param verbose Print Tracing information (Default False)
-#' @rdname AzureListSABlobs
+
+
+
+#' List Storage Containers for Specified Storage Account.
+#'
+#' @inheritParams SetAzureContext
+#' @inheritParams AzureSAGetKey
+
+#' @family Storage account
+# @param AzureActiveContext Azure Context Object
+# @param StorageAccount StorageAccount
+# @param StorageKey StorageKey
+# @param Container Storage Container
+# @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
+# @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
+# @param AzToken Token Object (or use AzureActiveContext)
+# @param verbose Print Tracing information (Default False)
+#'
 #' @export
 AzureListSABlobs <- function(AzureActiveContext,StorageAccount,StorageKey,Container,ResourceGroup,SubscriptionID,AzToken,verbose = FALSE) {
   AzureCheckToken(AzureActiveContext)
@@ -330,20 +358,25 @@ AzureListSABlobs <- function(AzureActiveContext,StorageAccount,StorageKey,Contai
   return(dfn)
 }
 
-#' @name AzureSM: AzureGetBlob
-#' @title Get contents from a specifed Storage Blob
-#' @param AzureActiveContext Azure Context Object
-#' @param Blob Blob Directory (leave for current directory)
-#' @param Blob Blob Name
-#' @param Blob Type ("Text" or "Raw")
-#' @param StorageAccount StorageAccount
-#' @param StorageKey StorageKey
-#' @param Container Storage Container
-#' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
-#' @param Token Token Object (or use AzureActiveContext)
-#' @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
-#' @param verbose Print Tracing information (Default False)
-#' @rdname AzureGetBlob
+
+#' Get contents from a specifed Storage Blob.
+#'
+#' @inheritParams SetAzureContext
+#' @inheritParams AzureSAGetKey
+
+#' @family Storage account
+# @param AzureActiveContext Azure Context Object
+# @param Blob Blob Directory (leave for current directory)
+# @param Blob Blob Name
+# @param Blob Type ("Text" or "Raw")
+# @param StorageAccount StorageAccount
+# @param StorageKey StorageKey
+# @param Container Storage Container
+# @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
+# @param Token Token Object (or use AzureActiveContext)
+# @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
+# @param verbose Print Tracing information (Default False)
+#'
 #' @export
 #' @importFrom base64enc base64encode base64decode
 
@@ -429,21 +462,26 @@ AzureGetBlob <- function(AzureActiveContext,Blob, Directory,Type="text",StorageA
   return(r2)
 }
 
-#' @name AzureSM: AzurePutBlob
-#' @title Write contents to a specifed Storage Blob
-#' @param AzureActiveContext -Azure Context Object
-#' @param Blob - Blob Name
-#' @param Contents - Object to Store or Value
-#' @param File - Local FileName to Store in Azure Blob
-#' @param Directory - Directory location (leave for current directory)
-#' @param StorageAccount - StorageAccount
-#' @param StorageKey - StorageKey
-#' @param Container - Storage Container
-#' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
-#' @param Token - Token Object (or use AzureActiveContext)
-#' @param SubscriptionID - SubscriptionID Object (or use AzureActiveContext)
-#' @param verbose - Print Tracing information (Default False)
-#' @rdname AzurePutBlob
+
+#' Write contents to a specifed Storage Blob.
+#'
+#' @inheritParams SetAzureContext
+#' @inheritParams AzureSAGetKey
+
+#' @family Storage account
+# @param AzureActiveContext -Azure Context Object
+# @param Blob - Blob Name
+# @param Contents - Object to Store or Value
+# @param File - Local FileName to Store in Azure Blob
+# @param Directory - Directory location (leave for current directory)
+# @param StorageAccount - StorageAccount
+# @param StorageKey - StorageKey
+# @param Container - Storage Container
+# @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
+# @param Token - Token Object (or use AzureActiveContext)
+# @param SubscriptionID - SubscriptionID Object (or use AzureActiveContext)
+# @param verbose - Print Tracing information (Default False)
+#'
 #' @export
 AzurePutBlob <- function(AzureActiveContext,Blob, Contents="",File="",Directory,StorageAccount,StorageKey,Container,ResourceGroup,SubscriptionID,AzToken,verbose=FALSE) {
 
@@ -524,17 +562,21 @@ AzurePutBlob <- function(AzureActiveContext,Blob, Contents="",File="",Directory,
 }
 
 
-#' @name AzureSM: AzureCreateSAContainer
-#' @title Create Storage Containers in a specified Storage Account
-#' @param AzureActiveContext Azure Context Object
-#' @param Container - Storage Container
-#' @param StorageAccount StorageAccount
-#' @param StorageKey StorageKey
-#' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
-#' @param Token Token Object (or use AzureActiveContext)
-#' @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
-#' @param verbose Print Tracing information (Default False)
-#' @rdname AzureCreateSAContainer
+#' Create Storage Containers in a specified Storage Account.
+#'
+#' @inheritParams SetAzureContext
+#' @inheritParams AzureSAGetKey
+
+#' @family Storage account
+# @param AzureActiveContext Azure Context Object
+# @param Container - Storage Container
+# @param StorageAccount StorageAccount
+# @param StorageKey StorageKey
+# @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
+# @param Token Token Object (or use AzureActiveContext)
+# @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
+# @param verbose Print Tracing information (Default False)
+#'
 #' @export
 AzureCreateSAContainer <- function(AzureActiveContext,Container,StorageAccount,StorageKey,ResourceGroup,AzToken,SubscriptionID,verbose = FALSE) {
 #  AzureCheckToken(AzureActiveContext)
@@ -594,17 +636,22 @@ AzureCreateSAContainer <- function(AzureActiveContext,Container,StorageAccount,S
   return("OK")
 }
 
-#' @name AzureSM: AzureDeleteSAContainer
-#' @title Delete Storage Container in a specified Storage Account
-#' @param AzureActiveContext Azure Context Object
-#' @param Container - Storage Container
-#' @param StorageAccount StorageAccount
-#' @param StorageKey StorageKey
-#' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
-#' @param Token Token Object (or use AzureActiveContext)
-#' @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
-#' @param verbose Print Tracing information (Default False)
-#' @rdname AzureDeleteSAContainer
+
+#' Delete Storage Container in a specified Storage Account.
+#'
+#' @inheritParams SetAzureContext
+#' @inheritParams AzureSAGetKey
+
+#' @family Storage account
+# @param AzureActiveContext Azure Context Object
+# @param Container - Storage Container
+# @param StorageAccount StorageAccount
+# @param StorageKey StorageKey
+# @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
+# @param Token Token Object (or use AzureActiveContext)
+# @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
+# @param verbose Print Tracing information (Default False)
+#'
 #' @export
 AzureDeleteSAContainer <- function(AzureActiveContext,Container,StorageAccount,StorageKey,ResourceGroup,AzToken,SubscriptionID,verbose = FALSE) {
   AzureCheckToken(AzureActiveContext)
@@ -654,19 +701,24 @@ AzureDeleteSAContainer <- function(AzureActiveContext,Container,StorageAccount,S
   return("OK")
 }
 
-#' @name AzureSM: AzureBlobLS
-#' @title List Blob files in a Storage account directory
-#' @param AzureActiveContext Azure Context Object
-#' @param Directory - Set Directory to list
-#' @param Recursive - List directories recursively (Default FALSE)
-#' @param StorageAccount StorageAccount
-#' @param StorageKey StorageKey
-#' @param Container Storage Container
-#' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
-#' @param Token Token Object (or use AzureActiveContext)
-#' @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
-#' @param verbose Print Tracing information (Default False)
-#' @rdname AzureBlobLS
+
+#' List Blob files in a Storage account directory.
+#'
+#' @inheritParams SetAzureContext
+#' @inheritParams AzureSAGetKey
+
+#' @family Storage account
+# @param AzureActiveContext Azure Context Object
+# @param Directory - Set Directory to list
+# @param Recursive - List directories recursively (Default FALSE)
+# @param StorageAccount StorageAccount
+# @param StorageKey StorageKey
+# @param Container Storage Container
+# @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
+# @param Token Token Object (or use AzureActiveContext)
+# @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
+# @param verbose Print Tracing information (Default False)
+#'
 #' @export
 #' @importFrom base64enc base64encode base64decode
 AzureBlobLS <- function(AzureActiveContext,Directory,Recursive=FALSE,StorageAccount,StorageKey,Container,ResourceGroup,SubscriptionID,AzToken,verbose=FALSE) {
@@ -812,17 +864,22 @@ AzureBlobLS <- function(AzureActiveContext,Directory,Recursive=FALSE,StorageAcco
   }
 }
 
-#' @name AzureSM: AzureBlobFind
-#' @title Find File in a Storage account directory
-#' @param AzureActiveContext Azure Context Object
-#' @param StorageAccount StorageAccount
-#' @param StorageKey StorageKey
-#' @param Container Storage Container
-#' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
-#' @param Token Token Object (or use AzureActiveContext)
-#' @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
-#' @param verbose Print Tracing information (Default False)
-#' @rdname AzureBlobFind
+
+#' Find File in a Storage account directory.
+#'
+#' @inheritParams SetAzureContext
+#' @inheritParams AzureSAGetKey
+
+#' @family Storage account
+# @param AzureActiveContext Azure Context Object
+# @param StorageAccount StorageAccount
+# @param StorageKey StorageKey
+# @param Container Storage Container
+# @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
+# @param Token Token Object (or use AzureActiveContext)
+# @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
+# @param verbose Print Tracing information (Default False)
+#'
 #' @export
 #' @importFrom base64enc base64encode base64decode
 AzureBlobFind <- function(AzureActiveContext,File,StorageAccount,StorageKey,Container,ResourceGroup,SubscriptionID,AzToken,verbose=FALSE) {
@@ -873,18 +930,23 @@ AzureBlobFind <- function(AzureActiveContext,File,StorageAccount,StorageKey,Cont
   return(F2)
 }
 
-#' @name AzureSM: AzureBlobCD
-#' @title Azure Blob change current Directory
-#' @param AzureActiveContext Azure Context Object
-#' @param Directory - Set Directory to Path (Supports (../ and ../..))
-#' @param Container Storage Container
-#' @param StorageAccount StorageAccount
-#' @param StorageKey StorageKey
-#' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
-#' @param Token Token Object (or use AzureActiveContext)
-#' @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
-#' @param verbose Print Tracing information (Default False)
-#' @rdname AzureBlobCD
+
+#' Azure Blob change current Directory.
+#'
+#' @inheritParams SetAzureContext
+#' @inheritParams AzureSAGetKey
+
+#' @family Storage account
+# @param AzureActiveContext Azure Context Object
+# @param Directory - Set Directory to Path (Supports (../ and ../..))
+# @param Container Storage Container
+# @param StorageAccount StorageAccount
+# @param StorageKey StorageKey
+# @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
+# @param Token Token Object (or use AzureActiveContext)
+# @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
+# @param verbose Print Tracing information (Default False)
+#'
 #' @export
 #' @importFrom base64enc base64encode base64decode
 AzureBlobCD <- function(AzureActiveContext,Directory,Container,File,StorageAccount,StorageKey,ResourceGroup,SubscriptionID,AzToken,verbose=FALSE) {
@@ -954,14 +1016,19 @@ AzureBlobCD <- function(AzureActiveContext,Directory,Container,File,StorageAccou
   return(paste0("Current Directory - ",SAI," >  ",CNTR, " : " ,Directory))
 }
 
-#' @name AzureSM: AzureListSA
-#' @title List Storage accounts
-#' @param AzureActiveContext Azure Context Object
-#' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
-#' @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
-#' @param AzToken Token Object (or use AzureActiveContext)
-#' @param verbose Print Tracing information (Default False)
-#' @rdname AzureListSA
+
+#' List Storage accounts.
+#'
+#' @inheritParams SetAzureContext
+#' @inheritParams AzureSAGetKey
+
+#' @family Storage account
+# @param AzureActiveContext Azure Context Object
+# @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
+# @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
+# @param AzToken Token Object (or use AzureActiveContext)
+# @param verbose Print Tracing information (Default False)
+#'
 #' @export
 AzureListSA <- function(AzureActiveContext,ResourceGroup,SubscriptionID,AzToken,verbose = FALSE)
 {

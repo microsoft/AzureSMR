@@ -1,14 +1,15 @@
-#' @name AzureSM: AzureDeployTemplate
-#' @title Submit a Azure Resource ManagerTemplate
-#' @param AzureActiveContext Azure Context Object
-#' @param DeplName DeplName
-#' @param TemplateURL TemplateURL
-#' @param ParamURL ParamURL
-#' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
-#' @param Token Token Object (or use AzureActiveContext)
-#' @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
-#' @param verbose Print Tracing information (Default False)
-#' @rdname AzureDeployTemplate
+#' Submit a Azure Resource ManagerTemplate.
+#'
+#' @inheritParams SetAzureContext
+# @param AzureActiveContext Azure Context Object
+# @param DeplName DeplName
+# @param TemplateURL TemplateURL
+# @param ParamURL ParamURL
+# @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
+# @param Token Token Object (or use AzureActiveContext)
+# @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
+# @param verbose Print Tracing information (Default False)
+#'
 #' @export
 AzureDeployTemplate <- function(AzureActiveContext,DeplName,TemplateURL,ParamURL,TemplateJSON,ParamJSON,Mode="Sync",ResourceGroup,SubscriptionID,AzToken, verbose = FALSE) {
   AzureCheckToken(AzureActiveContext)
@@ -99,14 +100,15 @@ AzureDeployTemplate <- function(AzureActiveContext,DeplName,TemplateURL,ParamURL
   return("OK")
 }
 
-#' @name AzureSM: AzureDeployStatus
-#' @title Check Template DeployStatus
-#' @param AzureActiveContext Azure Context Object
-#' @param DeplName DeplName
-#' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
-#' @param Token Token Object (or use AzureActiveContext)
-#' @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
-#' @param Verbose Print Tracing information (Default False)
+
+#' Check Template DeployStatus.
+#'
+# @param AzureActiveContext Azure Context Object
+# @param DeplName DeplName
+# @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
+# @param Token Token Object (or use AzureActiveContext)
+# @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
+# @param Verbose Print Tracing information (Default False)
 #' @export
 AzureDeployStatus <- function(AzureActiveContext,DeplName,ResourceGroup, SubscriptionID,AzToken,verbose = FALSE) {
   AzureCheckToken(AzureActiveContext)
@@ -131,14 +133,16 @@ AzureDeployStatus <- function(AzureActiveContext,DeplName,ResourceGroup, Subscri
   return(df$properties$provisioningState)
 }
 
-#' @name AzureSM: AzureDeleteDeploy
-#' @title Delete Template Deployment
-#' @param AzureActiveContext Azure Context Object
-#' @param DeplName DeplName
-#' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
-#' @param Token Token Object (or use AzureActiveContext)
-#' @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
-#' @param Verbose Print Tracing information (Default False)
+
+#' Delete Template Deployment.
+#'
+#' @inheritParams SetAzureContext
+# @param AzureActiveContext Azure Context Object
+# @param DeplName DeplName
+# @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
+# @param Token Token Object (or use AzureActiveContext)
+# @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
+# @param Verbose Print Tracing information (Default False)
 #' @export
 AzureDeleteDeploy <- function(AzureActiveContext,DeplName,ResourceGroup,SubscriptionID,AzToken,verbose = FALSE) {
   AzureCheckToken(AzureActiveContext)
