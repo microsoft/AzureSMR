@@ -1,8 +1,3 @@
-suppressWarnings(library(httr))
-suppressWarnings(library(jsonlite))
-suppressWarnings(library(XML))
-suppressWarnings(library(digest))
-
 
 #' CreateAzureContext
 #'

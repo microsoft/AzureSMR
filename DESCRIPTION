@@ -10,7 +10,6 @@ License: GPL-3
 LazyData: TRUE
 RoxygenNote: 5.0.1
 NeedsCompilation: no
-Depends: httr, jsonlite, XML ,plyr, base64enc, curl
-Imports: httr, jsonlite, XML ,plyr, base64enc, curl
+Imports: httr, jsonlite, XML ,plyr, base64enc, curl, digest
 Suggests: knitr, rmarkdown
 VignetteBuilder: knitr

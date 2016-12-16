@@ -1,3 +1,4 @@
+#' @importFrom digest hmac
 GetSig <- function(AzureActiveContext,url, verb, key, StorageAccount,Headers=NULL,Container=NULL,CMD=NULL,Size=NULL,ContentType=NULL,DateS,verbose = FALSE) {
 
   if (length(Headers))
@@ -344,7 +345,6 @@ AzureListSABlobs <- function(AzureActiveContext,StorageAccount,StorageKey,Contai
 #' @param verbose Print Tracing information (Default False)
 #' @rdname AzureGetBlob
 #' @export
-#' @importFrom digest hmac
 #' @importFrom base64enc base64encode base64decode
 
 AzureGetBlob <- function(AzureActiveContext,Blob, Directory,Type="text",StorageAccount,StorageKey,Container,ResourceGroup,SubscriptionID,AzToken,verbose=FALSE) {
@@ -668,7 +668,6 @@ AzureDeleteSAContainer <- function(AzureActiveContext,Container,StorageAccount,S
 #' @param verbose Print Tracing information (Default False)
 #' @rdname AzureBlobLS
 #' @export
-#' @importFrom digest hmac
 #' @importFrom base64enc base64encode base64decode
 AzureBlobLS <- function(AzureActiveContext,Directory,Recursive=FALSE,StorageAccount,StorageKey,Container,ResourceGroup,SubscriptionID,AzToken,verbose=FALSE) {
   AzureCheckToken(AzureActiveContext)
@@ -825,7 +824,6 @@ AzureBlobLS <- function(AzureActiveContext,Directory,Recursive=FALSE,StorageAcco
 #' @param verbose Print Tracing information (Default False)
 #' @rdname AzureBlobFind
 #' @export
-#' @importFrom digest hmac
 #' @importFrom base64enc base64encode base64decode
 AzureBlobFind <- function(AzureActiveContext,File,StorageAccount,StorageKey,Container,ResourceGroup,SubscriptionID,AzToken,verbose=FALSE) {
   AzureCheckToken(AzureActiveContext)
@@ -888,7 +886,6 @@ AzureBlobFind <- function(AzureActiveContext,File,StorageAccount,StorageKey,Cont
 #' @param verbose Print Tracing information (Default False)
 #' @rdname AzureBlobCD
 #' @export
-#' @importFrom digest hmac
 #' @importFrom base64enc base64encode base64decode
 AzureBlobCD <- function(AzureActiveContext,Directory,Container,File,StorageAccount,StorageKey,ResourceGroup,SubscriptionID,AzToken,verbose=FALSE) {
   AzureCheckToken(AzureActiveContext)
