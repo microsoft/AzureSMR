@@ -22,20 +22,29 @@ AzureAuthenticate <- function(AzureActiveContext,TID, CID, KEY,verbose = FALSE) 
   if (!length(AKEY)) {stop("Error: No KEY provided: Use KEY argument or set in AzureContext")}
   verbosity <- if(verbose) httr::verbose(TRUE) else NULL
 
-  URLGT <- paste("https://login.microsoftonline.com/",ATID,"/oauth2/token?api-version=1.0",sep="")
+  URLGT <- paste0("https://login.microsoftonline.com/",ATID,"/oauth2/token?api-version=1.0")
 
-  bodyGT <- paste("grant_type=client_credentials&resource=https%3A%2F%2Fmanagement.azure.com%2F&client_id=",ACID,"&client_secret=",AKEY,sep="")
+  bodyGT <- paste0("grant_type=client_credentials&resource=https%3A%2F%2Fmanagement.azure.com%2F&client_id=",ACID,"&client_secret=",AKEY)
 
-  r <- httr::POST(URLGT,add_headers(.headers = c("Cache-Control" = "no-cache", "Content-Type" = "application/x-www-form-urlencoded")),body=bodyGT,verbosity)
-  j1 <- content(r, "parsed",encoding="UTF-8")
-  if (status_code(r) != 200) {stop(paste("Error: Return code",status_code(r) ))}
+  r <- httr::POST(URLGT,
+                  add_headers(
+                    .headers = c("Cache-Control" = "no-cache",
+                                 "Content-Type" = "application/x-www-form-urlencoded")),
+                  body=bodyGT,
+                  verbosity)
+  if (status_code(r) != 200) {
+    j1 <- content(r, "parsed",encoding="UTF-8")
+    message(j1$error)
+    message(j1$error_description)
+    stop(paste("Error: Return code",status_code(r) ))
+  }
 
   AT <- paste("Bearer",j1$access_token)
 
-  AzureActiveContext$Token <- AT
-  AzureActiveContext$TID <- ATID
-  AzureActiveContext$CID <- ACID
-  AzureActiveContext$KEY <- AKEY
+  AzureActiveContext$Token  <- AT
+  AzureActiveContext$TID    <- ATID
+  AzureActiveContext$CID    <- ACID
+  AzureActiveContext$KEY    <- AKEY
   AzureActiveContext$EXPIRY <- Sys.time() + 3598
   SUBS <- AzureListSubscriptions(AzureActiveContext)
   return("Authentication Suceeded : Key Obtained")
