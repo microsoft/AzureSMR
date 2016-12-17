@@ -30,8 +30,8 @@ AzureAuthenticate <- function(AzureActiveContext,TID, CID, KEY,verbose = FALSE) 
                                  "Content-Type" = "application/x-www-form-urlencoded")),
                   body=bodyGT,
                   verbosity)
+  j1 <- content(r, "parsed",encoding="UTF-8")
   if (status_code(r) != 200) {
-    j1 <- content(r, "parsed",encoding="UTF-8")
     message(j1$error)
     message(j1$error_description)
     stop(paste("Error: Return code",status_code(r) ))
