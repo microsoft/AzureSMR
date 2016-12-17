@@ -6,6 +6,9 @@
 \usage{
 AzureListAllRecources(...)
 }
+\arguments{
+\item{...}{not used}
+}
 \description{
 Defunct functions.
 }
