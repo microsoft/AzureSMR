@@ -25,7 +25,7 @@ AzureListSABlobs <- function(AzureActiveContext,StorageAccount,StorageKey,Contai
   if (length(AzureActiveContext$StorageAccountK) <1 || SAI != AzureActiveContext$StorageAccountK|| length(AzureActiveContext$StorageKey) <1)
   {
     print("Fetching Storage Key..")
-    STK <- AzureSAGetKey(sc,ResourceGroup = RGI,StorageAccount = SAI)
+    STK <- AzureSAGetKey(AzureActiveContext,ResourceGroup = RGI,StorageAccount = SAI)
   }
   else
     STK <- AzureActiveContext$StorageKey
@@ -143,7 +143,7 @@ AzureBlobLS <- function(AzureActiveContext,Directory,Recursive=FALSE,StorageAcco
   if (length(AzureActiveContext$StorageAccountK) <1 || SAI != AzureActiveContext$StorageAccountK|| length(AzureActiveContext$StorageKey) <1)
   {
     cat("Fetching Storage Key..")
-    STK <- AzureSAGetKey(sc,ResourceGroup = RGI,StorageAccount = SAI)
+    STK <- AzureSAGetKey(AzureActiveContext, ResourceGroup = RGI, StorageAccount = SAI)
   }
   else
     STK <- AzureActiveContext$StorageKey
@@ -272,7 +272,7 @@ AzureGetBlob <- function(AzureActiveContext,Blob, Directory,Type="text",StorageA
   if (length(AzureActiveContext$StorageAccountK) <1 || SAI != AzureActiveContext$StorageAccountK|| length(AzureActiveContext$StorageKey) <1)
   {
     cat("Fetching Storage Key..")
-    STK <- AzureSAGetKey(sc,ResourceGroup = RGI,StorageAccount = SAI)
+    STK <- AzureSAGetKey(AzureActiveContext, ResourceGroup = RGI, StorageAccount = SAI)
   }
   else
     STK <- AzureActiveContext$StorageKey
@@ -398,7 +398,7 @@ AzurePutBlob <- function(AzureActiveContext,Blob, Contents="",File="",Directory,
 
   if (length(AzureActiveContext$StorageAccountK) <1 || SAI != AzureActiveContext$StorageAccountK|| length(AzureActiveContext$StorageKey) <1)  {
     cat("Fetching Storage Key..")
-    STK <- AzureSAGetKey(sc,ResourceGroup = RGI,StorageAccount = SAI)
+    STK <- AzureSAGetKey(AzureActiveContext, ResourceGroup = RGI, StorageAccount = SAI)
   }
   else
     STK <- AzureActiveContext$StorageKey
@@ -456,7 +456,7 @@ AzureBlobFind <- function(AzureActiveContext,File,StorageAccount,StorageKey,Cont
   if (length(AzureActiveContext$StorageAccountK) <1 || SAI != AzureActiveContext$StorageAccountK|| length(AzureActiveContext$StorageKey) <1)
   {
     print("Fetching Storage Key..")
-    STK <- AzureSAGetKey(sc,ResourceGroup = RGI,StorageAccount = SAI)
+    STK <- AzureSAGetKey(AzureActiveContext, ResourceGroup = RGI, StorageAccount = SAI)
   }
   else
     STK <- AzureActiveContext$StorageKey
@@ -473,7 +473,7 @@ AzureBlobFind <- function(AzureActiveContext,File,StorageAccount,StorageKey,Cont
 
   F2 <- data.frame()
   for (CI in CL){
-    Files <- AzureListSABlobs(sc,Container = CI)
+    Files <- AzureListSABlobs(AzureActiveContext, Container = CI)
     Files$Name <- paste0("/",Files$Name)
     #    print(Files$Name)
     F1 <- grep(File,Files$Name)
@@ -534,7 +534,7 @@ AzureBlobCD <- function(AzureActiveContext,Directory,Container,File,StorageAccou
   if (length(AzureActiveContext$StorageAccountK) <1 || SAI != AzureActiveContext$StorageAccountK|| length(AzureActiveContext$StorageKey) <1)
   {
     print("Fetching Storage Key..")
-    STK <- AzureSAGetKey(sc,ResourceGroup = RGI,StorageAccount = SAI)
+    STK <- AzureSAGetKey(AzureActiveContext, ResourceGroup = RGI,StorageAccount = SAI)
   }
   if (length(STK)<1) {stop("Error: No StorageKey provided: Use StorageKey argument or set in AzureContext")}
 

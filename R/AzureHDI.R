@@ -436,7 +436,7 @@ AzureCreateHDI <- function(AzureActiveContext,ClusterName,
   bodyI <- gsub("WWWWWW",Workers,bodyI)
   bodyI <- gsub("SSSSSSSSSSSS",SUBIDI,bodyI)
   bodyI <- gsub("LLLLLLLLLLL",Location,bodyI)
-  bodyI <- gsub("TTTTTTTTTTT",StorageAcc,bodyI)
+  bodyI <- gsub("TTTTTTTTTTT",StorageAccount,bodyI)
   bodyI <- gsub("KKKKKKKKKKKKKKKK",SKey,bodyI)
   bodyI <- gsub("DDDDDDDDD",Kind,bodyI)
   bodyI <- gsub("VVVV",Version,bodyI)

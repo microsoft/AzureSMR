@@ -29,7 +29,7 @@ AzureListSAContainers <- function(AzureActiveContext,StorageAccount,StorageKey,R
   if (length(AzureActiveContext$StorageAccountK) <1 || SAI != AzureActiveContext$StorageAccountK|| length(AzureActiveContext$StorageKey) <1)
   {
     print("Fetching Storage Key..")
-    STK <- AzureSAGetKey(sc,ResourceGroup = RGI,StorageAccount = SAI)
+    STK <- AzureSAGetKey(AzureActiveContext, ResourceGroup = RGI, StorageAccount = SAI)
   }
   else
     STK <- AzureActiveContext$StorageKey
@@ -126,7 +126,7 @@ AzureCreateSAContainer <- function(AzureActiveContext,Container,StorageAccount,S
   if (length(AzureActiveContext$StorageAccountK) <1 || SAI != AzureActiveContext$StorageAccountK|| length(AzureActiveContext$StorageKey) <1)
   {
     cat("Fetching Storage Key..")
-    STK <- AzureSAGetKey(sc,ResourceGroup = RGI,StorageAccount = SAI)
+    STK <- AzureSAGetKey(AzureActiveContext, ResourceGroup = RGI, StorageAccount = SAI)
   }
   else
     STK <- AzureActiveContext$StorageKey
@@ -204,7 +204,7 @@ AzureDeleteSAContainer <- function(AzureActiveContext,Container,StorageAccount,S
   if (length(AzureActiveContext$StorageAccountK) <1 || SAI != AzureActiveContext$StorageAccountK)
   {
     print("Fetching Storage Key..")
-    STK <- AzureSAGetKey(sc,ResourceGroup = RGI,StorageAccount = SAI)
+    STK <- AzureSAGetKey(AzureActiveContext, ResourceGroup = RGI, StorageAccount = SAI)
   }
   if (length(STK)<1) {stop("Error: No StorageKey provided: Use StorageKey argument or set in AzureContext")}
 
