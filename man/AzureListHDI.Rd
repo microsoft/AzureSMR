@@ -5,16 +5,24 @@
 \title{Get all HDInsight Clusters in default Subscription or details for a specified ClusterName.}
 \usage{
 AzureListHDI(AzureActiveContext, ResourceGroup, ClusterName = "*",
-  SubscriptionID, ATI, Name, Type, Location, verbose = FALSE)
+  SubscriptionID, AzToken, Name, Type, Location, verbose = FALSE)
 }
 \arguments{
 \item{AzureActiveContext}{Context Object}
 
 \item{ResourceGroup}{ResourceGroup Object}
 
-\item{ClusterName}{ResourceGroup Object (or use AzureActiveContext)}
+\item{ClusterName}{Cluster name}
 
 \item{SubscriptionID}{SubscriptionID Object}
+
+\item{AzToken}{Token Object}
+
+\item{Name}{Name}
+
+\item{Type}{Type}
+
+\item{Location}{Location string}
 
 \item{verbose}{Print Tracing information (Default False)}
 }
@@ -25,7 +33,7 @@ Returns Dataframe of HDInsight Clusters
 Get all HDInsight Clusters in default Subscription or details for a specified ClusterName.
 }
 \seealso{
-Other HDInsight: \code{\link{AzureCreateHDI}},
+Other HDInsight functions: \code{\link{AzureCreateHDI}},
   \code{\link{AzureDeleteHDI}}, \code{\link{AzureHDIConf}},
   \code{\link{AzureResizeHDI}},
   \code{\link{AzureRunScriptAction}},

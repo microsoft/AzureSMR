@@ -4,8 +4,8 @@
 \alias{AzureHDIConf}
 \title{Get Configuration Information for a specified ClusterName.}
 \usage{
-AzureHDIConf(AzureActiveContext, ClusterName, ResourceGroup, SUBID, ATI, Name,
-  Type, Location, verbose = FALSE)
+AzureHDIConf(AzureActiveContext, ClusterName, ResourceGroup, SubscriptionID,
+  AzToken, Name, Type, Location, verbose = FALSE)
 }
 \arguments{
 \item{AzureActiveContext}{Context Object}
@@ -13,6 +13,16 @@ AzureHDIConf(AzureActiveContext, ClusterName, ResourceGroup, SUBID, ATI, Name,
 \item{ClusterName}{ClusterName Object}
 
 \item{ResourceGroup}{ResourceGroup Object}
+
+\item{SubscriptionID}{SubscriptionID Object}
+
+\item{AzToken}{Token Object}
+
+\item{Name}{Name}
+
+\item{Type}{Type}
+
+\item{Location}{Location string}
 
 \item{verbose}{Print Tracing information (Default False)}
 }
@@ -23,7 +33,7 @@ Returns Dataframe of HDInsight Clusters information
 Get Configuration Information for a specified ClusterName.
 }
 \seealso{
-Other HDInsight: \code{\link{AzureCreateHDI}},
+Other HDInsight functions: \code{\link{AzureCreateHDI}},
   \code{\link{AzureDeleteHDI}}, \code{\link{AzureListHDI}},
   \code{\link{AzureResizeHDI}},
   \code{\link{AzureRunScriptAction}},

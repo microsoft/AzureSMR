@@ -13,6 +13,10 @@ AzureGetBlob(AzureActiveContext, Blob, Directory, Type = "text",
 
 \item{Blob}{Blob Object}
 
+\item{Directory}{Set Directory to list}
+
+\item{Type}{"Text" or "Raw"}
+
 \item{StorageAccount}{StorageAccount Object}
 
 \item{StorageKey}{StorageKey Object}
@@ -23,21 +27,17 @@ AzureGetBlob(AzureActiveContext, Blob, Directory, Type = "text",
 
 \item{SubscriptionID}{SubscriptionID Object}
 
-\item{AzToken}{Token Object (or use AzureActiveContext)}
+\item{AzToken}{Token Object}
+
+\item{verbose}{Print Tracing information (Default False)}
 }
 \description{
 Get contents from a specifed Storage Blob.
 }
 \seealso{
-Other Storage account: \code{\link{AzureBlobCD}},
+Other Blob store functions: \code{\link{AzureBlobCD}},
   \code{\link{AzureBlobFind}}, \code{\link{AzureBlobLS}},
-  \code{\link{AzureCreateSAContainer}},
-  \code{\link{AzureCreateStorageAccount}},
-  \code{\link{AzureDeleteSAContainer}},
-  \code{\link{AzureDeleteStorageAccount}},
   \code{\link{AzureListSABlobs}},
-  \code{\link{AzureListSAContainers}},
-  \code{\link{AzureListSA}}, \code{\link{AzurePutBlob}},
-  \code{\link{AzureSAGetKey}}
+  \code{\link{AzurePutBlob}}
 }
 

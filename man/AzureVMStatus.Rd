@@ -16,7 +16,9 @@ AzureVMStatus(AzureActiveContext, ResourceGroup, VMName, SubscriptionID,
 
 \item{SubscriptionID}{SubscriptionID Object}
 
-\item{AzToken}{Token Object (or use AzureActiveContext)}
+\item{AzToken}{Token Object}
+
+\item{Ignore}{Ignore}
 
 \item{verbose}{Print Tracing information (Default False)}
 }

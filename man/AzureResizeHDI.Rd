@@ -2,7 +2,7 @@
 % Please edit documentation in R/AzureHDI.R
 \name{AzureResizeHDI}
 \alias{AzureResizeHDI}
-\title{Resize a HDInsight CLuster Role.}
+\title{Resize a HDInsight Cluster Role.}
 \usage{
 AzureResizeHDI(AzureActiveContext, ClusterName, Role = "worker", Size = 2,
   Mode = "Sync", AzToken, SubscriptionID, ResourceGroup, verbose = FALSE)
@@ -12,6 +12,14 @@ AzureResizeHDI(AzureActiveContext, ClusterName, Role = "worker", Size = 2,
 
 \item{ClusterName}{ClusterName Object}
 
+\item{Role}{Role Type: "worker", "head" or "Edge"}
+
+\item{Size}{Desired size of Role Type}
+
+\item{Mode}{"Sync" or "Async"}
+
+\item{AzToken}{Token Object}
+
 \item{SubscriptionID}{SubscriptionID Object}
 
 \item{ResourceGroup}{ResourceGroup Object}
@@ -19,10 +27,10 @@ AzureResizeHDI(AzureActiveContext, ClusterName, Role = "worker", Size = 2,
 \item{verbose}{Print Tracing information (Default False)}
 }
 \description{
-Resize a HDInsight CLuster Role.
+Resize a HDInsight Cluster Role.
 }
 \seealso{
-Other HDInsight: \code{\link{AzureCreateHDI}},
+Other HDInsight functions: \code{\link{AzureCreateHDI}},
   \code{\link{AzureDeleteHDI}}, \code{\link{AzureHDIConf}},
   \code{\link{AzureListHDI}},
   \code{\link{AzureRunScriptAction}},

@@ -206,6 +206,7 @@ AzureStopVM <- function(AzureActiveContext,ResourceGroup, VMName,Mode="Sync",Sub
 #' @inheritParams SetAzureContext
 #' @inheritParams AzureListVM
 #' @inheritParams AzureStartVM
+#' @param Ignore Ignore
 #'
 #' @family Virtual Machine
 #' @export

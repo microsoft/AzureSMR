@@ -10,11 +10,15 @@ AzureSparkJob(AzureActiveContext, FILE, ClusterName, HDIAdmin, HDIPassword,
 \arguments{
 \item{AzureActiveContext}{Context Object}
 
+\item{FILE}{File}
+
 \item{ClusterName}{ClusterName Object}
 
 \item{HDIAdmin}{HDIAdmin Object}
 
 \item{HDIPassword}{HDIPassword Object}
+
+\item{Log}{Log}
 
 \item{verbose}{Print Tracing information (Default False)}
 }

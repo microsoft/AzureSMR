@@ -7,7 +7,21 @@
 AzureHiveStatus(AzureActiveContext, ClusterName, HDIAdmin, HDIPassword,
   verbose = FALSE)
 }
+\arguments{
+\item{AzureActiveContext}{Context Object}
+
+\item{ClusterName}{ClusterName Object}
+
+\item{HDIAdmin}{HDIAdmin Object}
+
+\item{HDIPassword}{HDIPassword Object}
+
+\item{verbose}{Print Tracing information (Default False)}
+}
 \description{
 Get Status of a HDI Hive Service/Version.
+}
+\seealso{
+Other Hive functions: \code{\link{AzureHiveSQL}}
 }
 

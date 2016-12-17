@@ -2,7 +2,7 @@
 % Please edit documentation in R/AzureTemplate.R
 \name{AzureDeployTemplate}
 \alias{AzureDeployTemplate}
-\title{Submit a Azure Resource ManagerTemplate.}
+\title{Deploy an Azure Resource Manager Template.}
 \usage{
 AzureDeployTemplate(AzureActiveContext, DeplName, TemplateURL, ParamURL,
   TemplateJSON, ParamJSON, Mode = "Sync", ResourceGroup, SubscriptionID,
@@ -11,11 +11,32 @@ AzureDeployTemplate(AzureActiveContext, DeplName, TemplateURL, ParamURL,
 \arguments{
 \item{AzureActiveContext}{Context Object}
 
+\item{DeplName}{DeplName}
+
+\item{TemplateURL}{TemplateURL}
+
+\item{ParamURL}{ParamURL}
+
+\item{TemplateJSON}{TemplateJSON}
+
+\item{ParamJSON}{ParamJSON}
+
+\item{Mode}{"Sync" or "Async"}
+
 \item{ResourceGroup}{ResourceGroup Object}
 
 \item{SubscriptionID}{SubscriptionID Object}
+
+\item{AzToken}{Token Object}
+
+\item{verbose}{Print Tracing information (Default False)}
 }
 \description{
-Submit a Azure Resource ManagerTemplate.
+Deploy an Azure Resource Manager Template.
+}
+\seealso{
+Other Template functions: \code{\link{AzureCancelDeploy}},
+  \code{\link{AzureDeleteDeploy}},
+  \code{\link{AzureDeployStatus}}
 }
 

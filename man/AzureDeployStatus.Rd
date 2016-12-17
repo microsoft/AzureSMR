@@ -2,12 +2,30 @@
 % Please edit documentation in R/AzureTemplate.R
 \name{AzureDeployStatus}
 \alias{AzureDeployStatus}
-\title{Check Template DeployStatus.}
+\title{Check Template Deployment Status.}
 \usage{
 AzureDeployStatus(AzureActiveContext, DeplName, ResourceGroup, SubscriptionID,
   AzToken, verbose = FALSE)
 }
+\arguments{
+\item{AzureActiveContext}{Context Object}
+
+\item{DeplName}{DeplName}
+
+\item{ResourceGroup}{ResourceGroup Object}
+
+\item{SubscriptionID}{SubscriptionID Object}
+
+\item{AzToken}{Token Object}
+
+\item{verbose}{Print Tracing information (Default False)}
+}
 \description{
-Check Template DeployStatus.
+Check Template Deployment Status.
+}
+\seealso{
+Other Template functions: \code{\link{AzureCancelDeploy}},
+  \code{\link{AzureDeleteDeploy}},
+  \code{\link{AzureDeployTemplate}}
 }
 

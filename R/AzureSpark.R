@@ -1,12 +1,12 @@
 #' Create new Spark Session.
 #'
 #' @inheritParams SetAzureContext
+#' @inheritParams AzureAuthenticate
+#' @inheritParams AzureCreateHDI
 #'
 #' @param ClusterName ClusterName
 #' @param HDIAdmin HDIAdmin - HDinsight Administrator Name
 #' @param HDIPassword HDinsight Administrator Name
-#' @param Kind Kind Spark/PySpark/Spark
-#' @param verbose Print Tracing information (Default False)
 #'
 #' @family Spark
 #' @export
@@ -148,6 +148,8 @@ AzureSparkStopSession <- function(AzureActiveContext,ClusterName,HDIAdmin,HDIPas
 #' @inheritParams SetAzureContext
 #' @inheritParams AzureSparkNewSession
 #'
+#' @param CMD CMD
+#'
 #' @family Spark
 #' @export
 AzureSparkCMD <- function(AzureActiveContext,CMD,ClusterName,HDIAdmin,HDIPassword,SessionID,verbose = FALSE) {
@@ -227,6 +229,9 @@ AzureSparkCMD <- function(AzureActiveContext,CMD,ClusterName,HDIAdmin,HDIPasswor
 #'
 #' @inheritParams SetAzureContext
 #' @inheritParams AzureSparkNewSession
+#'
+#' @param FILE File
+#' @param Log Log
 #'
 #' @family Spark
 #' @export
@@ -326,7 +331,7 @@ AzureSparkJob <- function(AzureActiveContext,FILE,ClusterName,HDIAdmin,HDIPasswo
 #' @family Spark
 #' @return (manually direct output to Blob fule /SQL in script)
 #' @export
-AzureSparkListJobs <- function(AzureActiveContext,ClusterName,HDIAdmin,HDIPassword,KIND,verbose = FALSE) {
+AzureSparkListJobs <- function(AzureActiveContext,ClusterName,HDIAdmin,HDIPassword,verbose = FALSE) {
   HA = ""
   if(missing(ClusterName)) {CN <- AzureActiveContext$ClusterName} else (CN = ClusterName)
   if(missing(HDIAdmin)) {HA <- AzureActiveContext$HDIAdmin} else (HA = HDIAdmin)
@@ -370,6 +375,8 @@ AzureSparkListJobs <- function(AzureActiveContext,ClusterName,HDIAdmin,HDIPasswo
 #'
 #' @inheritParams SetAzureContext
 #' @inheritParams AzureSparkNewSession
+#'
+#' @param URL URL
 #'
 #' @family Spark
 #'

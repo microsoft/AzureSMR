@@ -4,13 +4,21 @@
 \alias{AzureCreateResourceGroup}
 \title{Create a ResourceGroup.}
 \usage{
-AzureCreateResourceGroup(AzureActiveContext, ResourceGroup, Location, SUBID, AT,
-  verbose = FALSE)
+AzureCreateResourceGroup(AzureActiveContext, ResourceGroup, Location,
+  SubscriptionID, AzToken, verbose = FALSE)
 }
 \arguments{
 \item{AzureActiveContext}{Context Object}
 
 \item{ResourceGroup}{ResourceGroup Object}
+
+\item{Location}{Location string}
+
+\item{SubscriptionID}{SubscriptionID Object}
+
+\item{AzToken}{Token Object}
+
+\item{verbose}{Print Tracing information (Default False)}
 }
 \value{
 Returns Dataframe of Resources
@@ -19,17 +27,8 @@ Returns Dataframe of Resources
 Create a ResourceGroup.
 }
 \seealso{
-Other Resources: \code{\link{AzureAuthenticate}},
-  \code{\link{AzureCheckToken}},
-  \code{\link{AzureDeleteResourceGroup}},
-  \code{\link{AzureListAllRecources}},
-  \code{\link{AzureListRG}},
-  \code{\link{AzureListSubscriptions}}
-
-Other Resources: \code{\link{AzureAuthenticate}},
-  \code{\link{AzureCheckToken}},
-  \code{\link{AzureDeleteResourceGroup}},
-  \code{\link{AzureListAllRecources}},
+Other Resource group functions: \code{\link{AzureDeleteResourceGroup}},
+  \code{\link{AzureListAllResources}},
   \code{\link{AzureListRG}},
   \code{\link{AzureListSubscriptions}}
 }

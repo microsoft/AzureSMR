@@ -13,6 +13,12 @@ AzurePutBlob(AzureActiveContext, Blob, Contents = "", File = "", Directory,
 
 \item{Blob}{Blob Object}
 
+\item{Contents}{- Object to Store or Value}
+
+\item{File}{- Local FileName to Store in Azure Blob}
+
+\item{Directory}{Set Directory to list}
+
 \item{StorageAccount}{StorageAccount Object}
 
 \item{StorageKey}{StorageKey Object}
@@ -23,21 +29,17 @@ AzurePutBlob(AzureActiveContext, Blob, Contents = "", File = "", Directory,
 
 \item{SubscriptionID}{SubscriptionID Object}
 
-\item{AzToken}{Token Object (or use AzureActiveContext)}
+\item{AzToken}{Token Object}
+
+\item{verbose}{Print Tracing information (Default False)}
 }
 \description{
 Write contents to a specifed Storage Blob.
 }
 \seealso{
-Other Storage account: \code{\link{AzureBlobCD}},
+Other Blob store functions: \code{\link{AzureBlobCD}},
   \code{\link{AzureBlobFind}}, \code{\link{AzureBlobLS}},
-  \code{\link{AzureCreateSAContainer}},
-  \code{\link{AzureCreateStorageAccount}},
-  \code{\link{AzureDeleteSAContainer}},
-  \code{\link{AzureDeleteStorageAccount}},
   \code{\link{AzureGetBlob}},
-  \code{\link{AzureListSABlobs}},
-  \code{\link{AzureListSAContainers}},
-  \code{\link{AzureListSA}}, \code{\link{AzureSAGetKey}}
+  \code{\link{AzureListSABlobs}}
 }
 

@@ -10,7 +10,11 @@ AzureBlobCD(AzureActiveContext, Directory, Container, File, StorageAccount,
 \arguments{
 \item{AzureActiveContext}{Context Object}
 
+\item{Directory}{Set Directory to list}
+
 \item{Container}{Container Object}
+
+\item{File}{- Local FileName to Store in Azure Blob}
 
 \item{StorageAccount}{StorageAccount Object}
 
@@ -20,22 +24,17 @@ AzureBlobCD(AzureActiveContext, Directory, Container, File, StorageAccount,
 
 \item{SubscriptionID}{SubscriptionID Object}
 
-\item{AzToken}{Token Object (or use AzureActiveContext)}
+\item{AzToken}{Token Object}
+
+\item{verbose}{Print Tracing information (Default False)}
 }
 \description{
 Azure Blob change current Directory.
 }
 \seealso{
-Other Storage account: \code{\link{AzureBlobFind}},
-  \code{\link{AzureBlobLS}},
-  \code{\link{AzureCreateSAContainer}},
-  \code{\link{AzureCreateStorageAccount}},
-  \code{\link{AzureDeleteSAContainer}},
-  \code{\link{AzureDeleteStorageAccount}},
-  \code{\link{AzureGetBlob}},
+Other Blob store functions: \code{\link{AzureBlobFind}},
+  \code{\link{AzureBlobLS}}, \code{\link{AzureGetBlob}},
   \code{\link{AzureListSABlobs}},
-  \code{\link{AzureListSAContainers}},
-  \code{\link{AzureListSA}}, \code{\link{AzurePutBlob}},
-  \code{\link{AzureSAGetKey}}
+  \code{\link{AzurePutBlob}}
 }
 

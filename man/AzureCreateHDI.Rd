@@ -5,35 +5,62 @@
 \title{Create Specifed HDInsight Cluster.}
 \usage{
 AzureCreateHDI(AzureActiveContext, ClusterName, Location, Kind = "spark",
-  StorageAcc, SKey, Version = "3.4", Workers = 2, AdminUser, AdminPassword,
-  SSHUser, SSHPassword, HiveServer, HiveDB, HiveUser, HivePassword,
-  ResourceGroup, AzToken, SubscriptionID, Mode = "Sync", verbose = FALSE)
+  StorageAccount, SKey, Version = "3.4", Workers = 2, AdminUser,
+  AdminPassword, SSHUser, SSHPassword, HiveServer, HiveDB, HiveUser,
+  HivePassword, ResourceGroup, AzToken, SubscriptionID, Mode = "Sync",
+  verbose = FALSE)
 }
 \arguments{
 \item{AzureActiveContext}{Context Object}
 
-\item{ClusterName}{ClusterName Object}
+\item{ClusterName}{ResourceGroup Object (or use AzureActiveContext)}
 
-\item{Location}{- Location String}
+\item{Location}{Location string}
 
-\item{Kind}{- Kind (spark/hadoop) DEFAULT{spark}}
+\item{Kind}{"hadoop","spark" or "pyspark"}
 
-\item{Workers}{- # of Workers (Default 2)}
+\item{StorageAccount}{StorageAccount Object}
+
+\item{SKey}{Storage Key}
+
+\item{Version}{Version}
+
+\item{Workers}{Number of worker nodes}
+
+\item{AdminUser}{Admin user name}
+
+\item{AdminPassword}{Admin user password}
+
+\item{SSHUser}{SSH user name}
+
+\item{SSHPassword}{SSH user password}
+
+\item{HiveServer}{Hive server}
+
+\item{HiveDB}{Hive DB}
+
+\item{HiveUser}{Hive user name}
+
+\item{HivePassword}{Hive user password}
 
 \item{ResourceGroup}{ResourceGroup Object}
 
+\item{AzToken}{Token Object}
+
 \item{SubscriptionID}{SubscriptionID Object}
+
+\item{Mode}{Mode}
 
 \item{verbose}{Print Tracing information (Default False)}
 }
 \value{
-Returns Success Message
+Success message
 }
 \description{
 Create Specifed HDInsight Cluster.
 }
 \seealso{
-Other HDInsight: \code{\link{AzureDeleteHDI}},
+Other HDInsight functions: \code{\link{AzureDeleteHDI}},
   \code{\link{AzureHDIConf}}, \code{\link{AzureListHDI}},
   \code{\link{AzureResizeHDI}},
   \code{\link{AzureRunScriptAction}},

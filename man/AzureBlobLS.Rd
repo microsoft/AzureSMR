@@ -11,6 +11,10 @@ AzureBlobLS(AzureActiveContext, Directory, Recursive = FALSE, StorageAccount,
 \arguments{
 \item{AzureActiveContext}{Context Object}
 
+\item{Directory}{Set Directory to list}
+
+\item{Recursive}{List directories recursively (Default FALSE)}
+
 \item{StorageAccount}{StorageAccount Object}
 
 \item{StorageKey}{StorageKey Object}
@@ -21,22 +25,17 @@ AzureBlobLS(AzureActiveContext, Directory, Recursive = FALSE, StorageAccount,
 
 \item{SubscriptionID}{SubscriptionID Object}
 
-\item{AzToken}{Token Object (or use AzureActiveContext)}
+\item{AzToken}{Token Object}
+
+\item{verbose}{Print Tracing information (Default False)}
 }
 \description{
 List Blob files in a Storage account directory.
 }
 \seealso{
-Other Storage account: \code{\link{AzureBlobCD}},
-  \code{\link{AzureBlobFind}},
-  \code{\link{AzureCreateSAContainer}},
-  \code{\link{AzureCreateStorageAccount}},
-  \code{\link{AzureDeleteSAContainer}},
-  \code{\link{AzureDeleteStorageAccount}},
-  \code{\link{AzureGetBlob}},
+Other Blob store functions: \code{\link{AzureBlobCD}},
+  \code{\link{AzureBlobFind}}, \code{\link{AzureGetBlob}},
   \code{\link{AzureListSABlobs}},
-  \code{\link{AzureListSAContainers}},
-  \code{\link{AzureListSA}}, \code{\link{AzurePutBlob}},
-  \code{\link{AzureSAGetKey}}
+  \code{\link{AzurePutBlob}}
 }
 

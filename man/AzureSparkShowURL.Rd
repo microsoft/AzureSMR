@@ -8,6 +8,8 @@ AzureSparkShowURL(AzureActiveContext, URL)
 }
 \arguments{
 \item{AzureActiveContext}{Context Object}
+
+\item{URL}{URL}
 }
 \value{
 Show Log in Browser

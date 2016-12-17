@@ -32,7 +32,7 @@ DumpAzureContext <- function(AzureActiveContext){
 #' @param CID Client ID Object
 #' @param KEY Authentication KEY Object
 #' @param SubscriptionID SubscriptionID Object
-#' @param Token Token Object
+#' @param AzToken Token Object
 #' @param ResourceGroup ResourceGroup Object
 #' @param VMName VMName Object
 #' @param StorageAccount StorageAccount Object
@@ -42,13 +42,13 @@ DumpAzureContext <- function(AzureActiveContext){
 #' @param SessionID SessionID Object
 #' @param HDIAdmin HDIAdmin Object
 #' @param HDIPassword HDIPassword Object
-#' @param Kind Kind Object
 #' @param Container Container Object
+#' @param Kind "hadoop","spark" or "pyspark"
 #
 # @param Log Log Object#'
 #'
 #' @export
-SetAzureContext <- function(AzureActiveContext,TID, CID, KEY,Token,
+SetAzureContext <- function(AzureActiveContext,TID, CID, KEY,AzToken,
                             SubscriptionID,ResourceGroup,
                             StorageKey,StorageAccount,
                             Container,Blob,
@@ -58,7 +58,7 @@ SetAzureContext <- function(AzureActiveContext,TID, CID, KEY,Token,
   if (!missing(TID)) AzureActiveContext$TID <- TID
   if (!missing(CID)) AzureActiveContext$CID <- CID
   if (!missing(KEY)) AzureActiveContext$KEY <- KEY
-  if (!missing(Token)) AzureActiveContext$AZtoken <- Token
+  if (!missing(AzToken)) AzureActiveContext$AZtoken <- AzToken
   if (!missing(SubscriptionID)) AzureActiveContext$SubscriptionID <- SubscriptionID
   if (!missing(ResourceGroup)) AzureActiveContext$ResourceGroup <- ResourceGroup
   if (!missing(StorageKey)) AzureActiveContext$StorageKey <- StorageKey

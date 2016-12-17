@@ -1,5 +1,7 @@
 #' Get Status of a HDI Hive Service/Version.
 #'
+#' @inheritParams SetAzureContext
+#' @inheritParams AzureAuthenticate
 # @param AzureActiveContext Azure Context Object
 # @param ClusterName ClusterName
 # @param HDIAdmin HDIAdmin - HDinsight Administrator Name
@@ -7,6 +9,7 @@
 # @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
 # @param verbose Print Tracing information (Default False)
 #'
+#' @family Hive functions
 #' @export
 AzureHiveStatus <- function(AzureActiveContext,ClusterName,HDIAdmin,HDIPassword,verbose = FALSE) {
   HA = ""
@@ -38,14 +41,19 @@ AzureHiveStatus <- function(AzureActiveContext,ClusterName,HDIAdmin,HDIPassword,
 
 
 #' Submit SQL command to Hive Service.
-# @param AzureActiveContext Azure Context Object
-# @param CMD SQl COmmand String
+#'
+#' @inheritParams SetAzureContext
+#' @inheritParams AzureAuthenticate
+#'
+#' @param CMD SQl COmmand String
+#' @param Path path
 # @param ClusterName ClusterName
 # @param HDIAdmin HDIAdmin - HDinsight Administrator Name
 # @param HDIPassword HDinsight Administrator Name
 # @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
 # @param Verbose Print Tracing information (Default False)
 #'
+#' @family Hive functions
 #' @export
 AzureHiveSQL <- function(AzureActiveContext,CMD,ClusterName,HDIAdmin,HDIPassword,Path="wasb:///tmp/",verbose = FALSE) {
   HA = ""

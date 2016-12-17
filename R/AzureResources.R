@@ -1,84 +1,14 @@
-#' Authenticates against Azure Active Directory application.
-#'
-#' @inheritParams SetAzureContext
-#' @param verbose Print Tracing information (Default False)
-#'
-#' @note See \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/} to learn how to set up an Active Directory application
-#' @references \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/}
-#'
-#' @return Retunrs Azure Tokem and sets AzureContext Token
-#' @family Resources
-#' @export
-AzureAuthenticate <- function(AzureActiveContext,TID, CID, KEY,verbose = FALSE) {
-
-  if(missing(TID)) {ATID <- AzureActiveContext$TID} else (ATID = TID)
-  if(missing(CID)) {ACID <- AzureActiveContext$CID} else (ACID = CID)
-  if(missing(KEY)) {AKEY <- AzureActiveContext$KEY} else (AKEY = KEY)
-
-  if (!length(ATID)) {stop("Error: No TID provided: Use TID argument or set in AzureContext")}
-  if (!length(ACID)) {stop("Error: No CID provided: Use CID argument or set in AzureContext")}
-  if (!length(AKEY)) {stop("Error: No KEY provided: Use KEY argument or set in AzureContext")}
-  verbosity <- if(verbose) httr::verbose(TRUE) else NULL
-
-  URLGT <- paste0("https://login.microsoftonline.com/",ATID,"/oauth2/token?api-version=1.0")
-
-  bodyGT <- paste0("grant_type=client_credentials&resource=https%3A%2F%2Fmanagement.azure.com%2F&client_id=",ACID,"&client_secret=",AKEY)
-
-  r <- httr::POST(URLGT,
-                  add_headers(
-                    .headers = c("Cache-Control" = "no-cache",
-                                 "Content-Type" = "application/x-www-form-urlencoded")),
-                  body=bodyGT,
-                  verbosity)
-  if (status_code(r) != 200) {
-    j1 <- content(r, "parsed",encoding="UTF-8")
-    message(j1$error)
-    message(j1$error_description)
-    stop(paste("Error: Return code",status_code(r) ))
-  }
-
-  AT <- paste("Bearer",j1$access_token)
-
-  AzureActiveContext$Token  <- AT
-  AzureActiveContext$TID    <- ATID
-  AzureActiveContext$CID    <- ACID
-  AzureActiveContext$KEY    <- AKEY
-  AzureActiveContext$EXPIRY <- Sys.time() + 3598
-  SUBS <- AzureListSubscriptions(AzureActiveContext)
-  return("Authentication Suceeded : Key Obtained")
-}
-
-
-
-#' Check the timestamp of a Token and Renew if needed.
-#'
-#' @inheritParams SetAzureContext
-#' @family Resources
-#' @export
-AzureCheckToken <- function(AzureActiveContext) {
-  if (is.null(AzureActiveContext$EXPIRY)) print (stop("Not Authenticated: Use AzureAuthenticate"))
-
-  if (AzureActiveContext$EXPIRY < Sys.time())
-  {
-    print("Azure Token Expired: Attempting automatic renewal")
-    AzureAuthenticate(AzureActiveContext)
-  }
-  return("OK")
-}
-
 
 #' Get available Subscriptions.
 #'
-#' @description  Get available Subscriptions
-#' @param Azure Context Object
-#' @param Token Token Object (or use AzureActiveContext)
-#' @param Verbose Print Tracing information (Default False)
+#' @inheritParams SetAzureContext
+#' @inheritParams AzureAuthenticate
 #'
 #' @return Returns Dataframe of SubscriptionID sets AzureContext SubscriptionID
-#' @family Resources
+#' @family Resource group functions
 #' @export
-AzureListSubscriptions <- function(AzureActiveContext,ATI,verbose = FALSE) {
-  if(missing(ATI)) {AT <- AzureActiveContext$Token} else (AT = ATI)
+AzureListSubscriptions <- function(AzureActiveContext,AzToken,verbose = FALSE) {
+  if(missing(AzToken)) {AT <- AzureActiveContext$Token} else (AT = AzToken)
   if (nchar(AT)<5) {stop("Error: No Token / Not currently Authenticated.")}
   verbosity <- if(verbose) httr::verbose(TRUE) else NULL
 
@@ -98,15 +28,15 @@ AzureListSubscriptions <- function(AzureActiveContext,ATI,verbose = FALSE) {
 #' Get all Resource Groups in default Subscription.
 #'
 #' @inheritParams SetAzureContext
-#' @family Resources
+#' @inheritParams AzureAuthenticate
 #'
 #' @return Returns Dataframe of ResourceGroups
-#' @family Resources
+#' @family Resource group functions
 #' @export
-AzureListRG <- function(AzureActiveContext,SUBID,AT,verbose = FALSE) {
+AzureListRG <- function(AzureActiveContext,SubscriptionID,AzToken,verbose = FALSE) {
   AzureCheckToken(AzureActiveContext)
-  if(missing(AT)) {ATI <- AzureActiveContext$Token} else (ATI = AT)
-  if(missing(SUBID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SUBID)
+  if(missing(AzToken)) {ATI <- AzureActiveContext$Token} else (ATI = AzToken)
+  if(missing(SubscriptionID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SubscriptionID)
   if (!length(ATI)) {stop("Error: No Token / Not currently Authenticated.")}
   if (!length(SUBIDI)) {stop("Error: No SubscriptionID provided: Use SUBID argument or set in AzureContext")}
   verbosity <- if(verbose) httr::verbose(TRUE) else NULL
@@ -131,22 +61,26 @@ AzureListRG <- function(AzureActiveContext,SUBID,AT,verbose = FALSE) {
 
 #' Get all Resource in default Subscription.
 #'
+#' @inheritParams SetAzureContext
+#' @inheritParams AzureAuthenticate
+#'
 #' @param AzureActiveContext Azure Context Object
 #' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
-#' @param Token Token Object (or use AzureActiveContext)
 #' @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
-#' @param Verbose Print Tracing information (Default False)
+#' @param Name Name
+#' @param Type Type
+#' @param Location Location string
 #'
 #' @return Returns Dataframe of Resources
-#' @family Resources
+#' @family Resource group functions
 #' @export
-AzureListAllRecources <- function(AzureActiveContext,ResourceGroup,
-                                  SUBID,AT,Name, Type, Location,verbose = FALSE) {
+AzureListAllResources <- function(AzureActiveContext,ResourceGroup,
+                                  SubscriptionID,AzToken,Name, Type, Location,verbose = FALSE) {
 
   AzureCheckToken(AzureActiveContext)
 
-  if(missing(AT)) {ATI <- AzureActiveContext$Token} else (ATI = AT)
-  if(missing(SUBID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SUBID)
+  if(missing(AzToken)) {ATI <- AzureActiveContext$Token} else (ATI = AzToken)
+  if(missing(SubscriptionID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SubscriptionID)
   #  if (ATI == "") stop("Token not provided")
   #  if (SUBIDI == "") stop("Subscription not provided")
 
@@ -194,21 +128,17 @@ AzureListAllRecources <- function(AzureActiveContext,ResourceGroup,
 #' Create a ResourceGroup.
 #'
 #' @inheritParams SetAzureContext
-#' @family Resources
-#'
-# @param AzureActiveContext - Azure Context Object
-# @param ResourceGroup - ResourceGroup Object (or use AzureActiveContext)
-# @param AT - Token Object (or use AzureActiveContext)
-# @param SUBID - SubscriptionID Object (or use AzureActiveContext)
-# @param Verbose - Print Tracing information (Default False)
+#' @inheritParams AzureAuthenticate
+#' @inheritParams AzureListAllResources
 #'
 #' @return Returns Dataframe of Resources
-#' @family Resources
+#' @family Resource group functions
 #' @export
-AzureCreateResourceGroup <- function(AzureActiveContext,ResourceGroup,Location,SUBID,AT,verbose=FALSE) {
+AzureCreateResourceGroup <- function(AzureActiveContext,ResourceGroup,
+                                     Location,SubscriptionID,AzToken,verbose=FALSE) {
   AzureCheckToken(AzureActiveContext)
-  if(missing(AT)) {ATI <- AzureActiveContext$Token} else (ATI = AT)
-  if(missing(SUBID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SUBID)
+  if(missing(AzToken)) {ATI <- AzureActiveContext$Token} else (ATI = AzToken)
+  if(missing(SubscriptionID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SubscriptionID)
   #  if (ATI == "") stop("Token not provided")
   #  if (SUBIDI == "") stop("Subscription not provided")
   if(missing(ResourceGroup)) {RGI <- AzureActiveContext$ResourceGroup} else (RGI = ResourceGroup)
@@ -237,21 +167,18 @@ AzureCreateResourceGroup <- function(AzureActiveContext,ResourceGroup,Location,S
 #' Delete a ResourceGroup with all Resources.
 #'
 #' @inheritParams SetAzureContext
-#' @family Resources
-# @param AzureActiveContext Azure Context Object
-# @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
-# @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
-# @param Token Token Object (or use AzureActiveContext)
-# @param Verbose Print Tracing information (Default False)
+#' @inheritParams AzureAuthenticate
+#' @inheritParams AzureListAllResources
 #'
 #' @return Returns Dataframe of Resources
-#' @family Resources
+#' @family Resource group functions
 #' @export
-AzureDeleteResourceGroup <- function(AzureActiveContext,ResourceGroup,SUBID,AT, Type,verbose=FALSE) {
+AzureDeleteResourceGroup <- function(AzureActiveContext,ResourceGroup,SubscriptionID,
+                                     AzToken, Type,verbose=FALSE) {
   AzureCheckToken(AzureActiveContext)
 
-  if(missing(AT)) {ATI <- AzureActiveContext$Token} else (ATI = AT)
-  if(missing(SUBID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SUBID)
+  if(missing(AzToken)) {ATI <- AzureActiveContext$Token} else (ATI = AzToken)
+  if(missing(SubscriptionID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SubscriptionID)
   #  if (ATI == "") stop("Token not provided")
   #  if (SUBIDI == "") stop("Subscription not provided")
   if(missing(ResourceGroup)) stop("Please supply Resource Group to Confirm")
