@@ -28,15 +28,10 @@ AzureCreateSAContainer(AzureActiveContext, Container, StorageAccount,
 Create Storage Containers in a specified Storage Account.
 }
 \seealso{
-Other Storage account: \code{\link{AzureBlobCD}},
-  \code{\link{AzureBlobFind}}, \code{\link{AzureBlobLS}},
-  \code{\link{AzureCreateStorageAccount}},
+Other Storage account: \code{\link{AzureCreateStorageAccount}},
   \code{\link{AzureDeleteSAContainer}},
   \code{\link{AzureDeleteStorageAccount}},
-  \code{\link{AzureGetBlob}},
-  \code{\link{AzureListSABlobs}},
   \code{\link{AzureListSAContainers}},
-  \code{\link{AzureListSA}}, \code{\link{AzurePutBlob}},
-  \code{\link{AzureSAGetKey}}
+  \code{\link{AzureListSA}}, \code{\link{AzureSAGetKey}}
 }
 

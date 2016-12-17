@@ -4,10 +4,12 @@
 \alias{AzureListSubscriptions}
 \title{Get available Subscriptions.}
 \usage{
-AzureListSubscriptions(AzureActiveContext, ATI, verbose = FALSE)
+AzureListSubscriptions(AzureActiveContext, AzToken, verbose = FALSE)
 }
 \arguments{
 \item{AzureActiveContext}{Context Object}
+
+\item{AzToken}{Token Object}
 
 \item{verbose}{Print Tracing information (Default False)}
 }
@@ -18,11 +20,9 @@ Returns Dataframe of SubscriptionID sets AzureContext SubscriptionID
 Get available Subscriptions.
 }
 \seealso{
-Other Resources: \code{\link{AzureAuthenticate}},
-  \code{\link{AzureCheckToken}},
-  \code{\link{AzureCreateResourceGroup}},
+Other Resource group functions: \code{\link{AzureCreateResourceGroup}},
   \code{\link{AzureDeleteResourceGroup}},
-  \code{\link{AzureListAllRecources}},
+  \code{\link{AzureListAllResources}},
   \code{\link{AzureListRG}}
 }
 

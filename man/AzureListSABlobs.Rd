@@ -28,15 +28,8 @@ AzureListSABlobs(AzureActiveContext, StorageAccount, StorageKey, Container,
 List Storage Containers for Specified Storage Account.
 }
 \seealso{
-Other Storage account: \code{\link{AzureBlobCD}},
+Other Blob store functions: \code{\link{AzureBlobCD}},
   \code{\link{AzureBlobFind}}, \code{\link{AzureBlobLS}},
-  \code{\link{AzureCreateSAContainer}},
-  \code{\link{AzureCreateStorageAccount}},
-  \code{\link{AzureDeleteSAContainer}},
-  \code{\link{AzureDeleteStorageAccount}},
-  \code{\link{AzureGetBlob}},
-  \code{\link{AzureListSAContainers}},
-  \code{\link{AzureListSA}}, \code{\link{AzurePutBlob}},
-  \code{\link{AzureSAGetKey}}
+  \code{\link{AzureGetBlob}}, \code{\link{AzurePutBlob}}
 }
 

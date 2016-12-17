@@ -28,15 +28,10 @@ AzureDeleteSAContainer(AzureActiveContext, Container, StorageAccount,
 Delete Storage Container in a specified Storage Account.
 }
 \seealso{
-Other Storage account: \code{\link{AzureBlobCD}},
-  \code{\link{AzureBlobFind}}, \code{\link{AzureBlobLS}},
-  \code{\link{AzureCreateSAContainer}},
+Other Storage account: \code{\link{AzureCreateSAContainer}},
   \code{\link{AzureCreateStorageAccount}},
   \code{\link{AzureDeleteStorageAccount}},
-  \code{\link{AzureGetBlob}},
-  \code{\link{AzureListSABlobs}},
   \code{\link{AzureListSAContainers}},
-  \code{\link{AzureListSA}}, \code{\link{AzurePutBlob}},
-  \code{\link{AzureSAGetKey}}
+  \code{\link{AzureListSA}}, \code{\link{AzureSAGetKey}}
 }
 

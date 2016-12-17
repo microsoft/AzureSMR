@@ -30,11 +30,6 @@ See \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group
 \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/}
 }
 \seealso{
-Other Resources: \code{\link{AzureCheckToken}},
-  \code{\link{AzureCreateResourceGroup}},
-  \code{\link{AzureDeleteResourceGroup}},
-  \code{\link{AzureListAllRecources}},
-  \code{\link{AzureListRG}},
-  \code{\link{AzureListSubscriptions}}
+Other Resources: \code{\link{AzureCheckToken}}
 }
 

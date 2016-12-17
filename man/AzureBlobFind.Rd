@@ -10,6 +10,8 @@ AzureBlobFind(AzureActiveContext, File, StorageAccount, StorageKey, Container,
 \arguments{
 \item{AzureActiveContext}{Context Object}
 
+\item{File}{- Local FileName to Store in Azure Blob}
+
 \item{StorageAccount}{StorageAccount Object}
 
 \item{StorageKey}{StorageKey Object}
@@ -28,16 +30,9 @@ AzureBlobFind(AzureActiveContext, File, StorageAccount, StorageKey, Container,
 Find File in a Storage account directory.
 }
 \seealso{
-Other Storage account: \code{\link{AzureBlobCD}},
-  \code{\link{AzureBlobLS}},
-  \code{\link{AzureCreateSAContainer}},
-  \code{\link{AzureCreateStorageAccount}},
-  \code{\link{AzureDeleteSAContainer}},
-  \code{\link{AzureDeleteStorageAccount}},
-  \code{\link{AzureGetBlob}},
+Other Blob store functions: \code{\link{AzureBlobCD}},
+  \code{\link{AzureBlobLS}}, \code{\link{AzureGetBlob}},
   \code{\link{AzureListSABlobs}},
-  \code{\link{AzureListSAContainers}},
-  \code{\link{AzureListSA}}, \code{\link{AzurePutBlob}},
-  \code{\link{AzureSAGetKey}}
+  \code{\link{AzurePutBlob}}
 }
 

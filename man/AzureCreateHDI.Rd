@@ -5,9 +5,10 @@
 \title{Create Specifed HDInsight Cluster.}
 \usage{
 AzureCreateHDI(AzureActiveContext, ClusterName, Location, Kind = "spark",
-  StorageAcc, SKey, Version = "3.4", Workers = 2, AdminUser, AdminPassword,
-  SSHUser, SSHPassword, HiveServer, HiveDB, HiveUser, HivePassword,
-  ResourceGroup, AzToken, subscriptionID, Mode = "Sync", verbose = FALSE)
+  StorageAccount, SKey, Version = "3.4", Workers = 2, AdminUser,
+  AdminPassword, SSHUser, SSHPassword, HiveServer, HiveDB, HiveUser,
+  HivePassword, ResourceGroup, AzToken, SubscriptionID, Mode = "Sync",
+  verbose = FALSE)
 }
 \arguments{
 \item{AzureActiveContext}{Context Object}
@@ -17,6 +18,8 @@ AzureCreateHDI(AzureActiveContext, ClusterName, Location, Kind = "spark",
 \item{Location}{Location string}
 
 \item{Kind}{"hadoop","spark" or "pyspark"}
+
+\item{StorageAccount}{StorageAccount Object}
 
 \item{SKey}{Storage Key}
 
@@ -44,6 +47,8 @@ AzureCreateHDI(AzureActiveContext, ClusterName, Location, Kind = "spark",
 
 \item{AzToken}{Token Object}
 
+\item{SubscriptionID}{SubscriptionID Object}
+
 \item{Mode}{Mode}
 
 \item{verbose}{Print Tracing information (Default False)}
@@ -55,7 +60,7 @@ Success message
 Create Specifed HDInsight Cluster.
 }
 \seealso{
-Other HDInsight: \code{\link{AzureDeleteHDI}},
+Other HDInsight functions: \code{\link{AzureDeleteHDI}},
   \code{\link{AzureHDIConf}}, \code{\link{AzureListHDI}},
   \code{\link{AzureResizeHDI}},
   \code{\link{AzureRunScriptAction}},

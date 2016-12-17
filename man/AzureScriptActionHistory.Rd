@@ -2,10 +2,10 @@
 % Please edit documentation in R/AzureHDI.R
 \name{AzureScriptActionHistory}
 \alias{AzureScriptActionHistory}
-\title{Get all HDInsight Script Action Historyfor a specified ClusterName.}
+\title{Get all HDInsight Script Action History for a specified ClusterName.}
 \usage{
 AzureScriptActionHistory(AzureActiveContext, ResourceGroup, ClusterName = "*",
-  SubscriptionID, ATI, Name, Type, verbose = FALSE)
+  SubscriptionID, AzToken, Name, Type, verbose = FALSE)
 }
 \arguments{
 \item{AzureActiveContext}{Context Object}
@@ -16,7 +16,7 @@ AzureScriptActionHistory(AzureActiveContext, ResourceGroup, ClusterName = "*",
 
 \item{SubscriptionID}{SubscriptionID Object}
 
-\item{ATI}{ATI}
+\item{AzToken}{Token Object}
 
 \item{Name}{Name}
 
@@ -28,10 +28,10 @@ AzureScriptActionHistory(AzureActiveContext, ResourceGroup, ClusterName = "*",
 Returns Dataframe of HDInsight Clusters
 }
 \description{
-Get all HDInsight Script Action Historyfor a specified ClusterName.
+Get all HDInsight Script Action History for a specified ClusterName.
 }
 \seealso{
-Other HDInsight: \code{\link{AzureCreateHDI}},
+Other HDInsight functions: \code{\link{AzureCreateHDI}},
   \code{\link{AzureDeleteHDI}}, \code{\link{AzureHDIConf}},
   \code{\link{AzureListHDI}}, \code{\link{AzureResizeHDI}},
   \code{\link{AzureRunScriptAction}}

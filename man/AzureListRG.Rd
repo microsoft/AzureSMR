@@ -4,10 +4,14 @@
 \alias{AzureListRG}
 \title{Get all Resource Groups in default Subscription.}
 \usage{
-AzureListRG(AzureActiveContext, subscriptionID, AT, verbose = FALSE)
+AzureListRG(AzureActiveContext, SubscriptionID, AzToken, verbose = FALSE)
 }
 \arguments{
 \item{AzureActiveContext}{Context Object}
+
+\item{SubscriptionID}{SubscriptionID Object}
+
+\item{AzToken}{Token Object}
 
 \item{verbose}{Print Tracing information (Default False)}
 }
@@ -18,18 +22,9 @@ Returns Dataframe of ResourceGroups
 Get all Resource Groups in default Subscription.
 }
 \seealso{
-Other Resources: \code{\link{AzureAuthenticate}},
-  \code{\link{AzureCheckToken}},
-  \code{\link{AzureCreateResourceGroup}},
+Other Resource group functions: \code{\link{AzureCreateResourceGroup}},
   \code{\link{AzureDeleteResourceGroup}},
-  \code{\link{AzureListAllRecources}},
-  \code{\link{AzureListSubscriptions}}
-
-Other Resources: \code{\link{AzureAuthenticate}},
-  \code{\link{AzureCheckToken}},
-  \code{\link{AzureCreateResourceGroup}},
-  \code{\link{AzureDeleteResourceGroup}},
-  \code{\link{AzureListAllRecources}},
+  \code{\link{AzureListAllResources}},
   \code{\link{AzureListSubscriptions}}
 }
 

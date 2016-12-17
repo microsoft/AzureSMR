@@ -40,7 +40,7 @@ Returns Success Message
 Run Script Action on HDI Cluster.
 }
 \seealso{
-Other HDInsight: \code{\link{AzureCreateHDI}},
+Other HDInsight functions: \code{\link{AzureCreateHDI}},
   \code{\link{AzureDeleteHDI}}, \code{\link{AzureHDIConf}},
   \code{\link{AzureListHDI}}, \code{\link{AzureResizeHDI}},
   \code{\link{AzureScriptActionHistory}}

@@ -2,19 +2,19 @@
 #'
 #' @inheritParams SetAzureContext
 #' @inheritParams AzureAuthenticate
-#' @param ClusterName ResourceGroup Object (or use AzureActiveContext)
-# @param Token Token Object (or use AzureActiveContext)
-#' @param verbose Print Tracing information (Default False)
+#' @inheritParams AzureListAllResources
 #'
-#' @family HDInsight
+#' @param ClusterName Cluster name
+#'
+#' @family HDInsight functions
 #'
 #' @return Returns Dataframe of HDInsight Clusters
 #' @export
 AzureListHDI <- function(AzureActiveContext,ResourceGroup,ClusterName="*",
-                         SubscriptionID,ATI,Name, Type,Location,verbose = FALSE) {
+                         SubscriptionID,AzToken,Name, Type,Location,verbose = FALSE) {
 
   AzureCheckToken(AzureActiveContext)
-  if(missing(ATI)) {AT <- AzureActiveContext$Token} else (AT = ATI)
+  if(missing(AzToken)) {AT <- AzureActiveContext$Token} else (AT = AzToken)
   if(missing(SubscriptionID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SubscriptionID)
   if(missing(ResourceGroup)) {RGI <- AzureActiveContext$ResourceGroup} else (RGI = ResourceGroup)
   verbosity <- if(verbose) httr::verbose(TRUE) else NULL
@@ -108,14 +108,15 @@ AzureListHDI <- function(AzureActiveContext,ResourceGroup,ClusterName="*",
 #' @inheritParams AzureAuthenticate
 #' @inheritParams AzureListHDI
 #'
-#' @family HDInsight
 #'
 #' @return Returns Dataframe of HDInsight Clusters information
+#' @family HDInsight functions
 #' @export
-AzureHDIConf <- function(AzureActiveContext,ClusterName,ResourceGroup,SUBID,ATI,Name, Type,Location,verbose = FALSE) {
+AzureHDIConf <- function(AzureActiveContext,ClusterName,ResourceGroup,SubscriptionID,
+                         AzToken,Name, Type,Location,verbose = FALSE) {
   AzureCheckToken(AzureActiveContext)
-  if(missing(ATI)) {AT <- AzureActiveContext$Token} else (AT = ATI)
-  if(missing(SUBID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SUBID)
+  if(missing(AzToken)) {AT <- AzureActiveContext$Token} else (AT = AzToken)
+  if(missing(SubscriptionID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SubscriptionID)
   if(missing(ResourceGroup)) {RGI <- AzureActiveContext$ResourceGroup} else (RGI = ResourceGroup)
   if(missing(ClusterName)) {CN <- AzureActiveContext$ClusterName} else (CN = ClusterName)
   verbosity <- if(verbose) httr::verbose(TRUE) else NULL
@@ -158,17 +159,17 @@ AzureHDIConf <- function(AzureActiveContext,ClusterName,ResourceGroup,SUBID,ATI,
 }
 
 
-#' Resize a HDInsight CLuster Role.
+#' Resize a HDInsight Cluster Role.
 #'
 #' @inheritParams SetAzureContext
 #' @inheritParams AzureAuthenticate
 #' @inheritParams AzureListHDI
 #'
-#' @family HDInsight
 #' @param Role Role Type: "worker", "head" or "Edge"
 #' @param Size Desired size of Role Type
 #' @param Mode "Sync" or "Async"
 #'
+#' @family HDInsight functions
 #' @export
 AzureResizeHDI <- function(AzureActiveContext,ClusterName, Role="worker", Size=2, Mode="Sync",AzToken, SubscriptionID,ResourceGroup,verbose = FALSE) {
   AzureCheckToken(AzureActiveContext)
@@ -245,9 +246,8 @@ AzureResizeHDI <- function(AzureActiveContext,ClusterName, Role="worker", Size=2
 #' @inheritParams AzureAuthenticate
 #' @inheritParams AzureListHDI
 #'
-#' @family HDInsight
-#'
 #' @return Returns Dataframe of HDInsight Clusters information
+#' @family HDInsight functions
 #' @export
 AzureDeleteHDI <- function(AzureActiveContext,ClusterName,AzToken, SubscriptionID,ResourceGroup,verbose = FALSE) {
 
@@ -283,7 +283,6 @@ AzureDeleteHDI <- function(AzureActiveContext,ClusterName,AzToken, SubscriptionI
 #'
 #'
 #' @param ClusterName ResourceGroup Object (or use AzureActiveContext)
-#' @param Location Location string
 #' @param SKey Storage Key
 #' @param Version Version
 #' @param AdminUser Admin user name
@@ -298,24 +297,24 @@ AzureDeleteHDI <- function(AzureActiveContext,ClusterName,AzToken, SubscriptionI
 #' @param Mode Mode
 #'
 #' @return Success message
-#' @family HDInsight
+#' @family HDInsight functions
 #' @export
 AzureCreateHDI <- function(AzureActiveContext,ClusterName,
                            Location,Kind = "spark",
-                           StorageAcc, SKey, Version="3.4", Workers=2,
+                           StorageAccount, SKey, Version="3.4", Workers=2,
                            AdminUser,AdminPassword,
                            SSHUser,SSHPassword,
                            HiveServer,HiveDB,HiveUser,HivePassword,
-                           ResourceGroup,AzToken, subscriptionID,
+                           ResourceGroup,AzToken, SubscriptionID,
                            Mode="Sync",verbose = FALSE) {
   AzureCheckToken(AzureActiveContext)
 
   if(missing(ResourceGroup)) {RGI <- AzureActiveContext$ResourceGroup} else (RGI = ResourceGroup)
-  if(missing(subscriptionID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = subscriptionID)
+  if(missing(SubscriptionID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SubscriptionID)
   if(missing(AzToken)) {ATI <- AzureActiveContext$Token} else (ATI = AzToken)
   verbosity <- if(verbose) httr::verbose(TRUE) else NULL
 
-  if (!length(StorageAcc)) {stop("Error: No Storage Account (StorageAcc) provided")}
+  if (!length(StorageAccount)) {stop("Error: No Storage Account (StorageAcc) provided")}
 #  if (!length(SKey)) {stop("Error: No Storage Key (SKey) provided")}
   if (!length(Location)) {stop("Error: No Location provided")}
   if (!length(ClusterName)) {stop("Error: No Valid ClusterName provided")}
@@ -326,7 +325,7 @@ AzureCreateHDI <- function(AzureActiveContext,ClusterName,
   if (!length(RGI)) {stop("Error: No ResourceGroup provided: Use ResourceGroup argument or set in AzureContext")}
 
   cat("Fetching Storage Key..")
-  SKey <- AzureSAGetKey(AzureActiveContext,ResourceGroup = RGI,StorageAccount = StorageAcc)
+  SKey <- AzureSAGetKey(AzureActiveContext,ResourceGroup = RGI,StorageAccount = StorageAccount)
 
   HIVE <- FALSE
   print("1")
@@ -524,8 +523,8 @@ AzureCreateHDI <- function(AzureActiveContext,ClusterName,
 #' @param EdgeNode install on worker nodes (default FALSE)
 #' @param Parameters Parameters
 #'
-#' @family HDInsight
 #' @return Returns Success Message
+#' @family HDInsight functions
 #' @export
 AzureRunScriptAction <- function(AzureActiveContext,ScriptName = "script1",ScriptURL,
                                  HeadNode=TRUE,WorkerNode=FALSE,EdgeNode=FALSE,
@@ -592,24 +591,20 @@ AzureRunScriptAction <- function(AzureActiveContext,ScriptName = "script1",Scrip
 }
 
 
-#' Get all HDInsight Script Action Historyfor a specified ClusterName.
+#' Get all HDInsight Script Action History for a specified ClusterName.
 #'
 #' @inheritParams SetAzureContext
 #' @inheritParams AzureListHDI
 #' @inheritParams AzureRunScriptAction
 #'
-#' @param ATI ATI
-#' @param Name Name
-#' @param Type Type
-#'
-#' @family HDInsight
-#'
 #' @return Returns Dataframe of HDInsight Clusters
+#' @family HDInsight functions
 #' @export
 AzureScriptActionHistory <- function(AzureActiveContext,ResourceGroup,
-                                     ClusterName="*",SubscriptionID,ATI,Name, Type,verbose = FALSE) {
+                                     ClusterName="*",SubscriptionID,
+                                     AzToken,Name, Type,verbose = FALSE) {
     AzureCheckToken(AzureActiveContext)
-    if(missing(ATI)) {AT <- AzureActiveContext$Token} else (AT = ATI)
+    if(missing(AzToken)) {AT <- AzureActiveContext$Token} else (AT = AzToken)
     if(missing(ClusterName)) {CN <- AzureActiveContext$ClusterName} else (CN = ClusterName)
     if(missing(SubscriptionID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SubscriptionID)
     if(missing(ResourceGroup)) {RGI <- AzureActiveContext$ResourceGroup} else (RGI = ResourceGroup)

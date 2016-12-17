@@ -4,15 +4,11 @@
 #' @inheritParams SetAzureContext
 #' @inheritParams AzureAuthenticate
 #'
-# @param Azure Context Object
-# @param Token Token Object (or use AzureActiveContext)
-# @param Verbose Print Tracing information (Default False)
-#'
 #' @return Returns Dataframe of SubscriptionID sets AzureContext SubscriptionID
-#' @family Resources
+#' @family Resource group functions
 #' @export
-AzureListSubscriptions <- function(AzureActiveContext,ATI,verbose = FALSE) {
-  if(missing(ATI)) {AT <- AzureActiveContext$Token} else (AT = ATI)
+AzureListSubscriptions <- function(AzureActiveContext,AzToken,verbose = FALSE) {
+  if(missing(AzToken)) {AT <- AzureActiveContext$Token} else (AT = AzToken)
   if (nchar(AT)<5) {stop("Error: No Token / Not currently Authenticated.")}
   verbosity <- if(verbose) httr::verbose(TRUE) else NULL
 
@@ -33,14 +29,13 @@ AzureListSubscriptions <- function(AzureActiveContext,ATI,verbose = FALSE) {
 #'
 #' @inheritParams SetAzureContext
 #' @inheritParams AzureAuthenticate
-#' @family Resources
 #'
 #' @return Returns Dataframe of ResourceGroups
-#' @family Resources
+#' @family Resource group functions
 #' @export
-AzureListRG <- function(AzureActiveContext,subscriptionID,AT,verbose = FALSE) {
+AzureListRG <- function(AzureActiveContext,SubscriptionID,AzToken,verbose = FALSE) {
   AzureCheckToken(AzureActiveContext)
-  if(missing(AT)) {ATI <- AzureActiveContext$Token} else (ATI = AT)
+  if(missing(AzToken)) {ATI <- AzureActiveContext$Token} else (ATI = AzToken)
   if(missing(SubscriptionID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SubscriptionID)
   if (!length(ATI)) {stop("Error: No Token / Not currently Authenticated.")}
   if (!length(SUBIDI)) {stop("Error: No SubscriptionID provided: Use SUBID argument or set in AzureContext")}
@@ -71,13 +66,15 @@ AzureListRG <- function(AzureActiveContext,subscriptionID,AT,verbose = FALSE) {
 #'
 #' @param AzureActiveContext Azure Context Object
 #' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
-# @param AzToken Token Object (or use AzureActiveContext)
 #' @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
+#' @param Name Name
+#' @param Type Type
+#' @param Location Location string
 #'
 #' @return Returns Dataframe of Resources
-#' @family Resources
+#' @family Resource group functions
 #' @export
-AzureListAllRecources <- function(AzureActiveContext,ResourceGroup,
+AzureListAllResources <- function(AzureActiveContext,ResourceGroup,
                                   SubscriptionID,AzToken,Name, Type, Location,verbose = FALSE) {
 
   AzureCheckToken(AzureActiveContext)
@@ -131,21 +128,17 @@ AzureListAllRecources <- function(AzureActiveContext,ResourceGroup,
 #' Create a ResourceGroup.
 #'
 #' @inheritParams SetAzureContext
-#' @family Resources
-#'
-# @param AzureActiveContext - Azure Context Object
-# @param ResourceGroup - ResourceGroup Object (or use AzureActiveContext)
-# @param AT - Token Object (or use AzureActiveContext)
-# @param SUBID - SubscriptionID Object (or use AzureActiveContext)
-# @param Verbose - Print Tracing information (Default False)
+#' @inheritParams AzureAuthenticate
+#' @inheritParams AzureListAllResources
 #'
 #' @return Returns Dataframe of Resources
-#' @family Resources
+#' @family Resource group functions
 #' @export
-AzureCreateResourceGroup <- function(AzureActiveContext,ResourceGroup,Location,SUBID,AT,verbose=FALSE) {
+AzureCreateResourceGroup <- function(AzureActiveContext,ResourceGroup,
+                                     Location,SubscriptionID,AzToken,verbose=FALSE) {
   AzureCheckToken(AzureActiveContext)
-  if(missing(AT)) {ATI <- AzureActiveContext$Token} else (ATI = AT)
-  if(missing(SUBID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SUBID)
+  if(missing(AzToken)) {ATI <- AzureActiveContext$Token} else (ATI = AzToken)
+  if(missing(SubscriptionID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SubscriptionID)
   #  if (ATI == "") stop("Token not provided")
   #  if (SUBIDI == "") stop("Subscription not provided")
   if(missing(ResourceGroup)) {RGI <- AzureActiveContext$ResourceGroup} else (RGI = ResourceGroup)
@@ -175,21 +168,17 @@ AzureCreateResourceGroup <- function(AzureActiveContext,ResourceGroup,Location,S
 #'
 #' @inheritParams SetAzureContext
 #' @inheritParams AzureAuthenticate
-#' @family Resources
-# @param AzureActiveContext Azure Context Object
-# @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
-# @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
-# @param Token Token Object (or use AzureActiveContext)
-# @param Verbose Print Tracing information (Default False)
+#' @inheritParams AzureListAllResources
 #'
 #' @return Returns Dataframe of Resources
-#' @family Resources
+#' @family Resource group functions
 #' @export
-AzureDeleteResourceGroup <- function(AzureActiveContext,ResourceGroup,SUBID,AT, Type,verbose=FALSE) {
+AzureDeleteResourceGroup <- function(AzureActiveContext,ResourceGroup,SubscriptionID,
+                                     AzToken, Type,verbose=FALSE) {
   AzureCheckToken(AzureActiveContext)
 
-  if(missing(AT)) {ATI <- AzureActiveContext$Token} else (ATI = AT)
-  if(missing(SUBID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SUBID)
+  if(missing(AzToken)) {ATI <- AzureActiveContext$Token} else (ATI = AzToken)
+  if(missing(SubscriptionID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SubscriptionID)
   #  if (ATI == "") stop("Token not provided")
   #  if (SUBIDI == "") stop("Subscription not provided")
   if(missing(ResourceGroup)) stop("Please supply Resource Group to Confirm")

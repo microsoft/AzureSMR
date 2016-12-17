@@ -13,11 +13,6 @@ AzureCheckToken(AzureActiveContext)
 Check the timestamp of a Token and Renew if needed.
 }
 \seealso{
-Other Resources: \code{\link{AzureAuthenticate}},
-  \code{\link{AzureCreateResourceGroup}},
-  \code{\link{AzureDeleteResourceGroup}},
-  \code{\link{AzureListAllRecources}},
-  \code{\link{AzureListRG}},
-  \code{\link{AzureListSubscriptions}}
+Other Resources: \code{\link{AzureAuthenticate}}
 }
 

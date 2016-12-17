@@ -27,7 +27,7 @@ Returns Dataframe of HDInsight Clusters information
 Delete Specifed HDInsight Cluster.
 }
 \seealso{
-Other HDInsight: \code{\link{AzureCreateHDI}},
+Other HDInsight functions: \code{\link{AzureCreateHDI}},
   \code{\link{AzureHDIConf}}, \code{\link{AzureListHDI}},
   \code{\link{AzureResizeHDI}},
   \code{\link{AzureRunScriptAction}},

@@ -204,9 +204,9 @@ AzureListSA <- function(AzureActiveContext,ResourceGroup,SubscriptionID,AzToken,
   if (!length(SUBIDI)) {stop("Error: No SubscriptionID provided: Use SUBID argument or set in AzureContext")}
   verbosity <- if(verbose) httr::verbose(TRUE) else NULL
   if(missing(ResourceGroup))
-    SA <- AzureListAllRecources(AzureActiveContext, Type="Microsoft.Storage/storageAccounts")
+    SA <- AzureListAllResources(AzureActiveContext, Type="Microsoft.Storage/storageAccounts")
   else
-    SA <- AzureListAllRecources(AzureActiveContext, Type="Microsoft.Storage/storageAccounts",ResourceGroup ="myResourceGroup")
+    SA <- AzureListAllResources(AzureActiveContext, Type="Microsoft.Storage/storageAccounts",ResourceGroup ="myResourceGroup")
   rownames(SA) <- NULL
   return(SA)
 }

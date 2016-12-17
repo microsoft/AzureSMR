@@ -4,13 +4,19 @@
 \alias{AzureDeleteResourceGroup}
 \title{Delete a ResourceGroup with all Resources.}
 \usage{
-AzureDeleteResourceGroup(AzureActiveContext, ResourceGroup, SUBID, AT, Type,
-  verbose = FALSE)
+AzureDeleteResourceGroup(AzureActiveContext, ResourceGroup, SubscriptionID,
+  AzToken, Type, verbose = FALSE)
 }
 \arguments{
 \item{AzureActiveContext}{Context Object}
 
 \item{ResourceGroup}{ResourceGroup Object}
+
+\item{SubscriptionID}{SubscriptionID Object}
+
+\item{AzToken}{Token Object}
+
+\item{Type}{Type}
 
 \item{verbose}{Print Tracing information (Default False)}
 }
@@ -21,17 +27,8 @@ Returns Dataframe of Resources
 Delete a ResourceGroup with all Resources.
 }
 \seealso{
-Other Resources: \code{\link{AzureAuthenticate}},
-  \code{\link{AzureCheckToken}},
-  \code{\link{AzureCreateResourceGroup}},
-  \code{\link{AzureListAllRecources}},
-  \code{\link{AzureListRG}},
-  \code{\link{AzureListSubscriptions}}
-
-Other Resources: \code{\link{AzureAuthenticate}},
-  \code{\link{AzureCheckToken}},
-  \code{\link{AzureCreateResourceGroup}},
-  \code{\link{AzureListAllRecources}},
+Other Resource group functions: \code{\link{AzureCreateResourceGroup}},
+  \code{\link{AzureListAllResources}},
   \code{\link{AzureListRG}},
   \code{\link{AzureListSubscriptions}}
 }

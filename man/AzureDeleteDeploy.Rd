@@ -10,6 +10,8 @@ AzureDeleteDeploy(AzureActiveContext, DeplName, ResourceGroup, SubscriptionID,
 \arguments{
 \item{AzureActiveContext}{Context Object}
 
+\item{DeplName}{DeplName}
+
 \item{ResourceGroup}{ResourceGroup Object}
 
 \item{SubscriptionID}{SubscriptionID Object}
