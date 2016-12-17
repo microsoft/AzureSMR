@@ -7,7 +7,25 @@
 AzureHiveSQL(AzureActiveContext, CMD, ClusterName, HDIAdmin, HDIPassword,
   Path = "wasb:///tmp/", verbose = FALSE)
 }
+\arguments{
+\item{AzureActiveContext}{Context Object}
+
+\item{CMD}{SQl COmmand String}
+
+\item{ClusterName}{ClusterName Object}
+
+\item{HDIAdmin}{HDIAdmin Object}
+
+\item{HDIPassword}{HDIPassword Object}
+
+\item{Path}{path}
+
+\item{verbose}{Print Tracing information (Default False)}
+}
 \description{
 Submit SQL command to Hive Service.
+}
+\seealso{
+Other Hive functions: \code{\link{AzureHiveStatus}}
 }
 

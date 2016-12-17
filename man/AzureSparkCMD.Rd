@@ -10,6 +10,8 @@ AzureSparkCMD(AzureActiveContext, CMD, ClusterName, HDIAdmin, HDIPassword,
 \arguments{
 \item{AzureActiveContext}{Context Object}
 
+\item{CMD}{CMD}
+
 \item{ClusterName}{ClusterName Object}
 
 \item{HDIAdmin}{HDIAdmin Object}

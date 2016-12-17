@@ -16,6 +16,12 @@ AzureScriptActionHistory(AzureActiveContext, ResourceGroup, ClusterName = "*",
 
 \item{SubscriptionID}{SubscriptionID Object}
 
+\item{ATI}{ATI}
+
+\item{Name}{Name}
+
+\item{Type}{Type}
+
 \item{verbose}{Print Tracing information (Default False)}
 }
 \value{

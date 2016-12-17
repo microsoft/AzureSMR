@@ -4,10 +4,12 @@
 \alias{AzureListRG}
 \title{Get all Resource Groups in default Subscription.}
 \usage{
-AzureListRG(AzureActiveContext, SUBID, AT, verbose = FALSE)
+AzureListRG(AzureActiveContext, subscriptionID, AT, verbose = FALSE)
 }
 \arguments{
 \item{AzureActiveContext}{Context Object}
+
+\item{verbose}{Print Tracing information (Default False)}
 }
 \value{
 Returns Dataframe of ResourceGroups

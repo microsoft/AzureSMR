@@ -23,7 +23,9 @@ AzureGetBlob(AzureActiveContext, Blob, Directory, Type = "text",
 
 \item{SubscriptionID}{SubscriptionID Object}
 
-\item{AzToken}{Token Object (or use AzureActiveContext)}
+\item{AzToken}{Token Object}
+
+\item{verbose}{Print Tracing information (Default False)}
 }
 \description{
 Get contents from a specifed Storage Blob.

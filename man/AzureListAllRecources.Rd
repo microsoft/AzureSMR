@@ -4,19 +4,19 @@
 \alias{AzureListAllRecources}
 \title{Get all Resource in default Subscription.}
 \usage{
-AzureListAllRecources(AzureActiveContext, ResourceGroup, SUBID, AT, Name, Type,
-  Location, verbose = FALSE)
+AzureListAllRecources(AzureActiveContext, ResourceGroup, SubscriptionID,
+  AzToken, Name, Type, Location, verbose = FALSE)
 }
 \arguments{
 \item{AzureActiveContext}{Azure Context Object}
 
 \item{ResourceGroup}{ResourceGroup Object (or use AzureActiveContext)}
 
-\item{Token}{Token Object (or use AzureActiveContext)}
-
 \item{SubscriptionID}{SubscriptionID Object (or use AzureActiveContext)}
 
-\item{Verbose}{Print Tracing information (Default False)}
+\item{AzToken}{Token Object}
+
+\item{verbose}{Print Tracing information (Default False)}
 }
 \value{
 Returns Dataframe of Resources

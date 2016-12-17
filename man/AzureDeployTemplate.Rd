@@ -14,8 +14,17 @@ AzureDeployTemplate(AzureActiveContext, DeplName, TemplateURL, ParamURL,
 \item{ResourceGroup}{ResourceGroup Object}
 
 \item{SubscriptionID}{SubscriptionID Object}
+
+\item{AzToken}{Token Object}
+
+\item{verbose}{Print Tracing information (Default False)}
 }
 \description{
 Submit a Azure Resource ManagerTemplate.
+}
+\seealso{
+Other Template functions: \code{\link{AzureCancelDeploy}},
+  \code{\link{AzureDeleteDeploy}},
+  \code{\link{AzureDeployStatus}}
 }
 

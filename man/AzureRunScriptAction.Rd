@@ -11,21 +11,23 @@ AzureRunScriptAction(AzureActiveContext, ScriptName = "script1", ScriptURL,
 \arguments{
 \item{AzureActiveContext}{Context Object}
 
-\item{ScriptName}{- Identifier for Custom action scrript operation}
+\item{ScriptName}{Identifier for Custom action scrript operation}
 
-\item{ScriptURL}{- URL to custom action script (Sring)}
+\item{ScriptURL}{URL to custom action script (Sring)}
 
-\item{HeadNode}{- install on head nodes (default FALSE)}
+\item{HeadNode}{install on head nodes (default FALSE)}
 
-\item{WorkerNode}{- install on worker nodes (default FALSE)}
+\item{WorkerNode}{install on worker nodes (default FALSE)}
 
-\item{EdgeNode}{- install on worker nodes (default FALSE)}
+\item{EdgeNode}{install on worker nodes (default FALSE)}
 
 \item{ClusterName}{ClusterName Object}
 
 \item{ResourceGroup}{ResourceGroup Object}
 
-\item{AzToken}{Token Object (or use AzureActiveContext)}
+\item{Parameters}{Parameters}
+
+\item{AzToken}{Token Object}
 
 \item{SubscriptionID}{SubscriptionID Object}
 

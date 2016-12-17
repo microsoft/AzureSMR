@@ -1,6 +1,7 @@
 #' Submit a Azure Resource ManagerTemplate.
 #'
 #' @inheritParams SetAzureContext
+#' @inheritParams AzureAuthenticate
 # @param AzureActiveContext Azure Context Object
 # @param DeplName DeplName
 # @param TemplateURL TemplateURL
@@ -10,6 +11,7 @@
 # @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
 # @param verbose Print Tracing information (Default False)
 #'
+#' @family Template functions
 #' @export
 AzureDeployTemplate <- function(AzureActiveContext,DeplName,TemplateURL,ParamURL,TemplateJSON,ParamJSON,Mode="Sync",ResourceGroup,SubscriptionID,AzToken, verbose = FALSE) {
   AzureCheckToken(AzureActiveContext)
@@ -109,6 +111,8 @@ AzureDeployTemplate <- function(AzureActiveContext,DeplName,TemplateURL,ParamURL
 # @param Token Token Object (or use AzureActiveContext)
 # @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
 # @param Verbose Print Tracing information (Default False)
+#'
+#' @family Template functions
 #' @export
 AzureDeployStatus <- function(AzureActiveContext,DeplName,ResourceGroup, SubscriptionID,AzToken,verbose = FALSE) {
   AzureCheckToken(AzureActiveContext)
@@ -137,12 +141,15 @@ AzureDeployStatus <- function(AzureActiveContext,DeplName,ResourceGroup, Subscri
 #' Delete Template Deployment.
 #'
 #' @inheritParams SetAzureContext
+#' @inheritParams AzureAuthenticate
 # @param AzureActiveContext Azure Context Object
 # @param DeplName DeplName
 # @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
 # @param Token Token Object (or use AzureActiveContext)
 # @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
 # @param Verbose Print Tracing information (Default False)
+#'
+#' @family Template functions
 #' @export
 AzureDeleteDeploy <- function(AzureActiveContext,DeplName,ResourceGroup,SubscriptionID,AzToken,verbose = FALSE) {
   AzureCheckToken(AzureActiveContext)
@@ -169,6 +176,13 @@ AzureDeleteDeploy <- function(AzureActiveContext,DeplName,ResourceGroup,Subscrip
   return("OK")
 }
 
+#' Cancel Template Deployment.
+#'
+#' @inheritParams SetAzureContext
+#' @inheritParams AzureAuthenticate
+#'
+#' @family Template functions
+#' @export
 AzureCancelDeploy <- function(AzureActiveContext,DeplName,ResourceGroup, SubscriptionID,AzToken,verbose = FALSE) {
 
   AzureCheckToken(AzureActiveContext)

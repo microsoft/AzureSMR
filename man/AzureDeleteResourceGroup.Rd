@@ -11,6 +11,8 @@ AzureDeleteResourceGroup(AzureActiveContext, ResourceGroup, SUBID, AT, Type,
 \item{AzureActiveContext}{Context Object}
 
 \item{ResourceGroup}{ResourceGroup Object}
+
+\item{verbose}{Print Tracing information (Default False)}
 }
 \value{
 Returns Dataframe of Resources

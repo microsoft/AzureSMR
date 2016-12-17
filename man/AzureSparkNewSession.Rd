@@ -16,7 +16,7 @@ AzureSparkNewSession(AzureActiveContext, ClusterName, HDIAdmin, HDIPassword,
 
 \item{HDIPassword}{HDinsight Administrator Name}
 
-\item{Kind}{Kind Spark/PySpark/Spark}
+\item{Kind}{"hadoop","spark" or "pyspark"}
 
 \item{verbose}{Print Tracing information (Default False)}
 }

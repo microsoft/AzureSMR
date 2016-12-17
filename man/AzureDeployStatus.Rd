@@ -10,4 +10,9 @@ AzureDeployStatus(AzureActiveContext, DeplName, ResourceGroup, SubscriptionID,
 \description{
 Check Template DeployStatus.
 }
+\seealso{
+Other Template functions: \code{\link{AzureCancelDeploy}},
+  \code{\link{AzureDeleteDeploy}},
+  \code{\link{AzureDeployTemplate}}
+}
 

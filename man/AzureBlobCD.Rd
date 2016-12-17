@@ -20,7 +20,7 @@ AzureBlobCD(AzureActiveContext, Directory, Container, File, StorageAccount,
 
 \item{SubscriptionID}{SubscriptionID Object}
 
-\item{AzToken}{Token Object (or use AzureActiveContext)}
+\item{AzToken}{Token Object}
 }
 \description{
 Azure Blob change current Directory.

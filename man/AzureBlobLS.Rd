@@ -21,7 +21,9 @@ AzureBlobLS(AzureActiveContext, Directory, Recursive = FALSE, StorageAccount,
 
 \item{SubscriptionID}{SubscriptionID Object}
 
-\item{AzToken}{Token Object (or use AzureActiveContext)}
+\item{AzToken}{Token Object}
+
+\item{verbose}{Print Tracing information (Default False)}
 }
 \description{
 List Blob files in a Storage account directory.

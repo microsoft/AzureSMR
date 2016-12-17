@@ -12,6 +12,14 @@ AzureResizeHDI(AzureActiveContext, ClusterName, Role = "worker", Size = 2,
 
 \item{ClusterName}{ClusterName Object}
 
+\item{Role}{Role Type: "worker", "head" or "Edge"}
+
+\item{Size}{Desired size of Role Type}
+
+\item{Mode}{"Sync" or "Async"}
+
+\item{AzToken}{Token Object}
+
 \item{SubscriptionID}{SubscriptionID Object}
 
 \item{ResourceGroup}{ResourceGroup Object}

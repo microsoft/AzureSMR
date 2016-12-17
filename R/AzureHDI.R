@@ -1,6 +1,7 @@
 #' Get all HDInsight Clusters in default Subscription or details for a specified ClusterName.
 #'
 #' @inheritParams SetAzureContext
+#' @inheritParams AzureAuthenticate
 #' @param ClusterName ResourceGroup Object (or use AzureActiveContext)
 # @param Token Token Object (or use AzureActiveContext)
 #' @param verbose Print Tracing information (Default False)
@@ -104,6 +105,7 @@ AzureListHDI <- function(AzureActiveContext,ResourceGroup,ClusterName="*",
 #' Get Configuration Information for a specified ClusterName.
 #'
 #' @inheritParams SetAzureContext
+#' @inheritParams AzureAuthenticate
 #' @inheritParams AzureListHDI
 #'
 #' @family HDInsight
@@ -159,18 +161,13 @@ AzureHDIConf <- function(AzureActiveContext,ClusterName,ResourceGroup,SUBID,ATI,
 #' Resize a HDInsight CLuster Role.
 #'
 #' @inheritParams SetAzureContext
+#' @inheritParams AzureAuthenticate
 #' @inheritParams AzureListHDI
 #'
 #' @family HDInsight
-# @param AzureActiveContext Azure Context Object
-# @param ClusterName ResourceGroup Object (or use AzureActiveContext)
-# @param Role Role Type (Worker, Head, Edge)
-# @param Size Desired size of Role Type
-# @param MODE MODE Sync/Async
-# @param Token Token Object (or use AzureActiveContext)
-# @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
-# @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
-# @param verbose Print Tracing information (Default False)
+#' @param Role Role Type: "worker", "head" or "Edge"
+#' @param Size Desired size of Role Type
+#' @param Mode "Sync" or "Async"
 #'
 #' @export
 AzureResizeHDI <- function(AzureActiveContext,ClusterName, Role="worker", Size=2, Mode="Sync",AzToken, SubscriptionID,ResourceGroup,verbose = FALSE) {
@@ -245,6 +242,7 @@ AzureResizeHDI <- function(AzureActiveContext,ClusterName, Role="worker", Size=2
 #' Delete Specifed HDInsight Cluster.
 #'
 #' @inheritParams SetAzureContext
+#' @inheritParams AzureAuthenticate
 #' @inheritParams AzureListHDI
 #'
 #' @family HDInsight
@@ -280,22 +278,27 @@ AzureDeleteHDI <- function(AzureActiveContext,ClusterName,AzToken, SubscriptionI
 #' Create Specifed HDInsight Cluster.
 #'
 #' @inheritParams SetAzureContext
+#' @inheritParams AzureAuthenticate
 #' @inheritParams AzureListHDI
 #'
-#' @family HDInsight
-# @param AzureActiveContext - Azure Context Object
-# @param ClusterName - ResourceGroup Object (or use AzureActiveContext)
-#' @param Location - Location String
-#' @param Kind - Kind (spark/hadoop) DEFAULT{spark}
-# @param StorageAcc - Storage Account Name
-# @param SKey - Storage Key
-#' @param Workers - # of Workers (Default 2)
-# @param ResourceGroup - ResourceGroup Object (or use AzureActiveContext)
-# @param AzToken - Token Object (or use AzureActiveContext)
-# @param SubscriptionID - SubscriptionID Object (or use AzureActiveContext)
-# @param verbose - Print Tracing information (Default False)
 #'
-#' @return Returns Success Message
+#' @param ClusterName ResourceGroup Object (or use AzureActiveContext)
+#' @param Location Location string
+#' @param SKey Storage Key
+#' @param Version Version
+#' @param AdminUser Admin user name
+#' @param AdminPassword Admin user password
+#' @param Workers Number of worker nodes
+#' @param SSHUser SSH user name
+#' @param SSHPassword SSH user password
+#' @param HiveServer Hive server
+#' @param HiveDB Hive DB
+#' @param HiveUser Hive user name
+#' @param HivePassword Hive user password
+#' @param Mode Mode
+#'
+#' @return Success message
+#' @family HDInsight
 #' @export
 AzureCreateHDI <- function(AzureActiveContext,ClusterName,
                            Location,Kind = "spark",
@@ -303,15 +306,16 @@ AzureCreateHDI <- function(AzureActiveContext,ClusterName,
                            AdminUser,AdminPassword,
                            SSHUser,SSHPassword,
                            HiveServer,HiveDB,HiveUser,HivePassword,
-                           ResourceGroup,AzToken, SubscriptionID,Mode="Sync",verbose = FALSE) {
+                           ResourceGroup,AzToken, subscriptionID,
+                           Mode="Sync",verbose = FALSE) {
   AzureCheckToken(AzureActiveContext)
 
   if(missing(ResourceGroup)) {RGI <- AzureActiveContext$ResourceGroup} else (RGI = ResourceGroup)
-  if(missing(SubscriptionID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = SubscriptionID)
+  if(missing(subscriptionID)) {SUBIDI <- AzureActiveContext$SubscriptionID} else (SUBIDI = subscriptionID)
   if(missing(AzToken)) {ATI <- AzureActiveContext$Token} else (ATI = AzToken)
   verbosity <- if(verbose) httr::verbose(TRUE) else NULL
 
-  if (!length(StorageAcc)) {stop("Error: No Storage Account(StorageAcc) provided")}
+  if (!length(StorageAcc)) {stop("Error: No Storage Account (StorageAcc) provided")}
 #  if (!length(SKey)) {stop("Error: No Storage Key (SKey) provided")}
   if (!length(Location)) {stop("Error: No Location provided")}
   if (!length(ClusterName)) {stop("Error: No Valid ClusterName provided")}
@@ -508,15 +512,17 @@ AzureCreateHDI <- function(AzureActiveContext,ClusterName,
 #' Run Script Action on HDI Cluster.
 #'
 #' @inheritParams SetAzureContext
+#' @inheritParams AzureAuthenticate
 #' @inheritParams AzureListHDI
 #' @inheritParams AzureListVM
 #'
-#' @param ScriptName - Identifier for Custom action scrript operation
-#' @param ScriptURL - URL to custom action script (Sring)
+#' @param ScriptName Identifier for Custom action scrript operation
+#' @param ScriptURL URL to custom action script (Sring)
 # @param Roles - Specificy the Roles to apply action string (workernode,headnode,edgenode)
-#' @param HeadNode - install on head nodes (default FALSE)
-#' @param WorkerNode - install on worker nodes (default FALSE)
-#' @param EdgeNode - install on worker nodes (default FALSE)
+#' @param HeadNode install on head nodes (default FALSE)
+#' @param WorkerNode install on worker nodes (default FALSE)
+#' @param EdgeNode install on worker nodes (default FALSE)
+#' @param Parameters Parameters
 #'
 #' @family HDInsight
 #' @return Returns Success Message
@@ -591,6 +597,10 @@ AzureRunScriptAction <- function(AzureActiveContext,ScriptName = "script1",Scrip
 #' @inheritParams SetAzureContext
 #' @inheritParams AzureListHDI
 #' @inheritParams AzureRunScriptAction
+#'
+#' @param ATI ATI
+#' @param Name Name
+#' @param Type Type
 #'
 #' @family HDInsight
 #'

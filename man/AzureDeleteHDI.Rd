@@ -12,6 +12,8 @@ AzureDeleteHDI(AzureActiveContext, ClusterName, AzToken, SubscriptionID,
 
 \item{ClusterName}{ClusterName Object}
 
+\item{AzToken}{Token Object}
+
 \item{SubscriptionID}{SubscriptionID Object}
 
 \item{ResourceGroup}{ResourceGroup Object}

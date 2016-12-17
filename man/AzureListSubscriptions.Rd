@@ -7,17 +7,15 @@
 AzureListSubscriptions(AzureActiveContext, ATI, verbose = FALSE)
 }
 \arguments{
-\item{Azure}{Context Object}
+\item{AzureActiveContext}{Context Object}
 
-\item{Token}{Token Object (or use AzureActiveContext)}
-
-\item{Verbose}{Print Tracing information (Default False)}
+\item{verbose}{Print Tracing information (Default False)}
 }
 \value{
 Returns Dataframe of SubscriptionID sets AzureContext SubscriptionID
 }
 \description{
-Get available Subscriptions
+Get available Subscriptions.
 }
 \seealso{
 Other Resources: \code{\link{AzureAuthenticate}},

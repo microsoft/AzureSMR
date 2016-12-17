@@ -23,7 +23,9 @@ AzurePutBlob(AzureActiveContext, Blob, Contents = "", File = "", Directory,
 
 \item{SubscriptionID}{SubscriptionID Object}
 
-\item{AzToken}{Token Object (or use AzureActiveContext)}
+\item{AzToken}{Token Object}
+
+\item{verbose}{Print Tracing information (Default False)}
 }
 \description{
 Write contents to a specifed Storage Blob.

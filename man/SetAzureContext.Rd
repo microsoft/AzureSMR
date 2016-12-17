@@ -4,7 +4,7 @@
 \alias{SetAzureContext}
 \title{Updates the value of an AzureContext variable.}
 \usage{
-SetAzureContext(AzureActiveContext, TID, CID, KEY, Token, SubscriptionID,
+SetAzureContext(AzureActiveContext, TID, CID, KEY, AzToken, SubscriptionID,
   ResourceGroup, StorageKey, StorageAccount, Container, Blob, VMName, HDIAdmin,
   HDIPassword, ClusterName, Kind, SessionID)
 }
@@ -17,7 +17,7 @@ SetAzureContext(AzureActiveContext, TID, CID, KEY, Token, SubscriptionID,
 
 \item{KEY}{Authentication KEY Object}
 
-\item{Token}{Token Object}
+\item{AzToken}{Token Object}
 
 \item{SubscriptionID}{SubscriptionID Object}
 
@@ -39,7 +39,7 @@ SetAzureContext(AzureActiveContext, TID, CID, KEY, Token, SubscriptionID,
 
 \item{ClusterName}{ClusterName Object}
 
-\item{Kind}{Kind Object}
+\item{Kind}{"hadoop","spark" or "pyspark"}
 
 \item{SessionID}{SessionID Object}
 }

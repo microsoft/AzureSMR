@@ -4,7 +4,7 @@
 \alias{AzureSparkListJobs}
 \title{List Spark Jobs (Batch mode).}
 \usage{
-AzureSparkListJobs(AzureActiveContext, ClusterName, HDIAdmin, HDIPassword, KIND,
+AzureSparkListJobs(AzureActiveContext, ClusterName, HDIAdmin, HDIPassword,
   verbose = FALSE)
 }
 \arguments{
