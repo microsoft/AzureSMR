@@ -11,13 +11,13 @@ GetSig <- function(AzureActiveContext,url, verb, key, StorageAccount,
 
   SIG <- paste0(verb, "\n\n\n", Size, "\n\n", ContentType, "\n\n\n\n\n\n\n", ARG1, "\n", ARG2)
   if (verbose) print (paste0("TRACE: STRINGTOSIGN: ",SIG))
-  EKEY <- base64encode(
-    hmac(key=RCurl::base64Decode(key, mode="raw"),
+  base64encode(
+    hmac(key=base64decode(key, mode="raw"),
          object=iconv(SIG, "ASCII", to = "UTF-8"),
          algo="sha256",
          raw=TRUE)
   )
-  return (EKEY);
+
 }
 
 
