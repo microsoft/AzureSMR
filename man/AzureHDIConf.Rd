@@ -22,7 +22,7 @@ AzureHDIConf(AzureActiveContext, ClusterName, ResourceGroup, SubscriptionID,
 
 \item{Type}{Type}
 
-\item{Location}{Location string}
+\item{Location}{Azure region, e.g. "westeurope" or "southcentralus"}
 
 \item{verbose}{Print Tracing information (Default False)}
 }

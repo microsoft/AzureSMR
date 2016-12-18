@@ -12,7 +12,7 @@ AzureListVM(AzureActiveContext, ResourceGroup, Location, SubscriptionID,
 
 \item{ResourceGroup}{ResourceGroup Object (or use AzureActiveContext)}
 
-\item{Location}{Azure Resource Location}
+\item{Location}{Azure region, e.g. "westeurope" or "southcentralus"}
 
 \item{SubscriptionID}{SubscriptionID Object (or use AzureActiveContext)}
 

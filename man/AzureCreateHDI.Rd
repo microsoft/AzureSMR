@@ -15,7 +15,7 @@ AzureCreateHDI(AzureActiveContext, ClusterName, Location, Kind = "spark",
 
 \item{ClusterName}{ResourceGroup Object (or use AzureActiveContext)}
 
-\item{Location}{Location string}
+\item{Location}{Azure region, e.g. "westeurope" or "southcentralus"}
 
 \item{Kind}{"hadoop","spark" or "pyspark"}
 

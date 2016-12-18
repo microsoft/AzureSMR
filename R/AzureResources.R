@@ -69,7 +69,7 @@ AzureListRG <- function(AzureActiveContext,SubscriptionID,AzToken,verbose = FALS
 #' @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
 #' @param Name Name
 #' @param Type Type
-#' @param Location Location string
+#' @param Location Azure region, e.g. "westeurope" or "southcentralus"
 #'
 #' @return Returns Dataframe of Resources
 #' @family Resource group functions
