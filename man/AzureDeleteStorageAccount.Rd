@@ -24,10 +24,7 @@ AzureDeleteStorageAccount(AzureActiveContext, StorageAccount, AzToken,
 Delete an Azure Storage Account.
 }
 \seealso{
-Other Storage account: \code{\link{AzureCreateSAContainer}},
-  \code{\link{AzureCreateStorageAccount}},
-  \code{\link{AzureDeleteSAContainer}},
-  \code{\link{AzureListSAContainers}},
+Other Storage account functions: \code{\link{AzureCreateStorageAccount}},
   \code{\link{AzureListSA}}, \code{\link{AzureSAGetKey}}
 }
 

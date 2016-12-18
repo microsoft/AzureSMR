@@ -27,9 +27,6 @@ List Storage Containers for Specified Storage Account.
 }
 \seealso{
 Other Storage account: \code{\link{AzureCreateSAContainer}},
-  \code{\link{AzureCreateStorageAccount}},
-  \code{\link{AzureDeleteSAContainer}},
-  \code{\link{AzureDeleteStorageAccount}},
-  \code{\link{AzureListSA}}, \code{\link{AzureSAGetKey}}
+  \code{\link{AzureDeleteSAContainer}}
 }
 
