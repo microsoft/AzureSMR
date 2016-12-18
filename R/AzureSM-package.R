@@ -1,6 +1,6 @@
-#' Install packages from snapshots on the checkpoint server for reproducibility
+#' AzureSM
 #'
-#' THe AzureSMR package connects R to the Azure Service Manager API.
+#' The AzureSM package connects R to the Azure Service Manager API.
 #'
 #' This enables you to use and change many Azure resources, including:
 #'
@@ -12,8 +12,8 @@
 #' }
 #'
 #'
-#' @name AzureSMR-package
-#' @aliases AzureSMR
+#' @name AzureSM-package
+#' @aliases AzureSM
 #' @docType package
 #' @keywords package
 #'
@@ -21,12 +21,14 @@
 #' @importFrom digest hmac
 #' @importFrom base64enc base64encode base64decode
 #' @importFrom plyr rbind.fill
+#' @importFrom jsonlite fromJSON
+#' @importFrom httr add_headers content status_code GET
 #'
-#' @import httr
-#' @import jsonlite
-#' @import XML
-#' @import plyr
-#' @import base64enc
-#' @import curl
-#' @import digest
+# @import httr
+# @import jsonlite
+# @import XML
+# @import plyr
+# @import base64enc
+# @import curl
+# @import digest
 NULL
