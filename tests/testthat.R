@@ -8,6 +8,7 @@ if (identical(Sys.getenv("NOT_CRAN"), "true")) {
 } else {
   # CRAN
   # skip some tests on CRAN, to comply with timing directive and other policy
-  test_check("AzureSM", filter = "1-workspace-no-config")
-  test_check("AzureSM", filter = "7-discover-schema")
+  test_check("AzureSM")
+  # test_check("AzureSM", filter = "1-workspace-no-config")
+  # test_check("AzureSM", filter = "7-discover-schema")
 }

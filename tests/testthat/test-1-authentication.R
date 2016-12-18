@@ -38,23 +38,8 @@ test_that("Can connect to workspace with config file", {
   expect_is(res, "data.frame")
   expect_equal(ncol(res), 7)
 
-
-  res <- AzureListRG(asc)
-  expect_is(res, "data.frame")
-  expect_equal(ncol(res), 3)
-
   res <- AzureCheckToken(asc)
   expect_equal(res, "OK")
-
-  expect_error(AzureListAllRecources(asc)) # Deprecated function
-
-  res <- AzureListAllResources(asc)
-  expect_is(res, "data.frame")
-  expect_equal(ncol(res), 5)
-
-  res <- AzureListRG(asc)
-  expect_is(res, "data.frame")
-  expect_equal(ncol(res), 3)
 
   res <- AzureListSA(asc, ResourceGroup = "advdsvmlinux1")
   expect_is(res, "data.frame")
