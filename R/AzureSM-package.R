@@ -22,7 +22,7 @@
 #' @importFrom base64enc base64encode base64decode
 #' @importFrom plyr rbind.fill
 #' @importFrom jsonlite fromJSON
-#' @importFrom httr add_headers content status_code GET
+#' @importFrom httr add_headers content status_code GET PUT DELETE
 #'
 # @import httr
 # @import jsonlite
