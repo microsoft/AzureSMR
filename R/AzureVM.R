@@ -1,8 +1,8 @@
 #' List VMs in a Subscription.
 #'
 #' @inheritParams SetAzureContext
+#' @inheritParams AzureListAllResources
 #' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
-#' @param Location Azure Resource Location
 #' @param AzToken Token Object (or use AzureActiveContext)
 #' @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
 #' @param verbose Print Tracing information (Default False)

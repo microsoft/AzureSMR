@@ -20,7 +20,8 @@ Imports:
     digest
 Suggests: 
     knitr, 
-    rmarkdown
+    rmarkdown,
+    testthat
 Depends:
     R(>= 3.0.0)
 VignetteBuilder: knitr
