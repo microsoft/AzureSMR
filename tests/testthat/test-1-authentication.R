@@ -43,7 +43,7 @@ test_that("Can connect to workspace with config file", {
 
   res <- AzureListSA(asc, ResourceGroup = "advdsvmlinux1")
   expect_is(res, "data.frame")
-  expect_equal(ncol(res), 5)
+  expect_equal(ncol(res), 8)
 
 })
 

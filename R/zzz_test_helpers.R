@@ -23,3 +23,16 @@ skip_if_offline <- function(){
     testthat::skip("Offline. Skipping test.")
   }
 }
+
+# wait until request is completed
+wait_for_azure <- function(expr, test, pause = 3, times = 20){
+  terminate <- FALSE
+  .counter <- 0
+  while(!terminate && .counter <= times){
+    .counter <- .counter + 1
+    Sys.sleep(pause)
+    res <- eval(expr)
+    terminate <- isTRUE(eval(test))
+  }
+  res
+}
