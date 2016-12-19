@@ -2,19 +2,22 @@ GetSig <- function(AzureActiveContext, url, verb, key, StorageAccount,
                    Headers = NULL, Container = NULL, CMD = NULL, Size = NULL, ContentType = NULL,
                    DateS, verbose = FALSE) {
 
-  if (length(Headers))
-    ARG1 <- paste0(Headers, "\nx-ms-date:", DateS, "\nx-ms-version:2015-04-05") else ARG1 <- paste0("x-ms-date:", DateS, "\nx-ms-version:2015-04-05")
+  if (length(Headers)){
+    ARG1 <- paste0(Headers, "\nx-ms-date:", DateS, "\nx-ms-version:2015-04-05")
+  } else {
+    ARG1 <- paste0("x-ms-date:", DateS, "\nx-ms-version:2015-04-05")
+  }
 
-    ARG2 <- paste0("/", StorageAccount, "/", Container, CMD)
+  ARG2 <- paste0("/", StorageAccount, "/", Container, CMD)
 
-    SIG <- paste0(verb, "\n\n\n", Size, "\n\n", ContentType, "\n\n\n\n\n\n\n",
-                  ARG1, "\n", ARG2)
-    if (verbose) message(paste0("TRACE: STRINGTOSIGN: ", SIG))
-    base64encode(hmac(key = base64decode(key),
-                      object = iconv(SIG, "ASCII",to = "UTF-8"),
-                      algo = "sha256",
-                      raw = TRUE)
-    )
+  SIG <- paste0(verb, "\n\n\n", Size, "\n\n", ContentType, "\n\n\n\n\n\n\n",
+                ARG1, "\n", ARG2)
+  if (verbose) message(paste0("TRACE: STRINGTOSIGN: ", SIG))
+  base64encode(hmac(key = base64decode(key),
+                    object = iconv(SIG, "ASCII",to = "UTF-8"),
+                    algo = "sha256",
+                    raw = TRUE)
+  )
 
 }
 
@@ -107,6 +110,8 @@ AzureSAGetKey <- function(AzureActiveContext, StorageAccount, AzToken,
   }
   verbosity <- if (verbose)
     httr::verbose(TRUE) else NULL
+
+  message("Fetching Storage Key..")
 
   URL <- paste("https://management.azure.com/subscriptions/", SUBIDI,
                "/resourceGroups/", RGI, "/providers/Microsoft.Storage/storageAccounts/",
@@ -280,9 +285,7 @@ AzureDeleteStorageAccount <- function(AzureActiveContext, StorageAccount,
   if (status_code(r) == 409) {
     stop(paste0("Error: An operation for the storage account is in progress."))
   }
-  if (status_code(r) != 200) {
-    stopWithAzureError(r)
-  }
+  if (status_code(r) != 200) stopWithAzureError(r)
 
   rl <- content(r, "text", encoding = "UTF-8")
   AzureActiveContext$StorageAccount <- StorageAccount

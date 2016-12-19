@@ -67,19 +67,14 @@ AzureListRG <- function(AzureActiveContext, SubscriptionID, AzToken, verbose = F
                                            Authorization = ATI,
                                            `Content-Type` = "application/json")),
            verbosity)
-  if (status_code(r) != 200) {
-    stop(paste("Error: Return code", status_code(r)))
-  }
+  if (status_code(r) != 200) stopWithAzureError(r)
 
   rl <- content(r, "text", encoding = "UTF-8")
   df <- fromJSON(rl)
-  dfn <- as.data.frame(paste(df$value$name))
+  dfn <- df$value[, c("name", "location", "id")]
+  names(dfn) <- c("Name", "Location", "ID")
+  dfn$ResourceGroup <- extractResourceGroupName(dfn$ID)
 
-  clust <- nrow(dfn)
-  dfn[1:clust, 1] <- df$value$name
-  dfn[1:clust, 2] <- df$value$location
-  dfn[1:clust, 3] <- df$value$id
-  colnames(dfn) <- c("Name", "Location", "ID")
   return(dfn)
 }
 
@@ -134,23 +129,16 @@ AzureListAllResources <- function(AzureActiveContext, ResourceGroup, Subscriptio
   dfn <- df$value[, c("name", "type", "location", "id")]
   colnames(dfn) <- c("Name", "Type", "Location", "ID")
 
-  dfn$ResourceGroup  <- gsub(".*?/resourceGroups/(.*?)/.*", "\\1", dfn$ID)
+  dfn$ResourceGroup  <- extractResourceGroupName(dfn$ID)
   dfn$RG             <- dfn$ResourceGroup
-  dfn$SubscriptionID <- gsub(".*?/subscriptions/(.*?)/.*",  "\\1", dfn$ID)
+  dfn$SubscriptionID <- extractSubscriptionID(dfn$ID)
 
 
-  if (!missing(Name))
-    dfn <- dfn[grep(Name, dfn$Name), ]
+  if (!missing(Name))          dfn <- dfn[grep(Name, dfn$Name), ]
+  if (!missing(Type))          dfn <- dfn[grep(Type, dfn$Type), ]
+  if (!missing(Location))      dfn <- dfn[grep(Location, dfn$Location), ]
+  if (!missing(ResourceGroup)) dfn <- dfn[grep(ResourceGroup, dfn$ResourceGroup), ]
 
-  if (!missing(Type)) {
-    dfn <- dfn[grep(Type, dfn$Type), ]
-  }
-  if (!missing(Location)) {
-    dfn <- dfn[grep(Location, dfn$Location), ]
-  }
-  if (!missing(ResourceGroup)) {
-    dfn <- dfn[grep(ResourceGroup, dfn$ResourceGroup), ]
-  }
   dfn[, c(1:2, 6, 3:5, 7)]
 }
 
@@ -205,9 +193,8 @@ AzureCreateResourceGroup <- function(AzureActiveContext, ResourceGroup,
            body = bodyI,
            encode = "json",
            verbosity)
-  if (status_code(r) != 201) {
-    stop(paste("Error: Return code", status_code(r)))
-  }
+  if (!status_code(r) %in% c(200, 201)) stopWithAzureError(r)
+
   rl <- content(r, "text", encoding = "UTF-8")
   df <- fromJSON(rl)
   if (length(df$error$code) && df$error$code == "LocationNotAvailableForResourceGroup")
