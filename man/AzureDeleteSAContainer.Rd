@@ -28,7 +28,7 @@ AzureDeleteSAContainer(AzureActiveContext, Container, StorageAccount,
 Delete Storage Container in a specified Storage Account.
 }
 \seealso{
-Other Storage account: \code{\link{AzureCreateSAContainer}},
+Other Container functions: \code{\link{AzureCreateSAContainer}},
   \code{\link{AzureListSAContainers}}
 }
 

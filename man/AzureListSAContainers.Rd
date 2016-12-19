@@ -26,7 +26,7 @@ AzureListSAContainers(AzureActiveContext, StorageAccount, StorageKey,
 List Storage Containers for Specified Storage Account.
 }
 \seealso{
-Other Storage account: \code{\link{AzureCreateSAContainer}},
+Other Container functions: \code{\link{AzureCreateSAContainer}},
   \code{\link{AzureDeleteSAContainer}}
 }
 
