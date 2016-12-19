@@ -1,5 +1,5 @@
-AzureSM.config.default <- "~/.azureml/settings.json"
+AzureSMR.config.default <- "~/.azureml/settings.json"
 
 .onAttach <- function(libname, pkgname){
-  options(AzureML.config = AzureSM.config.default)
+  options(AzureSMR.config = AzureSMR.config.default)
 }

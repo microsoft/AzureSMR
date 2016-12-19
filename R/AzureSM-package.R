@@ -1,6 +1,6 @@
-#' AzureSM
+#' AzureSMR
 #'
-#' The AzureSM package connects R to the Azure Service Manager API.
+#' The AzureSMR package connects R to the Azure Service Manager API.
 #'
 #' This enables you to use and change many Azure resources, including:
 #'
@@ -12,8 +12,8 @@
 #' }
 #'
 #'
-#' @name AzureSM-package
-#' @aliases AzureSM
+#' @name AzureSMR-package
+#' @aliases AzureSMR
 #' @docType package
 #' @keywords package
 #'

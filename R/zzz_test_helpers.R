@@ -2,7 +2,7 @@
 #
 skip_if_missing_config <- function(f){
   if(!file.exists(f)) {
-    msg <- paste("To run tests, add a file ~/.azuresm/settings.json containing AzureML keys.",
+    msg <- paste("To run tests, add a file ~/.azuresmr/settings.json containing AzureML keys.",
                  "See ?workspace for help",
                  sep = "\n")
     message(msg)

@@ -1,7 +1,7 @@
-Package: AzureSM
+Package: AzureSMR
 Type: Package
 Title: Package for Interacting with Azure Services, including HDInsight (Spark, Hive), Virtual Machines and blob storage
-Version: 0.1
+Version: 0.2
 Date: 2016-12-17
 Author: Alan Weaver
 Maintainer: Alan Weaver <alanwe@microsoft.com>
