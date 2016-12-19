@@ -14,7 +14,11 @@ with(config,
 )
 AzureAuthenticate(asc)
 
-rg_name <- "_AzureSM-package-test"
+
+timestamp          <- format(Sys.time(), format = "%y%m%d%H%M")
+resourceGroup_name <- paste0("_AzureSMtest_", timestamp)
+sa_name            <- paste0("azuresmr", timestamp)
+
 
 test_that("Can connect to azure resources", {
   AzureSM:::skip_if_missing_config(settingsFile)
@@ -31,21 +35,20 @@ test_that("Can connect to azure resources", {
 
   res <- AzureListRG(asc)
   expect_is(res, "data.frame")
-  expect_equal(ncol(res), 3)
+  expect_equal(ncol(res), 4)
 })
 
 
 test_that("Can create resource group", {
   AzureSM:::skip_if_missing_config(settingsFile)
 
-  res <- AzureCreateResourceGroup(asc, Location = "westeurope", ResourceGroup = rg_name)
+  res <- AzureCreateResourceGroup(asc, Location = "westeurope", ResourceGroup = resourceGroup_name)
   expect_equal(res, "Create Request Submitted")
 
-  res <- AzureSM:::wait_for_azure(
-    asc %>% AzureListRG() %>% .$ID %>% basename(),
-    rg_name %in% res
+  wait_for_azure(
+    resourceGroup_name %in% AzureListRG(asc)$ResourceGroup
   )
-  expect_true(rg_name %in% res)
+  expect_true(resourceGroup_name %in% AzureListRG(asc)$ResourceGroup)
 })
 
 
@@ -57,44 +60,54 @@ test_that("Can connect to storage account", {
   expect_equal(ncol(res), 8)
 
   sub_id  <<- res$StorageAccount[1]
-  rg_name <<- res$ResourceGroup[1]
-  res <- AzureSAGetKey(asc, StorageAccount = sub_id, ResourceGroup = rg_name)
+  rg_temp <<- res$ResourceGroup[1]
+  res <- AzureSAGetKey(asc, StorageAccount = sub_id, ResourceGroup = rg_temp)
   expect_is(res, "character")
 })
 
 test_that("Can create storage account", {
   AzureSM:::skip_if_missing_config(settingsFile)
 
-  sa_name <- "storageazursmrtest"
-  res <- AzureCreateStorageAccount(asc, StorageAccount = sa_name, ResourceGroup = rg_name)
+  res <- AzureCreateStorageAccount(asc, StorageAccount = sa_name, ResourceGroup = resourceGroup_name)
+  if(res == "Account already exists with the same name") skip("Account already exists with the same name")
   expect_equal(res, "Create request Accepted. It can take a few moments to provision the storage account")
 
-  res <- AzureSM:::wait_for_azure(
-    AzureListSA(asc)$StorageAccount,
-    sa_name %in% res
+  wait_for_azure(
+    sa_name %in% sort(AzureListSA(asc)$StorageAccount)
   )
-  expect_true(sa_name %in% res)
+  expect_true(sa_name %in% AzureListSA(asc)$StorageAccount)
 })
+
+test_that("Can connect to container", {
+  AzureSM:::skip_if_missing_config(settingsFile)
+  sa <- AzureListSA(asc)[1, ]
+  res <- AzureListSAContainers(asc, StorageAccount = sa$StorageAccount[1], ResourceGroup = sa$ResourceGroup[1])
+  expect_is(res, "data.frame")
+  expect_equal(ncol(res), 5)
+})
+
+
 
 test_that("Can delete storage account", {
   AzureSM:::skip_if_missing_config(settingsFile)
 
-  res <- AzureDeleteStorageAccount(asc, StorageAccount = sa_name, ResourceGroup = rg_name)
+  res <- AzureDeleteStorageAccount(asc, StorageAccount = sa_name, ResourceGroup = resourceGroup_name)
   expect_equal(res, "Done")
-  expect_false(sa_name %in% AzureListSA(asc)$StorageAccount)
-
+  wait_for_azure(
+    !(sa_name %in% AzureListSA(asc)$StorageAccount)
+  )
+  expect_false(sa_name %in% sort(AzureListSA(asc)$StorageAccount))
 })
 
 test_that("Can delete resource group", {
   AzureSM:::skip_if_missing_config(settingsFile)
 
-  res <- AzureDeleteResourceGroup(asc, ResourceGroup = rg_name)
+  res <- AzureDeleteResourceGroup(asc, ResourceGroup = resourceGroup_name)
   expect_equal(res, "Delete Request Submitted")
-  res <- AzureSM:::wait_for_azure(
-    asc %>% AzureListRG() %>% .$ID %>% basename(),
-    !(rg_name %in% res)
+  wait_for_azure(
+    !(resourceGroup_name %in% AzureListRG(asc)$ResourceGroup)
   )
-  expect_false(rg_name %in% res)
+  expect_false(resourceGroup_name %in% sort(AzureListRG(asc)$ResourceGroup))
 
 })
 
