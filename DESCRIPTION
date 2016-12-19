@@ -1,12 +1,13 @@
 Package: AzureSMR
-Type: Package
 Title: Package for Interacting with Azure Services, including HDInsight (Spark, Hive), Virtual Machines and blob storage
+Description: Helps users to manage Azure Services and objects from within an R Session. Requires that an Active Directory application and service principal has been configured to access Azure resources.
+Type: Package
 Version: 0.2
 Date: 2016-12-17
-Author: Alan Weaver
+Author: Microsoft Corporation
 Maintainer: Alan Weaver <alanwe@microsoft.com>
-Description: Helps users to manage Azure Services and objects from within an R Session. Requires that an Active Directory application and service principal has been configured to access Azure resources.
-License: GPL-3
+Copyright: Microsoft
+License: MIT + file LICENSE
 LazyData: TRUE
 RoxygenNote: 5.0.1
 NeedsCompilation: no
