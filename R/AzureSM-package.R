@@ -23,6 +23,7 @@
 #' @importFrom plyr rbind.fill
 #' @importFrom jsonlite fromJSON
 #' @importFrom httr add_headers content status_code GET PUT DELETE POST
+#' @importFrom XML htmlParse xpathApply xpathSApply xmlValue
 #'
 # @import httr
 # @import jsonlite
