@@ -10,15 +10,15 @@ AzureStartVM(AzureActiveContext, ResourceGroup, VMName, Mode = "Sync",
 \arguments{
 \item{AzureActiveContext}{Context Object}
 
-\item{ResourceGroup}{ResourceGroup Object (or use AzureActiveContext)}
+\item{ResourceGroup}{ResourceGroup Object}
 
 \item{VMName}{Virtual Machine Name}
 
-\item{Mode}{Wait for operation to complete "Sync" (Default)}
+\item{Mode}{Wait for operation to complete 'Sync' (Default)}
 
-\item{SubscriptionID}{SubscriptionID Object (or use AzureActiveContext)}
+\item{SubscriptionID}{SubscriptionID Object}
 
-\item{AzToken}{Token Object (or use AzureActiveContext)}
+\item{AzToken}{Token Object}
 
 \item{verbose}{Print Tracing information (Default False)}
 }
@@ -26,7 +26,7 @@ AzureStartVM(AzureActiveContext, ResourceGroup, VMName, Mode = "Sync",
 Start a Virtual Machine.
 }
 \seealso{
-Other Virtual Machine: \code{\link{AzureDeleteVM}},
+Other Virtual machine functions: \code{\link{AzureDeleteVM}},
   \code{\link{AzureListVM}}, \code{\link{AzureStopVM}},
   \code{\link{AzureVMStatus}}
 }

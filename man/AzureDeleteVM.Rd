@@ -10,15 +10,15 @@ AzureDeleteVM(AzureActiveContext, ResourceGroup, VMName, SubscriptionID,
 \arguments{
 \item{AzureActiveContext}{Context Object}
 
-\item{ResourceGroup}{ResourceGroup Object (or use AzureActiveContext)}
+\item{ResourceGroup}{ResourceGroup Object}
 
 \item{VMName}{Virtual Machine Name}
 
-\item{SubscriptionID}{SubscriptionID Object (or use AzureActiveContext)}
+\item{SubscriptionID}{SubscriptionID Object}
 
-\item{AzToken}{Token Object (or use AzureActiveContext)}
+\item{AzToken}{Token Object}
 
-\item{Mode}{Wait for operation to complete "Sync" (Default)}
+\item{Mode}{Wait for operation to complete 'Sync' (Default)}
 
 \item{verbose}{Print Tracing information (Default False)}
 }
@@ -26,7 +26,7 @@ AzureDeleteVM(AzureActiveContext, ResourceGroup, VMName, SubscriptionID,
 Delete a Virtual Machine.
 }
 \seealso{
-Other Virtual Machine: \code{\link{AzureListVM}},
+Other Virtual machine functions: \code{\link{AzureListVM}},
   \code{\link{AzureStartVM}}, \code{\link{AzureStopVM}},
   \code{\link{AzureVMStatus}}
 }

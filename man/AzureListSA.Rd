@@ -22,11 +22,8 @@ AzureListSA(AzureActiveContext, ResourceGroup, SubscriptionID, AzToken,
 List Storage accounts.
 }
 \seealso{
-Other Storage account: \code{\link{AzureCreateSAContainer}},
-  \code{\link{AzureCreateStorageAccount}},
-  \code{\link{AzureDeleteSAContainer}},
+Other Storage account functions: \code{\link{AzureCreateStorageAccount}},
   \code{\link{AzureDeleteStorageAccount}},
-  \code{\link{AzureListSAContainers}},
   \code{\link{AzureSAGetKey}}
 }
 

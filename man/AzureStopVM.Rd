@@ -14,7 +14,7 @@ AzureStopVM(AzureActiveContext, ResourceGroup, VMName, Mode = "Sync",
 
 \item{VMName}{VMName Object}
 
-\item{Mode}{Wait for operation to complete "Sync" (Default)}
+\item{Mode}{Wait for operation to complete 'Sync' (Default)}
 
 \item{SubscriptionID}{SubscriptionID Object}
 
@@ -26,7 +26,7 @@ AzureStopVM(AzureActiveContext, ResourceGroup, VMName, Mode = "Sync",
 Stop a Virtual Machine.
 }
 \seealso{
-Other Virtual Machine: \code{\link{AzureDeleteVM}},
+Other Virtual machine functions: \code{\link{AzureDeleteVM}},
   \code{\link{AzureListVM}}, \code{\link{AzureStartVM}},
   \code{\link{AzureVMStatus}}
 }

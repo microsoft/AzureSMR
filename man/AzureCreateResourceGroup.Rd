@@ -12,7 +12,7 @@ AzureCreateResourceGroup(AzureActiveContext, ResourceGroup, Location,
 
 \item{ResourceGroup}{ResourceGroup Object}
 
-\item{Location}{Location string}
+\item{Location}{Azure region, e.g. 'westeurope' or 'southcentralus'}
 
 \item{SubscriptionID}{SubscriptionID Object}
 

@@ -21,7 +21,7 @@ AzureDeployTemplate(AzureActiveContext, DeplName, TemplateURL, ParamURL,
 
 \item{ParamJSON}{ParamJSON}
 
-\item{Mode}{"Sync" or "Async"}
+\item{Mode}{'Sync' or 'Async'}
 
 \item{ResourceGroup}{ResourceGroup Object}
 

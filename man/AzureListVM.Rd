@@ -10,13 +10,13 @@ AzureListVM(AzureActiveContext, ResourceGroup, Location, SubscriptionID,
 \arguments{
 \item{AzureActiveContext}{Context Object}
 
-\item{ResourceGroup}{ResourceGroup Object (or use AzureActiveContext)}
+\item{ResourceGroup}{ResourceGroup Object}
 
-\item{Location}{Azure Resource Location}
+\item{Location}{Azure region, e.g. 'westeurope' or 'southcentralus'}
 
-\item{SubscriptionID}{SubscriptionID Object (or use AzureActiveContext)}
+\item{SubscriptionID}{SubscriptionID Object}
 
-\item{AzToken}{Token Object (or use AzureActiveContext)}
+\item{AzToken}{Token Object}
 
 \item{verbose}{Print Tracing information (Default False)}
 }
@@ -24,7 +24,7 @@ AzureListVM(AzureActiveContext, ResourceGroup, Location, SubscriptionID,
 List VMs in a Subscription.
 }
 \seealso{
-Other Virtual Machine: \code{\link{AzureDeleteVM}},
+Other Virtual machine functions: \code{\link{AzureDeleteVM}},
   \code{\link{AzureStartVM}}, \code{\link{AzureStopVM}},
   \code{\link{AzureVMStatus}}
 }

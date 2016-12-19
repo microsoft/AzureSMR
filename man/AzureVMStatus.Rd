@@ -26,7 +26,7 @@ AzureVMStatus(AzureActiveContext, ResourceGroup, VMName, SubscriptionID,
 Get Status of a Virtual Machine.
 }
 \seealso{
-Other Virtual Machine: \code{\link{AzureDeleteVM}},
+Other Virtual machine functions: \code{\link{AzureDeleteVM}},
   \code{\link{AzureListVM}}, \code{\link{AzureStartVM}},
   \code{\link{AzureStopVM}}
 }

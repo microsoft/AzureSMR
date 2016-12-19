@@ -45,11 +45,7 @@ AzureAuthenticate <- function(AzureActiveContext, TID, CID, KEY, verbose = FALSE
                   body = bodyGT,
                   verbosity)
   j1 <- content(r, "parsed", encoding = "UTF-8")
-  if (status_code(r) != 200) {
-    message(j1$error)
-    message(j1$error_description)
-    stop(paste("Error: Return code", status_code(r)))
-  }
+  if (status_code(r) != 200) stopWithAzureError(r)
 
   AT <- paste("Bearer", j1$access_token)
 

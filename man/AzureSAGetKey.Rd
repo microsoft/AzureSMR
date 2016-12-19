@@ -24,11 +24,8 @@ AzureSAGetKey(AzureActiveContext, StorageAccount, AzToken, ResourceGroup,
 Get the Storage Keys for Specified Storage Account.
 }
 \seealso{
-Other Storage account: \code{\link{AzureCreateSAContainer}},
-  \code{\link{AzureCreateStorageAccount}},
-  \code{\link{AzureDeleteSAContainer}},
+Other Storage account functions: \code{\link{AzureCreateStorageAccount}},
   \code{\link{AzureDeleteStorageAccount}},
-  \code{\link{AzureListSAContainers}},
   \code{\link{AzureListSA}}
 }
 
