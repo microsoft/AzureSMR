@@ -49,7 +49,7 @@ azureCreateHDI(azureActiveContext, clustername, location, kind = "spark",
 
 \item{subscriptionID}{Set the subscriptionID Obtained automatically by AzureAuthenticate when only one is available}
 
-\item{mode}{Set Provisioning mode - Default Sync (Syncronous), set to ASYNC to return to session after submission}
+\item{mode}{Set Provisioning mode - Default Sync (Syncronous), set to Async to return to session after submission}
 
 \item{verbose}{Print Tracing information (Default False)}
 }

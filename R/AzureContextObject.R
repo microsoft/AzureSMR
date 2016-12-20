@@ -1,6 +1,6 @@
 #' Create an AzureContext
 #'
-#' Create an container(AzureContext) for holding variables used by the AzureSMR package.
+#' Create a container(AzureContext) for holding variables used by the AzureSMR package.
 #' If the Tenant ID, Client ID and Authenication Key is provided the function will attempt to
 #' authenicate the session.  
 #'
@@ -16,9 +16,7 @@ createAzureContext <- function(TID, CID, KEY){
   if (!missing(KEY)) AzEnv$KEY <- KEY else  AzEnv$TID <- "?"
   
   if (!missing(TID) && !missing(CID) && !missing(KEY) )
-  {
       azureAuthenticate(AzEnv,TID, CID, KEY)
-  }
   return(AzEnv)
 }
 

@@ -1,6 +1,8 @@
 stopWithAzureError <- function(r){
-  if(!is.null(r$error$code)) message(content(r)$error$code)
-  if(!is.null(r$error$message)) message(content(r)$error$message)
+  if(!is.null(r$error$code)) 
+    message(content(r)$error$code)
+  if(!is.null(r$error$message)) 
+    message(content(r)$error$message)
   stop("Error return code: ", status_code(r), call. = FALSE)
 }
 

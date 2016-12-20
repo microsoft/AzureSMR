@@ -381,7 +381,7 @@ azureDeleteHDI <- function(azureActiveContext, clustername, azToken, subscriptio
 #' @param hiveDB Set the name of the Hive DB
 #' @param hiveUser Set the hive user name
 #' @param hivePassword Set the Hive user password
-#' @param mode Set Provisioning mode - Default Sync (Syncronous), set to ASYNC to return to session after submission 
+#' @param mode Set Provisioning mode - Default Sync (Syncronous), set to Async to return to session after submission 
 #'
 #' @return Success message
 #' @family HDInsight functions

@@ -38,7 +38,7 @@ azureListVM <- function(azureActiveContext, resourceGroup, location, subscriptio
                                          Authorization = AT, `Content-type` = "application/json")), verbosity)
   rl <- content(r, "text", encoding = "UTF-8")
   df <- fromJSON(rl)
-  # print(df)
+  print(df)
   dfn <- as.data.frame(df$value$name)
   clust <- nrow(dfn)
   if (clust < 1) {
@@ -48,7 +48,10 @@ azureListVM <- function(azureActiveContext, resourceGroup, location, subscriptio
   dfn[1:clust, 1] <- df$value$name
   dfn[1:clust, 2] <- df$value$location
   dfn[1:clust, 3] <- df$value$type
-  dfn[1:clust, 4] <- df$value$properties$storageProfile$osDisk$ostype
+  if(!is.null(df$value$properties$storageProfile$osDisk$ostype))
+    dfn[1:clust, 4] <- df$value$properties$storageProfile$osDisk$ostype
+  else 
+    dfn[1:clust, 4] <- "-"
   dfn[1:clust, 5] <- df$value$properties$provisioningState
   dfn[1:clust, 6] <- df$value$properties$osProfile$adminUsername
   dfn[1:clust, 7] <- df$value$id
@@ -163,8 +166,11 @@ azureStartVM <- function(azureActiveContext, resourceGroup, vmName, mode = "Sync
         (break)()
       Sys.sleep(5)
     }
+    writeLines(paste("Finished: ", Sys.time()))
+    return("Done")
   }
-  return("Done")
+  writeLines(paste("Start request Submitted: ", Sys.time()))
+  return("")
 }
 
 
@@ -264,9 +270,11 @@ azureStopVM <- function(azureActiveContext, resourceGroup, vmName, mode = "Sync"
         (break)()
       Sys.sleep(5)
     }
+    writeLines(paste("Finished: ", Sys.time()))
+    return("Done")
   }
-  writeLines(paste("Finished: ", Sys.time()))
-  return(rc1)
+  writeLines(paste("Stop request Submitted: ", Sys.time()))
+  return("")
 }
 
 

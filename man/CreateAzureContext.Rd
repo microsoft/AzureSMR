@@ -14,7 +14,7 @@ createAzureContext(TID, CID, KEY)
 \item{KEY}{The Authentication Key which was provided when the Active Directory application / service principal is created}
 }
 \description{
-Create an container(AzureContext) for holding variables used by the AzureSMR package.
+Create a container(AzureContext) for holding variables used by the AzureSMR package.
 If the Tenant ID, Client ID and Authenication Key is provided the function will attempt to
 authenicate the session.
 }
