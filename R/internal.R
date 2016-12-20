@@ -4,17 +4,17 @@ stopWithAzureError <- function(r){
   stop("Error return code: ", status_code(r), call. = FALSE)
 }
 
-extractResourceGroupName <- function(x) gsub(".*?/resourceGroups/(.*?)(/.*)*$", "\\1", x)
-extractSubscriptionID    <- function(x) gsub(".*?/subscriptions/(.*?)(/.*)*$",  "\\1", x)
+extractresourceGroupname <- function(x) gsub(".*?/resourceGroups/(.*?)(/.*)*$", "\\1", x)
+extractsubscriptionID    <- function(x) gsub(".*?/subscriptions/(.*?)(/.*)*$",  "\\1", x)
 
-refreshStorageKey <- function(AzureActiveContext){
-  if (length(AzureActiveContext$StorageAccountK) < 1 ||
-      SAI != AzureActiveContext$StorageAccountK ||
-      length(AzureActiveContext$StorageKey) <1
+refreshstorageKey <- function(azureActiveContext){
+  if (length(azureActiveContext$storageAccountK) < 1 ||
+      SAI != azureActiveContext$storageAccountK ||
+      length(azureActiveContext$storageKey) <1
   ) {
     message("Fetching Storage Key..")
-    AzureSAGetKey(AzureActiveContext, ResourceGroup = RGI, StorageAccount = SAI)
+    azureSAGetKey(azureActiveContext, resourceGroup = RGI, storageAccount = SAI)
   } else {
-    AzureActiveContext$StorageKey
+    azureActiveContext$storageKey
   }
 }

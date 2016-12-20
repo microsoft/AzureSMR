@@ -1,24 +1,24 @@
-#' Authenticates against Azure Active Directory application.
+#' Authenticates against Azure Active directory application.
 #'
-#' @inheritParams SetAzureContext
+#' @inheritParams setAzureContext
 #' @param verbose Print Tracing information (Default False)
 #'
-#' @note See \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/} to learn how to set up an Active Directory application
+#' @note See \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/} to learn how to set up an Active directory application
 #' @references \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/}
 #'
 #' @return Retunrs Azure Tokem and sets AzureContext Token
 #' @family Resources
 #' @export
-AzureAuthenticate <- function(AzureActiveContext, TID, CID, KEY, verbose = FALSE) {
+azureAuthenticate <- function(azureActiveContext, TID, CID, KEY, verbose = FALSE) {
 
   if (missing(TID)) {
-    ATID <- AzureActiveContext$TID
+    ATID <- azureActiveContext$TID
   } else (ATID <- TID)
   if (missing(CID)) {
-    ACID <- AzureActiveContext$CID
+    ACID <- azureActiveContext$CID
   } else (ACID <- CID)
   if (missing(KEY)) {
-    AKEY <- AzureActiveContext$KEY
+    AKEY <- azureActiveContext$KEY
   } else (AKEY <- KEY)
 
   if (!length(ATID)) {
@@ -41,7 +41,7 @@ AzureAuthenticate <- function(AzureActiveContext, TID, CID, KEY, verbose = FALSE
   r <- httr::POST(URLGT,
                   add_headers(
                     .headers = c(`Cache-Control` = "no-cache",
-                                 `Content-Type` = "application/x-www-form-urlencoded")),
+                                 `Content-type` = "application/x-www-form-urlencoded")),
                   body = bodyGT,
                   verbosity)
   j1 <- content(r, "parsed", encoding = "UTF-8")
@@ -50,12 +50,12 @@ AzureAuthenticate <- function(AzureActiveContext, TID, CID, KEY, verbose = FALSE
   AT <- paste("Bearer", j1$access_token)
 
 
-  AzureActiveContext$Token  <- AT
-  AzureActiveContext$TID    <- ATID
-  AzureActiveContext$CID    <- ACID
-  AzureActiveContext$KEY    <- AKEY
-  AzureActiveContext$EXPIRY <- Sys.time() + 3598
-  SUBS <- AzureListSubscriptions(AzureActiveContext)
+  azureActiveContext$Token  <- AT
+  azureActiveContext$TID    <- ATID
+  azureActiveContext$CID    <- ACID
+  azureActiveContext$KEY    <- AKEY
+  azureActiveContext$EXPIRY <- Sys.time() + 3598
+  SUBS <- azureListSubscriptions(azureActiveContext)
   return("Authentication Suceeded : Key Obtained")
 }
 
@@ -63,17 +63,17 @@ AzureAuthenticate <- function(AzureActiveContext, TID, CID, KEY, verbose = FALSE
 
 #' Check the timestamp of a Token and Renew if needed.
 #'
-#' @inheritParams SetAzureContext
-#' @inheritParams AzureAuthenticate
+#' @inheritParams setAzureContext
+#' @inheritParams azureAuthenticate
 #' @family Resources
 #' @export
-AzureCheckToken <- function(AzureActiveContext) {
-  if (is.null(AzureActiveContext$EXPIRY))
-    stop("Not Authenticated: Use AzureAuthenticate")
+azureCheckToken <- function(azureActiveContext) {
+  if (is.null(azureActiveContext$EXPIRY))
+    stop("Not Authenticated: Use azureAuthenticate")
 
-  if (AzureActiveContext$EXPIRY < Sys.time()) {
+  if (azureActiveContext$EXPIRY < Sys.time()) {
     message("Azure Token Expired: Attempting automatic renewal")
-    AzureAuthenticate(AzureActiveContext)
+    azureAuthenticate(azureActiveContext)
   }
   return("OK")
 }

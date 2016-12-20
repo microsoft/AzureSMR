@@ -1,42 +1,42 @@
 #' Create new Spark Session.
 #'
-#' @inheritParams SetAzureContext
-#' @inheritParams AzureAuthenticate
-#' @inheritParams AzureCreateHDI
+#' @inheritParams setAzureContext
+#' @inheritParams azureAuthenticate
+#' @inheritParams azureCreateHDI
 #'
-#' @param ClusterName ClusterName
-#' @param HDIAdmin HDIAdmin - HDinsight Administrator Name
-#' @param HDIPassword HDinsight Administrator Name
+#' @param clustername clustername
+#' @param hdiAdmin hdiAdmin - HDinsight Administrator name
+#' @param hdiPassword  HDinsight Administrator name
 #'
 #' @family Spark
 #' @export
-AzureSparkNewSession <- function(AzureActiveContext,ClusterName,HDIAdmin,HDIPassword,Kind = "spark",verbose = FALSE) {
+azureSparkNewSession <- function(azureActiveContext,clustername,hdiAdmin,hdiPassword ,kind = "spark",verbose = FALSE) {
 
-  if(missing(ClusterName)) {CN <- AzureActiveContext$ClusterName} else (CN = ClusterName)
-  if(missing(HDIAdmin)) {HA <- AzureActiveContext$HDIAdmin} else (HA = HDIAdmin)
-  if(missing(HDIPassword)) {HP <- AzureActiveContext$HDIPassword} else (HP = HDIPassword)
-  if(missing(Kind)) {KI <- AzureActiveContext$Kind} else (KI = Kind)
+  if(missing(clustername)) {CN <- azureActiveContext$clustername} else (CN = clustername)
+  if(missing(hdiAdmin)) {HA <- azureActiveContext$hdiAdmin} else (HA = hdiAdmin)
+  if(missing(hdiPassword)) {HP <- azureActiveContext$hdiPassword } else (HP = hdiPassword )
+  if(missing(kind)) {KI <- azureActiveContext$kind} else (KI = kind)
   verbosity <- if(verbose) httr::verbose(TRUE) else NULL
 
-  if (!length(CN)) {stop("Error: No Valid ClusterName provided")}
-  if (!length(HA)) {stop("Error: No Valid HDIAdmin provided")}
-  if (!length(HP)) {stop("Error: No Valid HDIPassword provided")}
-  if (!length(Kind)) {stop("Error: No Valid Kind provided")}
+  if (!length(CN)) {stop("Error: No Valid clustername provided")}
+  if (!length(HA)) {stop("Error: No Valid hdiAdmin provided")}
+  if (!length(HP)) {stop("Error: No Valid hdiPassword  provided")}
+  if (!length(kind)) {stop("Error: No Valid kind provided")}
 
-  AzureActiveContext$HDIAdmin <- HA
-  AzureActiveContext$HDIPassword <- HP
-  AzureActiveContext$ClusterName <- CN
-  AzureActiveContext$Kind <- KI
+  azureActiveContext$hdiAdmin <- HA
+  azureActiveContext$hdiPassword  <- HP
+  azureActiveContext$clustername <- CN
+  azureActiveContext$kind <- KI
 
   URL <- paste("https://",CN,".azurehdinsight.net/livy/sessions",sep="")
 
-  #  URL <- paste("https://management.azure.com/subscriptions/",SUBIDI,"/resourceGroups/",RGI,"/providers/Microsoft.HDInsight/clusters/",ClusterName,"?api-version=2015-03-01-preview",sep="")
+  #  URL <- paste("https://management.azure.com/subscriptions/",SUBIDI,"/resourceGroups/",RGI,"/providers/Microsoft.HDInsight/clusters/",clustername,"?api-version=2015-03-01-preview",sep="")
 
   #  print(URL)
 
   bodyI <- list(kind = KI)
 
-  r <- POST(URL,add_headers(.headers = c("Content-Type" = "application/json")),authenticate(HA,HP),body = bodyI, encode = "json",verbosity)
+  r <- POST(URL,add_headers(.headers = c("Content-type" = "application/json")),authenticate(HA,HP),body = bodyI, encode = "json",verbosity)
 
   if (status_code(r) != "201")
     stop(paste("Error Return Code:",status_code(r)))
@@ -45,40 +45,40 @@ AzureSparkNewSession <- function(AzureActiveContext,ClusterName,HDIAdmin,HDIPass
   #print(rl)
   df <- fromJSON(rl)
   #print(df$id)
-  AzureActiveContext$SessionID <- toString(df$id)
+  azureActiveContext$sessionID <- toString(df$id)
   return(df$id)
 }
 
 
 #' List Spark Sessions.
 #'
-#' @inheritParams SetAzureContext
-#' @inheritParams AzureSparkNewSession
+#' @inheritParams setAzureContext
+#' @inheritParams azureSparkNewSession
 #'
 #' @family Spark
 #' @export
-AzureSparkListSessions <- function(AzureActiveContext,ClusterName,HDIAdmin,HDIPassword,verbose = FALSE) {
+azureSparkListSessions <- function(azureActiveContext,clustername,hdiAdmin,hdiPassword ,verbose = FALSE) {
   HA = ""
-  if(missing(ClusterName)) {CN <- AzureActiveContext$ClusterName} else (CN = ClusterName)
-  if(missing(HDIAdmin)) {HA <- AzureActiveContext$HDIAdmin} else (HA = HDIAdmin)
-  if(missing(HDIPassword)) {HP <- AzureActiveContext$HDIPassword} else (HP = HDIPassword)
+  if(missing(clustername)) {CN <- azureActiveContext$clustername} else (CN = clustername)
+  if(missing(hdiAdmin)) {HA <- azureActiveContext$hdiAdmin} else (HA = hdiAdmin)
+  if(missing(hdiPassword)) {HP <- azureActiveContext$hdiPassword } else (HP = hdiPassword )
   verbosity <- if(verbose) httr::verbose(TRUE) else NULL
 
-  if (!length(CN)) {stop("Error: No Valid ClusterName provided")}
-  if (!length(HA)) {stop("Error: No Valid HDIAdmin provided")}
-  if (!length(HP)) {stop("Error: No Valid HDIPassword provided")}
+  if (!length(CN)) {stop("Error: No Valid clustername provided")}
+  if (!length(HA)) {stop("Error: No Valid hdiAdmin provided")}
+  if (!length(HP)) {stop("Error: No Valid hdiPassword  provided")}
 
-  AzureActiveContext$HDIAdmin <- HA
-  AzureActiveContext$HDIPassword <- HP
-  AzureActiveContext$ClusterName <- CN
+  azureActiveContext$hdiAdmin <- HA
+  azureActiveContext$hdiPassword  <- HP
+  azureActiveContext$clustername <- CN
 
   URL <- paste("https://",CN,".azurehdinsight.net/livy/sessions",sep="")
 
-  #  URL <- paste("https://management.azure.com/subscriptions/",SUBIDI,"/resourceGroups/",RGI,"/providers/Microsoft.HDInsight/clusters/",ClusterName,"?api-version=2015-03-01-preview",sep="")
+  #  URL <- paste("https://management.azure.com/subscriptions/",SUBIDI,"/resourceGroups/",RGI,"/providers/Microsoft.HDInsight/clusters/",clustername,"?api-version=2015-03-01-preview",sep="")
 
   #print(URL)
 
-  r <- GET(URL,add_headers(.headers = c("Content-Type" = "application/json")),authenticate(HA,HP),verbosity)
+  r <- GET(URL,add_headers(.headers = c("Content-type" = "application/json")),authenticate(HA,HP),verbosity)
   #,authenticate("admin", "Summer2014!")
   rl <- content(r,"text",encoding="UTF-8")
   df <- fromJSON(rl)
@@ -99,43 +99,43 @@ AzureSparkListSessions <- function(AzureActiveContext,ClusterName,HDIAdmin,HDIPa
 
 #' Stop a Spark Sessions.
 #'
-#' @inheritParams SetAzureContext
-#' @inheritParams AzureSparkNewSession
+#' @inheritParams setAzureContext
+#' @inheritParams azureSparkNewSession
 #'
 #' @family Spark
 #' @export
-AzureSparkStopSession <- function(AzureActiveContext,ClusterName,HDIAdmin,HDIPassword,SessionID,verbose = FALSE) {
+azureSparkStopSession <- function(azureActiveContext,clustername,hdiAdmin,hdiPassword ,sessionID,verbose = FALSE) {
 
-  AzureCheckToken(AzureActiveContext)
+  azureCheckToken(azureActiveContext)
 
-  if(missing(ClusterName)) {CN <- AzureActiveContext$ClusterName} else (CN = ClusterName)
-  if(missing(HDIAdmin)) {HA <- AzureActiveContext$HDIAdmin} else (HA = HDIAdmin)
-  if(missing(HDIPassword)) {HP <- AzureActiveContext$HDIPassword} else (HP = HDIPassword)
-  if(missing(SessionID)) {SI <- AzureActiveContext$SessionID} else (SI = SessionID)
+  if(missing(clustername)) {CN <- azureActiveContext$clustername} else (CN = clustername)
+  if(missing(hdiAdmin)) {HA <- azureActiveContext$hdiAdmin} else (HA = hdiAdmin)
+  if(missing(hdiPassword)) {HP <- azureActiveContext$hdiPassword } else (HP = hdiPassword )
+  if(missing(sessionID)) {SI <- azureActiveContext$sessionID} else (SI = sessionID)
   verbosity <- if(verbose) httr::verbose(TRUE) else NULL
 
-  if (!length(CN)) {stop("Error: No ClusterName provided")}
-  if (!length(HA)) {stop("Error: No HDIAdmin provided")}
-  if (!length(HP)) {stop("Error: No HDIPassword provided")}
-  if (!length(SI)) {stop("Error: No SessionID provided")}
+  if (!length(CN)) {stop("Error: No clustername provided")}
+  if (!length(HA)) {stop("Error: No hdiAdmin provided")}
+  if (!length(HP)) {stop("Error: No hdiPassword  provided")}
+  if (!length(SI)) {stop("Error: No sessionID provided")}
 
-  AzureActiveContext$HDIAdmin <- HA
-  AzureActiveContext$HDIPassword <- HP
-  AzureActiveContext$ClusterName <- CN
-  AzureActiveContext$SessionID <- SI
+  azureActiveContext$hdiAdmin <- HA
+  azureActiveContext$hdiPassword  <- HP
+  azureActiveContext$clustername <- CN
+  azureActiveContext$sessionID <- SI
 
   URL <- paste("https://",CN,".azurehdinsight.net/livy/sessions/",SI,sep="")
 
-  #  URL <- paste("https://management.azure.com/subscriptions/",SUBIDI,"/resourceGroups/",RGI,"/providers/Microsoft.HDInsight/clusters/",ClusterName,"?api-version=2015-03-01-preview",sep="")
+  #  URL <- paste("https://management.azure.com/subscriptions/",SUBIDI,"/resourceGroups/",RGI,"/providers/Microsoft.HDInsight/clusters/",clustername,"?api-version=2015-03-01-preview",sep="")
 
   #print(URL)
 
-  r <- DELETE(URL,add_headers(.headers = c("Content-Type" = "application/json")),authenticate(HA,HP),verbosity)
+  r <- DELETE(URL,add_headers(.headers = c("Content-type" = "application/json")),authenticate(HA,HP),verbosity)
 
   #rl <- content(r,"text",encoding="UTF-8")
   #print(rl)
   if (status_code(r) == "404")
-    stop(paste("SessionID not found (",status_code(r),")"))
+    stop(paste("sessionID not found (",status_code(r),")"))
 
   if (status_code(r) != "200")
     stop(paste("Error Return Code:",status_code(r)))
@@ -145,48 +145,48 @@ AzureSparkStopSession <- function(AzureActiveContext,ClusterName,HDIAdmin,HDIPas
 
 #' Send Spark Statements/comamnds (REPL/Interactive mode).
 #'
-#' @inheritParams SetAzureContext
-#' @inheritParams AzureSparkNewSession
+#' @inheritParams setAzureContext
+#' @inheritParams azureSparkNewSession
 #'
 #' @param CMD CMD
 #'
 #' @family Spark
 #' @export
-AzureSparkCMD <- function(AzureActiveContext,CMD,ClusterName,HDIAdmin,HDIPassword,SessionID,verbose = FALSE) {
+azureSparkCMD <- function(azureActiveContext,CMD,clustername,hdiAdmin,hdiPassword ,sessionID,verbose = FALSE) {
 
-  if(missing(ClusterName)) {CN <- AzureActiveContext$ClusterName} else (CN = ClusterName)
-  if(missing(HDIAdmin)) {HA <- AzureActiveContext$HDIAdmin} else (HA = HDIAdmin)
-  if(missing(HDIPassword)) {HP <- AzureActiveContext$HDIPassword} else (HP = HDIPassword)
-  if(missing(SessionID)) {SI <- AzureActiveContext$SessionID} else (SI = SessionID)
+  if(missing(clustername)) {CN <- azureActiveContext$clustername} else (CN = clustername)
+  if(missing(hdiAdmin)) {HA <- azureActiveContext$hdiAdmin} else (HA = hdiAdmin)
+  if(missing(hdiPassword)) {HP <- azureActiveContext$hdiPassword } else (HP = hdiPassword )
+  if(missing(sessionID)) {SI <- azureActiveContext$sessionID} else (SI = sessionID)
   if(missing(CMD)) {stop("Error: No CMD provided")}
   verbosity <- if(verbose) httr::verbose(TRUE) else NULL
 
-  if (!length(CN)) {stop("Error: No Valid ClusterName provided")}
-  if (!length(HA)) {stop("Error: No Valid HDIAdmin provided")}
-  if (!length(HP)) {stop("Error: No Valid HDIPassword provided")}
-  if (!length(SI)) {stop("Error: No SessionID provided")}
+  if (!length(CN)) {stop("Error: No Valid clustername provided")}
+  if (!length(HA)) {stop("Error: No Valid hdiAdmin provided")}
+  if (!length(HP)) {stop("Error: No Valid hdiPassword  provided")}
+  if (!length(SI)) {stop("Error: No sessionID provided")}
 
-  AzureActiveContext$HDIAdmin <- HA
-  AzureActiveContext$HDIPassword <- HP
-  AzureActiveContext$ClusterName <- CN
-  AzureActiveContext$SessionID <- SI
+  azureActiveContext$hdiAdmin <- HA
+  azureActiveContext$hdiPassword  <- HP
+  azureActiveContext$clustername <- CN
+  azureActiveContext$sessionID <- SI
 
   URL <- paste("https://",CN,".azurehdinsight.net/livy/sessions/",SI,"/statements",sep="")
 
-  #  URL <- paste("https://management.azure.com/subscriptions/",SUBIDI,"/resourceGroups/",RGI,"/providers/Microsoft.HDInsight/clusters/",ClusterName,"?api-version=2015-03-01-preview",sep="")
+  #  URL <- paste("https://management.azure.com/subscriptions/",SUBIDI,"/resourceGroups/",RGI,"/providers/Microsoft.HDInsight/clusters/",clustername,"?api-version=2015-03-01-preview",sep="")
 
   #print(URL)
   # print(typeof(CMD))
   bodyI <- list(code = CMD)
   #print(CMD)
 
-  r <- POST(URL,add_headers(.headers = c("Content-Type" = "application/json")),authenticate(HA,HP),body = bodyI, encode = "json",verbosity)
+  r <- POST(URL,add_headers(.headers = c("Content-type" = "application/json")),authenticate(HA,HP),body = bodyI, encode = "json",verbosity)
 
   rl <- content(r,"text",encoding="UTF-8")
   rh <- headers(r)
 
   if (status_code(r) == "404")
-    stop(paste("SessionID not found (",status_code(r),")"))
+    stop(paste("sessionID not found (",status_code(r),")"))
 
   if (status_code(r) != "201")
     stop(paste("Error Return Code:",status_code(r)))
@@ -209,7 +209,7 @@ AzureSparkCMD <- function(AzureActiveContext,CMD,ClusterName,HDIAdmin,HDIPasswor
     Sys.sleep(DUR)
     if (DUR < 5) DUR <- DUR +1
     cat("R")
-    r <- GET(URL,add_headers(.headers = c("Content-Type" = "application/json")),authenticate(HA,HP))
+    r <- GET(URL,add_headers(.headers = c("Content-type" = "application/json")),authenticate(HA,HP))
     rl <- content(r,"text",encoding="UTF-8")
     rh <- headers(r)
     df <- fromJSON(rl)
@@ -227,46 +227,46 @@ AzureSparkCMD <- function(AzureActiveContext,CMD,ClusterName,HDIAdmin,HDIPasswor
 
 #' Submit Spark Job (Batch mode).
 #'
-#' @inheritParams SetAzureContext
-#' @inheritParams AzureSparkNewSession
+#' @inheritParams setAzureContext
+#' @inheritParams azureSparkNewSession
 #'
-#' @param FILE File
-#' @param Log Log
+#' @param FILE file
+#' @param log log
 #'
 #' @family Spark
 #' @export
-AzureSparkJob <- function(AzureActiveContext,FILE,ClusterName,HDIAdmin,HDIPassword, Log="URL",verbose = FALSE) {
+azureSparkJob <- function(azureActiveContext,FILE,clustername,hdiAdmin,hdiPassword , log="URL",verbose = FALSE) {
 
-  if(missing(ClusterName)) {CN <- AzureActiveContext$ClusterName} else (CN = ClusterName)
-  if(missing(HDIAdmin)) {HA <- AzureActiveContext$HDIAdmin} else (HA = HDIAdmin)
-  if(missing(HDIPassword)) {HP <- AzureActiveContext$HDIPassword} else (HP = HDIPassword)
+  if(missing(clustername)) {CN <- azureActiveContext$clustername} else (CN = clustername)
+  if(missing(hdiAdmin)) {HA <- azureActiveContext$hdiAdmin} else (HA = hdiAdmin)
+  if(missing(hdiPassword)) {HP <- azureActiveContext$hdiPassword } else (HP = hdiPassword )
   if(missing(FILE)) {stop("Error: No CMD provided")}
   verbosity <- if(verbose) httr::verbose(TRUE) else NULL
 
-  if (!length(CN)) {stop("Error: No Valid ClusterName provided")}
-  if (!length(HA)) {stop("Error: No Valid HDIAdmin provided")}
-  if (!length(HP)) {stop("Error: No Valid HDIPassword provided")}
+  if (!length(CN)) {stop("Error: No Valid clustername provided")}
+  if (!length(HA)) {stop("Error: No Valid hdiAdmin provided")}
+  if (!length(HP)) {stop("Error: No Valid hdiPassword  provided")}
 
-  AzureActiveContext$HDIAdmin <- HA
-  AzureActiveContext$HDIPassword <- HP
-  AzureActiveContext$ClusterName <- CN
+  azureActiveContext$hdiAdmin <- HA
+  azureActiveContext$hdiPassword  <- HP
+  azureActiveContext$clustername <- CN
 
   URL <- paste("https://",CN,".azurehdinsight.net/livy/batches",sep="")
 
-  #  URL <- paste("https://management.azure.com/subscriptions/",SUBIDI,"/resourceGroups/",RGI,"/providers/Microsoft.HDInsight/clusters/",ClusterName,"?api-version=2015-03-01-preview",sep="")
+  #  URL <- paste("https://management.azure.com/subscriptions/",SUBIDI,"/resourceGroups/",RGI,"/providers/Microsoft.HDInsight/clusters/",clustername,"?api-version=2015-03-01-preview",sep="")
 
   #print(URL)
   # print(typeof(CMD))
   bodyI <- list(file = FILE)
   #print(CMD)
 
-  r <- POST(URL,add_headers(.headers = c("Content-Type" = "application/json")),authenticate(HA,HP),body = bodyI, encode = "json",verbosity)
+  r <- POST(URL,add_headers(.headers = c("Content-type" = "application/json")),authenticate(HA,HP),body = bodyI, encode = "json",verbosity)
 
   rl <- content(r,"text",encoding="UTF-8")
   rh <- headers(r)
 
   if (status_code(r) == "404")
-    stop(paste("SessionID not found (",status_code(r),")"))
+    stop(paste("sessionID not found (",status_code(r),")"))
 
   if (status_code(r) != "201")
     stop(paste("Error Return Code:",status_code(r)))
@@ -290,12 +290,12 @@ AzureSparkJob <- function(AzureActiveContext,FILE,ClusterName,HDIAdmin,HDIPasswo
     Sys.sleep(DUR)
     if (DUR < 5) DUR <- DUR +1
     cat("R")
-    r <- GET(URL,add_headers(.headers = c("Content-Type" = "application/json")),authenticate(HA,HP),verbosity)
+    r <- GET(URL,add_headers(.headers = c("Content-type" = "application/json")),authenticate(HA,HP),verbosity)
     rl <- content(r,"text",encoding="UTF-8")
     rh <- headers(r)
     df <- fromJSON(rl)
-    if (length(df$appInfo$driverLogUrl))
-      LOGURL2 <- df$appInfo$driverLogUrl
+    if (length(df$appInfo$driverlogUrl))
+      LOGURL2 <- df$appInfo$driverlogUrl
   }
   cat("C")
   STATE <- df$state
@@ -308,16 +308,16 @@ AzureSparkJob <- function(AzureActiveContext,FILE,ClusterName,HDIAdmin,HDIPasswo
   print("LOGURL")
   print(LOGURL2)
 
-  if (Log == "URL")
-    AzureActiveContext$Log <- LOGURL2
+  if (log == "URL")
+    azureActiveContext$log <- LOGURL2
   else
   {
     print("LOGURL")
     print(LOGURL2)
 
-    r <- GET(LOGURL2,add_headers(.headers = c("Content-Type" = "application/json")),authenticate(HA,HP),verbosity)
+    r <- GET(LOGURL2,add_headers(.headers = c("Content-type" = "application/json")),authenticate(HA,HP),verbosity)
     rl <- content(r,"text",encoding="UTF-8")
-    AzureActiveContext$Log <- rl
+    azureActiveContext$log <- rl
   }
   return(STATE)
 }
@@ -325,35 +325,35 @@ AzureSparkJob <- function(AzureActiveContext,FILE,ClusterName,HDIAdmin,HDIPasswo
 
 #' List Spark Jobs (Batch mode).
 #'
-#' @inheritParams SetAzureContext
-#' @inheritParams AzureSparkNewSession
+#' @inheritParams setAzureContext
+#' @inheritParams azureSparkNewSession
 #'
 #' @family Spark
-#' @return (manually direct output to Blob fule /SQL in script)
+#' @return (manually direct output to blob fule /SQL in script)
 #' @export
-AzureSparkListJobs <- function(AzureActiveContext,ClusterName,HDIAdmin,HDIPassword,verbose = FALSE) {
+azureSparkListJobs <- function(azureActiveContext,clustername,hdiAdmin,hdiPassword ,verbose = FALSE) {
   HA = ""
-  if(missing(ClusterName)) {CN <- AzureActiveContext$ClusterName} else (CN = ClusterName)
-  if(missing(HDIAdmin)) {HA <- AzureActiveContext$HDIAdmin} else (HA = HDIAdmin)
-  if(missing(HDIPassword)) {HP <- AzureActiveContext$HDIPassword} else (HP = HDIPassword)
+  if(missing(clustername)) {CN <- azureActiveContext$clustername} else (CN = clustername)
+  if(missing(hdiAdmin)) {HA <- azureActiveContext$hdiAdmin} else (HA = hdiAdmin)
+  if(missing(hdiPassword)) {HP <- azureActiveContext$hdiPassword } else (HP = hdiPassword )
   verbosity <- if(verbose) httr::verbose(TRUE) else NULL
 
-  if (!length(CN)) {stop("Error: No Valid ClusterName provided")}
-  if (!length(HA)) {stop("Error: No Valid HDIAdmin provided")}
-  if (!length(HP)) {stop("Error: No Valid HDIPassword provided")}
+  if (!length(CN)) {stop("Error: No Valid clustername provided")}
+  if (!length(HA)) {stop("Error: No Valid hdiAdmin provided")}
+  if (!length(HP)) {stop("Error: No Valid hdiPassword  provided")}
 
-  AzureActiveContext$HDIAdmin <- HA
-  AzureActiveContext$HDIPassword <- HP
-  AzureActiveContext$ClusterName <- CN
+  azureActiveContext$hdiAdmin <- HA
+  azureActiveContext$hdiPassword  <- HP
+  azureActiveContext$clustername <- CN
 
   URL <- paste("https://",CN,".azurehdinsight.net/livy/batches",sep="")
 
-  #  URL <- paste("https://management.azure.com/subscriptions/",SUBIDI,"/resourceGroups/",RGI,"/providers/Microsoft.HDInsight/clusters/",ClusterName,"?api-version=2015-03-01-preview",sep="")
+  #  URL <- paste("https://management.azure.com/subscriptions/",SUBIDI,"/resourceGroups/",RGI,"/providers/Microsoft.HDInsight/clusters/",clustername,"?api-version=2015-03-01-preview",sep="")
 
   #print(URL)
 
 
-  r <- GET(URL,add_headers(.headers = c("Content-Type" = "application/json")),authenticate(HA,HP),verbosity)
+  r <- GET(URL,add_headers(.headers = c("Content-type" = "application/json")),authenticate(HA,HP),verbosity)
   #,authenticate("admin", "Summer2014!")
   rl <- content(r,"text",encoding="UTF-8")
   df <- fromJSON(rl)
@@ -371,21 +371,21 @@ AzureSparkListJobs <- function(AzureActiveContext,ClusterName,HDIAdmin,HDIPasswo
 }
 
 
-#' Show Spark Log Output.
+#' Show Spark log Output.
 #'
-#' @inheritParams SetAzureContext
-#' @inheritParams AzureSparkNewSession
+#' @inheritParams setAzureContext
+#' @inheritParams azureSparkNewSession
 #'
 #' @param URL URL
 #'
 #' @family Spark
 #'
-#' @return Show Log in Browser
+#' @return Show log in Browser
 #' @export
-AzureSparkShowURL <- function(AzureActiveContext,URL) {
+azureSparkShowURL <- function(azureActiveContext,URL) {
   if (!missing(URL))
     browseURL(URL)
   else
-    browseURL(AzureActiveContext$Log)
+    browseURL(azureActiveContext$log)
   return("")
 }
