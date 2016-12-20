@@ -11,15 +11,15 @@ azureCreateHDI(azureActiveContext, clustername, location, kind = "spark",
   verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{Context Object}
+\item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 
 \item{clustername}{resourceGroup Object (or use azureActiveContext)}
 
 \item{location}{Azure region, e.g. 'westeurope' or 'southcentralus'}
 
-\item{kind}{"hadoop","spark" or "pyspark"}
+\item{kind}{Set the HDinsight kind "hadoop","spark" or "pyspark"}
 
-\item{storageAccount}{storageAccount Object}
+\item{storageAccount}{Set the name of the azure storage account}
 
 \item{storageKey}{Storage Key}
 
@@ -43,11 +43,11 @@ azureCreateHDI(azureActiveContext, clustername, location, kind = "spark",
 
 \item{hivePassword}{Hive user password}
 
-\item{resourceGroup}{resourceGroup Object}
+\item{resourceGroup}{Set the name of the Resource Group}
 
-\item{azToken}{Token Object}
+\item{azToken}{Azure Token Object - Obtained by AzureAuthenticate}
 
-\item{subscriptionID}{subscriptionID Object}
+\item{subscriptionID}{Set the subscriptionID Obtained automatically by AzureAuthenticate when only one is available}
 
 \item{mode}{mode}
 

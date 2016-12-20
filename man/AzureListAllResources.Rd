@@ -14,11 +14,11 @@ azureListAllResources(azureActiveContext, resourceGroup, subscriptionID,
 
 \item{subscriptionID}{subscriptionID Object (or use azureActiveContext)}
 
-\item{azToken}{Token Object}
+\item{azToken}{Azure Token Object - Obtained by AzureAuthenticate}
 
-\item{name}{name}
+\item{name}{filter by resource name}
 
-\item{type}{type}
+\item{type}{filter by resource type}
 
 \item{location}{Azure region, e.g. 'westeurope' or 'southcentralus'}
 

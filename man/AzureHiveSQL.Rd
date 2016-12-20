@@ -8,15 +8,15 @@ azureHiveSQL(azureActiveContext, CMD, clustername, hdiAdmin, hdiPassword,
   path = "wasb:///tmp/", verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{Context Object}
+\item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 
 \item{CMD}{SQl COmmand String}
 
-\item{clustername}{clustername Object}
+\item{clustername}{Set the clustername}
 
-\item{hdiAdmin}{hdiAdmin Object}
+\item{hdiAdmin}{Set the HDInsight admin username}
 
-\item{hdiPassword}{hdiPassword  Object}
+\item{hdiPassword}{Set the HDInsight admin Password}
 
 \item{path}{path}
 

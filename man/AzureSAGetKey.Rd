@@ -8,15 +8,15 @@ azureSAGetKey(azureActiveContext, storageAccount, azToken, resourceGroup,
   subscriptionID, verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{Context Object}
+\item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 
 \item{storageAccount}{storageAccount}
 
 \item{azToken}{Token Object (or use azureActiveContext)}
 
-\item{resourceGroup}{resourceGroup Object}
+\item{resourceGroup}{Set the name of the Resource Group}
 
-\item{subscriptionID}{subscriptionID Object}
+\item{subscriptionID}{Set the subscriptionID Obtained automatically by AzureAuthenticate when only one is available}
 
 \item{verbose}{Print Tracing information (Default False)}
 }

@@ -8,13 +8,13 @@ azureHiveStatus(azureActiveContext, clustername, hdiAdmin, hdiPassword,
   verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{Context Object}
+\item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 
-\item{clustername}{clustername Object}
+\item{clustername}{Set the clustername}
 
-\item{hdiAdmin}{hdiAdmin Object}
+\item{hdiAdmin}{Set the HDInsight admin username}
 
-\item{hdiPassword}{hdiPassword  Object}
+\item{hdiPassword}{Set the HDInsight admin Password}
 
 \item{verbose}{Print Tracing information (Default False)}
 }

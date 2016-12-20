@@ -8,9 +8,9 @@ azureResizeHDI(azureActiveContext, clustername, role = "worker", size = 2,
   mode = "Sync", azToken, subscriptionID, resourceGroup, verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{Context Object}
+\item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 
-\item{clustername}{clustername Object}
+\item{clustername}{Set the clustername}
 
 \item{role}{role type: 'worker', 'head' or 'Edge'}
 
@@ -18,11 +18,11 @@ azureResizeHDI(azureActiveContext, clustername, role = "worker", size = 2,
 
 \item{mode}{'Sync' or 'Async'}
 
-\item{azToken}{Token Object}
+\item{azToken}{Azure Token Object - Obtained by AzureAuthenticate}
 
-\item{subscriptionID}{subscriptionID Object}
+\item{subscriptionID}{Set the subscriptionID Obtained automatically by AzureAuthenticate when only one is available}
 
-\item{resourceGroup}{resourceGroup Object}
+\item{resourceGroup}{Set the name of the Resource Group}
 
 \item{verbose}{Print Tracing information (Default False)}
 }

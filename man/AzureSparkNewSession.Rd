@@ -8,7 +8,7 @@ azureSparkNewSession(azureActiveContext, clustername, hdiAdmin, hdiPassword,
   kind = "spark", verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{Context Object}
+\item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 
 \item{clustername}{clustername}
 
@@ -16,7 +16,7 @@ azureSparkNewSession(azureActiveContext, clustername, hdiAdmin, hdiPassword,
 
 \item{hdiPassword}{HDinsight Administrator name}
 
-\item{kind}{"hadoop","spark" or "pyspark"}
+\item{kind}{Set the HDinsight kind "hadoop","spark" or "pyspark"}
 
 \item{verbose}{Print Tracing information (Default False)}
 }

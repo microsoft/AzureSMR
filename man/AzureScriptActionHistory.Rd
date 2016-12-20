@@ -8,19 +8,19 @@ azureScriptActionHistory(azureActiveContext, resourceGroup, clustername = "*",
   subscriptionID, azToken, name, type, verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{Context Object}
+\item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 
-\item{resourceGroup}{resourceGroup Object}
+\item{resourceGroup}{Set the name of the Resource Group}
 
-\item{clustername}{clustername Object}
+\item{clustername}{Set the clustername}
 
-\item{subscriptionID}{subscriptionID Object}
+\item{subscriptionID}{Set the subscriptionID Obtained automatically by AzureAuthenticate when only one is available}
 
-\item{azToken}{Token Object}
+\item{azToken}{Azure Token Object - Obtained by AzureAuthenticate}
 
-\item{name}{name}
+\item{name}{filter by resource name}
 
-\item{type}{type}
+\item{type}{filter by resource type}
 
 \item{verbose}{Print Tracing information (Default False)}
 }

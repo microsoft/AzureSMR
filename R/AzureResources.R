@@ -87,8 +87,8 @@ azureListRG <- function(azureActiveContext, subscriptionID, azToken, verbose = F
 #' @param azureActiveContext Azure Context Object
 #' @param resourceGroup resourceGroup Object (or use azureActiveContext)
 #' @param subscriptionID subscriptionID Object (or use azureActiveContext)
-#' @param name name
-#' @param type type
+#' @param name filter by resource name 
+#' @param type filter by resource type
 #' @param location Azure region, e.g. 'westeurope' or 'southcentralus'
 #'
 #' @return Returns Dataframe of Resources
