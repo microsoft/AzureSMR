@@ -369,22 +369,24 @@ azureDeleteHDI <- function(azureActiveContext, clustername, azToken, subscriptio
 #' @inheritParams azureListHDI
 #'
 #'
-#' @param clustername resourceGroup Object (or use azureActiveContext)
-#' @param storageKey Storage Key
-#' @param version version
+#' @param clustername set the Name of cluster
+#' @param storageKey set the Storage Key manually for the associaetd storage account
+#' @param version HDinsight version see 
 #' @param adminUser Admin user name
 #' @param adminPassword Admin user password
-#' @param workers Number of worker nodes
-#' @param sshUser SSH user name
-#' @param sshPassword SSH user password
-#' @param hiveServer Hive server
-#' @param hiveDB Hive DB
-#' @param hiveUser Hive user name
-#' @param hivePassword Hive user password
-#' @param mode mode
+#' @param workers Define the number of worker nodes
+#' @param sshUser set the SSH user name
+#' @param sshPassword set the SSH user password
+#' @param hiveServer URI address of the Hive server
+#' @param hiveDB Set the name of the Hive DB
+#' @param hiveUser Set the hive user name
+#' @param hivePassword Set the Hive user password
+#' @param mode Set Provisioning mode - Default Sync (Syncronous), set to ASYNC to return to session after submission 
 #'
 #' @return Success message
 #' @family HDInsight functions
+#' @note See \url{https://docs.microsoft.com/en-us/azure/hdinsight/hdinsight-component-versioning} to learn about HDInsight Versions
+
 #' @export
 azureCreateHDI <- function(azureActiveContext, clustername, location, kind = "spark", storageAccount,
                            storageKey, version = "3.4", workers = 2, adminUser, adminPassword, sshUser,
