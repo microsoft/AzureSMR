@@ -4,7 +4,7 @@
 #'
 #' @family Context Object
 #' @export
-CreateAzureContext <- function(){
+createAzureContext <- function(){
   AzEnv <- new.env(parent = globalenv())
   AzEnv$TID <- "xxx"
   AzEnv$CID <- "xxx"
@@ -16,59 +16,59 @@ CreateAzureContext <- function(){
 
 #' Dumps the contents of the AzureContext.
 #'
-#' @inheritParams SetAzureContext
+#' @inheritParams setAzureContext
 #' @family Context Object
 #' @export
 
-DumpAzureContext <- function(AzureActiveContext){
-  ls.str(envir = AzureActiveContext)
+dumpAzureContext <- function(azureActiveContext){
+  ls.str(envir = azureActiveContext)
 }
 
 
 #' Updates the value of an AzureContext variable.
 #'
-#' @param AzureActiveContext Context Object
+#' @param azureActiveContext Context Object
 #' @param TID Tenant ID Object
 #' @param CID Client ID Object
 #' @param KEY Authentication KEY Object
-#' @param SubscriptionID SubscriptionID Object
-#' @param AzToken Token Object
-#' @param ResourceGroup ResourceGroup Object
-#' @param VMName VMName Object
-#' @param StorageAccount StorageAccount Object
-#' @param StorageKey StorageKey Object
-#' @param Blob Blob Object
-#' @param ClusterName ClusterName Object
-#' @param SessionID SessionID Object
-#' @param HDIAdmin HDIAdmin Object
-#' @param HDIPassword HDIPassword Object
-#' @param Container Container Object
-#' @param Kind "hadoop","spark" or "pyspark"
+#' @param subscriptionID subscriptionID Object
+#' @param azToken Token Object
+#' @param resourceGroup resourceGroup Object
+#' @param vmName vmName Object
+#' @param storageAccount storageAccount Object
+#' @param storageKey storageKey Object
+#' @param blob blob Object
+#' @param clustername clustername Object
+#' @param sessionID sessionID Object
+#' @param hdiAdmin hdiAdmin Object
+#' @param hdiPassword  hdiPassword  Object
+#' @param container container Object
+#' @param kind "hadoop","spark" or "pyspark"
 #
-# @param Log Log Object#'
+# @param log log Object#'
 #'
 #' @export
-SetAzureContext <- function(AzureActiveContext,TID, CID, KEY,AzToken,
-                            SubscriptionID,ResourceGroup,
-                            StorageKey,StorageAccount,
-                            Container,Blob,
-                            VMName,
-                            HDIAdmin,HDIPassword,ClusterName,Kind,SessionID)
+setAzureContext <- function(azureActiveContext,TID, CID, KEY,azToken,
+                            subscriptionID,resourceGroup,
+                            storageKey,storageAccount,
+                            container,blob,
+                            vmName,
+                            hdiAdmin,hdiPassword ,clustername,kind,sessionID)
 {
-  if (!missing(TID)) AzureActiveContext$TID <- TID
-  if (!missing(CID)) AzureActiveContext$CID <- CID
-  if (!missing(KEY)) AzureActiveContext$KEY <- KEY
-  if (!missing(AzToken)) AzureActiveContext$AZtoken <- AzToken
-  if (!missing(SubscriptionID)) AzureActiveContext$SubscriptionID <- SubscriptionID
-  if (!missing(ResourceGroup)) AzureActiveContext$ResourceGroup <- ResourceGroup
-  if (!missing(StorageKey)) AzureActiveContext$StorageKey <- StorageKey
-  if (!missing(StorageAccount)) AzureActiveContext$StorageAccount <- StorageAccount
-  if (!missing(Container)) AzureActiveContext$Container <- Container
-  if (!missing(Blob)) AzureActiveContext$Container <- Blob
-  if (!missing(VMName)) AzureActiveContext$VMName <- VMName
-  if (!missing(ClusterName)) AzureActiveContext$ClusterName <- ClusterName
-  if (!missing(HDIAdmin)) AzureActiveContext$HDIAdmin <- HDIAdmin
-  if (!missing(HDIPassword)) AzureActiveContext$HDIPassword <- HDIPassword
-  if (!missing(Kind)) AzureActiveContext$Kind <- Kind
-  if (!missing(SessionID)) AzureActiveContext$SessionID <- SessionID
+  if (!missing(TID)) azureActiveContext$TID <- TID
+  if (!missing(CID)) azureActiveContext$CID <- CID
+  if (!missing(KEY)) azureActiveContext$KEY <- KEY
+  if (!missing(azToken)) azureActiveContext$AZtoken <- azToken
+  if (!missing(subscriptionID)) azureActiveContext$subscriptionID <- subscriptionID
+  if (!missing(resourceGroup)) azureActiveContext$resourceGroup <- resourceGroup
+  if (!missing(storageKey)) azureActiveContext$storageKey <- storageKey
+  if (!missing(storageAccount)) azureActiveContext$storageAccount <- storageAccount
+  if (!missing(container)) azureActiveContext$container <- container
+  if (!missing(blob)) azureActiveContext$container <- blob
+  if (!missing(vmName)) azureActiveContext$vmName <- vmName
+  if (!missing(clustername)) azureActiveContext$clustername <- clustername
+  if (!missing(hdiAdmin)) azureActiveContext$hdiAdmin <- hdiAdmin
+  if (!missing(hdiPassword)) azureActiveContext$hdiPassword  <- hdiPassword 
+  if (!missing(kind)) azureActiveContext$kind <- kind
+  if (!missing(sessionID)) azureActiveContext$sessionID <- sessionID
 }

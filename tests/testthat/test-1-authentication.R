@@ -1,8 +1,8 @@
 if(interactive()) library("testthat")
 
 
-settingsFile <- system.file("tests/testthat/config.json", package = "AzureSM")
-config <- read.AzureSM.config(settingsFile)
+settingsfile <- system.file("tests/testthat/config.json", package = "AzureSMR")
+config <- read.AzureSMR.config(settingsfile)
 
 #  ------------------------------------------------------------------------
 
@@ -11,37 +11,37 @@ context("Authenticate")
 
 
 test_that("Can authenticate to Azure Service Manager API", {
-  AzureSM:::skip_if_missing_config(settingsFile)
+  skip_if_missing_config(settingsfile)
 
-  asc <- CreateAzureContext()
+  asc <- createAzureContext()
   expect_is(asc, "environment")
 
   with(config,
-       SetAzureContext(asc, TID = TID, CID = CID, KEY = KEY)
+       setAzureContext(asc, TID = TID, CID = CID, KEY = KEY)
   )
-  res <- AzureAuthenticate(asc)
+  res <- azureAuthenticate(asc)
   expect_equal(res, "Authentication Suceeded : Key Obtained")
 
 })
 
-asc <- CreateAzureContext()
+asc <- createAzureContext()
 with(config,
-     SetAzureContext(asc, TID = TID, CID = CID, KEY = KEY)
+     setAzureContext(asc, TID = TID, CID = CID, KEY = KEY)
 )
-AzureAuthenticate(asc)
+azureAuthenticate(asc)
 
 
 test_that("Can connect to workspace with config file", {
-  AzureSM:::skip_if_missing_config(settingsFile)
+  skip_if_missing_config(settingsfile)
 
-  res <- AzureListSubscriptions(asc)
+  res <- azureListSubscriptions(asc)
   expect_is(res, "data.frame")
   expect_equal(ncol(res), 7)
 
-  res <- AzureCheckToken(asc)
+  res <- azureCheckToken(asc)
   expect_equal(res, "OK")
 
-  res <- AzureListSA(asc, ResourceGroup = "advdsvmlinux1")
+  res <- azureListSA(asc, resourceGroup = "advdsvmlinux1")
   expect_is(res, "data.frame")
   expect_equal(ncol(res), 8)
 

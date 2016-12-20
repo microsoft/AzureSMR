@@ -1,30 +1,30 @@
 #' List VMs in a Subscription.
 #'
-#' @inheritParams SetAzureContext
-#' @inheritParams AzureListAllResources
+#' @inheritParams setAzureContext
+#' @inheritParams azureListAllResources
 #'
 #' @family Virtual machine functions
 #' @export
-AzureListVM <- function(AzureActiveContext, ResourceGroup, Location, SubscriptionID,
-                        AzToken, verbose = FALSE) {
-  AzureCheckToken(AzureActiveContext)
-  if (missing(AzToken)) {
-    AT <- AzureActiveContext$Token
-  } else (AT <- AzToken)
-  if (missing(SubscriptionID)) {
-    SUBIDI <- AzureActiveContext$SubscriptionID
-  } else (SUBIDI <- SubscriptionID)
-  if (missing(ResourceGroup)) {
-    RGI <- AzureActiveContext$ResourceGroup
-  } else (RGI <- ResourceGroup)
+azureListVM <- function(azureActiveContext, resourceGroup, location, subscriptionID,
+                        azToken, verbose = FALSE) {
+  azureCheckToken(azureActiveContext)
+  if (missing(azToken)) {
+    AT <- azureActiveContext$Token
+  } else (AT <- azToken)
+  if (missing(subscriptionID)) {
+    SUBIDI <- azureActiveContext$subscriptionID
+  } else (SUBIDI <- subscriptionID)
+  if (missing(resourceGroup)) {
+    RGI <- azureActiveContext$resourceGroup
+  } else (RGI <- resourceGroup)
   verbosity <- if (verbose)
     httr::verbose(TRUE) else NULL
 
   if (!length(RGI)) {
-    stop("Error: No ResourceGroup provided: Use ResourceGroup argument or set in AzureContext")
+    stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
   }
   if (!length(SUBIDI)) {
-    stop("Error: No SubscriptionID provided: Use SUBID argument or set in AzureContext")
+    stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
   }
   if (!length(AT)) {
     stop("Error: No Token / Not currently Authenticated")
@@ -35,7 +35,7 @@ AzureListVM <- function(AzureActiveContext, ResourceGroup, Location, Subscriptio
                sep = "")
 
   r <- GET(URL, add_headers(.headers = c(Host = "management.azure.com",
-                                         Authorization = AT, `Content-Type` = "application/json")), verbosity)
+                                         Authorization = AT, `Content-type` = "application/json")), verbosity)
   rl <- content(r, "text", encoding = "UTF-8")
   df <- fromJSON(rl)
   # print(df)
@@ -48,19 +48,19 @@ AzureListVM <- function(AzureActiveContext, ResourceGroup, Location, Subscriptio
   dfn[1:clust, 1] <- df$value$name
   dfn[1:clust, 2] <- df$value$location
   dfn[1:clust, 3] <- df$value$type
-  dfn[1:clust, 4] <- df$value$properties$storageProfile$osDisk$osType
+  dfn[1:clust, 4] <- df$value$properties$storageProfile$osDisk$ostype
   dfn[1:clust, 5] <- df$value$properties$provisioningState
   dfn[1:clust, 6] <- df$value$properties$osProfile$adminUsername
   dfn[1:clust, 7] <- df$value$id
-  # dfn[1:clust,8] <- df$value$properties.vmSize
-  # print(df$value$properties.vmSize)
+  # dfn[1:clust,8] <- df$value$properties.vmsize
+  # print(df$value$properties.vmsize)
 
   # dvn
 
-  colnames(dfn) <- c("Name", "Location", "Type", "OS", "State", "Admin",
+  colnames(dfn) <- c("name", "location", "type", "OS", "State", "Admin",
                      "ID")
-  AzureActiveContext$SubscriptionID <- SUBIDI
-  AzureActiveContext$ResourceGroup <- RGI
+  azureActiveContext$subscriptionID <- SUBIDI
+  azureActiveContext$resourceGroup <- RGI
 
   return(dfn)
 }
@@ -68,50 +68,50 @@ AzureListVM <- function(AzureActiveContext, ResourceGroup, Location, Subscriptio
 
 #' Start a Virtual Machine.
 #'
-#' @inheritParams AzureListVM
-#' @param VMName Virtual Machine Name
-#' @param Mode Wait for operation to complete 'Sync' (Default)
+#' @inheritParams azureListVM
+#' @param vmName Virtual Machine name
+#' @param mode Wait for operation to complete 'Sync' (Default)
 #'
 #' @family Virtual machine functions
 #' @export
-AzureStartVM <- function(AzureActiveContext, ResourceGroup, VMName, Mode = "Sync",
-                         SubscriptionID, AzToken, verbose = FALSE) {
-  AzureCheckToken(AzureActiveContext)
-  if (missing(AzToken)) {
-    AT <- AzureActiveContext$Token
-  } else (AT <- AzToken)
-  if (missing(SubscriptionID)) {
-    SUBIDI <- AzureActiveContext$SubscriptionID
-  } else (SUBIDI <- SubscriptionID)
-  if (missing(ResourceGroup)) {
-    RGI <- AzureActiveContext$ResourceGroup
-  } else (RGI <- ResourceGroup)
-  if (missing(VMName)) {
-    VMNameI <- AzureActiveContext$VMNameI
-  } else (VMNameI <- VMName)
+azureStartVM <- function(azureActiveContext, resourceGroup, vmName, mode = "Sync",
+                         subscriptionID, azToken, verbose = FALSE) {
+  azureCheckToken(azureActiveContext)
+  if (missing(azToken)) {
+    AT <- azureActiveContext$Token
+  } else (AT <- azToken)
+  if (missing(subscriptionID)) {
+    SUBIDI <- azureActiveContext$subscriptionID
+  } else (SUBIDI <- subscriptionID)
+  if (missing(resourceGroup)) {
+    RGI <- azureActiveContext$resourceGroup
+  } else (RGI <- resourceGroup)
+  if (missing(vmName)) {
+    vmNameI <- azureActiveContext$vmNameI
+  } else (vmNameI <- vmName)
   verbosity <- if (verbose)
     httr::verbose(TRUE) else NULL
 
   if (!length(RGI)) {
-    stop("Error: No ResourceGroup provided: Use ResourceGroup argument or set in AzureContext")
+    stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
   }
   if (!length(SUBIDI)) {
-    stop("Error: No SubscriptionID provided: Use SUBID argument or set in AzureContext")
+    stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
   }
   if (!length(AT)) {
     stop("Error: No Token / Not currently Authenticated")
   }
-  if (!length(VMNameI)) {
-    stop("No VM Name provided")
+  if (!length(vmNameI)) {
+    stop("No VM name provided")
   }
 
   URL <- paste("https://management.azure.com/subscriptions/", SUBIDI,
                "/resourceGroups/", RGI, "/providers/Microsoft.Compute/virtualmachines/",
-               VMNameI, "/start?api-version=2015-05-01-preview", sep = "")
+               vmNameI, "/start?api-version=2015-05-01-preview", sep = "")
   # print(URL)
 
   r <- POST(URL, add_headers(.headers = c(Host = "management.azure.com",
-                                          Authorization = AT, `Content-Type` = "application/json")), verbosity)
+                                          Authorization = AT, `Content-type` = "application/json")), verbosity)
   if (status_code(r) == 404) {
     stop(paste("Error: Return code", status_code(r)), " (Not Found)")
   }
@@ -120,17 +120,17 @@ AzureStartVM <- function(AzureActiveContext, ResourceGroup, VMName, Mode = "Sync
   rl <- content(r, "text", encoding = "UTF-8")
 
   # print(rl) df <- fromJSON(rl) dfn <- as.data.frame(df$value$name)
-  AzureActiveContext$SubscriptionID <- SUBIDI
-  AzureActiveContext$ResourceGroup <- RGI
-  AzureActiveContext$VMName <- VMNameI
-  if (toupper(Mode) == "SYNC") {
+  azureActiveContext$subscriptionID <- SUBIDI
+  azureActiveContext$resourceGroup <- RGI
+  azureActiveContext$vmName <- vmNameI
+  if (toupper(mode) == "SYNC") {
     rc <- "running"
-    writeLines(paste("AzureStartVM: Request Submitted: ", Sys.time()))
+    writeLines(paste("azureStartVM: Request Submitted: ", Sys.time()))
     writeLines("Updating(U), deallocating(D), starting(S), Deallocated(-) ")
     a <- 1
     Sys.sleep(5)
     while (a > 0) {
-      rc1 <- AzureVMStatus(AzureActiveContext)
+      rc1 <- azureVMStatus(azureActiveContext)
       # rc1 <- rc$displayStatus[2] print(rc) print(rc1)
       a <- a + 1
       if (grepl("running", rc1)) {
@@ -170,51 +170,51 @@ AzureStartVM <- function(AzureActiveContext, ResourceGroup, VMName, Mode = "Sync
 
 #' Stop a Virtual Machine.
 #'
-#' @inheritParams SetAzureContext
-#' @inheritParams AzureListVM
-#' @inheritParams AzureStartVM
+#' @inheritParams setAzureContext
+#' @inheritParams azureListVM
+#' @inheritParams azureStartVM
 #'
 #' @family Virtual machine functions
 #' @export
-AzureStopVM <- function(AzureActiveContext, ResourceGroup, VMName, Mode = "Sync",
-                        SubscriptionID, AzToken, verbose = FALSE) {
-  AzureCheckToken(AzureActiveContext)
+azureStopVM <- function(azureActiveContext, resourceGroup, vmName, mode = "Sync",
+                        subscriptionID, azToken, verbose = FALSE) {
+  azureCheckToken(azureActiveContext)
 
-  if (missing(AzToken)) {
-    AT <- AzureActiveContext$Token
-  } else (AT <- AzToken)
-  if (missing(SubscriptionID)) {
-    SUBIDI <- AzureActiveContext$SubscriptionID
-  } else (SUBIDI <- SubscriptionID)
-  if (missing(ResourceGroup)) {
-    RGI <- AzureActiveContext$ResourceGroup
-  } else (RGI <- ResourceGroup)
-  if (missing(VMName)) {
-    VMNameI <- AzureActiveContext$VMName
-  } else (VMNameI <- VMName)
+  if (missing(azToken)) {
+    AT <- azureActiveContext$Token
+  } else (AT <- azToken)
+  if (missing(subscriptionID)) {
+    SUBIDI <- azureActiveContext$subscriptionID
+  } else (SUBIDI <- subscriptionID)
+  if (missing(resourceGroup)) {
+    RGI <- azureActiveContext$resourceGroup
+  } else (RGI <- resourceGroup)
+  if (missing(vmName)) {
+    vmNameI <- azureActiveContext$vmName
+  } else (vmNameI <- vmName)
   verbosity <- if (verbose)
     httr::verbose(TRUE) else NULL
 
   if (!length(RGI)) {
-    stop("Error: No ResourceGroup provided: Use ResourceGroup argument or set in AzureContext")
+    stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
   }
   if (!length(SUBIDI)) {
-    stop("Error: No SubscriptionID provided: Use SUBID argument or set in AzureContext")
+    stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
   }
   if (!length(AT)) {
     stop("Error: No Token / Not currently Authenticated")
   }
-  if (!length(VMNameI)) {
-    stop("No VM Name provided")
+  if (!length(vmNameI)) {
+    stop("No VM name provided")
   }
 
   URL <- paste("https://management.azure.com/subscriptions/", SUBIDI,
                "/resourceGroups/", RGI, "/providers/Microsoft.Compute/virtualmachines/",
-               VMNameI, "/deallocate?api-version=2015-05-01-preview", sep = "")
+               vmNameI, "/deallocate?api-version=2015-05-01-preview", sep = "")
   # print(URL)
 
   r <- POST(URL, add_headers(.headers = c(Host = "management.azure.com",
-                                          Authorization = AT, `Content-Type` = "application/json")), verbosity)
+                                          Authorization = AT, `Content-type` = "application/json")), verbosity)
   if (status_code(r) == 404) {
     stop(paste("Error: Return code", status_code(r)), " (Not Found)")
   }
@@ -225,17 +225,17 @@ AzureStopVM <- function(AzureActiveContext, ResourceGroup, VMName, Mode = "Sync"
   # df <- fromJSON(rl)
 
   # dfn <- as.data.frame(df$value$name)
-  AzureActiveContext$SubscriptionID <- SUBIDI
-  AzureActiveContext$ResourceGroup <- RGI
-  AzureActiveContext$VMName <- VMNameI
+  azureActiveContext$subscriptionID <- SUBIDI
+  azureActiveContext$resourceGroup <- RGI
+  azureActiveContext$vmName <- vmNameI
 
-  if (toupper(Mode) == "SYNC") {
+  if (toupper(mode) == "SYNC") {
     rc <- "running"
-    writeLines(paste("AzureStopVM: Request Submitted: ", Sys.time()))
+    writeLines(paste("azureStopVM: Request Submitted: ", Sys.time()))
     writeLines("Updating(U), deallocating(D), starting(S), Stopped/Deallocated(-) ")
     a <- 1
     while (a > 0) {
-      rc1 <- AzureVMStatus(AzureActiveContext)
+      rc1 <- azureVMStatus(azureActiveContext)
       if (grepl("deallocated", rc1)) {
         writeLines("")
         writeLines(paste("Finished Deallocated Sucessfully: ",
@@ -272,62 +272,62 @@ AzureStopVM <- function(AzureActiveContext, ResourceGroup, VMName, Mode = "Sync"
 
 #' Get Status of a Virtual Machine.
 #'
-#' @inheritParams SetAzureContext
-#' @inheritParams AzureListVM
-#' @inheritParams AzureStartVM
-#' @param Ignore Ignore
+#' @inheritParams setAzureContext
+#' @inheritParams azureListVM
+#' @inheritParams azureStartVM
+#' @param ignore ignore
 #'
 #' @family Virtual machine functions
 #' @export
-AzureVMStatus <- function(AzureActiveContext, ResourceGroup, VMName, SubscriptionID,
-                          AzToken, Ignore = "N", verbose = FALSE) {
-  AzureCheckToken(AzureActiveContext)
+azureVMStatus <- function(azureActiveContext, resourceGroup, vmName, subscriptionID,
+                          azToken, ignore = "N", verbose = FALSE) {
+  azureCheckToken(azureActiveContext)
 
-  if (missing(AzToken)) {
-    AT <- AzureActiveContext$Token
-  } else (AT <- AzToken)
-  if (missing(SubscriptionID)) {
-    SUBIDI <- AzureActiveContext$SubscriptionID
-  } else (SUBIDI <- SubscriptionID)
-  if (missing(ResourceGroup)) {
-    RGI <- AzureActiveContext$ResourceGroup
-  } else (RGI <- ResourceGroup)
-  if (missing(VMName)) {
-    VMNameI <- AzureActiveContext$VMName
-  } else (VMNameI <- VMName)
+  if (missing(azToken)) {
+    AT <- azureActiveContext$Token
+  } else (AT <- azToken)
+  if (missing(subscriptionID)) {
+    SUBIDI <- azureActiveContext$subscriptionID
+  } else (SUBIDI <- subscriptionID)
+  if (missing(resourceGroup)) {
+    RGI <- azureActiveContext$resourceGroup
+  } else (RGI <- resourceGroup)
+  if (missing(vmName)) {
+    vmNameI <- azureActiveContext$vmName
+  } else (vmNameI <- vmName)
   verbosity <- if (verbose)
     httr::verbose(TRUE) else NULL
 
   if (!length(RGI)) {
-    stop("Error: No ResourceGroup provided: Use ResourceGroup argument or set in AzureContext")
+    stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
   }
   if (!length(SUBIDI)) {
-    stop("Error: No SubscriptionID provided: Use SUBID argument or set in AzureContext")
+    stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
   }
   if (!length(AT)) {
     stop("Error: No Token / Not currently Authenticated")
   }
-  if (!length(VMNameI)) {
-    stop("No VM Name provided")
+  if (!length(vmNameI)) {
+    stop("No VM name provided")
   }
 
   URL <- paste("https://management.azure.com/subscriptions/", SUBIDI,
                "/resourceGroups/", RGI, "/providers/Microsoft.Compute/virtualmachines/",
-               VMNameI, "/InstanceView?api-version=2015-05-01-preview", sep = "")
+               vmNameI, "/InstanceView?api-version=2015-05-01-preview", sep = "")
   # print(URL)
 
   r <- GET(URL, add_headers(.headers = c(Host = "management.azure.com",
-                                         Authorization = AT, `Content-Type` = "application/json")), verbosity)
+                                         Authorization = AT, `Content-type` = "application/json")), verbosity)
   rl <- content(r, "text", encoding = "UTF-8")
   df <- fromJSON(rl)
   # print(df)
   if (length(df$error$code) && df$error$code == "ExpiredAuthenticationToken")
-    stop("Authentication token has expired. Run AzureAuthenticate() to renew.")
+    stop("Authentication token has expired. Run azureAuthenticate() to renew.")
 
   dfn <- as.data.frame(df$statuses)
 
   clust <- nrow(dfn)
-  if (clust < 1 && Ignore == "Y")
+  if (clust < 1 && ignore == "Y")
     return("NA")
   if (clust < 1)
     stop("No Virtual Machines found")
@@ -339,49 +339,49 @@ AzureVMStatus <- function(AzureActiveContext, ResourceGroup, VMName, Subscriptio
 
 #' Delete a Virtual Machine.
 #'
-#' @inheritParams AzureListVM
-#' @inheritParams AzureStartVM
+#' @inheritParams azureListVM
+#' @inheritParams azureStartVM
 #' @family Virtual machine functions
 #' @export
-AzureDeleteVM <- function(AzureActiveContext, ResourceGroup, VMName, SubscriptionID,
-                          AzToken, Mode = "Sync", verbose = FALSE) {
-  AzureCheckToken(AzureActiveContext)
-  if (missing(AzToken)) {
-    AT <- AzureActiveContext$Token
-  } else (AT <- AzToken)
-  if (missing(SubscriptionID)) {
-    SUBIDI <- AzureActiveContext$SubscriptionID
-  } else (SUBIDI <- SubscriptionID)
-  if (missing(ResourceGroup)) {
-    RGI <- AzureActiveContext$ResourceGroup
-  } else (RGI <- ResourceGroup)
-  if (missing(VMName)) {
-    VMNameI <- AzureActiveContext$VMNameI
-  } else (VMNameI <- VMName)
+azureDeleteVM <- function(azureActiveContext, resourceGroup, vmName, subscriptionID,
+                          azToken, mode = "Sync", verbose = FALSE) {
+  azureCheckToken(azureActiveContext)
+  if (missing(azToken)) {
+    AT <- azureActiveContext$Token
+  } else (AT <- azToken)
+  if (missing(subscriptionID)) {
+    SUBIDI <- azureActiveContext$subscriptionID
+  } else (SUBIDI <- subscriptionID)
+  if (missing(resourceGroup)) {
+    RGI <- azureActiveContext$resourceGroup
+  } else (RGI <- resourceGroup)
+  if (missing(vmName)) {
+    vmNameI <- azureActiveContext$vmNameI
+  } else (vmNameI <- vmName)
   verbosity <- if (verbose)
     httr::verbose(TRUE) else NULL
 
   if (!length(RGI)) {
-    stop("Error: No ResourceGroup provided: Use ResourceGroup argument or set in AzureContext")
+    stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
   }
   if (!length(SUBIDI)) {
-    stop("Error: No SubscriptionID provided: Use SUBID argument or set in AzureContext")
+    stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
   }
   if (!length(AT)) {
     stop("Error: No Token / Not currently Authenticated")
   }
-  if (!length(VMNameI)) {
-    stop("No VM Name provided")
+  if (!length(vmNameI)) {
+    stop("No VM name provided")
   }
 
   URL <- paste("https://management.azure.com/subscriptions/", SUBIDI,
                "/resourceGroups/", RGI, "/providers/Microsoft.Compute/virtualmachines/",
-               VMNameI, "?api-version=2015-05-01-preview", sep = "")
+               vmNameI, "?api-version=2015-05-01-preview", sep = "")
   # print(URL)
   print(URL)
 
   r <- DELETE(URL, add_headers(.headers = c(Host = "management.azure.com",
-                                            Authorization = AT, `Content-Type` = "application/json")), verbosity)
+                                            Authorization = AT, `Content-type` = "application/json")), verbosity)
   if (status_code(r) == 404) {
     stop(paste("Error: Return code", status_code(r)), " (Not Found)")
   }
@@ -393,17 +393,17 @@ AzureDeleteVM <- function(AzureActiveContext, ResourceGroup, VMName, Subscriptio
   # df <- fromJSON(rl)
 
   # dfn <- as.data.frame(df$value$name)
-  AzureActiveContext$SubscriptionID <- SUBIDI
-  AzureActiveContext$ResourceGroup <- RGI
-  AzureActiveContext$VMName <- VMNameI
+  azureActiveContext$subscriptionID <- SUBIDI
+  azureActiveContext$resourceGroup <- RGI
+  azureActiveContext$vmName <- vmNameI
 
-  if (toupper(Mode) == "SYNC") {
+  if (toupper(mode) == "SYNC") {
     rc <- "running"
-    writeLines(paste("AzureDeleteVM: Request Submitted: ", Sys.time()))
+    writeLines(paste("azureDeleteVM: Request Submitted: ", Sys.time()))
     writeLines("Updating(U), Deleting(D), Stopped/Deallocated(-) ")
     a <- 1
     while (a > 0) {
-      rc <- AzureVMStatus(Ignore = "Y")
+      rc <- azureVMStatus(ignore = "Y")
       if (grepl("NA", rc)) {
         writeLines("")
         writeLines(paste("Finished Deleted Sucessfully: ", Sys.time()))

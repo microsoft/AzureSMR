@@ -1,16 +1,16 @@
 
 #' Get available Subscriptions.
 #'
-#' @inheritParams SetAzureContext
-#' @inheritParams AzureAuthenticate
+#' @inheritParams setAzureContext
+#' @inheritParams azureAuthenticate
 #'
-#' @return Returns Dataframe of SubscriptionID sets AzureContext SubscriptionID
+#' @return Returns Dataframe of subscriptionID sets AzureContext subscriptionID
 #' @family Resource group functions
 #' @export
-AzureListSubscriptions <- function(AzureActiveContext, AzToken, verbose = FALSE) {
-  if (missing(AzToken)) {
-    AT <- AzureActiveContext$Token
-  } else (AT = AzToken)
+azureListSubscriptions <- function(azureActiveContext, azToken, verbose = FALSE) {
+  if (missing(azToken)) {
+    AT <- azureActiveContext$Token
+  } else (AT = azToken)
   if (nchar(AT) < 5) {
     stop("Error: No Token / Not currently Authenticated.")
   }
@@ -22,7 +22,7 @@ AzureListSubscriptions <- function(AzureActiveContext, AzToken, verbose = FALSE)
   r <- GET(URLGS,
            add_headers(.headers = c(Host = "management.azure.com",
                                     Authorization = AT,
-                                    `Content-Type` = "application/json")),
+                                    `Content-type` = "application/json")),
            verbosity)
   dfs <- lapply(content(r), data.frame, stringsAsFactors = FALSE)
   # head(dfs)
@@ -30,32 +30,32 @@ AzureListSubscriptions <- function(AzureActiveContext, AzToken, verbose = FALSE)
   typeof(dfs)
   df1 <- rbind.fill(dfs)
   if (nrow(df1) == 1)
-    AzureActiveContext$SubscriptionID <- df1[, 2]
+    azureActiveContext$subscriptionID <- df1[, 2]
   return(df1)
 }
 
 
 #' Get all Resource Groups in default Subscription.
 #'
-#' @inheritParams SetAzureContext
-#' @inheritParams AzureAuthenticate
+#' @inheritParams setAzureContext
+#' @inheritParams azureAuthenticate
 #'
-#' @return Returns Dataframe of ResourceGroups
+#' @return Returns Dataframe of resourceGroups
 #' @family Resource group functions
 #' @export
-AzureListRG <- function(AzureActiveContext, SubscriptionID, AzToken, verbose = FALSE) {
-  AzureCheckToken(AzureActiveContext)
-  if (missing(AzToken)) {
-    ATI <- AzureActiveContext$Token
-  } else (ATI = AzToken)
-  if (missing(SubscriptionID)) {
-    SUBIDI <- AzureActiveContext$SubscriptionID
-  } else (SUBIDI = SubscriptionID)
+azureListRG <- function(azureActiveContext, subscriptionID, azToken, verbose = FALSE) {
+  azureCheckToken(azureActiveContext)
+  if (missing(azToken)) {
+    ATI <- azureActiveContext$Token
+  } else (ATI = azToken)
+  if (missing(subscriptionID)) {
+    SUBIDI <- azureActiveContext$subscriptionID
+  } else (SUBIDI = subscriptionID)
   if (!length(ATI)) {
     stop("Error: No Token / Not currently Authenticated.")
   }
   if (!length(SUBIDI)) {
-    stop("Error: No SubscriptionID provided: Use SUBID argument or set in AzureContext")
+    stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
   }
   verbosity <- if (verbose)
     httr::verbose(TRUE) else NULL
@@ -65,15 +65,15 @@ AzureListRG <- function(AzureActiveContext, SubscriptionID, AzToken, verbose = F
 
   r <- GET(URLRG, add_headers(.headers = c(Host = "management.azure.com",
                                            Authorization = ATI,
-                                           `Content-Type` = "application/json")),
+                                           `Content-type` = "application/json")),
            verbosity)
   if (status_code(r) != 200) stopWithAzureError(r)
 
   rl <- content(r, "text", encoding = "UTF-8")
   df <- fromJSON(rl)
   dfn <- df$value[, c("name", "location", "id")]
-  names(dfn) <- c("Name", "Location", "ID")
-  dfn$ResourceGroup <- extractResourceGroupName(dfn$ID)
+  names(dfn) <- c("name", "location", "ID")
+  dfn$resourceGroup <- extractresourceGroupname(dfn$ID)
 
   return(dfn)
 }
@@ -81,30 +81,30 @@ AzureListRG <- function(AzureActiveContext, SubscriptionID, AzToken, verbose = F
 
 #' Get all Resource in default Subscription.
 #'
-#' @inheritParams SetAzureContext
-#' @inheritParams AzureAuthenticate
+#' @inheritParams setAzureContext
+#' @inheritParams azureAuthenticate
 #'
-#' @param AzureActiveContext Azure Context Object
-#' @param ResourceGroup ResourceGroup Object (or use AzureActiveContext)
-#' @param SubscriptionID SubscriptionID Object (or use AzureActiveContext)
-#' @param Name Name
-#' @param Type Type
-#' @param Location Azure region, e.g. 'westeurope' or 'southcentralus'
+#' @param azureActiveContext Azure Context Object
+#' @param resourceGroup resourceGroup Object (or use azureActiveContext)
+#' @param subscriptionID subscriptionID Object (or use azureActiveContext)
+#' @param name name
+#' @param type type
+#' @param location Azure region, e.g. 'westeurope' or 'southcentralus'
 #'
 #' @return Returns Dataframe of Resources
 #' @family Resource group functions
 #' @export
-AzureListAllResources <- function(AzureActiveContext, ResourceGroup, SubscriptionID,
-                                  AzToken, Name, Type, Location, verbose = FALSE) {
+azureListAllResources <- function(azureActiveContext, resourceGroup, subscriptionID,
+                                  azToken, name, type, location, verbose = FALSE) {
 
-  AzureCheckToken(AzureActiveContext)
+  azureCheckToken(azureActiveContext)
 
-  if (missing(AzToken)) {
-    ATI <- AzureActiveContext$Token
-  } else (ATI = AzToken)
-  if (missing(SubscriptionID)) {
-    SUBIDI <- AzureActiveContext$SubscriptionID
-  } else (SUBIDI = SubscriptionID)
+  if (missing(azToken)) {
+    ATI <- azureActiveContext$Token
+  } else (ATI = azToken)
+  if (missing(subscriptionID)) {
+    SUBIDI <- azureActiveContext$subscriptionID
+  } else (SUBIDI = subscriptionID)
   # if (ATI == '') stop('Token not provided') if (SUBIDI == '')
   # stop('Subscription not provided')
 
@@ -112,7 +112,7 @@ AzureListAllResources <- function(AzureActiveContext, ResourceGroup, Subscriptio
     stop("Error: No Token / Not currently Authenticated.")
   }
   if (!length(SUBIDI)) {
-    stop("Error: No SubscriptionID provided: Use SUBID argument or set in AzureContext")
+    stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
   }
   verbosity <- if (verbose)
     httr::verbose(TRUE) else NULL
@@ -121,75 +121,75 @@ AzureListAllResources <- function(AzureActiveContext, ResourceGroup, Subscriptio
                  "/resources?api-version=2015-01-01", sep = "")
   r <- GET(URLRS, add_headers(.headers = c(Host = "management.azure.com",
                                            Authorization = ATI,
-                                           `Content-Type` = "application/json")),
+                                           `Content-type` = "application/json")),
            verbosity)
   rl <- content(r, "text", encoding = "UTF-8")
   df <- fromJSON(rl)
 
   dfn <- df$value[, c("name", "type", "location", "id")]
-  colnames(dfn) <- c("Name", "Type", "Location", "ID")
+  colnames(dfn) <- c("name", "type", "location", "ID")
 
-  dfn$ResourceGroup  <- extractResourceGroupName(dfn$ID)
-  dfn$RG             <- dfn$ResourceGroup
-  dfn$SubscriptionID <- extractSubscriptionID(dfn$ID)
+  dfn$resourceGroup  <- extractresourceGroupname(dfn$ID)
+  dfn$RG             <- dfn$resourceGroup
+  dfn$subscriptionID <- extractsubscriptionID(dfn$ID)
 
 
-  if (!missing(Name))          dfn <- dfn[grep(Name, dfn$Name), ]
-  if (!missing(Type))          dfn <- dfn[grep(Type, dfn$Type), ]
-  if (!missing(Location))      dfn <- dfn[grep(Location, dfn$Location), ]
-  if (!missing(ResourceGroup)) dfn <- dfn[grep(ResourceGroup, dfn$ResourceGroup), ]
+  if (!missing(name))          dfn <- dfn[grep(name, dfn$name), ]
+  if (!missing(type))          dfn <- dfn[grep(type, dfn$type), ]
+  if (!missing(location))      dfn <- dfn[grep(location, dfn$location), ]
+  if (!missing(resourceGroup)) dfn <- dfn[grep(resourceGroup, dfn$resourceGroup), ]
 
   dfn[, c(1:2, 6, 3:5, 7)]
 }
 
 
-#' Create a ResourceGroup.
+#' Create a resourceGroup.
 #'
-#' @inheritParams SetAzureContext
-#' @inheritParams AzureAuthenticate
-#' @inheritParams AzureListAllResources
+#' @inheritParams setAzureContext
+#' @inheritParams azureAuthenticate
+#' @inheritParams azureListAllResources
 #'
 #' @return Returns Dataframe of Resources
 #' @family Resource group functions
 #' @export
-AzureCreateResourceGroup <- function(AzureActiveContext, ResourceGroup,
-                                     Location, SubscriptionID, AzToken, verbose = FALSE) {
-  AzureCheckToken(AzureActiveContext)
-  if (missing(AzToken)) {
-    ATI <- AzureActiveContext$Token
-  } else (ATI = AzToken)
-  if (missing(SubscriptionID)) {
-    SUBIDI <- AzureActiveContext$SubscriptionID
-  } else (SUBIDI = SubscriptionID)
+azureCreateresourceGroup <- function(azureActiveContext, resourceGroup,
+                                     location, subscriptionID, azToken, verbose = FALSE) {
+  azureCheckToken(azureActiveContext)
+  if (missing(azToken)) {
+    ATI <- azureActiveContext$Token
+  } else (ATI = azToken)
+  if (missing(subscriptionID)) {
+    SUBIDI <- azureActiveContext$subscriptionID
+  } else (SUBIDI = subscriptionID)
   # if (ATI == '') stop('Token not provided') if (SUBIDI == '')
   # stop('Subscription not provided')
-  if (missing(ResourceGroup)) {
-    RGI <- AzureActiveContext$ResourceGroup
-  } else (RGI = ResourceGroup)
-  if (missing(Location)) {
-    stop("Error: No Location provided")
+  if (missing(resourceGroup)) {
+    RGI <- azureActiveContext$resourceGroup
+  } else (RGI = resourceGroup)
+  if (missing(location)) {
+    stop("Error: No location provided")
   }
 
   verbosity <- if (verbose)
     httr::verbose(TRUE) else NULL
 
   if (!length(RGI)) {
-    stop("Error: No ResourceGroup provided: Use ResourceGroup argument or set in AzureContext")
+    stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
   }
   if (!length(ATI)) {
     stop("Error: No Token / Not currently Authenticated.")
   }
   if (!length(SUBIDI)) {
-    stop("Error: No SubscriptionID provided: Use SUBID argument or set in AzureContext")
+    stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
   }
 
-  bodyI <- list(location = Location)
+  bodyI <- list(location = location)
 
   URLRS <- paste("https://management.azure.com/subscriptions/", SUBIDI,
                  "/resourcegroups/", RGI, "?api-version=2015-01-01", sep = "")
   r <- PUT(URLRS, add_headers(.headers = c(Host = "management.azure.com",
                                            Authorization = ATI,
-                                           `Content-Type` = "application/json")),
+                                           `Content-type` = "application/json")),
            body = bodyI,
            encode = "json",
            verbosity)
@@ -197,57 +197,57 @@ AzureCreateResourceGroup <- function(AzureActiveContext, ResourceGroup,
 
   rl <- content(r, "text", encoding = "UTF-8")
   df <- fromJSON(rl)
-  if (length(df$error$code) && df$error$code == "LocationNotAvailableForResourceGroup")
+  if (length(df$error$code) && df$error$code == "locationNotAvailableForresourceGroup")
     stop(df$message)
 
   return("Create Request Submitted")
 }
 
 
-#' Delete a ResourceGroup with all Resources.
+#' Delete a resourceGroup with all Resources.
 #'
-#' @inheritParams SetAzureContext
-#' @inheritParams AzureAuthenticate
-#' @inheritParams AzureListAllResources
+#' @inheritParams setAzureContext
+#' @inheritParams azureAuthenticate
+#' @inheritParams azureListAllResources
 #'
 #' @return Returns Dataframe of Resources
 #' @family Resource group functions
 #' @export
-AzureDeleteResourceGroup <- function(AzureActiveContext, ResourceGroup,
-                                     SubscriptionID, AzToken, Type, verbose = FALSE) {
-  AzureCheckToken(AzureActiveContext)
+azureDeleteresourceGroup <- function(azureActiveContext, resourceGroup,
+                                     subscriptionID, azToken, type, verbose = FALSE) {
+  azureCheckToken(azureActiveContext)
 
-  if (missing(AzToken)) {
-    ATI <- AzureActiveContext$Token
-  } else (ATI = AzToken)
-  if (missing(SubscriptionID)) {
-    SUBIDI <- AzureActiveContext$SubscriptionID
-  } else (SUBIDI = SubscriptionID)
+  if (missing(azToken)) {
+    ATI <- azureActiveContext$Token
+  } else (ATI = azToken)
+  if (missing(subscriptionID)) {
+    SUBIDI <- azureActiveContext$subscriptionID
+  } else (SUBIDI = subscriptionID)
   # if (ATI == '') stop('Token not provided') if (SUBIDI == '')
   # stop('Subscription not provided')
-  if (missing(ResourceGroup))
+  if (missing(resourceGroup))
     stop("Please supply Resource Group to Confirm")
-  if (missing(ResourceGroup)) {
-    RGI <- AzureActiveContext$ResourceGroup
-  } else (RGI = ResourceGroup)
+  if (missing(resourceGroup)) {
+    RGI <- azureActiveContext$resourceGroup
+  } else (RGI = resourceGroup)
   verbosity <- if (verbose)
     httr::verbose(TRUE) else NULL
 
   if (!length(RGI)) {
-    stop("Error: No ResourceGroup provided: Use ResourceGroup argument or set in AzureContext")
+    stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
   }
   if (!length(ATI)) {
     stop("Error: No Token / Not currently Authenticated.")
   }
   if (!length(SUBIDI)) {
-    stop("Error: No SubscriptionID provided: Use SUBID argument or set in AzureContext")
+    stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
   }
 
   URLRS <- paste("https://management.azure.com/subscriptions/", SUBIDI,
                  "/resourcegroups/", RGI, "?api-version=2015-01-01", sep = "")
   r <- DELETE(URLRS, add_headers(.headers = c(Host = "management.azure.com",
                                               Authorization = ATI,
-                                              `Content-Type` = "application/json")),
+                                              `Content-type` = "application/json")),
               verbosity)
   if (status_code(r) == 404) {
     stop(paste0("Error: Resource Group Not Found(", status_code(r), ")"))

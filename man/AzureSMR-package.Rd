@@ -12,7 +12,7 @@ The AzureSMR package connects R to the Azure Service Manager API.
 This enables you to use and change many Azure resources, including:
 
 \itemize{
-\item Storage Blobs
+\item Storage blobs
 \item HDInsight (Nodes, Hive, Spark)
 \item Azure Resource Manager
 \item Virtual Machines

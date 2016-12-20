@@ -1,6 +1,6 @@
 # Reads settings from configuration file in JSON format.
 #
-# @config Location of file that contains configuration in JSON format
+# @config location of file that contains configuration in JSON format
 #
 read.AzureSMR.config <- function(config = getOption("AzureSMR.config")){
   z <- tryCatch(fromJSON(file(config)),
