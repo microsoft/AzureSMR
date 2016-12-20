@@ -51,6 +51,7 @@ azureListHDI <- function(azureActiveContext, resourceGroup, clustername = "*",
            verbosity)
   rl <- content(r, "text")
   df <- fromJSON(rl)
+#  print(df)
   if (clustername == "*") {
     dfn <- as.data.frame(df$value$name)
     clust <- nrow(dfn)
@@ -64,7 +65,10 @@ azureListHDI <- function(azureActiveContext, resourceGroup, clustername = "*",
     dfn[1:clust, 4] <- df$value$type
     dfn[1:clust, 5] <- df$value$properties$tier
     dfn[1:clust, 6] <- df$value$properties$clusterDefinition$kind
-    dfn[1:clust, 7] <- df$value$properties$ostype
+    if(!is.null(df$value$properties$osType))
+          dfn[1:clust, 7] <- df$value$properties$osType
+    else
+      dfn[1:clust, 7] <- "-"
     dfn[1:clust, 8] <- df$value$properties$provisioningState
     dfn[1:clust, 9] <- df$value$properties$clusterState
     dfn[1:clust, 10] <- df$value$properties$createdDate
@@ -574,6 +578,8 @@ azureCreateHDI <- function(azureActiveContext, clustername, location, kind = "sp
              body = bodyI,
              encode = "json",
            verbosity)
+  
+  if (!status_code(r) %in% c(200, 201)) stopWithAzureError(r)
   rl <- content(r, "text", encoding = "UTF-8")
   if (toupper(mode) == "SYNC") {
     azureActiveContext$resourceGroup <- RGI

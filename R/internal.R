@@ -9,7 +9,7 @@ stopWithAzureError <- function(r){
 extractresourceGroupname <- function(x) gsub(".*?/resourceGroups/(.*?)(/.*)*$", "\\1", x)
 extractsubscriptionID    <- function(x) gsub(".*?/subscriptions/(.*?)(/.*)*$",  "\\1", x)
 
-refreshstorageKey <- function(azureActiveContext){
+refreshstorageKey <- function(azureActiveContext,SAI){
   if (length(azureActiveContext$storageAccountK) < 1 ||
       SAI != azureActiveContext$storageAccountK ||
       length(azureActiveContext$storageKey) <1
