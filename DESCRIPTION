@@ -1,15 +1,21 @@
 Package: AzureSMR
-Title: Package for Interacting with Azure Services, including HDInsight (Spark, Hive), Virtual Machines and blob storage
-Description: Helps users to manage Azure Services and objects from within an R Session. Requires that an Active Directory application and service principal has been configured to access Azure resources.
+Title: Package for Interacting with Azure Services Manager
+Description: Helps users to manage Azure Services and objects from within an R Session.
+    This includes Azure Storage (e.g. containers and blobs), Virtual Machines and HDInsight (Spark, Hive).
+    Requires that an Active Directory application and service principal has been configured 
+    to access Azure resources.
 Type: Package
-Version: 0.2
+Version: 0.2.0
 Date: 2016-12-17
-Author: Microsoft Corporation
-Maintainer: Alan Weaver <alanwe@microsoft.com>
+Authors@R: c(
+      person(family="Microsoft Corporation", role="cph"),
+      person("Alan", "Weaver", role=c("aut"), email="alanwe@microsoft.com"),
+      person("Andrie", "de Vries", role=c("aut", "cre"), email="adevries@microsoft.com")
+    )
 Copyright: Microsoft
 License: MIT + file LICENSE
-LazyData: TRUE
-RoxygenNote: 5.0.1
+URL: https://github.com/Microsoft/AzureSMR
+BugReports: https://github.com/Microsoft/AzureSMR/issues
 NeedsCompilation: no
 Imports:
     httr, 
@@ -19,10 +25,12 @@ Imports:
     base64enc, 
     curl, 
     digest
+Depends:
+    R(>= 3.0.0)
 Suggests: 
     knitr, 
     rmarkdown,
     testthat
-Depends:
-    R(>= 3.0.0)
 VignetteBuilder: knitr
+LazyData: TRUE
+RoxygenNote: 5.0.1
