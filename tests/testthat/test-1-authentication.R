@@ -17,7 +17,7 @@ test_that("Can authenticate to Azure Service Manager API", {
   expect_is(asc, "environment")
 
   with(config,
-       setAzureContext(asc, TID = TID, CID = CID, KEY = KEY)
+       setAzureContext(asc, tenantID = tenantID, clientID = clientID, authKey = authKey)
   )
   res <- azureAuthenticate(asc)
   expect_equal(res, "Authentication Suceeded : Key Obtained")
@@ -26,7 +26,7 @@ test_that("Can authenticate to Azure Service Manager API", {
 
 asc <- createAzureContext()
 with(config,
-     setAzureContext(asc, TID = TID, CID = CID, KEY = KEY)
+     setAzureContext(asc, tenantID = tenantID, clientID = clientID, authKey = authKey)
 )
 azureAuthenticate(asc)
 

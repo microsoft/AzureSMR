@@ -54,16 +54,16 @@ dumpAzureContext <- function(azureActiveContext){
 # @param log log Object#'
 #'
 #' @export
-setAzureContext <- function(azureActiveContext,TID, CID, KEY,azToken,
+setAzureContext <- function(azureActiveContext,tenantID, clientID, authKey,azToken,
                             subscriptionID,resourceGroup,
                             storageKey,storageAccount,
                             container,blob,
                             vmName,
                             hdiAdmin,hdiPassword ,clustername,kind,sessionID)
 {
-  if (!missing(TID)) azureActiveContext$TID <- TID
-  if (!missing(CID)) azureActiveContext$CID <- CID
-  if (!missing(KEY)) azureActiveContext$KEY <- KEY
+  if (!missing(tenantID)) azureActiveContext$tenantID <- tenantID
+  if (!missing(clientID)) azureActiveContext$clientID <- clientID
+  if (!missing(authKey)) azureActiveContext$authKey <- authKey
   if (!missing(azToken)) azureActiveContext$AZtoken <- azToken
   if (!missing(subscriptionID)) azureActiveContext$subscriptionID <- subscriptionID
   if (!missing(resourceGroup)) azureActiveContext$resourceGroup <- resourceGroup

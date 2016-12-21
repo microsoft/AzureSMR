@@ -10,7 +10,7 @@ context("Azure resources")
 
 asc <- createAzureContext()
 with(config,
-     setAzureContext(asc, TID = TID, CID = CID, KEY = KEY)
+     setAzureContext(asc, tenantID = tenantID, clientID = clientID, authKey = authKey)
 )
 azureAuthenticate(asc)
 
@@ -42,7 +42,7 @@ test_that("Can connect to azure resources", {
 test_that("Can create resource group", {
   skip_if_missing_config(settingsfile)
 
-  res <- azureCreateresourceGroup(asc, location = "westeurope", resourceGroup = resourceGroup_name)
+  res <- azureCreateResourceGroup(asc, location = "westeurope", resourceGroup = resourceGroup_name)
   expect_equal(res, "Create Request Submitted")
 
   wait_for_azure(
@@ -68,7 +68,7 @@ test_that("Can connect to storage account", {
 test_that("Can create storage account", {
   skip_if_missing_config(settingsfile)
 
-  res <- azureCreatestorageAccount(asc, storageAccount = sa_name, resourceGroup = resourceGroup_name)
+  res <- azureCreateStorageAccount(asc, storageAccount = sa_name, resourceGroup = resourceGroup_name)
   if(res == "Account already exists with the same name") skip("Account already exists with the same name")
   expect_equal(res, "Create request Accepted. It can take a few moments to provision the storage account")
 
@@ -81,7 +81,7 @@ test_that("Can create storage account", {
 test_that("Can connect to container", {
   skip_if_missing_config(settingsfile)
   sa <- azureListSA(asc)[1, ]
-  res <- azureListSAcontainers(asc, storageAccount = sa$storageAccount[1], resourceGroup = sa$resourceGroup[1])
+  res <- azureListStorageContainers(asc, storageAccount = sa$storageAccount[1], resourceGroup = sa$resourceGroup[1])
   expect_is(res, "data.frame")
   expect_equal(ncol(res), 5)
 })
@@ -102,7 +102,7 @@ test_that("Can delete storage account", {
 test_that("Can delete resource group", {
   skip_if_missing_config(settingsfile)
 
-  res <- azureDeleteresourceGroup(asc, resourceGroup = resourceGroup_name)
+  res <- azureDeleteResourceGroup(asc, resourceGroup = resourceGroup_name)
   expect_equal(res, "Delete Request Submitted")
   wait_for_azure(
     !(resourceGroup_name %in% azureListRG(asc)$resourceGroup)

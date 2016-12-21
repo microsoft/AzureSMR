@@ -101,7 +101,7 @@ azureListHDI <- function(azureActiveContext, resourceGroup, clustername = "*",
     dfn[1, 4] <- df$type
     dfn[1, 5] <- df$properties$tier
     dfn[1, 6] <- df$properties$clusterDefinition$kind
-    dfn[1, 7] <- df$properties$ostype
+    dfn[1, 7] <- df$properties$osType
     dfn[1, 8] <- df$properties$provisioningState
     dfn[1, 9] <- df$properties$clusterState
     dfn[1, 10] <- df$properties$createdDate
@@ -183,7 +183,7 @@ azureHDIConf <- function(azureActiveContext, clustername, resourceGroup,
   dfn[1, 4] <- df$type
   dfn[1, 5] <- df$properties$tier
   dfn[1, 6] <- df$properties$clusterDefinition$kind
-  dfn[1, 7] <- df$properties$ostype
+  dfn[1, 7] <- df$properties$osType
   dfn[1, 8] <- df$properties$provisioningState
   dfn[1, 9] <- df$properties$clusterState
   dfn[1, 10] <- df$properties$createdDate
@@ -462,7 +462,7 @@ azureCreateHDI <- function(azureActiveContext, clustername, location, kind = "sp
   if ((!grepl("[a-z]", sshPassword))) warning(msg)
   if ((!grepl("[0-9]", sshPassword))) warning(msg)
 
-  SKEY <- "oNgZByVwfm2V1CslTHe28e4LJXeY+JjP2f9RLIOg89g2q696EgTRhJkQpHCkOx1Wg0JvowraTgHxT1uKEHM2hA=="
+  SauthKey <- "oNgZByVwfm2V1CslTHe28e4LJXeY+JjP2f9RLIOg89g2q696EgTRhJkQpHCkOx1Wg0JvowraTgHxT1uKEHM2hA=="
 
   bodyI = '
   {
@@ -473,7 +473,7 @@ azureCreateHDI <- function(azureActiveContext, clustername, location, kind = "sp
   "tags": { "tag1": "value1", "tag2": "value2" },
   "properties": {
   "clusterversion": "VVVV",
-  "ostype": "Linux",
+  "osType": "Linux",
   "tier": "standard",
   "clusterDefinition": {
   "kind": "DDDDDDDDD",

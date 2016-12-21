@@ -20,8 +20,8 @@ Returns Dataframe of subscriptionID sets AzureContext subscriptionID
 Get available Subscriptions.
 }
 \seealso{
-Other Resource group functions: \code{\link{azureCreateresourceGroup}},
-  \code{\link{azureDeleteresourceGroup}},
+Other Resource group functions: \code{\link{azureCreateResourceGroup}},
+  \code{\link{azureDeleteResourceGroup}},
   \code{\link{azureListAllResources}},
   \code{\link{azureListRG}}
 }

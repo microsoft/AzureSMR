@@ -7,7 +7,7 @@
 #' @family container functions
 #'
 #' @export
-azureListSAcontainers <- function(azureActiveContext, storageAccount, storageKey,
+azureListStorageContainers <- function(azureActiveContext, storageAccount, storageKey,
                                   resourceGroup, azToken, subscriptionID, verbose = FALSE) {
   azureCheckToken(azureActiveContext)
 
@@ -110,7 +110,7 @@ azureListSAcontainers <- function(azureActiveContext, storageAccount, storageKey
 #' @family container functions
 #'
 #' @export
-azureCreateSAcontainer <- function(azureActiveContext, container, storageAccount,
+azureCreateStorageContainer <- function(azureActiveContext, container, storageAccount,
                                    storageKey, resourceGroup, azToken, subscriptionID, verbose = FALSE) {
   # azureCheckToken(azureActiveContext)
 
@@ -203,7 +203,7 @@ azureCreateSAcontainer <- function(azureActiveContext, container, storageAccount
 #' @family container functions
 #'
 #' @export
-azureDeleteSAcontainer <- function(azureActiveContext, container, storageAccount,
+azureDeleteStorageContainer <- function(azureActiveContext, container, storageAccount,
                                    storageKey, resourceGroup, azToken, subscriptionID, verbose = FALSE) {
   azureCheckToken(azureActiveContext)
 

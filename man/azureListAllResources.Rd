@@ -31,8 +31,8 @@ Returns Dataframe of Resources
 Get all Resource in default Subscription.
 }
 \seealso{
-Other Resource group functions: \code{\link{azureCreateresourceGroup}},
-  \code{\link{azureDeleteresourceGroup}},
+Other Resource group functions: \code{\link{azureCreateResourceGroup}},
+  \code{\link{azureDeleteResourceGroup}},
   \code{\link{azureListRG}},
   \code{\link{azureListSubscriptions}}
 }

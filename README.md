@@ -12,3 +12,13 @@ To get started with this package, see the Vignettes:
 There is also help pages within the package that can be accessed from IDEs like RStudio. Just type AzureSM into search when the package is loaded to see a list of functions/help pages.
 
 Note: The package imports standard R packages including `httr` and `jsonlite`. This means it can run in any open source R Session. 
+
+
+## Code of conduct
+
+This project has adopted the [Microsoft Open Source Code of
+Conduct](https://opensource.microsoft.com/codeofconduct/).
+For more information see the [Code of Conduct
+FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
+contact [opencode@microsoft.com](mailto:opencode@microsoft.com)
+with any additional questions or comments.
