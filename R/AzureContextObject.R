@@ -2,7 +2,7 @@
 #'
 #' Create a container(AzureContext) for holding variables used by the AzureSMR package.
 #' If the Tenant ID, Client ID and Authenication Key is provided the function will attempt to
-#' authenicate the session.  
+#' authenicate the session.
 #'
 #' @inheritParams setAzureContext
 #' @family Context Object
@@ -10,14 +10,16 @@
 #' @references \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/}
 #' @export
 createAzureContext <- function(tenantID, clientID, authKey){
-  AzEnv <- new.env(parent = globalenv())
-  if (!missing(tenantID)) AzEnv$tenantID <- tenantID else  AzEnv$tenantID <- "?"
-  if (!missing(clientID)) AzEnv$clientID <- clientID else  AzEnv$tenantID <- "?"
-  if (!missing(authKey)) AzEnv$authKey <- authKey else  AzEnv$tenantID <- "?"
-  
+  azEnv <- new.env(parent = globalenv())
+  azEnv <- as.azureActiveContext(azEnv)
+
+  if (!missing(tenantID)) azEnv$tenantID <- tenantID else  azEnv$tenantID <- "?"
+  if (!missing(clientID)) azEnv$clientID <- clientID else  azEnv$tenantID <- "?"
+  if (!missing(authKey)) azEnv$authKey <- authKey else  azEnv$tenantID <- "?"
+
   if (!missing(tenantID) && !missing(clientID) && !missing(authKey) )
-      azureAuthenticate(AzEnv,tenantID, clientID, authKey)
-  return(AzEnv)
+      azureAuthenticate(azEnv,tenantID, clientID, authKey)
+  return(azEnv)
 }
 
 #' Dumps out the contents of the AzureContext.
@@ -43,12 +45,12 @@ dumpAzureContext <- function(azureActiveContext){
 #' @param vmName Set the name of the virtual Machine
 #' @param storageAccount Set the name of the azure storage account
 #' @param storageKey Set the Storage Key associated with storage account
-#' @param blob Set the blob name 
+#' @param blob Set the blob name
 #' @param clustername Set the clustername
 #' @param sessionID Set the Spark sessionID
 #' @param hdiAdmin Set the HDInsight admin username
 #' @param hdiPassword  Set the HDInsight admin Password
-#' @param container Set the storage container 
+#' @param container Set the storage container
 #' @param kind Set the HDinsight kind "hadoop","spark" or "pyspark"
 #
 # @param log log Object#'
@@ -74,7 +76,7 @@ setAzureContext <- function(azureActiveContext,tenantID, clientID, authKey,azTok
   if (!missing(vmName)) azureActiveContext$vmName <- vmName
   if (!missing(clustername)) azureActiveContext$clustername <- clustername
   if (!missing(hdiAdmin)) azureActiveContext$hdiAdmin <- hdiAdmin
-  if (!missing(hdiPassword)) azureActiveContext$hdiPassword  <- hdiPassword 
+  if (!missing(hdiPassword)) azureActiveContext$hdiPassword  <- hdiPassword
   if (!missing(kind)) azureActiveContext$kind <- kind
   if (!missing(sessionID)) azureActiveContext$sessionID <- sessionID
 }
