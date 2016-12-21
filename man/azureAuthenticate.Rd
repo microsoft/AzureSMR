@@ -8,13 +8,13 @@ azureAuthenticate(azureActiveContext, tenantID, clientID, authKey,
   verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{Context Object}
+\item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 
-\item{tenantID}{Tenant ID Object}
+\item{tenantID}{The Tenant ID which was provided when the Active Directory application / service principal is created}
 
-\item{clientID}{Client ID Object}
+\item{clientID}{The Client ID which was provided when the Active Directory application / service principal is created}
 
-\item{authKey}{Authentication authKey Object}
+\item{authKey}{The Authentication Key which was provided when the Active Directory application / service principal is created}
 
 \item{verbose}{Print Tracing information (Default False)}
 }

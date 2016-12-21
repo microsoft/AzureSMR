@@ -8,17 +8,17 @@ azureStartVM(azureActiveContext, resourceGroup, vmName, mode = "Sync",
   subscriptionID, azToken, verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{Context Object}
+\item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 
-\item{resourceGroup}{resourceGroup Object}
+\item{resourceGroup}{Set the name of the Resource Group}
 
 \item{vmName}{Virtual Machine name}
 
 \item{mode}{Wait for operation to complete 'Sync' (Default)}
 
-\item{subscriptionID}{subscriptionID Object}
+\item{subscriptionID}{Set the subscriptionID Obtained automatically by AzureAuthenticate when only one is available}
 
-\item{azToken}{Token Object}
+\item{azToken}{Azure Token Object - Obtained by AzureAuthenticate}
 
 \item{verbose}{Print Tracing information (Default False)}
 }

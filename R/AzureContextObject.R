@@ -1,20 +1,26 @@
-
+#' Create an AzureContext
 #'
-#' Create an AzureContext.
+#' Create a container(AzureContext) for holding variables used by the AzureSMR package.
+#' If the Tenant ID, Client ID and Authenication Key is provided the function will attempt to
+#' authenicate the session.  
 #'
+#' @inheritParams setAzureContext
 #' @family Context Object
+#' @note See \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/} to learn how to set up an Active directory application
+#' @references \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/}
 #' @export
-createAzureContext <- function(){
+createAzureContext <- function(tenantID, clientID, authKey){
   AzEnv <- new.env(parent = globalenv())
-  AzEnv$tenantID <- "xxx"
-  AzEnv$clientID <- "xxx"
-  AzEnv$authKey <- "xxx"
+  if (!missing(tenantID)) AzEnv$tenantID <- tenantID else  AzEnv$tenantID <- "?"
+  if (!missing(clientID)) AzEnv$clientID <- clientID else  AzEnv$tenantID <- "?"
+  if (!missing(authKey)) AzEnv$authKey <- authKey else  AzEnv$tenantID <- "?"
+  
+  if (!missing(tenantID) && !missing(clientID) && !missing(authKey) )
+      azureAuthenticate(AzEnv,tenantID, clientID, authKey)
   return(AzEnv)
-  return(1)
 }
 
-
-#' Dumps the contents of the AzureContext.
+#' Dumps out the contents of the AzureContext.
 #'
 #' @inheritParams setAzureContext
 #' @family Context Object
@@ -27,23 +33,23 @@ dumpAzureContext <- function(azureActiveContext){
 
 #' Updates the value of an AzureContext variable.
 #'
-#' @param azureActiveContext Context Object
-#' @param tenantID Tenant ID Object
-#' @param clientID Client ID Object
-#' @param authKey Authentication authKey Object
-#' @param subscriptionID subscriptionID Object
-#' @param azToken Token Object
-#' @param resourceGroup resourceGroup Object
-#' @param vmName vmName Object
-#' @param storageAccount storageAccount Object
-#' @param storageKey storageKey Object
-#' @param blob blob Object
-#' @param clustername clustername Object
-#' @param sessionID sessionID Object
-#' @param hdiAdmin hdiAdmin Object
-#' @param hdiPassword  hdiPassword  Object
-#' @param container container Object
-#' @param kind "hadoop","spark" or "pyspark"
+#' @param azureActiveContext A container used for caching variables used by AzureSMR
+#' @param tenantID The Tenant ID which was provided when the Active Directory application / service principal is created
+#' @param clientID The Client ID which was provided when the Active Directory application / service principal is created
+#' @param authKey The Authentication Key which was provided when the Active Directory application / service principal is created
+#' @param subscriptionID Set the subscriptionID Obtained automatically by AzureAuthenticate when only one is available
+#' @param azToken Azure Token Object - Obtained by AzureAuthenticate
+#' @param resourceGroup Set the name of the Resource Group
+#' @param vmName Set the name of the virtual Machine
+#' @param storageAccount Set the name of the azure storage account
+#' @param storageKey Set the Storage Key associated with storage account
+#' @param blob Set the blob name 
+#' @param clustername Set the clustername
+#' @param sessionID Set the Spark sessionID
+#' @param hdiAdmin Set the HDInsight admin username
+#' @param hdiPassword  Set the HDInsight admin Password
+#' @param container Set the storage container 
+#' @param kind Set the HDinsight kind "hadoop","spark" or "pyspark"
 #
 # @param log log Object#'
 #'

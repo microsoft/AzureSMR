@@ -43,7 +43,7 @@ azureListStorageBlobs <- function(azureActiveContext, storageAccount, storageKey
     stop("Error: No container provided: Use container argument or set in AzureContext")
   }
 
-  STK <- refreshstorageKey(azureActiveContext)
+  STK <- refreshstorageKey(azureActiveContext,SAI)
 
   if (length(STK) < 1) {
     stop("Error: No storageKey provided: Use storageKey argument or set in AzureContext")
@@ -187,7 +187,7 @@ azureblobLS <- function(azureActiveContext, directory, recursive = FALSE,
 
   DIR <- gsub("//", "/", DIR)
 
-  STK <- refreshstorageKey(azureActiveContext)
+  STK <- refreshstorageKey(azureActiveContext,SAI)
 
   if (length(STK) < 1) {
     stop("Error: No storageKey provided: Use storageKey argument or set in AzureContext")
@@ -325,7 +325,7 @@ azureGetBlob <- function(azureActiveContext, blob, directory, type = "text",
     stop("Error: No blob provided: Use blob argument or set in AzureContext")
   }
 
-  STK <- refreshstorageKey(azureActiveContext)
+  STK <- refreshstorageKey(azureActiveContext,SAI)
 
   if (length(STK) < 1) {
     stop("Error: No storageKey provided: Use storageKey argument or set in AzureContext")
@@ -473,7 +473,7 @@ azurePutBlob <- function(azureActiveContext, blob, contents = "", file = "",
     stop("Provided either Content OR file Argument")
 
 
-  STK <- refreshstorageKey(azureActiveContext)
+  STK <- refreshstorageKey(azureActiveContext,SAI)
 
   if (length(STK) < 1) {
     stop("Error: No storageKey provided: Use storageKey argument or set in AzureContext")
@@ -553,7 +553,7 @@ azureBlobFind <- function(azureActiveContext, file, storageAccount, storageKey,
   }
 
 
-  STK <- refreshstorageKey(azureActiveContext)
+  STK <- refreshstorageKey(azureActiveContext,SAI)
 
   if (length(STK) < 1) {
     stop("Error: No storageKey provided: Use storageKey argument or set in AzureContext")
@@ -641,7 +641,7 @@ azureBlobCD <- function(azureActiveContext, directory, container, file,
                   DIR))
 
   }
-  STK <- refreshstorageKey(azureActiveContext)
+  STK <- refreshstorageKey(azureActiveContext,SAI)
   if (length(STK) < 1) {
     stop("Error: No storageKey provided: Use storageKey argument or set in AzureContext")
   }

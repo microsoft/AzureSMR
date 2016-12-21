@@ -8,15 +8,15 @@ azureCreateStorageAccount(azureActiveContext, storageAccount, azToken,
   resourceGroup, subscriptionID, verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{Context Object}
+\item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 
-\item{storageAccount}{storageAccount Object}
+\item{storageAccount}{Set the name of the azure storage account}
 
-\item{azToken}{Token Object}
+\item{azToken}{Azure Token Object - Obtained by AzureAuthenticate}
 
-\item{resourceGroup}{resourceGroup Object}
+\item{resourceGroup}{Set the name of the Resource Group}
 
-\item{subscriptionID}{subscriptionID Object}
+\item{subscriptionID}{Set the subscriptionID Obtained automatically by AzureAuthenticate when only one is available}
 
 \item{verbose}{Print Tracing information (Default False)}
 }

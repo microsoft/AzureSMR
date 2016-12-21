@@ -2,12 +2,27 @@
 % Please edit documentation in R/AzureContextObject.R
 \name{createAzureContext}
 \alias{createAzureContext}
-\title{Create an AzureContext.}
+\title{Create an AzureContext}
 \usage{
-createAzureContext()
+createAzureContext(tenantID, clientID, authKey)
+}
+\arguments{
+\item{tenantID}{The Tenant ID which was provided when the Active Directory application / service principal is created}
+
+\item{clientID}{The Client ID which was provided when the Active Directory application / service principal is created}
+
+\item{authKey}{The Authentication Key which was provided when the Active Directory application / service principal is created}
 }
 \description{
-Create an AzureContext.
+Create a container(AzureContext) for holding variables used by the AzureSMR package.
+If the Tenant ID, Client ID and Authenication Key is provided the function will attempt to
+authenicate the session.
+}
+\note{
+See \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/} to learn how to set up an Active directory application
+}
+\references{
+\url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/}
 }
 \seealso{
 Other Context Object: \code{\link{dumpAzureContext}}

@@ -7,7 +7,7 @@
 azureSparkShowURL(azureActiveContext, URL)
 }
 \arguments{
-\item{azureActiveContext}{Context Object}
+\item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 
 \item{URL}{URL}
 }

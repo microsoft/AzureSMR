@@ -8,15 +8,15 @@ azureVMStatus(azureActiveContext, resourceGroup, vmName, subscriptionID,
   azToken, ignore = "N", verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{Context Object}
+\item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 
-\item{resourceGroup}{resourceGroup Object}
+\item{resourceGroup}{Set the name of the Resource Group}
 
-\item{vmName}{vmName Object}
+\item{vmName}{Set the name of the virtual Machine}
 
-\item{subscriptionID}{subscriptionID Object}
+\item{subscriptionID}{Set the subscriptionID Obtained automatically by AzureAuthenticate when only one is available}
 
-\item{azToken}{Token Object}
+\item{azToken}{Azure Token Object - Obtained by AzureAuthenticate}
 
 \item{ignore}{ignore}
 

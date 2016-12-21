@@ -2,15 +2,15 @@
 % Please edit documentation in R/AzureContextObject.R
 \name{dumpAzureContext}
 \alias{dumpAzureContext}
-\title{Dumps the contents of the AzureContext.}
+\title{Dumps out the contents of the AzureContext.}
 \usage{
 dumpAzureContext(azureActiveContext)
 }
 \arguments{
-\item{azureActiveContext}{Context Object}
+\item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 }
 \description{
-Dumps the contents of the AzureContext.
+Dumps out the contents of the AzureContext.
 }
 \seealso{
 Other Context Object: \code{\link{createAzureContext}}

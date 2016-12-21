@@ -11,45 +11,45 @@ azureCreateHDI(azureActiveContext, clustername, location, kind = "spark",
   verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{Context Object}
+\item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 
-\item{clustername}{resourceGroup Object (or use azureActiveContext)}
+\item{clustername}{set the Name of cluster}
 
 \item{location}{Azure region, e.g. 'westeurope' or 'southcentralus'}
 
-\item{kind}{"hadoop","spark" or "pyspark"}
+\item{kind}{Set the HDinsight kind "hadoop","spark" or "pyspark"}
 
-\item{storageAccount}{storageAccount Object}
+\item{storageAccount}{Set the name of the azure storage account}
 
-\item{storageKey}{Storage Key}
+\item{storageKey}{set the Storage Key manually for the associaetd storage account}
 
-\item{version}{version}
+\item{version}{HDinsight version see}
 
-\item{workers}{Number of worker nodes}
+\item{workers}{Define the number of worker nodes}
 
 \item{adminUser}{Admin user name}
 
 \item{adminPassword}{Admin user password}
 
-\item{sshUser}{SSH user name}
+\item{sshUser}{set the SSH user name}
 
-\item{sshPassword}{SSH user password}
+\item{sshPassword}{set the SSH user password}
 
-\item{hiveServer}{Hive server}
+\item{hiveServer}{URI address of the Hive server}
 
-\item{hiveDB}{Hive DB}
+\item{hiveDB}{Set the name of the Hive DB}
 
-\item{hiveUser}{Hive user name}
+\item{hiveUser}{Set the hive user name}
 
-\item{hivePassword}{Hive user password}
+\item{hivePassword}{Set the Hive user password}
 
-\item{resourceGroup}{resourceGroup Object}
+\item{resourceGroup}{Set the name of the Resource Group}
 
-\item{azToken}{Token Object}
+\item{azToken}{Azure Token Object - Obtained by AzureAuthenticate}
 
-\item{subscriptionID}{subscriptionID Object}
+\item{subscriptionID}{Set the subscriptionID Obtained automatically by AzureAuthenticate when only one is available}
 
-\item{mode}{mode}
+\item{mode}{Set Provisioning mode - Default Sync (Syncronous), set to Async to return to session after submission}
 
 \item{verbose}{Print Tracing information (Default False)}
 }
@@ -58,6 +58,9 @@ Success message
 }
 \description{
 Create Specifed HDInsight Cluster.
+}
+\note{
+See \url{https://docs.microsoft.com/en-us/azure/hdinsight/hdinsight-component-versioning} to learn about HDInsight Versions
 }
 \seealso{
 Other HDInsight functions: \code{\link{azureDeleteHDI}},

@@ -9,7 +9,7 @@ azureRunScriptAction(azureActiveContext, scriptname = "script1", scriptURL,
   resourceGroup, parameters = "", azToken, subscriptionID, verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{Context Object}
+\item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 
 \item{scriptname}{Identifier for Custom action scrript operation}
 
@@ -21,15 +21,15 @@ azureRunScriptAction(azureActiveContext, scriptname = "script1", scriptURL,
 
 \item{edgeNode}{install on worker nodes (default FALSE)}
 
-\item{clustername}{clustername Object}
+\item{clustername}{Set the clustername}
 
-\item{resourceGroup}{resourceGroup Object}
+\item{resourceGroup}{Set the name of the Resource Group}
 
 \item{parameters}{parameters}
 
-\item{azToken}{Token Object}
+\item{azToken}{Azure Token Object - Obtained by AzureAuthenticate}
 
-\item{subscriptionID}{subscriptionID Object}
+\item{subscriptionID}{Set the subscriptionID Obtained automatically by AzureAuthenticate when only one is available}
 
 \item{verbose}{Print Tracing information (Default False)}
 }

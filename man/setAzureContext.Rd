@@ -9,39 +9,39 @@ setAzureContext(azureActiveContext, tenantID, clientID, authKey, azToken,
   vmName, hdiAdmin, hdiPassword, clustername, kind, sessionID)
 }
 \arguments{
-\item{azureActiveContext}{Context Object}
+\item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 
-\item{tenantID}{Tenant ID Object}
+\item{tenantID}{The Tenant ID which was provided when the Active Directory application / service principal is created}
 
-\item{clientID}{Client ID Object}
+\item{clientID}{The Client ID which was provided when the Active Directory application / service principal is created}
 
-\item{authKey}{Authentication authKey Object}
+\item{authKey}{The Authentication Key which was provided when the Active Directory application / service principal is created}
 
-\item{azToken}{Token Object}
+\item{azToken}{Azure Token Object - Obtained by AzureAuthenticate}
 
-\item{subscriptionID}{subscriptionID Object}
+\item{subscriptionID}{Set the subscriptionID Obtained automatically by AzureAuthenticate when only one is available}
 
-\item{resourceGroup}{resourceGroup Object}
+\item{resourceGroup}{Set the name of the Resource Group}
 
-\item{storageKey}{storageKey Object}
+\item{storageKey}{Set the Storage Key associated with storage account}
 
-\item{storageAccount}{storageAccount Object}
+\item{storageAccount}{Set the name of the azure storage account}
 
-\item{container}{container Object}
+\item{container}{Set the storage container}
 
-\item{blob}{blob Object}
+\item{blob}{Set the blob name}
 
-\item{vmName}{vmName Object}
+\item{vmName}{Set the name of the virtual Machine}
 
-\item{hdiAdmin}{hdiAdmin Object}
+\item{hdiAdmin}{Set the HDInsight admin username}
 
-\item{hdiPassword}{hdiPassword  Object}
+\item{hdiPassword}{Set the HDInsight admin Password}
 
-\item{clustername}{clustername Object}
+\item{clustername}{Set the clustername}
 
-\item{kind}{"hadoop","spark" or "pyspark"}
+\item{kind}{Set the HDinsight kind "hadoop","spark" or "pyspark"}
 
-\item{sessionID}{sessionID Object}
+\item{sessionID}{Set the Spark sessionID}
 }
 \description{
 Updates the value of an AzureContext variable.

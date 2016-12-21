@@ -7,7 +7,7 @@
 azureCheckToken(azureActiveContext)
 }
 \arguments{
-\item{azureActiveContext}{Context Object}
+\item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 }
 \description{
 Check the timestamp of a Token and Renew if needed.
