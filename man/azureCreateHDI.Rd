@@ -13,17 +13,17 @@ azureCreateHDI(azureActiveContext, clustername, location, kind = "spark",
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 
-\item{clustername}{set the Name of cluster}
+\item{clustername}{Cluster name, used for HDI and Spark clusters. See \code{\link{azureCreateHDI}}}
 
 \item{location}{Azure region, e.g. 'westeurope' or 'southcentralus'}
 
-\item{kind}{Set the HDinsight kind "hadoop","spark" or "pyspark"}
+\item{kind}{HDinsight kind: "hadoop","spark" or "pyspark"}
 
-\item{storageAccount}{Set the name of the azure storage account}
+\item{storageAccount}{Name of the azure storage account}
 
-\item{storageKey}{set the Storage Key manually for the associaetd storage account}
+\item{storageKey}{Storage key associated with storage account}
 
-\item{version}{HDinsight version see}
+\item{version}{HDinsight version}
 
 \item{workers}{Define the number of worker nodes}
 
@@ -31,25 +31,25 @@ azureCreateHDI(azureActiveContext, clustername, location, kind = "spark",
 
 \item{adminPassword}{Admin user password}
 
-\item{sshUser}{set the SSH user name}
+\item{sshUser}{SSH user name}
 
-\item{sshPassword}{set the SSH user password}
+\item{sshPassword}{SSH user password}
 
 \item{hiveServer}{URI address of the Hive server}
 
-\item{hiveDB}{Set the name of the Hive DB}
+\item{hiveDB}{Hive DB name}
 
-\item{hiveUser}{Set the hive user name}
+\item{hiveUser}{Hive user name}
 
-\item{hivePassword}{Set the Hive user password}
+\item{hivePassword}{Hive user password}
 
-\item{resourceGroup}{Set the name of the Resource Group}
+\item{resourceGroup}{Name of the resource group}
 
-\item{azToken}{Azure Token Object - Obtained by AzureAuthenticate}
+\item{azToken}{Azure authentication token, obtained by \code{\link{azureAuthenticate}}}
 
-\item{subscriptionID}{Set the subscriptionID Obtained automatically by AzureAuthenticate when only one is available}
+\item{subscriptionID}{Set the subscriptionID.  This is obtained automatically by \code{\link{azureAuthenticate}} when only a single subscriptionID is available via Active Directory}
 
-\item{mode}{Set Provisioning mode - Default Sync (Syncronous), set to Async to return to session after submission}
+\item{mode}{Provisioning mode, "Sync" or "Async". Use "Async" to immediately return to R session after submission of request}
 
 \item{verbose}{Print Tracing information (Default False)}
 }

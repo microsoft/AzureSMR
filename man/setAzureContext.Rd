@@ -2,7 +2,7 @@
 % Please edit documentation in R/AzureContextObject.R
 \name{setAzureContext}
 \alias{setAzureContext}
-\title{Updates the value of an AzureContext variable.}
+\title{Updates azureActiveContext object.}
 \usage{
 setAzureContext(azureActiveContext, tenantID, clientID, authKey, azToken,
   subscriptionID, resourceGroup, storageKey, storageAccount, container, blob,
@@ -11,39 +11,42 @@ setAzureContext(azureActiveContext, tenantID, clientID, authKey, azToken,
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 
-\item{tenantID}{The Tenant ID which was provided when the Active Directory application / service principal is created}
+\item{tenantID}{The Tenant ID provided during creation of the Active Directory application / service principal}
 
-\item{clientID}{The Client ID which was provided when the Active Directory application / service principal is created}
+\item{clientID}{The Client ID provided during creation of the Active Directory application / service principal}
 
-\item{authKey}{The Authentication Key which was provided when the Active Directory application / service principal is created}
+\item{authKey}{The Authentication Key provided during creation of the Active Directory application / service principal}
 
-\item{azToken}{Azure Token Object - Obtained by AzureAuthenticate}
+\item{azToken}{Azure authentication token, obtained by \code{\link{azureAuthenticate}}}
 
-\item{subscriptionID}{Set the subscriptionID Obtained automatically by AzureAuthenticate when only one is available}
+\item{subscriptionID}{Set the subscriptionID.  This is obtained automatically by \code{\link{azureAuthenticate}} when only a single subscriptionID is available via Active Directory}
 
-\item{resourceGroup}{Set the name of the Resource Group}
+\item{resourceGroup}{Name of the resource group}
 
-\item{storageKey}{Set the Storage Key associated with storage account}
+\item{storageKey}{Storage key associated with storage account}
 
-\item{storageAccount}{Set the name of the azure storage account}
+\item{storageAccount}{Name of the azure storage account}
 
-\item{container}{Set the storage container}
+\item{container}{Storage container name. See \code{\link{azureListStorageContainers}}}
 
-\item{blob}{Set the blob name}
+\item{blob}{Blob name}
 
-\item{vmName}{Set the name of the virtual Machine}
+\item{vmName}{Name of the virtual Machine}
 
-\item{hdiAdmin}{Set the HDInsight admin username}
+\item{hdiAdmin}{HDInsight admin username}
 
-\item{hdiPassword}{Set the HDInsight admin Password}
+\item{hdiPassword}{HDInsight admin password}
 
-\item{clustername}{Set the clustername}
+\item{clustername}{Cluster name, used for HDI and Spark clusters. See \code{\link{azureCreateHDI}}}
 
-\item{kind}{Set the HDinsight kind "hadoop","spark" or "pyspark"}
+\item{kind}{HDinsight kind: "hadoop","spark" or "pyspark"}
 
-\item{sessionID}{Set the Spark sessionID}
+\item{sessionID}{Spark sessionID. See \code{\link{azureSparkCMD}}}
 }
 \description{
-Updates the value of an AzureContext variable.
+Updates the value of an azureActiveContext object, created by \code{\link{createAzureContext}}
+}
+\seealso{
+Other azureActiveContext functions: \code{\link{createAzureContext}}
 }
 

@@ -142,7 +142,7 @@ azureCreateStorageContainer <- function(azureActiveContext, container, storageAc
     stop("Error: No storageAccount provided: Use storageAccount argument or set in AzureContext")
   }
 
-  STK <- refreshstorageKey(azureActiveContext,SAI)
+  STK <- refreshStorageKey(azureActiveContext, SAI, RGI)
 
   if (length(STK) < 1) {
     stop("Error: No storageKey provided: Use storageKey argument or set in AzureContext")
@@ -237,7 +237,7 @@ azureDeleteStorageContainer <- function(azureActiveContext, container, storageAc
     stop("Error: No storageAccount provided: Use storageAccount argument or set in AzureContext")
   }
 
-  STK <- refreshstorageKey(azureActiveContext,SAI)
+  STK <- refreshStorageKey(azureActiveContext, SAI, RGI)
   if (length(STK) < 1) {
     stop("Error: No storageKey provided: Use storageKey argument or set in AzureContext")
   }

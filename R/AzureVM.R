@@ -50,7 +50,7 @@ azureListVM <- function(azureActiveContext, resourceGroup, location, subscriptio
   dfn[1:clust, 3] <- df$value$type
   if(!is.null(df$value$properties$storageProfile$osDisk$osType))
     dfn[1:clust, 4] <- df$value$properties$storageProfile$osDisk$osType
-  else 
+  else
     dfn[1:clust, 4] <- "-"
   dfn[1:clust, 5] <- df$value$properties$provisioningState
   dfn[1:clust, 6] <- df$value$properties$osProfile$adminUsername
@@ -60,7 +60,7 @@ azureListVM <- function(azureActiveContext, resourceGroup, location, subscriptio
 
   # dvn
 
-  colnames(dfn) <- c("name", "location", "type", "OS", "State", "Admin",
+  colnames(dfn) <- c("name", "location", "type", "OS", "state", "admin",
                      "ID")
   azureActiveContext$subscriptionID <- SUBIDI
   azureActiveContext$resourceGroup <- RGI

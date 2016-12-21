@@ -14,9 +14,9 @@ azureSAGetKey(azureActiveContext, storageAccount, azToken, resourceGroup,
 
 \item{azToken}{Token Object (or use azureActiveContext)}
 
-\item{resourceGroup}{Set the name of the Resource Group}
+\item{resourceGroup}{Name of the resource group}
 
-\item{subscriptionID}{Set the subscriptionID Obtained automatically by AzureAuthenticate when only one is available}
+\item{subscriptionID}{Set the subscriptionID.  This is obtained automatically by \code{\link{azureAuthenticate}} when only a single subscriptionID is available via Active Directory}
 
 \item{verbose}{Print Tracing information (Default False)}
 }

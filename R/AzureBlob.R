@@ -43,7 +43,7 @@ azureListStorageBlobs <- function(azureActiveContext, storageAccount, storageKey
     stop("Error: No container provided: Use container argument or set in AzureContext")
   }
 
-  STK <- refreshstorageKey(azureActiveContext,SAI)
+  STK <- refreshStorageKey(azureActiveContext, SAI, RGI)
 
   if (length(STK) < 1) {
     stop("Error: No storageKey provided: Use storageKey argument or set in AzureContext")
@@ -101,7 +101,7 @@ azureListStorageBlobs <- function(azureActiveContext, storageAccount, storageKey
     dfn[i, 4] <- bltx[i]
     dfn[i, 5] <- cpx[i]
   }
-  colnames(dfn) <- c("name", "LastModified", "Length", "type", "LeaseState")
+  colnames(dfn) <- c("name", "lastModified", "length", "type", "leaseState")
   azureActiveContext$storageAccount <- SAI
   azureActiveContext$resourceGroup <- RGI
   azureActiveContext$storageKey <- STK
@@ -187,7 +187,7 @@ azureblobLS <- function(azureActiveContext, directory, recursive = FALSE,
 
   DIR <- gsub("//", "/", DIR)
 
-  STK <- refreshstorageKey(azureActiveContext,SAI)
+  STK <- refreshStorageKey(azureActiveContext, SAI, RGI)
 
   if (length(STK) < 1) {
     stop("Error: No storageKey provided: Use storageKey argument or set in AzureContext")
@@ -325,7 +325,7 @@ azureGetBlob <- function(azureActiveContext, blob, directory, type = "text",
     stop("Error: No blob provided: Use blob argument or set in AzureContext")
   }
 
-  STK <- refreshstorageKey(azureActiveContext,SAI)
+  STK <- refreshStorageKey(azureActiveContext, SAI, RGI)
 
   if (length(STK) < 1) {
     stop("Error: No storageKey provided: Use storageKey argument or set in AzureContext")
@@ -473,7 +473,7 @@ azurePutBlob <- function(azureActiveContext, blob, contents = "", file = "",
     stop("Provided either Content OR file Argument")
 
 
-  STK <- refreshstorageKey(azureActiveContext,SAI)
+  STK <- refreshStorageKey(azureActiveContext, SAI, RGI)
 
   if (length(STK) < 1) {
     stop("Error: No storageKey provided: Use storageKey argument or set in AzureContext")
@@ -553,7 +553,7 @@ azureBlobFind <- function(azureActiveContext, file, storageAccount, storageKey,
   }
 
 
-  STK <- refreshstorageKey(azureActiveContext,SAI)
+  STK <- refreshStorageKey(azureActiveContext, SAI, RGI)
 
   if (length(STK) < 1) {
     stop("Error: No storageKey provided: Use storageKey argument or set in AzureContext")
@@ -641,7 +641,7 @@ azureBlobCD <- function(azureActiveContext, directory, container, file,
                   DIR))
 
   }
-  STK <- refreshstorageKey(azureActiveContext,SAI)
+  STK <- refreshStorageKey(azureActiveContext, SAI, RGI)
   if (length(STK) < 1) {
     stop("Error: No storageKey provided: Use storageKey argument or set in AzureContext")
   }

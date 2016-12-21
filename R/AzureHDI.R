@@ -4,8 +4,6 @@
 #' @inheritParams azureAuthenticate
 #' @inheritParams azureListAllResources
 #'
-#' @param clustername Cluster name
-#'
 #' @family HDInsight functions
 #'
 #' @return Returns Dataframe of HDInsight Clusters
@@ -115,8 +113,8 @@ azureListHDI <- function(azureActiveContext, resourceGroup, clustername = "*",
     }
     dfn[1, 12] <- rt
   }
-  colnames(dfn) <- c("name", "ID", "location", "type", "Tier", "kind",
-                     "OS", "ProvState", "Status", "Created", "NumCores", "Information")
+  colnames(dfn) <- c("name", "ID", "location", "type", "tier", "kind",
+                     "OS", "provState", "status", "created", "numCores", "information")
   azureActiveContext$resourceGroup <- RGI
 
   return(t(dfn))
@@ -196,8 +194,8 @@ azureHDIConf <- function(azureActiveContext, clustername, resourceGroup,
                                                                      3], ")")
   }
   dfn[1, 12] <- rt
-  colnames(dfn) <- c("name", "ID", "location", "type", "Tier", "kind",
-                     "OS", "ProvState", "Status", "Created", "NumCores", "Information")
+  colnames(dfn) <- c("name", "ID", "location", "type", "tier", "kind",
+                     "OS", "provState", "status", "created", "numCores", "information")
 
   return(t(dfn))
 }
@@ -208,15 +206,16 @@ azureHDIConf <- function(azureActiveContext, clustername, resourceGroup,
 #' @inheritParams setAzureContext
 #' @inheritParams azureAuthenticate
 #' @inheritParams azureListHDI
+#' @inheritParams azureCreateHDI
 #'
 #' @param role role type: 'worker', 'head' or 'Edge'
 #' @param size Desired size of role type
-#' @param mode 'Sync' or 'Async'
 #'
 #' @family HDInsight functions
 #' @export
 azureResizeHDI <- function(azureActiveContext, clustername, role = "worker",
-                           size = 2, mode = "Sync", azToken, subscriptionID, resourceGroup, verbose = FALSE) {
+                           size = 2, mode = "Sync", azToken, subscriptionID,
+                           resourceGroup, verbose = FALSE) {
   azureCheckToken(azureActiveContext)
 
   if (missing(resourceGroup)) {
@@ -373,19 +372,17 @@ azureDeleteHDI <- function(azureActiveContext, clustername, azToken, subscriptio
 #' @inheritParams azureListHDI
 #'
 #'
-#' @param clustername set the Name of cluster
-#' @param storageKey set the Storage Key manually for the associaetd storage account
-#' @param version HDinsight version see 
+#' @param version HDinsight version
 #' @param adminUser Admin user name
 #' @param adminPassword Admin user password
 #' @param workers Define the number of worker nodes
-#' @param sshUser set the SSH user name
-#' @param sshPassword set the SSH user password
+#' @param sshUser SSH user name
+#' @param sshPassword SSH user password
 #' @param hiveServer URI address of the Hive server
-#' @param hiveDB Set the name of the Hive DB
-#' @param hiveUser Set the hive user name
-#' @param hivePassword Set the Hive user password
-#' @param mode Set Provisioning mode - Default Sync (Syncronous), set to Async to return to session after submission 
+#' @param hiveDB Hive DB name
+#' @param hiveUser Hive user name
+#' @param hivePassword Hive user password
+#' @param mode Provisioning mode, "Sync" or "Async". Use "Async" to immediately return to R session after submission of request
 #'
 #' @return Success message
 #' @family HDInsight functions
@@ -578,7 +575,7 @@ azureCreateHDI <- function(azureActiveContext, clustername, location, kind = "sp
              body = bodyI,
              encode = "json",
            verbosity)
-  
+
   if (!status_code(r) %in% c(200, 201)) stopWithAzureError(r)
   rl <- content(r, "text", encoding = "UTF-8")
   if (toupper(mode) == "SYNC") {
@@ -637,9 +634,10 @@ azureCreateHDI <- function(azureActiveContext, clustername, location, kind = "sp
 #' @return Returns Success Message
 #' @family HDInsight functions
 #' @export
-azureRunScriptAction <- function(azureActiveContext, scriptname = "script1",
-                                 scriptURL, headNode = TRUE, workerNode = FALSE, edgeNode = FALSE, clustername,
-                                 resourceGroup, parameters = "", azToken, subscriptionID, verbose = FALSE) {
+azureRunScriptAction <- function(azureActiveContext, scriptname = "script1", scriptURL,
+                                 headNode = TRUE, workerNode = FALSE, edgeNode = FALSE,
+                                 clustername, resourceGroup,
+                                 parameters = "", azToken, subscriptionID, verbose = FALSE) {
   azureCheckToken(azureActiveContext)
   if (missing(clustername)) {
     CN <- azureActiveContext$clustername

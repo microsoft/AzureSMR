@@ -10,13 +10,13 @@ azureSparkStopSession(azureActiveContext, clustername, hdiAdmin, hdiPassword,
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 
-\item{clustername}{Set the clustername}
+\item{clustername}{Cluster name, used for HDI and Spark clusters. See \code{\link{azureCreateHDI}}}
 
-\item{hdiAdmin}{Set the HDInsight admin username}
+\item{hdiAdmin}{HDInsight admin username}
 
-\item{hdiPassword}{Set the HDInsight admin Password}
+\item{hdiPassword}{HDInsight admin password}
 
-\item{sessionID}{Set the Spark sessionID}
+\item{sessionID}{Spark sessionID. See \code{\link{azureSparkCMD}}}
 
 \item{verbose}{Print Tracing information (Default False)}
 }
@@ -24,7 +24,7 @@ azureSparkStopSession(azureActiveContext, clustername, hdiAdmin, hdiPassword,
 Stop a Spark Sessions.
 }
 \seealso{
-Other Spark: \code{\link{azureSparkCMD}},
+Other Spark functions: \code{\link{azureSparkCMD}},
   \code{\link{azureSparkJob}},
   \code{\link{azureSparkListJobs}},
   \code{\link{azureSparkListSessions}},

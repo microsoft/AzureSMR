@@ -22,7 +22,8 @@
 #' @importFrom base64enc base64encode base64decode
 #' @importFrom plyr rbind.fill
 #' @importFrom jsonlite fromJSON
-#' @importFrom httr add_headers content status_code GET PUT DELETE POST
+#' @importFrom httr add_headers headers content status_code http_status authenticate
+#' @importFrom httr GET PUT DELETE POST
 #' @importFrom XML htmlParse xpathApply xpathSApply xmlValue
 #'
 # @import httr
