@@ -6,9 +6,9 @@
 #' @export
 createAzureContext <- function(){
   AzEnv <- new.env(parent = globalenv())
-  AzEnv$TID <- "xxx"
-  AzEnv$CID <- "xxx"
-  AzEnv$KEY <- "xxx"
+  AzEnv$tenantID <- "xxx"
+  AzEnv$clientID <- "xxx"
+  AzEnv$authKey <- "xxx"
   return(AzEnv)
   return(1)
 }
@@ -28,9 +28,9 @@ dumpAzureContext <- function(azureActiveContext){
 #' Updates the value of an AzureContext variable.
 #'
 #' @param azureActiveContext Context Object
-#' @param TID Tenant ID Object
-#' @param CID Client ID Object
-#' @param KEY Authentication KEY Object
+#' @param tenantID Tenant ID Object
+#' @param clientID Client ID Object
+#' @param authKey Authentication authKey Object
 #' @param subscriptionID subscriptionID Object
 #' @param azToken Token Object
 #' @param resourceGroup resourceGroup Object
@@ -48,16 +48,16 @@ dumpAzureContext <- function(azureActiveContext){
 # @param log log Object#'
 #'
 #' @export
-setAzureContext <- function(azureActiveContext,TID, CID, KEY,azToken,
+setAzureContext <- function(azureActiveContext,tenantID, clientID, authKey,azToken,
                             subscriptionID,resourceGroup,
                             storageKey,storageAccount,
                             container,blob,
                             vmName,
                             hdiAdmin,hdiPassword ,clustername,kind,sessionID)
 {
-  if (!missing(TID)) azureActiveContext$TID <- TID
-  if (!missing(CID)) azureActiveContext$CID <- CID
-  if (!missing(KEY)) azureActiveContext$KEY <- KEY
+  if (!missing(tenantID)) azureActiveContext$tenantID <- tenantID
+  if (!missing(clientID)) azureActiveContext$clientID <- clientID
+  if (!missing(authKey)) azureActiveContext$authKey <- authKey
   if (!missing(azToken)) azureActiveContext$AZtoken <- azToken
   if (!missing(subscriptionID)) azureActiveContext$subscriptionID <- subscriptionID
   if (!missing(resourceGroup)) azureActiveContext$resourceGroup <- resourceGroup

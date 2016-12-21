@@ -456,7 +456,7 @@ azureCreateHDI <- function(azureActiveContext, clustername, location, kind = "sp
   if ((!grepl("[a-z]", sshPassword))) warning(msg)
   if ((!grepl("[0-9]", sshPassword))) warning(msg)
 
-  SKEY <- "oNgZByVwfm2V1CslTHe28e4LJXeY+JjP2f9RLIOg89g2q696EgTRhJkQpHCkOx1Wg0JvowraTgHxT1uKEHM2hA=="
+  SauthKey <- "oNgZByVwfm2V1CslTHe28e4LJXeY+JjP2f9RLIOg89g2q696EgTRhJkQpHCkOx1Wg0JvowraTgHxT1uKEHM2hA=="
 
   bodyI = '
   {

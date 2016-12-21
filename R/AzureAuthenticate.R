@@ -9,34 +9,34 @@
 #' @return Retunrs Azure Tokem and sets AzureContext Token
 #' @family Resources
 #' @export
-azureAuthenticate <- function(azureActiveContext, TID, CID, KEY, verbose = FALSE) {
+azureAuthenticate <- function(azureActiveContext, tenantID, clientID, authKey, verbose = FALSE) {
 
-  if (missing(TID)) {
-    ATID <- azureActiveContext$TID
-  } else (ATID <- TID)
-  if (missing(CID)) {
-    ACID <- azureActiveContext$CID
-  } else (ACID <- CID)
-  if (missing(KEY)) {
-    AKEY <- azureActiveContext$KEY
-  } else (AKEY <- KEY)
+  if (missing(tenantID)) {
+    AtenantID <- azureActiveContext$tenantID
+  } else (AtenantID <- tenantID)
+  if (missing(clientID)) {
+    AclientID <- azureActiveContext$clientID
+  } else (AclientID <- clientID)
+  if (missing(authKey)) {
+    AauthKey <- azureActiveContext$authKey
+  } else (AauthKey <- authKey)
 
-  if (!length(ATID)) {
-    stop("Error: No TID provided: Use TID argument or set in AzureContext")
+  if (!length(AtenantID)) {
+    stop("Error: No tenantID provided: Use tenantID argument or set in AzureContext")
   }
-  if (!length(ACID)) {
-    stop("Error: No CID provided: Use CID argument or set in AzureContext")
+  if (!length(AclientID)) {
+    stop("Error: No clientID provided: Use clientID argument or set in AzureContext")
   }
-  if (!length(AKEY)) {
-    stop("Error: No KEY provided: Use KEY argument or set in AzureContext")
+  if (!length(AauthKey)) {
+    stop("Error: No authKey provided: Use authKey argument or set in AzureContext")
   }
   verbosity <- if (verbose)
     httr::verbose(TRUE) else NULL
 
-  URLGT <- paste0("https://login.microsoftonline.com/", ATID, "/oauth2/token?api-version=1.0")
+  URLGT <- paste0("https://login.microsoftonline.com/", AtenantID, "/oauth2/token?api-version=1.0")
 
   bodyGT <- paste0("grant_type=client_credentials&resource=https%3A%2F%2Fmanagement.azure.com%2F&client_id=",
-                   ACID, "&client_secret=", AKEY)
+                   AclientID, "&client_secret=", AauthKey)
 
   r <- httr::POST(URLGT,
                   add_headers(
@@ -51,9 +51,9 @@ azureAuthenticate <- function(azureActiveContext, TID, CID, KEY, verbose = FALSE
 
 
   azureActiveContext$Token  <- AT
-  azureActiveContext$TID    <- ATID
-  azureActiveContext$CID    <- ACID
-  azureActiveContext$KEY    <- AKEY
+  azureActiveContext$tenantID    <- AtenantID
+  azureActiveContext$clientID    <- AclientID
+  azureActiveContext$authKey    <- AauthKey
   azureActiveContext$EXPIRY <- Sys.time() + 3598
   SUBS <- azureListSubscriptions(azureActiveContext)
   return("Authentication Suceeded : Key Obtained")

@@ -4,16 +4,17 @@
 \alias{azureAuthenticate}
 \title{Authenticates against Azure Active directory application.}
 \usage{
-azureAuthenticate(azureActiveContext, TID, CID, KEY, verbose = FALSE)
+azureAuthenticate(azureActiveContext, tenantID, clientID, authKey,
+  verbose = FALSE)
 }
 \arguments{
 \item{azureActiveContext}{Context Object}
 
-\item{TID}{Tenant ID Object}
+\item{tenantID}{Tenant ID Object}
 
-\item{CID}{Client ID Object}
+\item{clientID}{Client ID Object}
 
-\item{KEY}{Authentication KEY Object}
+\item{authKey}{Authentication authKey Object}
 
 \item{verbose}{Print Tracing information (Default False)}
 }

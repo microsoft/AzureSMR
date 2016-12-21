@@ -10,7 +10,7 @@ context("Azure resources")
 
 asc <- createAzureContext()
 with(config,
-     setAzureContext(asc, TID = TID, CID = CID, KEY = KEY)
+     setAzureContext(asc, tenantID = tenantID, clientID = clientID, authKey = authKey)
 )
 azureAuthenticate(asc)
 

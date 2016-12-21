@@ -4,18 +4,18 @@
 \alias{setAzureContext}
 \title{Updates the value of an AzureContext variable.}
 \usage{
-setAzureContext(azureActiveContext, TID, CID, KEY, azToken, subscriptionID,
-  resourceGroup, storageKey, storageAccount, container, blob, vmName, hdiAdmin,
-  hdiPassword, clustername, kind, sessionID)
+setAzureContext(azureActiveContext, tenantID, clientID, authKey, azToken,
+  subscriptionID, resourceGroup, storageKey, storageAccount, container, blob,
+  vmName, hdiAdmin, hdiPassword, clustername, kind, sessionID)
 }
 \arguments{
 \item{azureActiveContext}{Context Object}
 
-\item{TID}{Tenant ID Object}
+\item{tenantID}{Tenant ID Object}
 
-\item{CID}{Client ID Object}
+\item{clientID}{Client ID Object}
 
-\item{KEY}{Authentication KEY Object}
+\item{authKey}{Authentication authKey Object}
 
 \item{azToken}{Token Object}
 
