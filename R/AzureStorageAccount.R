@@ -63,10 +63,9 @@ azureListSA <- function(azureActiveContext, resourceGroup, subscriptionID,
                           resourceGroup = RGI)
   }
   rownames(SA) <- NULL
-  SA$storageAccount <- gsub(".*?/storageAccounts/(.*?)", "\\1", SA$ID)
+  SA$storageAccount <- gsub(".*?/storageAccounts/(.*?)", "\\1", SA$id)
   return(SA)
 }
-
 
 
 #' Get the Storage Keys for Specified Storage Account.

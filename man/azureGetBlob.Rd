@@ -36,8 +36,8 @@ Get contents from a specifed Storage blob.
 }
 \seealso{
 Other blob store functions: \code{\link{azureBlobCD}},
-  \code{\link{azureBlobFind}},
+  \code{\link{azureBlobFind}}, \code{\link{azureBlobLS}},
   \code{\link{azureListStorageBlobs}},
-  \code{\link{azurePutBlob}}, \code{\link{azureblobLS}}
+  \code{\link{azurePutBlob}}
 }
 

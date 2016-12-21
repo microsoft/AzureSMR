@@ -125,12 +125,12 @@ azureListAllResources <- function(azureActiveContext, resourceGroup, subscriptio
            verbosity)
   rl <- content(r, "text", encoding = "UTF-8")
   df <- fromJSON(rl)
-
+  #print(df)
   dfn <- df$value[, c("name", "type", "location", "id")]
 
-  dfn$resourceGroup  <- extractResourceGroupname(dfn$ID)
+  dfn$resourceGroup  <- extractResourceGroupname(dfn$id)
   dfn$RG             <- dfn$resourceGroup
-  dfn$subscriptionID <- extractSubscriptionID(dfn$ID)
+  dfn$subscriptionID <- extractSubscriptionID(dfn$id)
 
 
   if (!missing(name))          dfn <- dfn[grep(name, dfn$name), ]
