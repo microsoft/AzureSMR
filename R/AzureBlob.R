@@ -7,7 +7,7 @@
 #'
 #' @family blob store functions
 #' @export
-azureListSAblobs <- function(azureActiveContext, storageAccount, storageKey,
+azureListStorageBlobs <- function(azureActiveContext, storageAccount, storageKey,
                              container, resourceGroup, subscriptionID,
                              azToken, verbose = FALSE) {
   azureCheckToken(azureActiveContext)
@@ -195,7 +195,7 @@ azureblobLS <- function(azureActiveContext, directory, recursive = FALSE,
 
   azureActiveContext$Dircontainer <- CNTR
 
-  files <- azureListSAblobs(azureActiveContext, container = CNTR)
+  files <- azureListStorageBlobs(azureActiveContext, container = CNTR)
 
   files$name <- paste0("/", files$name)
   files$name <- gsub("//", "/", files$name)
@@ -284,7 +284,7 @@ azureblobLS <- function(azureActiveContext, directory, recursive = FALSE,
 #' @family blob store functions
 #' @export
 
-azureGetblob <- function(azureActiveContext, blob, directory, type = "text",
+azureGetBlob <- function(azureActiveContext, blob, directory, type = "text",
                          storageAccount, storageKey, container, resourceGroup, subscriptionID,
                          azToken, verbose = FALSE) {
   azureCheckToken(azureActiveContext)
@@ -401,7 +401,7 @@ azureGetblob <- function(azureActiveContext, blob, directory, type = "text",
 #'
 #' @family blob store functions
 #' @export
-azurePutblob <- function(azureActiveContext, blob, contents = "", file = "",
+azurePutBlob <- function(azureActiveContext, blob, contents = "", file = "",
                          directory, storageAccount, storageKey,
                          container, resourceGroup, subscriptionID,
                          azToken, verbose = FALSE) {
@@ -516,11 +516,11 @@ azurePutblob <- function(azureActiveContext, blob, contents = "", file = "",
 #' @inheritParams setAzureContext
 #' @inheritParams azureAuthenticate
 #' @inheritParams azureSAGetKey
-#' @inheritParams azurePutblob
+#' @inheritParams azurePutBlob
 #'
 #' @family blob store functions
 #' @export
-azureblobFind <- function(azureActiveContext, file, storageAccount, storageKey,
+azureBlobFind <- function(azureActiveContext, file, storageAccount, storageKey,
                           container, resourceGroup, subscriptionID,
                           azToken, verbose = FALSE) {
   azureCheckToken(azureActiveContext)
@@ -562,12 +562,12 @@ azureblobFind <- function(azureActiveContext, file, storageAccount, storageKey,
   if (!missing(container)) {
     CL <- container
   } else {
-    CL <- azureListSAcontainers(azureActiveContext)$name
+    CL <- azureListStorageContainers(azureActiveContext)$name
   }
 
   F2 <- data.frame()
   for (CI in CL) {
-    files <- azureListSAblobs(azureActiveContext, container = CI)
+    files <- azureListStorageBlobs(azureActiveContext, container = CI)
     files$name <- paste0("/", files$name)
     F1 <- grep(file, files$name)
     files <- files[F1, 1:4]
@@ -585,11 +585,11 @@ azureblobFind <- function(azureActiveContext, file, storageAccount, storageKey,
 #' @inheritParams azureAuthenticate
 #' @inheritParams azureSAGetKey
 #' @inheritParams azureblobLS
-#' @inheritParams azurePutblob
+#' @inheritParams azurePutBlob
 #'
 #' @family blob store functions
 #' @export
-azureblobCD <- function(azureActiveContext, directory, container, file,
+azureBlobCD <- function(azureActiveContext, directory, container, file,
                         storageAccount, storageKey, resourceGroup, subscriptionID,
                         azToken,verbose = FALSE) {
   azureCheckToken(azureActiveContext)
