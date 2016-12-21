@@ -4,18 +4,18 @@
 \alias{setAzureContext}
 \title{Updates the value of an AzureContext variable.}
 \usage{
-setAzureContext(azureActiveContext, TID, CID, KEY, azToken, subscriptionID,
-  resourceGroup, storageKey, storageAccount, container, blob, vmName, hdiAdmin,
-  hdiPassword, clustername, kind, sessionID)
+setAzureContext(azureActiveContext, tenantID, clientID, authKey, azToken,
+  subscriptionID, resourceGroup, storageKey, storageAccount, container, blob,
+  vmName, hdiAdmin, hdiPassword, clustername, kind, sessionID)
 }
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 
-\item{TID}{The Tenant ID which was provided when the Active Directory application / service principal is created}
+\item{tenantID}{The Tenant ID which was provided when the Active Directory application / service principal is created}
 
-\item{CID}{The Client ID which was provided when the Active Directory application / service principal is created}
+\item{clientID}{The Client ID which was provided when the Active Directory application / service principal is created}
 
-\item{KEY}{The Authentication Key which was provided when the Active Directory application / service principal is created}
+\item{authKey}{The Authentication Key which was provided when the Active Directory application / service principal is created}
 
 \item{azToken}{Azure Token Object - Obtained by AzureAuthenticate}
 

@@ -4,14 +4,14 @@
 \alias{createAzureContext}
 \title{Create an AzureContext}
 \usage{
-createAzureContext(TID, CID, KEY)
+createAzureContext(tenantID, clientID, authKey)
 }
 \arguments{
-\item{TID}{The Tenant ID which was provided when the Active Directory application / service principal is created}
+\item{tenantID}{The Tenant ID which was provided when the Active Directory application / service principal is created}
 
-\item{CID}{The Client ID which was provided when the Active Directory application / service principal is created}
+\item{clientID}{The Client ID which was provided when the Active Directory application / service principal is created}
 
-\item{KEY}{The Authentication Key which was provided when the Active Directory application / service principal is created}
+\item{authKey}{The Authentication Key which was provided when the Active Directory application / service principal is created}
 }
 \description{
 Create a container(AzureContext) for holding variables used by the AzureSMR package.

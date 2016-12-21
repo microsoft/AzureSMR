@@ -4,16 +4,17 @@
 \alias{azureAuthenticate}
 \title{Authenticates against Azure Active directory application.}
 \usage{
-azureAuthenticate(azureActiveContext, TID, CID, KEY, verbose = FALSE)
+azureAuthenticate(azureActiveContext, tenantID, clientID, authKey,
+  verbose = FALSE)
 }
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 
-\item{TID}{The Tenant ID which was provided when the Active Directory application / service principal is created}
+\item{tenantID}{The Tenant ID which was provided when the Active Directory application / service principal is created}
 
-\item{CID}{The Client ID which was provided when the Active Directory application / service principal is created}
+\item{clientID}{The Client ID which was provided when the Active Directory application / service principal is created}
 
-\item{KEY}{The Authentication Key which was provided when the Active Directory application / service principal is created}
+\item{authKey}{The Authentication Key which was provided when the Active Directory application / service principal is created}
 
 \item{verbose}{Print Tracing information (Default False)}
 }

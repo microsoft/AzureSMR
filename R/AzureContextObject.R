@@ -9,14 +9,14 @@
 #' @note See \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/} to learn how to set up an Active directory application
 #' @references \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/}
 #' @export
-createAzureContext <- function(TID, CID, KEY){
+createAzureContext <- function(tenantID, clientID, authKey){
   AzEnv <- new.env(parent = globalenv())
-  if (!missing(TID)) AzEnv$TID <- TID else  AzEnv$TID <- "?"
-  if (!missing(CID)) AzEnv$CID <- CID else  AzEnv$TID <- "?"
-  if (!missing(KEY)) AzEnv$KEY <- KEY else  AzEnv$TID <- "?"
+  if (!missing(tenantID)) AzEnv$tenantID <- tenantID else  AzEnv$tenantID <- "?"
+  if (!missing(clientID)) AzEnv$clientID <- clientID else  AzEnv$tenantID <- "?"
+  if (!missing(authKey)) AzEnv$authKey <- authKey else  AzEnv$tenantID <- "?"
   
-  if (!missing(TID) && !missing(CID) && !missing(KEY) )
-      azureAuthenticate(AzEnv,TID, CID, KEY)
+  if (!missing(tenantID) && !missing(clientID) && !missing(authKey) )
+      azureAuthenticate(AzEnv,tenantID, clientID, authKey)
   return(AzEnv)
 }
 
@@ -34,9 +34,9 @@ dumpAzureContext <- function(azureActiveContext){
 #' Updates the value of an AzureContext variable.
 #'
 #' @param azureActiveContext A container used for caching variables used by AzureSMR
-#' @param TID The Tenant ID which was provided when the Active Directory application / service principal is created
-#' @param CID The Client ID which was provided when the Active Directory application / service principal is created
-#' @param KEY The Authentication Key which was provided when the Active Directory application / service principal is created
+#' @param tenantID The Tenant ID which was provided when the Active Directory application / service principal is created
+#' @param clientID The Client ID which was provided when the Active Directory application / service principal is created
+#' @param authKey The Authentication Key which was provided when the Active Directory application / service principal is created
 #' @param subscriptionID Set the subscriptionID Obtained automatically by AzureAuthenticate when only one is available
 #' @param azToken Azure Token Object - Obtained by AzureAuthenticate
 #' @param resourceGroup Set the name of the Resource Group
