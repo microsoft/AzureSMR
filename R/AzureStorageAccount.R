@@ -142,7 +142,7 @@ azureSAGetKey <- function(azureActiveContext, storageAccount, azToken,
 
 #' @family Storage account functions
 #' @export
-azureCreatestorageAccount <- function(azureActiveContext, storageAccount,
+azureCreateStorageAccount <- function(azureActiveContext, storageAccount,
                                       azToken, resourceGroup, subscriptionID, verbose = FALSE) {
   azureCheckToken(azureActiveContext)
 

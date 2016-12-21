@@ -64,7 +64,7 @@ azureListHDI <- function(azureActiveContext, resourceGroup, clustername = "*",
     dfn[1:clust, 4] <- df$value$type
     dfn[1:clust, 5] <- df$value$properties$tier
     dfn[1:clust, 6] <- df$value$properties$clusterDefinition$kind
-    dfn[1:clust, 7] <- df$value$properties$ostype
+    dfn[1:clust, 7] <- df$value$properties$osType
     dfn[1:clust, 8] <- df$value$properties$provisioningState
     dfn[1:clust, 9] <- df$value$properties$clusterState
     dfn[1:clust, 10] <- df$value$properties$createdDate
@@ -97,7 +97,7 @@ azureListHDI <- function(azureActiveContext, resourceGroup, clustername = "*",
     dfn[1, 4] <- df$type
     dfn[1, 5] <- df$properties$tier
     dfn[1, 6] <- df$properties$clusterDefinition$kind
-    dfn[1, 7] <- df$properties$ostype
+    dfn[1, 7] <- df$properties$osType
     dfn[1, 8] <- df$properties$provisioningState
     dfn[1, 9] <- df$properties$clusterState
     dfn[1, 10] <- df$properties$createdDate
@@ -179,7 +179,7 @@ azureHDIConf <- function(azureActiveContext, clustername, resourceGroup,
   dfn[1, 4] <- df$type
   dfn[1, 5] <- df$properties$tier
   dfn[1, 6] <- df$properties$clusterDefinition$kind
-  dfn[1, 7] <- df$properties$ostype
+  dfn[1, 7] <- df$properties$osType
   dfn[1, 8] <- df$properties$provisioningState
   dfn[1, 9] <- df$properties$clusterState
   dfn[1, 10] <- df$properties$createdDate
@@ -467,7 +467,7 @@ azureCreateHDI <- function(azureActiveContext, clustername, location, kind = "sp
   "tags": { "tag1": "value1", "tag2": "value2" },
   "properties": {
   "clusterversion": "VVVV",
-  "ostype": "Linux",
+  "osType": "Linux",
   "tier": "standard",
   "clusterDefinition": {
   "kind": "DDDDDDDDD",

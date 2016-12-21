@@ -152,7 +152,7 @@ azureListAllResources <- function(azureActiveContext, resourceGroup, subscriptio
 #' @return Returns Dataframe of Resources
 #' @family Resource group functions
 #' @export
-azureCreateresourceGroup <- function(azureActiveContext, resourceGroup,
+azureCreateResourceGroup <- function(azureActiveContext, resourceGroup,
                                      location, subscriptionID, azToken, verbose = FALSE) {
   azureCheckToken(azureActiveContext)
   if (missing(azToken)) {
@@ -213,7 +213,7 @@ azureCreateresourceGroup <- function(azureActiveContext, resourceGroup,
 #' @return Returns Dataframe of Resources
 #' @family Resource group functions
 #' @export
-azureDeleteresourceGroup <- function(azureActiveContext, resourceGroup,
+azureDeleteResourceGroup <- function(azureActiveContext, resourceGroup,
                                      subscriptionID, azToken, type, verbose = FALSE) {
   azureCheckToken(azureActiveContext)
 
