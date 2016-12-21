@@ -10,17 +10,17 @@ azureDeleteStorageContainer(azureActiveContext, container, storageAccount,
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 
-\item{container}{Set the storage container}
+\item{container}{Storage container name. See \code{\link{azureListStorageContainers}}}
 
-\item{storageAccount}{Set the name of the azure storage account}
+\item{storageAccount}{Name of the azure storage account}
 
-\item{storageKey}{Set the Storage Key associated with storage account}
+\item{storageKey}{Storage key associated with storage account}
 
-\item{resourceGroup}{Set the name of the Resource Group}
+\item{resourceGroup}{Name of the resource group}
 
-\item{azToken}{Azure Token Object - Obtained by AzureAuthenticate}
+\item{azToken}{Azure authentication token, obtained by \code{\link{azureAuthenticate}}}
 
-\item{subscriptionID}{Set the subscriptionID Obtained automatically by AzureAuthenticate when only one is available}
+\item{subscriptionID}{Set the subscriptionID.  This is obtained automatically by \code{\link{azureAuthenticate}} when only a single subscriptionID is available via Active Directory}
 
 \item{verbose}{Print Tracing information (Default False)}
 }

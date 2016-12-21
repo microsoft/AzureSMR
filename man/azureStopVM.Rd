@@ -10,15 +10,15 @@ azureStopVM(azureActiveContext, resourceGroup, vmName, mode = "Sync",
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 
-\item{resourceGroup}{Set the name of the Resource Group}
+\item{resourceGroup}{Name of the resource group}
 
-\item{vmName}{Set the name of the virtual Machine}
+\item{vmName}{Name of the virtual Machine}
 
 \item{mode}{Wait for operation to complete 'Sync' (Default)}
 
-\item{subscriptionID}{Set the subscriptionID Obtained automatically by AzureAuthenticate when only one is available}
+\item{subscriptionID}{Set the subscriptionID.  This is obtained automatically by \code{\link{azureAuthenticate}} when only a single subscriptionID is available via Active Directory}
 
-\item{azToken}{Azure Token Object - Obtained by AzureAuthenticate}
+\item{azToken}{Azure authentication token, obtained by \code{\link{azureAuthenticate}}}
 
 \item{verbose}{Print Tracing information (Default False)}
 }

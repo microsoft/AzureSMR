@@ -11,14 +11,11 @@ azureSparkShowURL(azureActiveContext, URL)
 
 \item{URL}{URL}
 }
-\value{
-Show log in Browser
-}
 \description{
 Show Spark log Output.
 }
 \seealso{
-Other Spark: \code{\link{azureSparkCMD}},
+Other Spark functions: \code{\link{azureSparkCMD}},
   \code{\link{azureSparkJob}},
   \code{\link{azureSparkListJobs}},
   \code{\link{azureSparkListSessions}},

@@ -12,7 +12,4 @@ dumpAzureContext(azureActiveContext)
 \description{
 Dumps out the contents of the AzureContext.
 }
-\seealso{
-Other Context Object: \code{\link{createAzureContext}}
-}
 

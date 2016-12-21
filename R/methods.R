@@ -3,6 +3,7 @@
 #' Functions for creating and displaying information about azureActiveContext objects.
 #'
 #' @param x Object to create, test or print
+#' @param object Object to create, test or print
 #' @param ... Ignored
 #'
 #' @seealso \code{\link{createAzureContext}}
@@ -28,8 +29,9 @@ print.azureActiveContext <- function(x, ...){
 }
 
 #' @export
+#' @importFrom utils str
 #' @rdname Internal
-str.azureActiveContext <- function(x, ...){
+str.azureActiveContext <- function(object, ...){
   cat(("AzureSMR azureActiveContext with elements:\n"))
-  ls.str(x, all.names = TRUE)
+  ls.str(object, all.names = TRUE)
 }

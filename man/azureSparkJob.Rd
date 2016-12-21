@@ -12,11 +12,11 @@ azureSparkJob(azureActiveContext, FILE, clustername, hdiAdmin, hdiPassword,
 
 \item{FILE}{file}
 
-\item{clustername}{Set the clustername}
+\item{clustername}{Cluster name, used for HDI and Spark clusters. See \code{\link{azureCreateHDI}}}
 
-\item{hdiAdmin}{Set the HDInsight admin username}
+\item{hdiAdmin}{HDInsight admin username}
 
-\item{hdiPassword}{Set the HDInsight admin Password}
+\item{hdiPassword}{HDInsight admin password}
 
 \item{log}{log}
 
@@ -26,7 +26,7 @@ azureSparkJob(azureActiveContext, FILE, clustername, hdiAdmin, hdiPassword,
 Submit Spark Job (Batch mode).
 }
 \seealso{
-Other Spark: \code{\link{azureSparkCMD}},
+Other Spark functions: \code{\link{azureSparkCMD}},
   \code{\link{azureSparkListJobs}},
   \code{\link{azureSparkListSessions}},
   \code{\link{azureSparkNewSession}},

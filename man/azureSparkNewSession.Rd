@@ -10,13 +10,13 @@ azureSparkNewSession(azureActiveContext, clustername, hdiAdmin, hdiPassword,
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 
-\item{clustername}{clustername}
+\item{clustername}{Cluster name, used for HDI and Spark clusters. See \code{\link{azureCreateHDI}}}
 
-\item{hdiAdmin}{hdiAdmin - HDinsight Administrator name}
+\item{hdiAdmin}{HDInsight admin username}
 
-\item{hdiPassword}{HDinsight Administrator name}
+\item{hdiPassword}{HDInsight admin password}
 
-\item{kind}{Set the HDinsight kind "hadoop","spark" or "pyspark"}
+\item{kind}{HDinsight kind: "hadoop","spark" or "pyspark"}
 
 \item{verbose}{Print Tracing information (Default False)}
 }
@@ -24,7 +24,7 @@ azureSparkNewSession(azureActiveContext, clustername, hdiAdmin, hdiPassword,
 Create new Spark Session.
 }
 \seealso{
-Other Spark: \code{\link{azureSparkCMD}},
+Other Spark functions: \code{\link{azureSparkCMD}},
   \code{\link{azureSparkJob}},
   \code{\link{azureSparkListJobs}},
   \code{\link{azureSparkListSessions}},

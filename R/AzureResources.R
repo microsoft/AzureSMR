@@ -73,7 +73,7 @@ azureListRG <- function(azureActiveContext, subscriptionID, azToken, verbose = F
   df <- fromJSON(rl)
   dfn <- df$value[, c("name", "location", "id")]
   names(dfn) <- c("name", "location", "ID")
-  dfn$resourceGroup <- extractresourceGroupname(dfn$ID)
+  dfn$resourceGroup <- extractResourceGroupname(dfn$ID)
 
   return(dfn)
 }
@@ -87,7 +87,7 @@ azureListRG <- function(azureActiveContext, subscriptionID, azToken, verbose = F
 #' @param azureActiveContext Azure Context Object
 #' @param resourceGroup resourceGroup Object (or use azureActiveContext)
 #' @param subscriptionID subscriptionID Object (or use azureActiveContext)
-#' @param name filter by resource name 
+#' @param name filter by resource name
 #' @param type filter by resource type
 #' @param location Azure region, e.g. 'westeurope' or 'southcentralus'
 #'
@@ -127,11 +127,10 @@ azureListAllResources <- function(azureActiveContext, resourceGroup, subscriptio
   df <- fromJSON(rl)
 
   dfn <- df$value[, c("name", "type", "location", "id")]
-  colnames(dfn) <- c("name", "type", "location", "ID")
 
-  dfn$resourceGroup  <- extractresourceGroupname(dfn$ID)
+  dfn$resourceGroup  <- extractResourceGroupname(dfn$ID)
   dfn$RG             <- dfn$resourceGroup
-  dfn$subscriptionID <- extractsubscriptionID(dfn$ID)
+  dfn$subscriptionID <- extractSubscriptionID(dfn$ID)
 
 
   if (!missing(name))          dfn <- dfn[grep(name, dfn$name), ]

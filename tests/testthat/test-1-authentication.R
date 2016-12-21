@@ -14,7 +14,7 @@ test_that("Can authenticate to Azure Service Manager API", {
   skip_if_missing_config(settingsfile)
 
   asc <- createAzureContext()
-  expect_is(asc, "environment")
+  expect_is(asc, "azureActiveContext")
 
   with(config,
        setAzureContext(asc, tenantID = tenantID, clientID = clientID, authKey = authKey)
