@@ -26,11 +26,4 @@
 #' @importFrom httr GET PUT DELETE POST
 #' @importFrom XML htmlParse xpathApply xpathSApply xmlValue
 #'
-# @import httr
-# @import jsonlite
-# @import XML
-# @import plyr
-# @import base64enc
-# @import curl
-# @import digest
 NULL

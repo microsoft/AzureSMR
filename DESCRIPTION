@@ -23,7 +23,6 @@ Imports:
     XML,
     plyr, 
     base64enc, 
-    curl, 
     digest
 Depends:
     R(>= 3.0.0)
