@@ -26,6 +26,9 @@ is.azureActiveContext <- function(x){
 print.azureActiveContext <- function(x, ...){
   cat("AzureSMR azureActiveContext\n")
   cat("Tenant ID :", x$tenantID, "\n")
+  cat("Subscription ID :", x$subscriptionID, "\n")
+  cat("Resource group  :", x$resourceGroup, "\n")
+  cat("Storage account :", x$storageAccount, "\n")
 }
 
 #' @export
