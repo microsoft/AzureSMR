@@ -186,8 +186,12 @@ azureCreateStorageContainer <- function(azureActiveContext, container, storageAc
            verbosity)
 
   if (status_code(r) == 201) {
-    return("container created OK")
+    return("OK. Container created.")
   }
+  if (status_code(r) == 409) {
+    return("OK. The specified container already exists.")
+  }
+
   stopWithAzureError(r)
   return("OK")
 }
