@@ -672,4 +672,106 @@ azureBlobCD <- function(azureActiveContext, directory, container, file,
   return(paste0("Current directory - ", SAI, " >  ", CNTR, " : ", directory))
 }
 
+#' Delete a specifed Storage blob.
+#'
+#' @inheritParams setAzureContext
+#' @inheritParams azureAuthenticate
+#' @inheritParams azureSAGetKey
+#' @inheritParams azureBlobLS
+#'
+#' @family blob store functions
+#' @export
 
+azureDeleteBlob <- function(azureActiveContext, blob, directory,
+                            storageAccount, storageKey, container, resourceGroup, subscriptionID,
+                            azToken, verbose = FALSE) {
+  azureCheckToken(azureActiveContext)
+  if (missing(subscriptionID)) {
+    SUBIDI <- azureActiveContext$subscriptionID
+  } else (SUBIDI <- subscriptionID)
+  if (missing(azToken)) {
+    ATI <- azureActiveContext$Token
+  } else (ATI <- azToken)
+  if (missing(resourceGroup)) {
+    RGI <- azureActiveContext$resourceGroup
+  } else (RGI <- resourceGroup)
+  if (missing(storageAccount)) {
+    SAI <- azureActiveContext$storageAccount
+  } else (SAI <- storageAccount)
+  if (missing(storageKey)) {
+    STK <- azureActiveContext$storageKey
+  } else (STK <- storageKey)
+  if (missing(container)) {
+    CNTR <- azureActiveContext$container
+  } else (CNTR <- container)
+  if (missing(blob)) {
+    BLOBI <- azureActiveContext$blob
+  } else (BLOBI <- blob)
+  verbosity <- if (verbose)
+    httr::verbose(TRUE) else NULL
+  
+  if (length(RGI) < 1) {
+    stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
+  }
+  if (length(SAI) < 1) {
+    stop("Error: No storageAccount provided: Use storageAccount argument or set in AzureContext")
+  }
+  if (length(CNTR) < 1) {
+    stop("Error: No container provided: Use container argument or set in AzureContext")
+  }
+  if (length(BLOBI) < 1) {
+    stop("Error: No blob provided: Use blob argument or set in AzureContext")
+  }
+  
+  STK <- refreshStorageKey(azureActiveContext, SAI, RGI)
+  
+  if (length(STK) < 1) {
+    stop("Error: No storageKey provided: Use storageKey argument or set in AzureContext")
+  }
+  
+  DIR <- azureActiveContext$directory
+  DC <- azureActiveContext$Dcontainer
+  
+  if (missing(directory)) {
+    if (length(DIR) < 1)
+      DIR <- ""  # No previous Dir value
+    if (length(DC) < 1) {
+      DIR <- ""  # No previous Dir value
+      DC <- ""
+    } else if (CNTR != DC)
+      DIR <- ""  # Change of container
+  } else DIR <- directory
+  
+  if (nchar(DIR) > 0)
+    DIR <- paste0(DIR, "/")
+  
+  BLOBI <- paste0(DIR, BLOBI)
+  BLOBI <- gsub("^/", "", BLOBI)
+  BLOBI <- gsub("^\\./", "", BLOBI)
+  cat(BLOBI)
+  
+  URL <- paste("http://", SAI, ".blob.core.windows.net/", CNTR, "/",
+               BLOBI, sep = "")
+  
+  
+  D1 <- Sys.getlocale("LC_TIME")
+  Sys.setlocale("LC_TIME", "C")
+  # `x-ms-date` <- format(Sys.time(),'%a, %d %b %Y %H:%M:%S %Z',
+  # tz='GMT')
+  Sys.setlocale("LC_TIME", D1)
+  D1 <- format(Sys.time(), "%a, %d %b %Y %H:%M:%S %Z", tz = "GMT")
+  
+  SIG <- getSig(azureActiveContext, URL, "DELETE", STK, SAI, container = CNTR,
+                CMD = paste0("/", BLOBI), dateS = D1)
+  
+  AT <- paste0("SharedKey ", SAI, ":", SIG)
+  
+  r <- DELETE(URL, add_headers(.headers = c(Authorization = AT, `Content-Length` = "0",
+                                            `x-ms-version` = "2015-04-05", `x-ms-date` = D1)), verbosity)
+  
+  if (status_code(r) == 202) {
+    return("Blob delete request accepted")
+  }
+  else
+    stopWithAzureError(r)
+}

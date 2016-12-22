@@ -33,7 +33,8 @@ Azure blob change current directory.
 }
 \seealso{
 Other blob store functions: \code{\link{azureBlobFind}},
-  \code{\link{azureBlobLS}}, \code{\link{azureGetBlob}},
+  \code{\link{azureBlobLS}}, \code{\link{azureDeleteBlob}},
+  \code{\link{azureGetBlob}},
   \code{\link{azureListStorageBlobs}},
   \code{\link{azurePutBlob}}
 }
