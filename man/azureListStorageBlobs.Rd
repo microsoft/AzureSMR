@@ -2,7 +2,7 @@
 % Please edit documentation in R/AzureBlob.R
 \name{azureListStorageBlobs}
 \alias{azureListStorageBlobs}
-\title{List Storage containers for Specified Storage Account.}
+\title{List storage blobs for specified storage account.}
 \usage{
 azureListStorageBlobs(azureActiveContext, storageAccount, storageKey, container,
   resourceGroup, subscriptionID, azToken, verbose = FALSE)
@@ -25,11 +25,11 @@ azureListStorageBlobs(azureActiveContext, storageAccount, storageKey, container,
 \item{verbose}{Print Tracing information (Default False)}
 }
 \description{
-List Storage containers for Specified Storage Account.
+List storage blobs for specified storage account.
 }
 \seealso{
 Other blob store functions: \code{\link{azureBlobCD}},
-  \code{\link{azureBlobFind}}, \code{\link{azureBlobLS}},
-  \code{\link{azureGetBlob}}, \code{\link{azurePutBlob}}
+  \code{\link{azureBlobFind}}, \code{\link{azureGetBlob}},
+  \code{\link{azurePutBlob}}, \code{\link{azureblobLS}}
 }
 
