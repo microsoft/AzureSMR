@@ -22,15 +22,22 @@ getSig <- function(azureActiveContext, url, verb, key, storageAccount,
 
 
 stopWithAzureError <- function(r){
+
+  msg <- paste0(as.character(sys.call(1))[1], "()") # Name of calling fucntion
+  addToMsg <- function(x){
+    if(is.null(x)) x else paste(msg, x, sep = "\n")
+  }
   if(inherits(content(r), "xml_document")){
     rr <- XML::xmlToList(XML::xmlParse(content(r)))
-    if(!is.null(rr$Code)) message(rr$Code)
-    if(!is.null(rr$Message)) message(rr$Message)
+    msg <- addToMsg(rr$Code)
+    msg <- addToMsg(rr$Message)
   } else {
-    if(!is.null(r$error$code)) message(content(r)$error$code)
-    if(!is.null(r$error$message)) message(content(r)$error$message)
+    rr <- content(r)
+    msg <- addToMsg(rr$error$code)
+    msg <- addToMsg(rr$error$message)
   }
-  stop("Error return code: ", status_code(r), call. = FALSE)
+  msg <- addToMsg(paste0("Return code: ", status_code(r)))
+  stop(msg, call. = FALSE)
 }
 
 extractResourceGroupname <- function(x) gsub(".*?/resourceGroups/(.*?)(/.*)*$",  "\\1", x)
