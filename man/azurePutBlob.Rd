@@ -17,7 +17,7 @@ azurePutBlob(azureActiveContext, blob, contents = "", file = "", directory,
 
 \item{file}{- Local filename to Store in Azure blob}
 
-\item{directory}{Set directory to list}
+\item{directory}{Blob store directory to list for content}
 
 \item{storageAccount}{Name of the azure storage account}
 
@@ -38,8 +38,8 @@ Write contents to a specifed Storage blob.
 }
 \seealso{
 Other blob store functions: \code{\link{azureBlobCD}},
-  \code{\link{azureBlobFind}}, \code{\link{azureGetBlob}},
-  \code{\link{azureListStorageBlobs}},
-  \code{\link{azureblobLS}}
+  \code{\link{azureBlobFind}}, \code{\link{azureBlobLS}},
+  \code{\link{azureGetBlob}},
+  \code{\link{azureListStorageBlobs}}
 }
 

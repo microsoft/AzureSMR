@@ -29,7 +29,7 @@ List storage blobs for specified storage account.
 }
 \seealso{
 Other blob store functions: \code{\link{azureBlobCD}},
-  \code{\link{azureBlobFind}}, \code{\link{azureGetBlob}},
-  \code{\link{azurePutBlob}}, \code{\link{azureblobLS}}
+  \code{\link{azureBlobFind}}, \code{\link{azureBlobLS}},
+  \code{\link{azureGetBlob}}, \code{\link{azurePutBlob}}
 }
 

@@ -31,8 +31,8 @@ Find file in a Storage account directory.
 }
 \seealso{
 Other blob store functions: \code{\link{azureBlobCD}},
-  \code{\link{azureGetBlob}},
+  \code{\link{azureBlobLS}}, \code{\link{azureGetBlob}},
   \code{\link{azureListStorageBlobs}},
-  \code{\link{azurePutBlob}}, \code{\link{azureblobLS}}
+  \code{\link{azurePutBlob}}
 }
 

@@ -115,12 +115,12 @@ azureListStorageBlobs <- function(azureActiveContext, storageAccount, storageKey
 #' @inheritParams azureAuthenticate
 #' @inheritParams azureSAGetKey
 
-#' @param directory Set directory to list
-#' @param recursive List directories recursively (Default FALSE)
+#' @param directory Blob store directory to list for content
+#' @param recursive If TRUE, list blob store directories recursively
 #'
 #' @family blob store functions
 #' @export
-azureblobLS <- function(azureActiveContext, directory, recursive = FALSE,
+azureBlobLS <- function(azureActiveContext, directory, recursive = FALSE,
                         storageAccount, storageKey, container, resourceGroup, subscriptionID,
                         azToken, verbose = FALSE) {
   azureCheckToken(azureActiveContext)
@@ -277,9 +277,9 @@ azureblobLS <- function(azureActiveContext, directory, recursive = FALSE,
 #' @inheritParams setAzureContext
 #' @inheritParams azureAuthenticate
 #' @inheritParams azureSAGetKey
-#' @inheritParams azureblobLS
+#' @inheritParams azureBlobLS
 
-#' @param type "Text" or "Raw"
+#' @param type String, either "text" or "raw"
 #'
 #' @family blob store functions
 #' @export
@@ -394,7 +394,7 @@ azureGetBlob <- function(azureActiveContext, blob, directory, type = "text",
 #' @inheritParams setAzureContext
 #' @inheritParams azureAuthenticate
 #' @inheritParams azureSAGetKey
-#' @inheritParams azureblobLS
+#' @inheritParams azureBlobLS
 #'
 #' @param contents - Object to Store or Value
 #' @param file - Local filename to Store in Azure blob
@@ -584,7 +584,7 @@ azureBlobFind <- function(azureActiveContext, file, storageAccount, storageKey,
 #' @inheritParams setAzureContext
 #' @inheritParams azureAuthenticate
 #' @inheritParams azureSAGetKey
-#' @inheritParams azureblobLS
+#' @inheritParams azureBlobLS
 #' @inheritParams azurePutBlob
 #'
 #' @family blob store functions
