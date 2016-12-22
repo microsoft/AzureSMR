@@ -34,7 +34,9 @@ List blob files in a Storage account directory.
 }
 \seealso{
 Other blob store functions: \code{\link{azureBlobCD}},
-  \code{\link{azureBlobFind}}, \code{\link{azureGetBlob}},
+  \code{\link{azureBlobFind}},
+  \code{\link{azureDeleteBlob}},
+  \code{\link{azureGetBlob}},
   \code{\link{azureListStorageBlobs}},
   \code{\link{azurePutBlob}}
 }

@@ -81,11 +81,72 @@ test_that("Can create storage account", {
 test_that("Can connect to container", {
   skip_if_missing_config(settingsfile)
   sa <- azureListSA(asc)[1, ]
-  res <- azureListStorageContainers(asc, storageAccount = sa$storageAccount[1], resourceGroup = sa$resourceGroup[1])
+  res <- azureListStorageContainers(asc, storageAccount = sa$storageAccount[1],
+                                    resourceGroup = sa$resourceGroup[1])
   expect_is(res, "data.frame")
   expect_equal(ncol(res), 5)
 })
 
+test_that("Can create container", {
+  skip_if_missing_config(settingsfile)
+  res <- azureCreateStorageContainer(asc, container = "tempcontainer")
+  expect_true(grepl("OK", res))
+
+  Sys.sleep(1)
+
+  res <- azureListStorageContainers(asc)
+  expect_is(res, "data.frame")
+  expect_equal(ncol(res), 5)
+
+  expect_true("tempcontainer" %in% azureListStorageContainers(asc))
+
+})
+
+test_that("Can put, list, get and delete a blob", {
+  skip_if_missing_config(settingsfile)
+  res <- azureListStorageBlobs(asc, container = "tempcontainer")
+  expect_is(res, "data.frame")
+  expect_equal(ncol(res), 5)
+  expect_equal(nrow(res), 0)
+
+  res <- azurePutBlob(asc, blob = "iris", contents = "iris", container = "tempcontainer")
+  res <- azurePutBlob(asc, blob = "foo", contents = "foo", container = "tempcontainer")
+
+  res <- azureListStorageBlobs(asc, container = "tempcontainer")
+  expect_is(res, "data.frame")
+  expect_equal(ncol(res), 5)
+  expect_equal(nrow(res), 2)
+  expect_equal(res$name, c("foo", "iris"))
+
+  res <- azureDeleteBlob(asc, blob = "foo", container = "tempcontainer")
+  res <- azureDeleteBlob(asc, blob = "iris", container = "tempcontainer")
+
+  res <- azureListStorageBlobs(asc, container = "tempcontainer")
+  expect_is(res, "data.frame")
+  expect_equal(ncol(res), 5)
+  expect_equal(nrow(res), 0)
+
+})
+
+
+test_that("Can delete a container", {
+  skip_if_missing_config(settingsfile)
+
+  res <- azureListStorageContainers(asc)
+  expect_is(res, "data.frame")
+  expect_equal(ncol(res), 5)
+  expect_equal(nrow(res), 1)
+
+  res <- azureDeleteStorageContainer(asc, container = "tempcontainer")
+  expect_equal(res,  "container delete request accepted")
+
+  res <- azureListStorageContainers(asc)
+  expect_is(res, "data.frame")
+  expect_equal(ncol(res), 5)
+  expect_equal(nrow(res), 0)
+
+
+})
 
 
 test_that("Can delete storage account", {
