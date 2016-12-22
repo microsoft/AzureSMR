@@ -53,19 +53,18 @@ azureListStorageBlobs <- function(azureActiveContext, storageAccount, storageKey
                sep = "")
   D1 <- Sys.getlocale("LC_TIME")
   Sys.setlocale("LC_TIME", "us")
-  # `x-ms-date` <- format(Sys.time(),'%a, %d %b %Y %H:%M:%S %Z',
-  # tz='GMT')
   Sys.setlocale("LC_TIME", D1)
   D1 <- format(Sys.time(), "%a, %d %b %Y %H:%M:%S %Z", tz = "GMT")
 
-  SIG <- getSig(azureActiveContext, URL, "GET", STK, SAI, container = CNTR,
+  SIG <- getSig(azureActiveContext, url = URL, verb = "GET", key = STK,
+                storageAccount = SAI, container = CNTR,
                 CMD = "\ncomp:list\nrestype:container", dateS = D1)
 
   AT <- paste0("SharedKey ", SAI, ":", SIG)
-  # getSig <- function(azureActiveContext,url, verb, key,
-  # storageAccount,headers=NULL,container=NULL,CMD=NULL,size=NULL) {
   r <- GET(URL, add_headers(.headers = c(Authorization = AT, `Content-Length` = "0",
-                                         `x-ms-version` = "2015-04-05", `x-ms-date` = D1)), verbosity)
+                                         `x-ms-version` = "2015-04-05",
+                                         `x-ms-date` = D1)),
+           verbosity)
 
 
   if (status_code(r) == 404) {
@@ -84,28 +83,39 @@ azureListStorageBlobs <- function(azureActiveContext, storageAccount, storageKey
 
   if (length(namesx) == 0) {
     warning("container is empty")
-    return(NULL)
+    return(
+      data.frame(
+        name            = character(0),
+        lastModified    = character(0),
+        length          = character(0),
+        type            = character(0),
+        leaseState      = character(0),
+        stringsAsFactors = FALSE,
+        check.names = FALSE
+      )
+    )
   }
 
-  lmodx <- xpathApply(y, "//blobs//blob//properties/last-modified", xmlValue)
-  lenx <- xpathApply(y, "//blobs//blob//properties/content-length", xmlValue)
-  bltx <- xpathApply(y, "//blobs//blob//properties/blobtype", xmlValue)
-  cpx <- xpathApply(y, "//blobs//blob//properties/leasestate", xmlValue)
 
-  dfn <- as.data.frame(matrix(ncol = 5, nrow = length(namesx)))
-
-  for (i in 1:length(namesx)) {
-    dfn[i, 1] <- namesx[i]
-    dfn[i, 2] <- lmodx[i]
-    dfn[i, 3] <- lenx[i]
-    dfn[i, 4] <- bltx[i]
-    dfn[i, 5] <- cpx[i]
+  getXmlBlob <- function(x, property, path = "//blobs//blob//properties/"){
+    pth <- paste0(path, property)
+    xpathSApply(y, pth, xmlValue)
   }
-  colnames(dfn) <- c("name", "lastModified", "length", "type", "leaseState")
+
+
   azureActiveContext$storageAccount <- SAI
   azureActiveContext$resourceGroup <- RGI
   azureActiveContext$storageKey <- STK
-  return(dfn)
+
+  data.frame(
+    name            = getXmlBlob(y, "name", path = "//blobs//blob//"),
+    lastModified    = getXmlBlob(y, "last-modified"),
+    length          = getXmlBlob(y, "content-length"),
+    type            = getXmlBlob(y, "blobtype"),
+    leaseState      = getXmlBlob(y, "leasestate"),
+    stringsAsFactors = FALSE,
+    check.names = FALSE
+  )
 }
 
 
@@ -363,13 +373,16 @@ azureGetBlob <- function(azureActiveContext, blob, directory, type = "text",
   Sys.setlocale("LC_TIME", D1)
   D1 <- format(Sys.time(), "%a, %d %b %Y %H:%M:%S %Z", tz = "GMT")
 
-  SIG <- getSig(azureActiveContext, URL, "GET", STK, SAI, container = CNTR,
+  SIG <- getSig(azureActiveContext, url = URL, verb = "GET", key = STK,
+                storageAccount = SAI, container = CNTR,
                 CMD = paste0("/", BLOBI), dateS = D1)
 
   AT <- paste0("SharedKey ", SAI, ":", SIG)
 
   r <- GET(URL, add_headers(.headers = c(Authorization = AT, `Content-Length` = "0",
-                                         `x-ms-version` = "2015-04-05", `x-ms-date` = D1)), verbosity)
+                                         `x-ms-version` = "2015-04-05",
+                                         `x-ms-date` = D1)),
+           verbosity)
 
   if (status_code(r) == 404) {
     cat(BLOBI)
@@ -489,9 +502,14 @@ azurePutBlob <- function(azureActiveContext, blob, contents = "", file = "",
   if (nchar(contents) == 0)
     contents <- "-"
 
-  SIG <- getSig(azureActiveContext, URL, "PUT", STK, SAI, contenttype = "text/plain; charset=UTF-8",
-                size = nchar(contents), headers = "x-ms-blob-type:Blockblob", container = CNTR,
+  SIG <- getSig(azureActiveContext, url = URL, verb = "PUT", key = STK,
+                storageAccount = SAI, container = CNTR,
+                contenttype = "text/plain; charset=UTF-8",
+                size = nchar(contents),
+                headers = "x-ms-blob-type:Blockblob",
                 CMD = paste0("/", BLOBI), dateS = D1)
+
+
 
   AT <- paste0("SharedKey ", SAI, ":", SIG)
 
@@ -709,7 +727,7 @@ azureDeleteBlob <- function(azureActiveContext, blob, directory,
   } else (BLOBI <- blob)
   verbosity <- if (verbose)
     httr::verbose(TRUE) else NULL
-  
+
   if (length(RGI) < 1) {
     stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
   }
@@ -722,16 +740,16 @@ azureDeleteBlob <- function(azureActiveContext, blob, directory,
   if (length(BLOBI) < 1) {
     stop("Error: No blob provided: Use blob argument or set in AzureContext")
   }
-  
+
   STK <- refreshStorageKey(azureActiveContext, SAI, RGI)
-  
+
   if (length(STK) < 1) {
     stop("Error: No storageKey provided: Use storageKey argument or set in AzureContext")
   }
-  
+
   DIR <- azureActiveContext$directory
   DC <- azureActiveContext$Dcontainer
-  
+
   if (missing(directory)) {
     if (length(DIR) < 1)
       DIR <- ""  # No previous Dir value
@@ -741,34 +759,36 @@ azureDeleteBlob <- function(azureActiveContext, blob, directory,
     } else if (CNTR != DC)
       DIR <- ""  # Change of container
   } else DIR <- directory
-  
+
   if (nchar(DIR) > 0)
     DIR <- paste0(DIR, "/")
-  
+
   BLOBI <- paste0(DIR, BLOBI)
   BLOBI <- gsub("^/", "", BLOBI)
   BLOBI <- gsub("^\\./", "", BLOBI)
   cat(BLOBI)
-  
+
   URL <- paste("http://", SAI, ".blob.core.windows.net/", CNTR, "/",
                BLOBI, sep = "")
-  
-  
+
+
   D1 <- Sys.getlocale("LC_TIME")
   Sys.setlocale("LC_TIME", "C")
-  # `x-ms-date` <- format(Sys.time(),'%a, %d %b %Y %H:%M:%S %Z',
-  # tz='GMT')
   Sys.setlocale("LC_TIME", D1)
   D1 <- format(Sys.time(), "%a, %d %b %Y %H:%M:%S %Z", tz = "GMT")
-  
-  SIG <- getSig(azureActiveContext, URL, "DELETE", STK, SAI, container = CNTR,
+
+  SIG <- getSig(azureActiveContext, url = URL, verb = "DELETE", key = STK,
+                storageAccount = SAI, container = CNTR,
                 CMD = paste0("/", BLOBI), dateS = D1)
-  
+
   AT <- paste0("SharedKey ", SAI, ":", SIG)
-  
-  r <- DELETE(URL, add_headers(.headers = c(Authorization = AT, `Content-Length` = "0",
-                                            `x-ms-version` = "2015-04-05", `x-ms-date` = D1)), verbosity)
-  
+
+  r <- DELETE(URL, add_headers(.headers = c(Authorization = AT,
+                                            `Content-Length` = "0",
+                                            `x-ms-version` = "2015-04-05",
+                                            `x-ms-date` = D1)),
+              verbosity)
+
   if (status_code(r) == 202) {
     return("Blob delete request accepted")
   }

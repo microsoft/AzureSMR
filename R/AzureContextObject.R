@@ -26,9 +26,9 @@ createAzureContext <- function(tenantID, clientID, authKey){
 #'
 #' @inheritParams setAzureContext
 #' @export
-
 dumpAzureContext <- function(azureActiveContext){
-  .Deprecated(str)
+  .Deprecated("str")
+  str(asc)
 }
 
 #' Updates azureActiveContext object.
