@@ -1,5 +1,5 @@
 
-#' List Storage accounts.
+#' List storage accounts.
 #'
 #' @inheritParams setAzureContext
 #' @inheritParams azureAuthenticate
@@ -33,10 +33,15 @@ azureListSA <- function(azureActiveContext, resourceGroup, subscriptionID,
   }
   verbosity <- if (verbose) httr::verbose(TRUE) else NULL
 
-  if(missing(resourceGroup)) RGI <- NULL
-  SA <- azureListAllResources(azureActiveContext,
+  SA <- if(missing(resourceGroup)) {
+    azureListAllResources(azureActiveContext,
+                          type = "Microsoft.Storage/storageAccounts")
+  } else {
+    azureListAllResources(azureActiveContext,
                           type = "Microsoft.Storage/storageAccounts",
                           resourceGroup = RGI)
+
+  }
 
   rownames(SA) <- NULL
   SA$storageAccount <- extractStorageAccount(SA$id)
