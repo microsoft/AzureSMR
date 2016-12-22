@@ -35,7 +35,7 @@ azureListSubscriptions <- function(azureActiveContext, azToken, verbose = FALSE)
 }
 
 
-#' Get all Resource Groups in default Subscription.
+#' Get all resource groups in subscription ID.
 #'
 #' @inheritParams setAzureContext
 #' @inheritParams azureAuthenticate
@@ -125,18 +125,20 @@ azureListAllResources <- function(azureActiveContext, resourceGroup, subscriptio
            verbosity)
   rl <- content(r, "text", encoding = "UTF-8")
   df <- fromJSON(rl)
-
+  #print(df)
   dfn <- df$value[, c("name", "type", "location", "id")]
 
-  dfn$resourceGroup  <- extractResourceGroupname(dfn$ID)
+  dfn$resourceGroup  <- extractResourceGroupname(dfn$id)
   dfn$RG             <- dfn$resourceGroup
-  dfn$subscriptionID <- extractSubscriptionID(dfn$ID)
+  dfn$subscriptionID <- extractSubscriptionID(dfn$id)
 
 
   if (!missing(name))          dfn <- dfn[grep(name, dfn$name), ]
   if (!missing(type))          dfn <- dfn[grep(type, dfn$type), ]
   if (!missing(location))      dfn <- dfn[grep(location, dfn$location), ]
-  if (!missing(resourceGroup)) dfn <- dfn[grep(resourceGroup, dfn$resourceGroup), ]
+  if (!missing(resourceGroup) && !is.null(resourceGroup)) {
+    dfn <- dfn[grep(resourceGroup, dfn$resourceGroup), ]
+  }
 
   dfn[, c(1:2, 6, 3:5, 7)]
 }
@@ -164,7 +166,10 @@ azureCreateResourceGroup <- function(azureActiveContext, resourceGroup,
   # stop('Subscription not provided')
   if (missing(resourceGroup)) {
     RGI <- azureActiveContext$resourceGroup
-  } else (RGI = resourceGroup)
+  } else {
+    RGI <- resourceGroup
+    azureActiveContext$resourceGroup <- RGI
+  }
   if (missing(location)) {
     stop("Error: No location provided")
   }

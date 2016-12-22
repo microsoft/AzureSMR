@@ -2,7 +2,7 @@
 % Please edit documentation in R/AzureResources.R
 \name{azureListRG}
 \alias{azureListRG}
-\title{Get all Resource Groups in default Subscription.}
+\title{Get all resource groups in subscription ID.}
 \usage{
 azureListRG(azureActiveContext, subscriptionID, azToken, verbose = FALSE)
 }
@@ -19,7 +19,7 @@ azureListRG(azureActiveContext, subscriptionID, azToken, verbose = FALSE)
 Returns Dataframe of resourceGroups
 }
 \description{
-Get all Resource Groups in default Subscription.
+Get all resource groups in subscription ID.
 }
 \seealso{
 Other Resource group functions: \code{\link{azureCreateResourceGroup}},

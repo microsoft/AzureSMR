@@ -71,7 +71,7 @@ azureListStorageContainers <- function(azureActiveContext, storageAccount, stora
 
   namesx  <- xpathApply(y, "//containers//container/name", xmlValue)
   if (length(namesx) == 0) {
-    warning("No containers found in Storage account")
+    message("No containers found in Storage account")
     return(
       data.frame(
         name            = character(0),
@@ -189,7 +189,7 @@ azureCreateStorageContainer <- function(azureActiveContext, container, storageAc
   if (status_code(r) == 201) {
     return("container created OK")
   }
-  stop(paste0("Error: Return code(", status_code(r), ")"))
+  stopWithAzureError(r)
   return("OK")
 }
 

@@ -13,9 +13,9 @@ azureGetBlob(azureActiveContext, blob, directory, type = "text",
 
 \item{blob}{Blob name}
 
-\item{directory}{Set directory to list}
+\item{directory}{Blob store directory to list for content}
 
-\item{type}{"Text" or "Raw"}
+\item{type}{String, either "text" or "raw"}
 
 \item{storageAccount}{Name of the azure storage account}
 
@@ -36,8 +36,8 @@ Get contents from a specifed Storage blob.
 }
 \seealso{
 Other blob store functions: \code{\link{azureBlobCD}},
-  \code{\link{azureBlobFind}},
+  \code{\link{azureBlobFind}}, \code{\link{azureBlobLS}},
   \code{\link{azureListStorageBlobs}},
-  \code{\link{azurePutBlob}}, \code{\link{azureblobLS}}
+  \code{\link{azurePutBlob}}
 }
 

@@ -10,7 +10,7 @@ azureBlobCD(azureActiveContext, directory, container, file, storageAccount,
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 
-\item{directory}{Set directory to list}
+\item{directory}{Blob store directory to list for content}
 
 \item{container}{Storage container name. See \code{\link{azureListStorageContainers}}}
 
@@ -33,8 +33,8 @@ Azure blob change current directory.
 }
 \seealso{
 Other blob store functions: \code{\link{azureBlobFind}},
-  \code{\link{azureGetBlob}},
+  \code{\link{azureBlobLS}}, \code{\link{azureGetBlob}},
   \code{\link{azureListStorageBlobs}},
-  \code{\link{azurePutBlob}}, \code{\link{azureblobLS}}
+  \code{\link{azurePutBlob}}
 }
 

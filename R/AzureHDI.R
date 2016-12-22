@@ -382,6 +382,7 @@ azureDeleteHDI <- function(azureActiveContext, clustername, azToken, subscriptio
 #' @param hiveDB Hive DB name
 #' @param hiveUser Hive user name
 #' @param hivePassword Hive user password
+#' @param componentVersion Spark componentVersion. Default : 1.6.2
 #' @param mode Provisioning mode, "Sync" or "Async". Use "Async" to immediately return to R session after submission of request
 #'
 #' @return Success message
@@ -390,7 +391,7 @@ azureDeleteHDI <- function(azureActiveContext, clustername, azToken, subscriptio
 
 #' @export
 azureCreateHDI <- function(azureActiveContext, clustername, location, kind = "spark", storageAccount,
-                           storageKey, version = "3.4", workers = 2, adminUser, adminPassword, sshUser,
+                           storageKey, version = "3.4", componentVersion="1.6.2", workers = 2, adminUser, adminPassword, sshUser,
                            sshPassword, hiveServer, hiveDB, hiveUser, hivePassword, resourceGroup,
                            azToken, subscriptionID, mode = "Sync", verbose = FALSE) {
   azureCheckToken(azureActiveContext)
@@ -473,6 +474,7 @@ azureCreateHDI <- function(azureActiveContext, clustername, location, kind = "sp
   "osType": "Linux",
   "tier": "standard",
   "clusterDefinition": {
+   CDCDCDCDCDCDCDCDCD
   "kind": "DDDDDDDDD",
   "configurations": {
   "gateway": {
@@ -563,6 +565,12 @@ azureCreateHDI <- function(azureActiveContext, clustername, location, kind = "sp
   } else {
     bodyI <- gsub("HHHHHHHHHHHHHH", "", bodyI)
   }
+  if (kind == "spark" && componentVersion != "1.6.2")
+      bodyI <- gsub('CDCDCDCDCDCDCDCDCD', paste0('"componentVersion": {"Spark": "',componentVersion,'"},'), bodyI)
+  else 
+    bodyI <- gsub("CDCDCDCDCDCDCDCDCD", "", bodyI)
+  
+  #return(bodyI)
 
   URL <- paste0("https://management.azure.com/subscriptions/", SUBIDI,
                "/resourceGroups/", RGI,

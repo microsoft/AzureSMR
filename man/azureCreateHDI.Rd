@@ -5,10 +5,10 @@
 \title{Create Specifed HDInsight Cluster.}
 \usage{
 azureCreateHDI(azureActiveContext, clustername, location, kind = "spark",
-  storageAccount, storageKey, version = "3.4", workers = 2, adminUser,
-  adminPassword, sshUser, sshPassword, hiveServer, hiveDB, hiveUser,
-  hivePassword, resourceGroup, azToken, subscriptionID, mode = "Sync",
-  verbose = FALSE)
+  storageAccount, storageKey, version = "3.4", componentVersion = "1.6.2",
+  workers = 2, adminUser, adminPassword, sshUser, sshPassword, hiveServer,
+  hiveDB, hiveUser, hivePassword, resourceGroup, azToken, subscriptionID,
+  mode = "Sync", verbose = FALSE)
 }
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by AzureSMR}
@@ -24,6 +24,8 @@ azureCreateHDI(azureActiveContext, clustername, location, kind = "spark",
 \item{storageKey}{Storage key associated with storage account}
 
 \item{version}{HDinsight version}
+
+\item{componentVersion}{Spark componentVersion. Default : 1.6.2}
 
 \item{workers}{Define the number of worker nodes}
 

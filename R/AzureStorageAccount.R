@@ -54,19 +54,16 @@ azureListSA <- function(azureActiveContext, resourceGroup, subscriptionID,
     stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
   }
   verbosity <- if (verbose) httr::verbose(TRUE) else NULL
-  SA <- if (missing(resourceGroup)) {
-    azureListAllResources(azureActiveContext,
-                          type = "Microsoft.Storage/storageAccounts")
-  } else {
-    azureListAllResources(azureActiveContext,
+
+  if(missing(resourceGroup)) RGI <- NULL
+  SA <- azureListAllResources(azureActiveContext,
                           type = "Microsoft.Storage/storageAccounts",
                           resourceGroup = RGI)
-  }
+
   rownames(SA) <- NULL
-  SA$storageAccount <- gsub(".*?/storageAccounts/(.*?)", "\\1", SA$ID)
+  SA$storageAccount <- extractStorageAccount(SA$id)
   return(SA)
 }
-
 
 
 #' Get the Storage Keys for Specified Storage Account.
