@@ -103,7 +103,7 @@ azureDeployTemplate <- function(azureActiveContext, deplname, templateURL,
         writeLines(paste("Finished Deploying Sucessfully: ", Sys.time()))
         (break)()
       }
-      if (grepl("Error", rc)) {
+      if (grepl("Error", rc) || grepl("Failed", rc)) {
         writeLines("")
         writeLines(paste("Error Deploying: ", Sys.time()))
         (break)()
@@ -130,7 +130,7 @@ azureDeployTemplate <- function(azureActiveContext, deplname, templateURL,
     }
   }
   writeLines(paste("Deployment", deplname, "Submitted: ", Sys.time()))
-  return("OK")
+  return(TRUE)
 }
 
 

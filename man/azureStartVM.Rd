@@ -27,6 +27,9 @@ Start a Virtual Machine.
 }
 \seealso{
 Other Virtual machine functions: \code{\link{azureDeleteVM}},
+  \code{\link{azureListScaleSetNetwork}},
+  \code{\link{azureListScaleSetVM}},
+  \code{\link{azureListScaleSets}},
   \code{\link{azureListVM}}, \code{\link{azureStopVM}},
   \code{\link{azureVMStatus}}
 }

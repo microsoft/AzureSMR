@@ -25,6 +25,9 @@ List VMs in a Subscription.
 }
 \seealso{
 Other Virtual machine functions: \code{\link{azureDeleteVM}},
+  \code{\link{azureListScaleSetNetwork}},
+  \code{\link{azureListScaleSetVM}},
+  \code{\link{azureListScaleSets}},
   \code{\link{azureStartVM}}, \code{\link{azureStopVM}},
   \code{\link{azureVMStatus}}
 }
