@@ -1,27 +1,5 @@
-getSig <- function(azureActiveContext, url, verb, key, storageAccount,
-                   headers = NULL, container = NULL, CMD = NULL, size = NULL, contenttype = NULL,
-                   dateS, verbose = FALSE) {
 
-  if (length(headers)){
-    ARG1 <- paste0(headers, "\nx-ms-date:", dateS, "\nx-ms-version:2015-04-05")
-  } else {
-    ARG1 <- paste0("x-ms-date:", dateS, "\nx-ms-version:2015-04-05")
-  }
-
-  ARG2 <- paste0("/", storageAccount, "/", container, CMD)
-
-  SIG <- paste0(verb, "\n\n\n", size, "\n\n", contenttype, "\n\n\n\n\n\n\n",
-                ARG1, "\n", ARG2)
-  if (verbose) message(paste0("TRACE: STRINGTOSIGN: ", SIG))
-  base64encode(hmac(key = base64decode(key),
-                    object = iconv(SIG, "ASCII",to = "UTF-8"),
-                    algo = "sha256",
-                    raw = TRUE)
-  )
-
-}
-
-#' List Storage accounts.
+#' List storage accounts.
 #'
 #' @inheritParams setAzureContext
 #' @inheritParams azureAuthenticate
@@ -55,10 +33,15 @@ azureListSA <- function(azureActiveContext, resourceGroup, subscriptionID,
   }
   verbosity <- if (verbose) httr::verbose(TRUE) else NULL
 
-  if(missing(resourceGroup)) RGI <- NULL
-  SA <- azureListAllResources(azureActiveContext,
+  SA <- if(missing(resourceGroup)) {
+    azureListAllResources(azureActiveContext,
+                          type = "Microsoft.Storage/storageAccounts")
+  } else {
+    azureListAllResources(azureActiveContext,
                           type = "Microsoft.Storage/storageAccounts",
                           resourceGroup = RGI)
+
+  }
 
   rownames(SA) <- NULL
   SA$storageAccount <- extractStorageAccount(SA$id)

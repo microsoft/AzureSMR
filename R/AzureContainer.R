@@ -56,13 +56,15 @@ azureListStorageContainers <- function(azureActiveContext, storageAccount, stora
   Sys.setlocale("LC_TIME", D1)
   D1 <- format(Sys.time(), "%a, %d %b %Y %H:%M:%S %Z", tz = "GMT")
 
-  SIG <- getSig(azureActiveContext, URL, "GET", STK, SAI, CMD = "\ncomp:list",
-                dateS = D1)
+  SIG <- getSig(azureActiveContext, url = URL, verb = "GET", key = STK, storageAccount = SAI,
+                CMD = "\ncomp:list", dateS = D1)
 
   AT <- paste0("SharedKey ", SAI, ":", SIG)
 
   r <- GET(URL, add_headers(.headers = c(Authorization = AT, `Content-Length` = "0",
-                                         `x-ms-version` = "2015-04-05", `x-ms-date` = D1)), verbosity)
+                                         `x-ms-version` = "2015-04-05",
+                                         `x-ms-date` = D1)),
+           verbosity)
 
   if (status_code(r) != 200) stopWithAzureError(r)
   r <- content(r, "text", encoding = "UTF-8")
@@ -164,31 +166,32 @@ azureCreateStorageContainer <- function(azureActiveContext, container, storageAc
   azureActiveContext$container <- container
   azureActiveContext$storageAccount <- SAI
   azureActiveContext$resourceGroup <- RGI
-  # SIG <-
-  # getSig(azureActiveContext,URL,'GET',STK,storageAccount,CMD='\nrestype:container',dateS=D1)
 
   URL <- paste("http://", SAI, ".blob.core.windows.net/", container,
                "?restype=container", sep = "")
 
   D1 <- Sys.getlocale("LC_TIME")
   Sys.setlocale("LC_TIME", "us")
-  # `x-ms-date` <- format(Sys.time(),'%a, %d %b %Y %H:%M:%S %Z',
-  # tz='GMT')
   Sys.setlocale("LC_TIME", D1)
   D1 <- format(Sys.time(), "%a, %d %b %Y %H:%M:%S %Z", tz = "GMT")
 
-  # SIG <-
-  # getSig(azureActiveContext,URL,'PUT',STK,storageAccount,container=CNTR,dateS=D1)
-  SIG <- getSig(azureActiveContext, URL, "PUT", STK, SAI, container = CNTR,
+  SIG <- getSig(azureActiveContext, url = URL, verb = "PUT", key = STK,
+                storageAccount = SAI, container = CNTR,
                 CMD = "\nrestype:container", dateS = D1)
 
   AT <- paste0("SharedKey ", SAI, ":", SIG)
   r <- PUT(URL, add_headers(.headers = c(Authorization = AT, `Content-Length` = "0",
-                                         `x-ms-version` = "2015-04-05", `x-ms-date` = D1)), verbosity)
+                                         `x-ms-version` = "2015-04-05",
+                                         `x-ms-date` = D1)),
+           verbosity)
 
   if (status_code(r) == 201) {
-    return("container created OK")
+    return("OK. Container created.")
   }
+  if (status_code(r) == 409) {
+    return("OK. The specified container already exists.")
+  }
+
   stopWithAzureError(r)
   return("OK")
 }
@@ -246,8 +249,6 @@ azureDeleteStorageContainer <- function(azureActiveContext, container, storageAc
   URL <- paste("http://", SAI, ".blob.core.windows.net/", container,
                "?restype=container", sep = "")
 
-  # r<-OLDazureblobCall(azureActiveContext,URL, 'GET', key=STK)
-
   D1 <- Sys.getlocale("LC_TIME")
   Sys.setlocale("LC_TIME", "C")
   `x-ms-date` <- format(Sys.time(), "%a, %d %b %Y %H:%M:%S %Z", tz = "GMT")
@@ -258,13 +259,16 @@ azureDeleteStorageContainer <- function(azureActiveContext, container, storageAc
   azureActiveContext$container <- CNTR
   azureActiveContext$storageAccount <- SAI
   azureActiveContext$resourceGroup <- RGI
-  SIG <- getSig(azureActiveContext, URL, "DELETE", STK, SAI, CMD = paste0(CNTR,
-                                                                          "\nrestype:container"), dateS = D1)
+  SIG <- getSig(azureActiveContext, url = URL, verb = "DELETE", key = STK,
+                storageAccount = SAI,
+                CMD = paste0(CNTR, "\nrestype:container"), dateS = D1)
 
   AT <- paste0("SharedKey ", SAI, ":", SIG)
 
   r <- DELETE(URL, add_headers(.headers = c(Authorization = AT, `Content-Length` = "0",
-                                            `x-ms-version` = "2015-04-05", `x-ms-date` = D1)), verbosity)
+                                            `x-ms-version` = "2015-04-05",
+                                            `x-ms-date` = D1)),
+              verbosity)
 
   if (status_code(r) == 202) {
     return("container delete request accepted")

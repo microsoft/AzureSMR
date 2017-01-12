@@ -2,7 +2,7 @@
 % Please edit documentation in R/AzureStorageAccount.R
 \name{azureListSA}
 \alias{azureListSA}
-\title{List Storage accounts.}
+\title{List storage accounts.}
 \usage{
 azureListSA(azureActiveContext, resourceGroup, subscriptionID, azToken,
   verbose = FALSE)
@@ -19,7 +19,7 @@ azureListSA(azureActiveContext, resourceGroup, subscriptionID, azToken,
 \item{verbose}{Print Tracing information (Default False)}
 }
 \description{
-List Storage accounts.
+List storage accounts.
 }
 \seealso{
 Other Storage account functions: \code{\link{azureCreateStorageAccount}},
