@@ -33,4 +33,3 @@ Other HDInsight functions: \code{\link{azureCreateHDI}},
   \code{\link{azureRunScriptAction}},
   \code{\link{azureScriptActionHistory}}
 }
-

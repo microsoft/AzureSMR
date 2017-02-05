@@ -2,9 +2,12 @@
 % Please edit documentation in R/AzureResources.R
 \name{azureListRG}
 \alias{azureListRG}
+\alias{AzureListRG}
 \title{Get all resource groups in subscription ID.}
 \usage{
 azureListRG(azureActiveContext, subscriptionID, azToken, verbose = FALSE)
+
+AzureListRG(azureActiveContext, subscriptionID, azToken, verbose = FALSE)
 }
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by AzureSMR}
@@ -27,4 +30,3 @@ Other Resource group functions: \code{\link{azureCreateResourceGroup}},
   \code{\link{azureListAllResources}},
   \code{\link{azureListSubscriptions}}
 }
-

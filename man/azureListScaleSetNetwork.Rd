@@ -2,15 +2,13 @@
 % Please edit documentation in R/AzureVM.R
 \name{azureListScaleSetNetwork}
 \alias{azureListScaleSetNetwork}
-\title{List VMs within a scale set}
+\title{List scale set network information with a ResourceGroup}
 \usage{
-azureListScaleSetNetwork(azureActiveContext, scaleSet, resourceGroup, location,
+azureListScaleSetNetwork(azureActiveContext, resourceGroup, location,
   subscriptionID, azToken, verbose = FALSE)
 }
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by AzureSMR}
-
-\item{scaleSet}{name of the scale refer to (azureListScaleSets)}
 
 \item{resourceGroup}{Name of the resource group}
 
@@ -23,7 +21,7 @@ azureListScaleSetNetwork(azureActiveContext, scaleSet, resourceGroup, location,
 \item{verbose}{Print Tracing information (Default False)}
 }
 \description{
-List VMs within a scale set
+List scale set network information with a ResourceGroup
 }
 \seealso{
 Other Virtual machine functions: \code{\link{azureDeleteVM}},
@@ -32,4 +30,3 @@ Other Virtual machine functions: \code{\link{azureDeleteVM}},
   \code{\link{azureListVM}}, \code{\link{azureStartVM}},
   \code{\link{azureStopVM}}, \code{\link{azureVMStatus}}
 }
-

@@ -32,4 +32,3 @@ Other Resource group functions: \code{\link{azureCreateResourceGroup}},
   \code{\link{azureListRG}},
   \code{\link{azureListSubscriptions}}
 }
-

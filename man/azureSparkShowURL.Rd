@@ -22,4 +22,3 @@ Other Spark functions: \code{\link{azureSparkCMD}},
   \code{\link{azureSparkNewSession}},
   \code{\link{azureSparkStopSession}}
 }
-

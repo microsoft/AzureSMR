@@ -24,4 +24,3 @@ See the Azure documentation (\url{https://azure.microsoft.com/en-us/documentatio
 
 Other azureActiveContext functions: \code{\link{setAzureContext}}
 }
-

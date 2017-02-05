@@ -38,4 +38,3 @@ Other blob store functions: \code{\link{azureBlobFind}},
   \code{\link{azureListStorageBlobs}},
   \code{\link{azurePutBlob}}
 }
-

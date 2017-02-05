@@ -31,4 +31,3 @@ Delete Storage container in a specified Storage Account.
 Other container functions: \code{\link{azureCreateStorageContainer}},
   \code{\link{azureListStorageContainers}}
 }
-

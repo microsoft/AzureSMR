@@ -30,4 +30,3 @@ Other Virtual machine functions: \code{\link{azureDeleteVM}},
   \code{\link{azureListVM}}, \code{\link{azureStartVM}},
   \code{\link{azureStopVM}}, \code{\link{azureVMStatus}}
 }
-

@@ -24,4 +24,3 @@ Get Status of a HDI Hive Service/version.
 \seealso{
 Other Hive functions: \code{\link{azureHiveSQL}}
 }
-

@@ -2,6 +2,7 @@
 
 S3method(print,azureActiveContext)
 S3method(str,azureActiveContext)
+export(AzureListRG)
 export(as.azureActiveContext)
 export(azureAuthenticate)
 export(azureBlobCD)
