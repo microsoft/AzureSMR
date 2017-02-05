@@ -28,4 +28,3 @@ Submit SQL command to Hive Service.
 \seealso{
 Other Hive functions: \code{\link{azureHiveStatus}}
 }
-

@@ -15,4 +15,3 @@ Check the timestamp of a Token and Renew if needed.
 \seealso{
 Other Resources: \code{\link{azureAuthenticate}}
 }
-

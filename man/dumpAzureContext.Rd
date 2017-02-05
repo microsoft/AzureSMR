@@ -12,4 +12,3 @@ dumpAzureContext(azureActiveContext)
 \description{
 Dumps out the contents of the AzureContext.
 }
-

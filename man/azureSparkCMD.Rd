@@ -33,4 +33,3 @@ Other Spark functions: \code{\link{azureSparkJob}},
   \code{\link{azureSparkShowURL}},
   \code{\link{azureSparkStopSession}}
 }
-

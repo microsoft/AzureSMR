@@ -32,4 +32,3 @@ Other Virtual machine functions: \code{\link{azureListScaleSetNetwork}},
   \code{\link{azureListVM}}, \code{\link{azureStartVM}},
   \code{\link{azureStopVM}}, \code{\link{azureVMStatus}}
 }
-

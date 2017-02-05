@@ -28,4 +28,3 @@ Other Storage account functions: \code{\link{azureCreateStorageAccount}},
   \code{\link{azureDeletestorageAccount}},
   \code{\link{azureListSA}}
 }
-

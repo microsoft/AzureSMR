@@ -7,8 +7,8 @@
 azureCreateHDI(azureActiveContext, clustername, location, kind = "spark",
   storageAccount, storageKey, version = "3.4", componentVersion = "1.6.2",
   workers = 2, adminUser, adminPassword, sshUser, sshPassword, hiveServer,
-  hiveDB, hiveUser, hivePassword, resourceGroup, azToken, subscriptionID,
-  mode = "Sync", verbose = FALSE)
+  hiveDB, hiveUser, hivePassword, resourceGroup, vmSize = "Large", azToken,
+  subscriptionID, mode = "Sync", verbose = FALSE)
 }
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by AzureSMR}
@@ -17,7 +17,7 @@ azureCreateHDI(azureActiveContext, clustername, location, kind = "spark",
 
 \item{location}{Azure region, e.g. 'westeurope' or 'southcentralus'}
 
-\item{kind}{HDinsight kind: "hadoop","spark" or "pyspark"}
+\item{kind}{HDinsight kind: "hadoop","spark" or "rserver"}
 
 \item{storageAccount}{Name of the azure storage account}
 
@@ -47,6 +47,8 @@ azureCreateHDI(azureActiveContext, clustername, location, kind = "spark",
 
 \item{resourceGroup}{Name of the resource group}
 
+\item{vmSize}{Size of nodes: "Large", "Small", "Standard_D14_V2", etc.}
+
 \item{azToken}{Azure authentication token, obtained by \code{\link{azureAuthenticate}}}
 
 \item{subscriptionID}{Set the subscriptionID.  This is obtained automatically by \code{\link{azureAuthenticate}} when only a single subscriptionID is available via Active Directory}
@@ -71,4 +73,3 @@ Other HDInsight functions: \code{\link{azureDeleteHDI}},
   \code{\link{azureRunScriptAction}},
   \code{\link{azureScriptActionHistory}}
 }
-

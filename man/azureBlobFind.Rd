@@ -36,4 +36,3 @@ Other blob store functions: \code{\link{azureBlobCD}},
   \code{\link{azureListStorageBlobs}},
   \code{\link{azurePutBlob}}
 }
-
