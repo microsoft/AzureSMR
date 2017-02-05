@@ -488,7 +488,8 @@ azureCreateHDI <- function(azureActiveContext, clustername, location, kind = "sp
   "core-site": {
   "fs.defaultFS": "wasb://CCCCCC@TTTTTTTTTTT.blob.core.windows.net",
   "fs.azure.account.key.TTTTTTTTTTT.blob.core.windows.net": "KKKKKKKKKKKKKKKK"
-  }
+  },
+  YYYYYYYYYYYYYY,
   HHHHHHHHHHHHHH
   }},
   "computeProfile": {
@@ -558,7 +559,15 @@ azureCreateHDI <- function(azureActiveContext, clustername, location, kind = "sp
     "hive_existing_mssql_server_host": "SSSSSSSSSS",
     "hive_hostname": "SSSSSSSSSS"
   }'
-
+  
+  rserver <- (kind == "rserver")
+  
+  if (rserver) {
+    bodyI <- gsub("YYYYYYYYYYYYYY", "\"rserver\": {\"rstudio\": true}\n", bodyI)
+  } else {
+    bodyI <- gsub("YYYYYYYYYYYYYY", "", bodyI)
+  }
+  
   bodyI <- gsub("CCCCCC", clustername, bodyI)
   bodyI <- gsub("UUUUUUUUU", sshUser, bodyI)
   bodyI <- gsub("PPPPPPPPP", sshPassword, bodyI)
