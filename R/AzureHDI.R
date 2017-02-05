@@ -513,8 +513,8 @@ azureCreateHDI <- function(azureActiveContext, clustername, location, kind = "sp
   },
   "osProfile": {
   "linuxOperatingSystemProfile": {
-  "username": "username",
-  "password": "password"
+  "username": "UUUUUUUUU",
+  "password": "PPPPPPPPP"
   }}},
   {
   "name": "workernode",
