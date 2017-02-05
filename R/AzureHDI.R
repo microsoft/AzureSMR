@@ -373,6 +373,7 @@ azureDeleteHDI <- function(azureActiveContext, clustername, azToken, subscriptio
 #'
 #'
 #' @param version HDinsight version
+#' @param kind HDinsight kind: "hadoop","spark" or "rserver"
 #' @param adminUser Admin user name
 #' @param adminPassword Admin user password
 #' @param workers Define the number of worker nodes
@@ -383,6 +384,7 @@ azureDeleteHDI <- function(azureActiveContext, clustername, azToken, subscriptio
 #' @param hiveUser Hive user name
 #' @param hivePassword Hive user password
 #' @param componentVersion Spark componentVersion. Default : 1.6.2
+#' @param vmSize Size of nodes: "Large", "Small", "Standard_D14_V2", etc.
 #' @param mode Provisioning mode, "Sync" or "Async". Use "Async" to immediately return to R session after submission of request
 #'
 #' @return Success message
@@ -393,6 +395,7 @@ azureDeleteHDI <- function(azureActiveContext, clustername, azToken, subscriptio
 azureCreateHDI <- function(azureActiveContext, clustername, location, kind = "spark", storageAccount,
                            storageKey, version = "3.4", componentVersion="1.6.2", workers = 2, adminUser, adminPassword, sshUser,
                            sshPassword, hiveServer, hiveDB, hiveUser, hivePassword, resourceGroup,
+                           vmSize = "Large",
                            azToken, subscriptionID, mode = "Sync", verbose = FALSE) {
   azureCheckToken(azureActiveContext)
 
@@ -470,7 +473,7 @@ azureCreateHDI <- function(azureActiveContext, clustername, location, kind = "sp
   "location": "LLLLLLLLLLL",
   "tags": { "tag1": "value1", "tag2": "value2" },
   "properties": {
-  "clusterversion": "VVVV",
+  "clusterVersion": "VVVV",
   "osType": "Linux",
   "tier": "standard",
   "clusterDefinition": {
@@ -494,7 +497,7 @@ azureCreateHDI <- function(azureActiveContext, clustername, location, kind = "sp
   "name": "headnode",
   "targetInstanceCount": 2,
   "hardwareProfile": {
-  "vmsize": "Large"
+  "vmsize": "ZZZZZZ"
   },
   "osProfile": {
   "linuxOperatingSystemProfile": {
@@ -502,10 +505,22 @@ azureCreateHDI <- function(azureActiveContext, clustername, location, kind = "sp
   "password": "PPPPPPPPP"
   }}},
   {
+  "name": "edgenode",
+  "minInstanceCount": 1,
+  "targetInstanceCount": 1,
+  "hardwareProfile": {
+  "vmSize": "ZZZZZZ"
+  },
+  "osProfile": {
+  "linuxOperatingSystemProfile": {
+  "username": "username",
+  "password": "password"
+  }}},
+  {
   "name": "workernode",
   "targetInstanceCount": WWWWWW,
   "hardwareProfile": {
-  "vmsize": "Large"
+  "vmsize": "ZZZZZZ"
   },
   "osProfile": {
   "linuxOperatingSystemProfile": {
@@ -555,7 +570,8 @@ azureCreateHDI <- function(azureActiveContext, clustername, location, kind = "sp
   bodyI <- gsub("TTTTTTTTTTT", storageAccount, bodyI)
   bodyI <- gsub("KKKKKKKKKKKKKKKK", storageKey, bodyI)
   bodyI <- gsub("DDDDDDDDD", kind, bodyI)
-  bodyI <- gsub("VVVV", version, bodyI)
+  bodyI <- gsub("VVVV", componentVersion, bodyI)
+  bodyI <- gsub("ZZZZZZ", vmSize, bodyI)
   if (HIVE) {
     HIVEJSON <- gsub("SSSSSSSSSS", hiveServer, HIVEJSON)
     HIVEJSON <- gsub("DDDDDDDDDD", hiveDB, HIVEJSON)
