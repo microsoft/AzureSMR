@@ -11,9 +11,9 @@ azureListStorageBlobs <- function(azureActiveContext, storageAccount, storageKey
                              container, resourceGroup, subscriptionID,
                              azToken, verbose = FALSE) {
 
-  if (!missing(azureActiveContext)) {
-    azureCheckToken(azureActiveContext)
-  }
+  #if (!missing(azureActiveContext)) {
+    #azureCheckToken(azureActiveContext)
+  #}
 
   if (missing(resourceGroup) && !missing(azureActiveContext)) {
     resourceGroup <- azureActiveContext$resourceGroup
