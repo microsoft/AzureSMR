@@ -10,57 +10,57 @@
 azureListStorageBlobs <- function(azureActiveContext, storageAccount, storageKey,
                              container, resourceGroup, subscriptionID,
                              azToken, verbose = FALSE) {
-  azureCheckToken(azureActiveContext)
 
-  if (missing(subscriptionID)) {
-    SUBIDI <- azureActiveContext$subscriptionID
-  } else (SUBIDI <- subscriptionID)
-  if (missing(azToken)) {
-    ATI <- azureActiveContext$Token
-  } else (ATI <- azToken)
-  if (missing(resourceGroup)) {
-    RGI <- azureActiveContext$resourceGroup
-  } else (RGI <- resourceGroup)
-  if (missing(storageAccount)) {
-    SAI <- azureActiveContext$storageAccount
-  } else (SAI <- storageAccount)
-  if (missing(storageKey)) {
-    STK <- azureActiveContext$storageKey
-  } else (STK <- storageKey)
-  if (missing(container)) {
-    CNTR <- azureActiveContext$container
-  } else (CNTR <- container)
+  if (!missing(azureActiveContext)) {
+    azureCheckToken(azureActiveContext)
+  }
+
+  if (missing(resourceGroup) && !missing(azureActiveContext)) {
+    resourceGroup <- azureActiveContext$resourceGroup
+  } 
+
+  if (missing(storageAccount) && !missing(azureActiveContext) && !is.null(azureActiveContext)) {
+    storageAccount <- azureActiveContext$storageAccount
+  } 
+  if (missing(storageKey) && !missing(azureActiveContext)) {
+    storageKey <- azureActiveContext$storageKey
+  } 
+  if (missing(container) && !missing(azureActiveContext)) {
+    container <- azureActiveContext$container
+  } 
   verbosity <- if (verbose)
     httr::verbose(TRUE) else NULL
 
-  if (length(RGI) < 1) {
+  if (length(resourceGroup) < 1) {
     stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
   }
-  if (length(SAI) < 1) {
+  if (length(storageAccount) < 1) {
     stop("Error: No storageAccount provided: Use storageAccount argument or set in AzureContext")
   }
-  if (length(CNTR) < 1) {
+  if (length(container) < 1) {
     stop("Error: No container provided: Use container argument or set in AzureContext")
   }
 
-  STK <- refreshStorageKey(azureActiveContext, SAI, RGI)
-
-  if (length(STK) < 1) {
-    stop("Error: No storageKey provided: Use storageKey argument or set in AzureContext")
+  if (missing(storageKey) && !missing(azureActiveContext) && !is.null(azureActiveContext)) {
+    storageKey <- refreshStorageKey(azureActiveContext, storageAccount, resourceGroup)
   }
 
-  URL <- paste("http://", SAI, ".blob.core.windows.net/", CNTR, "?restype=container&comp=list",
-               sep = "")
+    if (length(storageKey) < 1) {
+      stop("Error: No storageKey provided: Use storageKey argument or set in AzureContext")
+    }
+  
+
+  URL <- paste0("http://", storageAccount, ".blob.core.windows.net/", container, "?restype=container&comp=list")
   D1 <- Sys.getlocale("LC_TIME")
   Sys.setlocale("LC_TIME", "us")
   Sys.setlocale("LC_TIME", D1)
   D1 <- format(Sys.time(), "%a, %d %b %Y %H:%M:%S %Z", tz = "GMT")
 
-  SIG <- getSig(azureActiveContext, url = URL, verb = "GET", key = STK,
-                storageAccount = SAI, container = CNTR,
+  SIG <- getSig(azureActiveContext, url = URL, verb = "GET", key = storageKey,
+                storageAccount = storageAccount, container = container,
                 CMD = "\ncomp:list\nrestype:container", dateS = D1)
-
-  AT <- paste0("SharedKey ", SAI, ":", SIG)
+  
+  AT <- paste0("SharedKey ", storageAccount, ":", SIG)
   r <- GET(URL, add_headers(.headers = c(Authorization = AT, `Content-Length` = "0",
                                          `x-ms-version` = "2015-04-05",
                                          `x-ms-date` = D1)),
@@ -68,7 +68,7 @@ azureListStorageBlobs <- function(azureActiveContext, storageAccount, storageKey
 
 
   if (status_code(r) == 404) {
-    warning("container not found")
+    warning("Azure response: container not found")
     return(NULL)
   } else {
     if (status_code(r) != 200)
@@ -103,9 +103,9 @@ azureListStorageBlobs <- function(azureActiveContext, storageAccount, storageKey
   }
 
 
-  azureActiveContext$storageAccount <- SAI
-  azureActiveContext$resourceGroup <- RGI
-  azureActiveContext$storageKey <- STK
+  azureActiveContext$storageAccount <- storageAccount
+  azureActiveContext$resourceGroup <- resourceGroup
+  azureActiveContext$storageKey <- storageKey
 
   data.frame(
     name            = getXmlBlob(y, "name", path = "//blobs//blob//"),
@@ -135,36 +135,36 @@ azureBlobLS <- function(azureActiveContext, directory, recursive = FALSE,
                         azToken, verbose = FALSE) {
   azureCheckToken(azureActiveContext)
   if (missing(subscriptionID)) {
-    SUBIDI <- azureActiveContext$subscriptionID
-  } else (SUBIDI <- subscriptionID)
+    subscriptionID <- azureActiveContext$subscriptionID
+  } else (subscriptionID <- subscriptionID)
   if (missing(azToken)) {
-    ATI <- azureActiveContext$Token
-  } else (ATI <- azToken)
+    azToken <- azureActiveContext$Token
+  } else (azToken <- azToken)
   if (missing(resourceGroup)) {
-    RGI <- azureActiveContext$resourceGroup
-  } else (RGI <- resourceGroup)
+    resourceGroup <- azureActiveContext$resourceGroup
+  } else (resourceGroup <- resourceGroup)
   if (missing(storageKey)) {
-    STK <- azureActiveContext$storageKey
-  } else (STK <- storageKey)
+    storageKey <- azureActiveContext$storageKey
+  } else (storageKey <- storageKey)
   if (missing(storageAccount)) {
-    SAI <- azureActiveContext$storageAccount
-  } else (SAI <- storageAccount)
+    storageAccount <- azureActiveContext$storageAccount
+  } else (storageAccount <- storageAccount)
   if (missing(container)) {
-    CNTR <- azureActiveContext$container
-  } else (CNTR <- container)
+    container <- azureActiveContext$container
+  } else (container <- container)
   if (missing(directory)) {
     DIR <- azureActiveContext$directory
   } else (DIR <- directory)
   verbosity <- if (verbose)
     httr::verbose(TRUE) else NULL
 
-  if (length(RGI) < 1) {
+  if (length(resourceGroup) < 1) {
     stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
   }
-  if (length(SAI) < 1) {
+  if (length(storageAccount) < 1) {
     stop("Error: No storageAccount provided: Use storageAccount argument or set in AzureContext")
   }
-  if (length(CNTR) < 1) {
+  if (length(container) < 1) {
     stop("Error: No container provided: Use container argument or set in AzureContext")
   }
   SD <- 0
@@ -176,7 +176,7 @@ azureBlobLS <- function(azureActiveContext, directory, recursive = FALSE,
       DC <- ""
     if (length(DIR) < 1)
       DIR <- "/"
-    if (DC != CNTR)
+    if (DC != container)
       DIR <- "/"  # Change of container
   } else {
     if (substr(directory, 1, 1) != "/") {
@@ -197,15 +197,17 @@ azureBlobLS <- function(azureActiveContext, directory, recursive = FALSE,
 
   DIR <- gsub("//", "/", DIR)
 
-  STK <- refreshStorageKey(azureActiveContext, SAI, RGI)
+  if (!missing(azureActiveContext) && !is.null(azureActiveContext) && missing(storageKey)) {
+    storageKey <- refreshStorageKey(azureActiveContext, storageAccount, resourceGroup)
+  }
 
-  if (length(STK) < 1) {
+  if (length(storageKey) < 1) {
     stop("Error: No storageKey provided: Use storageKey argument or set in AzureContext")
   }
 
-  azureActiveContext$Dircontainer <- CNTR
+  azureActiveContext$Dircontainer <- container
 
-  files <- azureListStorageBlobs(azureActiveContext, container = CNTR)
+  files <- azureListStorageBlobs(azureActiveContext, container = container)
 
   files$name <- paste0("/", files$name)
   files$name <- gsub("//", "/", files$name)
@@ -215,9 +217,9 @@ azureBlobLS <- function(azureActiveContext, directory, recursive = FALSE,
 
   if (SD == 0)
     azureActiveContext$directory <- DIR
-  azureActiveContext$container <- CNTR
-  azureActiveContext$Dcontainer <- CNTR
-  cat(paste0("Current directory - ", SAI, " >  ", CNTR, " : ", DIR, "\n\n"))
+  azureActiveContext$container <- container
+  azureActiveContext$Dcontainer <- container
+  cat(paste0("Current directory - ", storageAccount, " >  ", container, " : ", DIR, "\n\n"))
 
   DIR <- gsub("//", "/", DIR)
   Depth <- length(strsplit(DIR, "/")[[1]])
@@ -267,10 +269,10 @@ azureBlobLS <- function(azureActiveContext, directory, recursive = FALSE,
       return(NULL)
     }
     azureActiveContext$directory <- DIR
-    azureActiveContext$container <- CNTR
-    azureActiveContext$storageAccount <- SAI
-    azureActiveContext$resourceGroup <- RGI
-    azureActiveContext$Dcontainer <- CNTR
+    azureActiveContext$container <- container
+    azureActiveContext$storageAccount <- storageAccount
+    azureActiveContext$resourceGroup <- resourceGroup
+    azureActiveContext$Dcontainer <- container
 
     rownames(FO) <- NULL
     colnames(FO)[1] <- "filename"
@@ -297,73 +299,82 @@ azureBlobLS <- function(azureActiveContext, directory, recursive = FALSE,
 azureGetBlob <- function(azureActiveContext, blob, directory, type = "text",
                          storageAccount, storageKey, container, resourceGroup, subscriptionID,
                          azToken, verbose = FALSE) {
-  azureCheckToken(azureActiveContext)
-  if (missing(subscriptionID)) {
-    SUBIDI <- azureActiveContext$subscriptionID
-  } else (SUBIDI <- subscriptionID)
-  if (missing(azToken)) {
-    ATI <- azureActiveContext$Token
-  } else (ATI <- azToken)
+  #if (!missing(azureActiveContext) || !is.null(azureActiveContext)) {
+    #azureCheckToken(azureActiveContext)
+  #}
+
+  #if (missing(subscriptionID)) {
+    #subscriptionID <- azureActiveContext$subscriptionID
+  #} 
+  #if (missing(azToken)) {
+    #azToken <- azureActiveContext$Token
+  #} 
+
   if (missing(resourceGroup)) {
-    RGI <- azureActiveContext$resourceGroup
-  } else (RGI <- resourceGroup)
+    resourceGroup <- azureActiveContext$resourceGroup
+  } 
   if (missing(storageAccount)) {
-    SAI <- azureActiveContext$storageAccount
-  } else (SAI <- storageAccount)
+    storageAccount <- azureActiveContext$storageAccount
+  } 
   if (missing(storageKey)) {
-    STK <- azureActiveContext$storageKey
-  } else (STK <- storageKey)
+    storageKey <- azureActiveContext$storageKey
+  } 
   if (missing(container)) {
-    CNTR <- azureActiveContext$container
-  } else (CNTR <- container)
+    container <- azureActiveContext$container
+  } 
   if (missing(blob)) {
-    BLOBI <- azureActiveContext$blob
-  } else (BLOBI <- blob)
+    blob <- azureActiveContext$blob
+  } 
   verbosity <- if (verbose)
     httr::verbose(TRUE) else NULL
 
-  if (length(RGI) < 1) {
+  if (length(resourceGroup) < 1) {
     stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
   }
-  if (length(SAI) < 1) {
+  if (length(storageAccount) < 1) {
     stop("Error: No storageAccount provided: Use storageAccount argument or set in AzureContext")
   }
-  if (length(CNTR) < 1) {
+  if (length(container) < 1) {
     stop("Error: No container provided: Use container argument or set in AzureContext")
   }
-  if (length(BLOBI) < 1) {
+  if (length(blob) < 1) {
     stop("Error: No blob provided: Use blob argument or set in AzureContext")
   }
 
-  STK <- refreshStorageKey(azureActiveContext, SAI, RGI)
+  #storageKey <- refreshStorageKey(azureActiveContext, storageAccount, resourceGroup)
 
-  if (length(STK) < 1) {
+  if (length(storageKey) < 1) {
     stop("Error: No storageKey provided: Use storageKey argument or set in AzureContext")
   }
 
-  DIR <- azureActiveContext$directory
-  DC <- azureActiveContext$Dcontainer
 
   if (missing(directory)) {
-    if (length(DIR) < 1)
-      DIR <- ""  # No previous Dir value
-    if (length(DC) < 1) {
-      DIR <- ""  # No previous Dir value
-      DC <- ""
-    } else if (CNTR != DC)
-      DIR <- ""  # Change of container
-  } else DIR <- directory
+    directory <- azureActiveContext$directory
+  }
 
-  if (nchar(DIR) > 0)
-    DIR <- paste0(DIR, "/")
+  if (missing(container)) {
+    container <- azureActiveContext$Dcontainer
+  }
 
-  BLOBI <- paste0(DIR, BLOBI)
-  BLOBI <- gsub("^/", "", BLOBI)
-  BLOBI <- gsub("^\\./", "", BLOBI)
-  cat(BLOBI)
+    if (length(directory) < 1)
+      directory <- ""  # No previous Dir value
+    if (length(container) < 1) {
+      directory <- ""  # No previous Dir value
+      container <- ""
+    } else if (container != container)
+      directory <- ""  # Change of container
+  
 
-  URL <- paste("http://", SAI, ".blob.core.windows.net/", CNTR, "/",
-               BLOBI, sep = "")
+  if (nchar(directory) > 0)
+    directory <- paste0(directory, "/")
+
+  blob <- paste0(directory, blob)
+  blob <- gsub("^/", "", blob)
+  blob <- gsub("^\\./", "", blob)
+  cat(blob)
+
+  URL <- paste("http://", storageAccount, ".blob.core.windows.net/", container, "/",
+               blob, sep = "")
 
 
   D1 <- Sys.getlocale("LC_TIME")
@@ -373,11 +384,11 @@ azureGetBlob <- function(azureActiveContext, blob, directory, type = "text",
   Sys.setlocale("LC_TIME", D1)
   D1 <- format(Sys.time(), "%a, %d %b %Y %H:%M:%S %Z", tz = "GMT")
 
-  SIG <- getSig(azureActiveContext, url = URL, verb = "GET", key = STK,
-                storageAccount = SAI, container = CNTR,
-                CMD = paste0("/", BLOBI), dateS = D1)
+  SIG <- getSig(azureActiveContext, url = URL, verb = "GET", key = storageKey,
+                storageAccount = storageAccount, container = container,
+                CMD = paste0("/", blob), dateS = D1)
 
-  AT <- paste0("SharedKey ", SAI, ":", SIG)
+  AT <- paste0("SharedKey ", storageAccount, ":", SIG)
 
   r <- GET(URL, add_headers(.headers = c(Authorization = AT, `Content-Length` = "0",
                                          `x-ms-version` = "2015-04-05",
@@ -385,7 +396,7 @@ azureGetBlob <- function(azureActiveContext, blob, directory, type = "text",
            verbosity)
 
   if (status_code(r) == 404) {
-    cat(BLOBI)
+    cat(blob)
     warning("file not found")
     return(NULL)
   } else if (status_code(r) != 200)
@@ -393,11 +404,11 @@ azureGetBlob <- function(azureActiveContext, blob, directory, type = "text",
 
   r2 <- content(r, type, encoding = "UTF-8")
 
-  azureActiveContext$storageAccount <- SAI
-  azureActiveContext$resourceGroup <- RGI
-  azureActiveContext$storageKey <- STK
-  azureActiveContext$container <- CNTR
-  azureActiveContext$blob <- BLOBI
+  azureActiveContext$storageAccount <- storageAccount
+  azureActiveContext$resourceGroup <- resourceGroup
+  azureActiveContext$storageKey <- storageKey
+  azureActiveContext$container <- container
+  azureActiveContext$blob <- blob
   return(r2)
 }
 
@@ -422,39 +433,39 @@ azurePutBlob <- function(azureActiveContext, blob, contents = "", file = "",
   azureCheckToken(azureActiveContext)
 
   if (missing(subscriptionID)) {
-    SUBIDI <- azureActiveContext$subscriptionID
-  } else (SUBIDI <- subscriptionID)
+    subscriptionID <- azureActiveContext$subscriptionID
+  } else (subscriptionID <- subscriptionID)
   if (missing(azToken)) {
-    ATI <- azureActiveContext$Token
-  } else (ATI <- azToken)
+    azToken <- azureActiveContext$Token
+  } else (azToken <- azToken)
   if (missing(resourceGroup)) {
-    RGI <- azureActiveContext$resourceGroup
-  } else (RGI <- resourceGroup)
+    resourceGroup <- azureActiveContext$resourceGroup
+  } else (resourceGroup <- resourceGroup)
   if (missing(storageAccount)) {
-    SAI <- azureActiveContext$storageAccount
-  } else (SAI <- storageAccount)
+    storageAccount <- azureActiveContext$storageAccount
+  } else (storageAccount <- storageAccount)
   if (missing(storageKey)) {
-    STK <- azureActiveContext$storageKey
-  } else (STK <- storageKey)
+    storageKey <- azureActiveContext$storageKey
+  } else (storageKey <- storageKey)
   if (missing(container)) {
-    CNTR <- azureActiveContext$container
-  } else (CNTR <- container)
+    container <- azureActiveContext$container
+  } else (container <- container)
   if (missing(blob)) {
-    BLOBI <- azureActiveContext$blob
-  } else (BLOBI <- blob)
+    blob <- azureActiveContext$blob
+  } else (blob <- blob)
   verbosity <- if (verbose)
     httr::verbose(TRUE) else NULL
 
-  if (length(RGI) < 1) {
+  if (length(resourceGroup) < 1) {
     stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
   }
-  if (length(SAI) < 1) {
+  if (length(storageAccount) < 1) {
     stop("Error: No storageAccount provided: Use storageAccount argument or set in AzureContext")
   }
-  if (length(CNTR) < 1) {
+  if (length(container) < 1) {
     stop("Error: No container provided: Use container argument or set in AzureContext")
   }
-  if (length(BLOBI) < 1) {
+  if (length(blob) < 1) {
     stop("Error: No blob provided: Use blob argument or set in AzureContext")
   }
 
@@ -468,16 +479,16 @@ azurePutBlob <- function(azureActiveContext, blob, contents = "", file = "",
     if (length(DC) < 1) {
       DIR <- ""  # No previous Dir value
       DC <- ""
-    } else if (CNTR != DC)
+    } else if (container != DC)
       DIR <- ""  # Change of container
   } else DIR <- directory
   if (nchar(DIR) > 0)
     DIR <- paste0(DIR, "/")
 
-  BLOBI <- paste0(DIR, BLOBI)
-  BLOBI <- gsub("^/", "", BLOBI)
-  BLOBI <- gsub("//", "/", BLOBI)
-  BLOBI <- gsub("//", "/", BLOBI)
+  blob <- paste0(DIR, blob)
+  blob <- gsub("^/", "", blob)
+  blob <- gsub("//", "/", blob)
+  blob <- gsub("//", "/", blob)
 
   if (missing(contents) && missing(file))
     stop("Content or file needs to be supplied")
@@ -486,14 +497,14 @@ azurePutBlob <- function(azureActiveContext, blob, contents = "", file = "",
     stop("Provided either Content OR file Argument")
 
 
-  STK <- refreshStorageKey(azureActiveContext, SAI, RGI)
+  storageKey <- refreshStorageKey(azureActiveContext, storageAccount, resourceGroup)
 
-  if (length(STK) < 1) {
+  if (length(storageKey) < 1) {
     stop("Error: No storageKey provided: Use storageKey argument or set in AzureContext")
   }
 
-  URL <- paste("http://", SAI, ".blob.core.windows.net/", CNTR, "/",
-               BLOBI, sep = "")
+  URL <- paste("http://", storageAccount, ".blob.core.windows.net/", container, "/",
+               blob, sep = "")
 
   D1 <- Sys.getlocale("LC_TIME")
   Sys.setlocale("LC_TIME", "C")
@@ -502,16 +513,16 @@ azurePutBlob <- function(azureActiveContext, blob, contents = "", file = "",
   if (nchar(contents) == 0)
     contents <- "-"
 
-  SIG <- getSig(azureActiveContext, url = URL, verb = "PUT", key = STK,
-                storageAccount = SAI, container = CNTR,
+  SIG <- getSig(azureActiveContext, url = URL, verb = "PUT", key = storageKey,
+                storageAccount = storageAccount, container = container,
                 contenttype = "text/plain; charset=UTF-8",
                 size = nchar(contents),
                 headers = "x-ms-blob-type:Blockblob",
-                CMD = paste0("/", BLOBI), dateS = D1)
+                CMD = paste0("/", blob), dateS = D1)
 
 
 
-  AT <- paste0("SharedKey ", SAI, ":", SIG)
+  AT <- paste0("SharedKey ", storageAccount, ":", SIG)
 
   r <- PUT(URL, add_headers(.headers = c(Authorization = AT,
                                          `Content-Length` = nchar(contents),
@@ -522,8 +533,8 @@ azurePutBlob <- function(azureActiveContext, blob, contents = "", file = "",
            body = contents,
            verbosity)
 
-  azureActiveContext$blob <- BLOBI
-  return(paste("blob:", BLOBI, " Saved:", nchar(contents), "bytes written"))
+  azureActiveContext$blob <- blob
+  return(paste("blob:", blob, " Saved:", nchar(contents), "bytes written"))
 }
 
 
@@ -543,37 +554,37 @@ azureBlobFind <- function(azureActiveContext, file, storageAccount, storageKey,
                           azToken, verbose = FALSE) {
   azureCheckToken(azureActiveContext)
   if (missing(subscriptionID)) {
-    SUBIDI <- azureActiveContext$subscriptionID
-  } else (SUBIDI <- subscriptionID)
+    subscriptionID <- azureActiveContext$subscriptionID
+  } else (subscriptionID <- subscriptionID)
   if (missing(azToken)) {
-    ATI <- azureActiveContext$Token
-  } else (ATI <- azToken)
+    azToken <- azureActiveContext$Token
+  } else (azToken <- azToken)
   if (missing(resourceGroup)) {
-    RGI <- azureActiveContext$resourceGroup
-  } else (RGI <- resourceGroup)
+    resourceGroup <- azureActiveContext$resourceGroup
+  } else (resourceGroup <- resourceGroup)
   if (missing(storageAccount)) {
-    SAI <- azureActiveContext$storageAccount
-  } else (SAI <- storageAccount)
+    storageAccount <- azureActiveContext$storageAccount
+  } else (storageAccount <- storageAccount)
   if (missing(storageKey)) {
-    STK <- azureActiveContext$storageKey
-  } else (STK <- storageKey)
+    storageKey <- azureActiveContext$storageKey
+  } else (storageKey <- storageKey)
   if (missing(file)) {
     stop("Error: No filename{pattern} provided")
   }
   verbosity <- if (verbose)
     httr::verbose(TRUE) else NULL
 
-  if (length(RGI) < 1) {
+  if (length(resourceGroup) < 1) {
     stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
   }
-  if (length(SAI) < 1) {
+  if (length(storageAccount) < 1) {
     stop("Error: No storageAccount provided: Use storageAccount argument or set in AzureContext")
   }
 
 
-  STK <- refreshStorageKey(azureActiveContext, SAI, RGI)
+  storageKey <- refreshStorageKey(azureActiveContext, storageAccount, resourceGroup)
 
-  if (length(STK) < 1) {
+  if (length(storageKey) < 1) {
     stop("Error: No storageKey provided: Use storageKey argument or set in AzureContext")
   }
 
@@ -612,30 +623,30 @@ azureBlobCD <- function(azureActiveContext, directory, container, file,
                         azToken,verbose = FALSE) {
   azureCheckToken(azureActiveContext)
   if (missing(subscriptionID)) {
-    SUBIDI <- azureActiveContext$subscriptionID
-  } else (SUBIDI <- subscriptionID)
+    subscriptionID <- azureActiveContext$subscriptionID
+  } else (subscriptionID <- subscriptionID)
   if (missing(azToken)) {
-    ATI <- azureActiveContext$Token
-  } else (ATI <- azToken)
+    azToken <- azureActiveContext$Token
+  } else (azToken <- azToken)
   if (missing(resourceGroup)) {
-    RGI <- azureActiveContext$resourceGroup
-  } else (RGI <- resourceGroup)
+    resourceGroup <- azureActiveContext$resourceGroup
+  } else (resourceGroup <- resourceGroup)
   if (missing(storageAccount)) {
-    SAI <- azureActiveContext$storageAccount
-  } else (SAI <- storageAccount)
+    storageAccount <- azureActiveContext$storageAccount
+  } else (storageAccount <- storageAccount)
   if (missing(storageKey)) {
-    STK <- azureActiveContext$storageKey
-  } else (STK <- storageKey)
+    storageKey <- azureActiveContext$storageKey
+  } else (storageKey <- storageKey)
   if (missing(container)) {
-    CNTR <- azureActiveContext$container
-  } else (CNTR <- container)
+    container <- azureActiveContext$container
+  } else (container <- container)
   verbosity <- if (verbose)
     httr::verbose(TRUE) else NULL
 
-  if (length(RGI) < 1) {
+  if (length(resourceGroup) < 1) {
     stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
   }
-  if (length(SAI) < 1) {
+  if (length(storageAccount) < 1) {
     stop("Error: No storageAccount provided: Use storageAccount argument or set in AzureContext")
   }
 
@@ -647,25 +658,25 @@ azureBlobCD <- function(azureActiveContext, directory, container, file,
     if (length(DC) < 1) {
       DIR <- "/"  # No previous Dir value
       DC <- ""
-    } else if (CNTR != DC)
+    } else if (container != DC)
       DIR <- "/"  # Change of container
 
     azureActiveContext$directory <- DIR
-    azureActiveContext$container <- CNTR
-    azureActiveContext$storageAccount <- SAI
-    azureActiveContext$resourceGroup <- RGI
-    azureActiveContext$Dcontainer <- CNTR
-    return(paste0("Current directory - ", SAI, " >  ", CNTR, " : ",
+    azureActiveContext$container <- container
+    azureActiveContext$storageAccount <- storageAccount
+    azureActiveContext$resourceGroup <- resourceGroup
+    azureActiveContext$Dcontainer <- container
+    return(paste0("Current directory - ", storageAccount, " >  ", container, " : ",
                   DIR))
 
   }
-  STK <- refreshStorageKey(azureActiveContext, SAI, RGI)
-  if (length(STK) < 1) {
+  storageKey <- refreshStorageKey(azureActiveContext, storageAccount, resourceGroup)
+  if (length(storageKey) < 1) {
     stop("Error: No storageKey provided: Use storageKey argument or set in AzureContext")
   }
 
   if (directory == "../" || directory == "..") {
-    # Basic attempt at relative paths
+    # Basic attempt at relazTokenve paths
     directory <- gsub("/[a-zA-Z0-9]*$", "", azureActiveContext$directory)
   }
 
@@ -681,13 +692,13 @@ azureBlobCD <- function(azureActiveContext, directory, container, file,
   }
 
   azureActiveContext$directory <- directory
-  azureActiveContext$container <- CNTR
-  azureActiveContext$Dcontainer <- CNTR
-  azureActiveContext$storageAccount <- SAI
-  azureActiveContext$resourceGroup <- RGI
-  azureActiveContext$Dcontainer <- CNTR
+  azureActiveContext$container <- container
+  azureActiveContext$Dcontainer <- container
+  azureActiveContext$storageAccount <- storageAccount
+  azureActiveContext$resourceGroup <- resourceGroup
+  azureActiveContext$Dcontainer <- container
 
-  return(paste0("Current directory - ", SAI, " >  ", CNTR, " : ", directory))
+  return(paste0("Current directory - ", storageAccount, " >  ", container, " : ", directory))
 }
 
 #' Delete a specifed Storage blob.
@@ -705,45 +716,45 @@ azureDeleteBlob <- function(azureActiveContext, blob, directory,
                             azToken, verbose = FALSE) {
   azureCheckToken(azureActiveContext)
   if (missing(subscriptionID)) {
-    SUBIDI <- azureActiveContext$subscriptionID
-  } else (SUBIDI <- subscriptionID)
+    subscriptionID <- azureActiveContext$subscriptionID
+  } else (subscriptionID <- subscriptionID)
   if (missing(azToken)) {
-    ATI <- azureActiveContext$Token
-  } else (ATI <- azToken)
+    azToken <- azureActiveContext$Token
+  } else (azToken <- azToken)
   if (missing(resourceGroup)) {
-    RGI <- azureActiveContext$resourceGroup
-  } else (RGI <- resourceGroup)
+    resourceGroup <- azureActiveContext$resourceGroup
+  } else (resourceGroup <- resourceGroup)
   if (missing(storageAccount)) {
-    SAI <- azureActiveContext$storageAccount
-  } else (SAI <- storageAccount)
+    storageAccount <- azureActiveContext$storageAccount
+  } else (storageAccount <- storageAccount)
   if (missing(storageKey)) {
-    STK <- azureActiveContext$storageKey
-  } else (STK <- storageKey)
+    storageKey <- azureActiveContext$storageKey
+  } else (storageKey <- storageKey)
   if (missing(container)) {
-    CNTR <- azureActiveContext$container
-  } else (CNTR <- container)
+    container <- azureActiveContext$container
+  } 
   if (missing(blob)) {
-    BLOBI <- azureActiveContext$blob
-  } else (BLOBI <- blob)
+    blob <- azureActiveContext$blob
+  } else (blob <- blob)
   verbosity <- if (verbose)
     httr::verbose(TRUE) else NULL
 
-  if (length(RGI) < 1) {
+  if (length(resourceGroup) < 1) {
     stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
   }
-  if (length(SAI) < 1) {
+  if (length(storageAccount) < 1) {
     stop("Error: No storageAccount provided: Use storageAccount argument or set in AzureContext")
   }
-  if (length(CNTR) < 1) {
+  if (length(container) < 1) {
     stop("Error: No container provided: Use container argument or set in AzureContext")
   }
-  if (length(BLOBI) < 1) {
+  if (length(blob) < 1) {
     stop("Error: No blob provided: Use blob argument or set in AzureContext")
   }
 
-  STK <- refreshStorageKey(azureActiveContext, SAI, RGI)
+  storageKey <- refreshStorageKey(azureActiveContext, storageAccount, resourceGroup)
 
-  if (length(STK) < 1) {
+  if (length(storageKey) < 1) {
     stop("Error: No storageKey provided: Use storageKey argument or set in AzureContext")
   }
 
@@ -756,20 +767,20 @@ azureDeleteBlob <- function(azureActiveContext, blob, directory,
     if (length(DC) < 1) {
       DIR <- ""  # No previous Dir value
       DC <- ""
-    } else if (CNTR != DC)
+    } else if (container != DC)
       DIR <- ""  # Change of container
   } else DIR <- directory
 
   if (nchar(DIR) > 0)
     DIR <- paste0(DIR, "/")
 
-  BLOBI <- paste0(DIR, BLOBI)
-  BLOBI <- gsub("^/", "", BLOBI)
-  BLOBI <- gsub("^\\./", "", BLOBI)
-  cat(BLOBI)
+  blob <- paste0(DIR, blob)
+  blob <- gsub("^/", "", blob)
+  blob <- gsub("^\\./", "", blob)
+  cat(blob)
 
-  URL <- paste("http://", SAI, ".blob.core.windows.net/", CNTR, "/",
-               BLOBI, sep = "")
+  URL <- paste("http://", storageAccount, ".blob.core.windows.net/", container, "/",
+               blob, sep = "")
 
 
   D1 <- Sys.getlocale("LC_TIME")
@@ -777,11 +788,11 @@ azureDeleteBlob <- function(azureActiveContext, blob, directory,
   Sys.setlocale("LC_TIME", D1)
   D1 <- format(Sys.time(), "%a, %d %b %Y %H:%M:%S %Z", tz = "GMT")
 
-  SIG <- getSig(azureActiveContext, url = URL, verb = "DELETE", key = STK,
-                storageAccount = SAI, container = CNTR,
-                CMD = paste0("/", BLOBI), dateS = D1)
+  SIG <- getSig(azureActiveContext, url = URL, verb = "DELETE", key = storageKey,
+                storageAccount = storageAccount, container = container,
+                CMD = paste0("/", blob), dateS = D1)
 
-  AT <- paste0("SharedKey ", SAI, ":", SIG)
+  AT <- paste0("SharedKey ", storageAccount, ":", SIG)
 
   r <- DELETE(URL, add_headers(.headers = c(Authorization = AT,
                                             `Content-Length` = "0",
