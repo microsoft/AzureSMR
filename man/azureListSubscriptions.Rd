@@ -25,4 +25,3 @@ Other Resource group functions: \code{\link{azureCreateResourceGroup}},
   \code{\link{azureListAllResources}},
   \code{\link{azureListRG}}
 }
-

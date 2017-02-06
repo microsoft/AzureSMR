@@ -35,8 +35,10 @@ azureAuthenticate <- function(azureActiveContext, tenantID, clientID, authKey, v
 
   URLGT <- paste0("https://login.microsoftonline.com/", AtenantID, "/oauth2/token?api-version=1.0")
 
+  AauthKeyE <- URLencode(AauthKey, reserved = TRUE)
+
   bodyGT <- paste0("grant_type=client_credentials&resource=https%3A%2F%2Fmanagement.azure.com%2F&client_id=",
-                   AclientID, "&client_secret=", AauthKey)
+                   AclientID, "&client_secret=", AauthKeyE)
 
   r <- httr::POST(URLGT,
                   add_headers(

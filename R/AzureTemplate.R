@@ -82,12 +82,16 @@ azureDeployTemplate <- function(azureActiveContext, deplname, templateURL,
   r <- PUT(URL, add_headers(.headers = c(Host = "management.azure.com",
                                          Authorization = AT, `Content-type` = "application/json")), body = bodyI,
            verbosity)
+
+    rl <- content(r, "text", encoding = "UTF-8")
+    if (verbose == TRUE && status_code(r) != 200 && status_code(r) != 201 && status_code(r) !=
+      202) print (rl)
+  
   # print(paste(deplname,'Submitted'))
   if (status_code(r) != 200 && status_code(r) != 201 && status_code(r) !=
       202) {
     stopWithAzureError(r)
   }
-  rl <- content(r, "text", encoding = "UTF-8")
   # print (rl)
   df <- fromJSON(rl)
   if (toupper(mode) == "SYNC") {
@@ -103,7 +107,7 @@ azureDeployTemplate <- function(azureActiveContext, deplname, templateURL,
         writeLines(paste("Finished Deploying Sucessfully: ", Sys.time()))
         (break)()
       }
-      if (grepl("Error", rc)) {
+      if (grepl("Error", rc) || grepl("Failed", rc)) {
         writeLines("")
         writeLines(paste("Error Deploying: ", Sys.time()))
         (break)()
@@ -130,7 +134,7 @@ azureDeployTemplate <- function(azureActiveContext, deplname, templateURL,
     }
   }
   writeLines(paste("Deployment", deplname, "Submitted: ", Sys.time()))
-  return("OK")
+  return(TRUE)
 }
 
 

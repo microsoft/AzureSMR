@@ -67,7 +67,7 @@ azureListSubscriptions(sc)
 
 ```{r, eval=FALSE}
 # list resource groups
-AzureListRG(sc)
+azureListRG(sc)
 
 # list all resources
 azureListAllResources(sc)

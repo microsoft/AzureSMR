@@ -33,4 +33,3 @@ Other blob store functions: \code{\link{azureBlobCD}},
   \code{\link{azureDeleteBlob}},
   \code{\link{azureGetBlob}}, \code{\link{azurePutBlob}}
 }
-

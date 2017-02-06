@@ -49,4 +49,3 @@ Updates the value of an azureActiveContext object, created by \code{\link{create
 \seealso{
 Other azureActiveContext functions: \code{\link{createAzureContext}}
 }
-

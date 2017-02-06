@@ -28,4 +28,3 @@ Functions for creating and displaying information about azureActiveContext objec
 \seealso{
 \code{\link{createAzureContext}}
 }
-

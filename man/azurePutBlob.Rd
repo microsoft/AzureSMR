@@ -43,4 +43,3 @@ Other blob store functions: \code{\link{azureBlobCD}},
   \code{\link{azureGetBlob}},
   \code{\link{azureListStorageBlobs}}
 }
-

@@ -28,4 +28,3 @@ Other Template functions: \code{\link{azureCancelDeploy}},
   \code{\link{azureDeployStatus}},
   \code{\link{azureDeployTemplate}}
 }
-

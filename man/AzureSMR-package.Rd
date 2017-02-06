@@ -2,8 +2,8 @@
 % Please edit documentation in R/AzureSM-package.R
 \docType{package}
 \name{AzureSMR-package}
-\alias{AzureSMR}
 \alias{AzureSMR-package}
+\alias{AzureSMR}
 \title{AzureSMR}
 \description{
 The AzureSMR package connects R to the Azure Service Manager API.
@@ -19,4 +19,3 @@ This enables you to use and change many Azure resources, including:
 }
 }
 \keyword{package}
-

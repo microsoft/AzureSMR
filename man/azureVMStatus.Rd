@@ -27,7 +27,9 @@ Get Status of a Virtual Machine.
 }
 \seealso{
 Other Virtual machine functions: \code{\link{azureDeleteVM}},
+  \code{\link{azureListScaleSetNetwork}},
+  \code{\link{azureListScaleSetVM}},
+  \code{\link{azureListScaleSets}},
   \code{\link{azureListVM}}, \code{\link{azureStartVM}},
   \code{\link{azureStopVM}}
 }
-

@@ -33,4 +33,3 @@ See \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group
 \seealso{
 Other Resources: \code{\link{azureCheckToken}}
 }
-

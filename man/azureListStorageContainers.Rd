@@ -29,4 +29,3 @@ List Storage containers for Specified Storage Account.
 Other container functions: \code{\link{azureCreateStorageContainer}},
   \code{\link{azureDeleteStorageContainer}}
 }
-

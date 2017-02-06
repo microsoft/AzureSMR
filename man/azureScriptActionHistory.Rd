@@ -36,4 +36,3 @@ Other HDInsight functions: \code{\link{azureCreateHDI}},
   \code{\link{azureListHDI}}, \code{\link{azureResizeHDI}},
   \code{\link{azureRunScriptAction}}
 }
-

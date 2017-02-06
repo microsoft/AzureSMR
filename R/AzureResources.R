@@ -79,6 +79,11 @@ azureListRG <- function(azureActiveContext, subscriptionID, azToken, verbose = F
 }
 
 
+#' @rdname azureListRG
+#' @export
+AzureListRG <- azureListRG
+
+
 #' Get all Resource in default Subscription.
 #'
 #' @inheritParams setAzureContext
