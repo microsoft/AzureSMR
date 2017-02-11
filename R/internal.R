@@ -1,24 +1,95 @@
-getSig <- function(azureActiveContext, url, verb, key, storageAccount,
-                   headers = NULL, container = NULL, CMD = NULL, size = NULL, contenttype = NULL,
-                   dateS, verbose = FALSE) {
-
-  if (length(headers)){
-    ARG1 <- paste0(headers, "\nx-ms-date:", dateS, "\nx-ms-version:2015-04-05")
+extractUrlArguments <- function(x) {
+  ptn <- ".*\\?(.*?)"
+  args <- grepl("\\?", x)
+  z <- if (args) gsub(ptn, "\\1", x) else ""
+  if (z == "") {
+    ""
   } else {
-    ARG1 <- paste0("x-ms-date:", dateS, "\nx-ms-version:2015-04-05")
+    z <- strsplit(z, "&")[[1]]
+    z <- sort(z)
+    z <- paste(z, collapse = "\n")
+    z <- gsub("=", ":", z)
+    paste0("\n", z)
+  }
+}
+
+callAzureStorageApi <- function(url, verb = "GET", storageKey, storageAccount,
+                   headers = NULL, container = NULL, CMD, size = NULL, contenttype = NULL,
+                   verbose = FALSE) {
+  dateSig <- format(Sys.time(), "%a, %d %b %Y %H:%M:%S %Z", tz = "GMT")
+
+  verbosity <- if (verbose) httr::verbose(TRUE) else NULL
+
+  if (missing(CMD) || is.null(CMD)) CMD <- extractUrlArguments(url)
+
+  sig <- createAzureStorageSignature(url = URL, verb = verb, key = storageKey,
+                storageAccount = storageAccount, container = container,
+                CMD = CMD, dateSig = dateSig, verbose = verbose)
+
+  at <- paste0("SharedKey ", storageAccount, ":", sig)
+
+  GET(url, add_headers(.headers = c(Authorization = at, 
+                                    `Content-Length` = "0",
+                                    `x-ms-version` = "2015-04-05",
+                                    `x-ms-date` = dateSig)
+                                    ),
+    verbosity)
+
+}
+
+
+createAzureStorageSignature <- function(url, verb, key, storageAccount,
+                   headers = NULL, container = NULL, CMD = NULL, size = NULL, contenttype = NULL,
+                   dateSig, verbose = FALSE) {
+  if (missing(dateSig)) {
+    dateSig <- format(Sys.time(), "%a, %d %b %Y %H:%M:%S %Z", tz = "GMT")
   }
 
-  ARG2 <- paste0("/", storageAccount, "/", container, CMD)
+  arg1 <- if (length(headers)) {
+    paste0(headers, "\nx-ms-date:", dateSig, "\nx-ms-version:2015-04-05")
+  } else {
+    paste0("x-ms-date:", dateSig, "\nx-ms-version:2015-04-05")
+  }
+
+  arg2 <- paste0("/", storageAccount, "/", container, CMD)
 
   SIG <- paste0(verb, "\n\n\n", size, "\n\n", contenttype, "\n\n\n\n\n\n\n",
-                ARG1, "\n", ARG2)
+                   arg1, "\n", arg2)
   if (verbose) message(paste0("TRACE: STRINGTOSIGN: ", SIG))
   base64encode(hmac(key = base64decode(key),
-                    object = iconv(SIG, "ASCII",to = "UTF-8"),
+                    object = iconv(SIG, "ASCII", to = "UTF-8"),
                     algo = "sha256",
                     raw = TRUE)
-  )
+                   )
 }
+
+
+
+getSig <- function(azureActiveContext, url, verb, key, storageAccount,
+                   headers = NULL, container = NULL, CMD = NULL, size = NULL, contenttype = NULL,
+                   dateSig, verbose = FALSE) {
+
+  if (missing(dateSig)) {
+    dateSig <- format(Sys.time(), "%a, %d %b %Y %H:%M:%S %Z", tz = "GMT")
+  }
+
+  arg1 <- if (length(headers)) {
+    paste0(headers, "\nx-ms-date:", dateSig, "\nx-ms-version:2015-04-05")
+  } else {
+    paste0("x-ms-date:", dateSig, "\nx-ms-version:2015-04-05")
+  }
+
+  arg2 <- paste0("/", storageAccount, "/", container, CMD)
+
+  SIG <- paste0(verb, "\n\n\n", size, "\n\n", contenttype, "\n\n\n\n\n\n\n",
+                   arg1, "\n", arg2)
+  if (verbose) message(paste0("TRACE: STRINGTOSIGN: ", SIG))
+  base64encode(hmac(key = base64decode(key),
+                    object = iconv(SIG, "ASCII", to = "UTF-8"),
+                    algo = "sha256",
+                    raw = TRUE)
+                   )
+  }
 
 
 stopWithAzureError <- function(r){

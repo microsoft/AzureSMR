@@ -45,26 +45,15 @@ azureListStorageBlobs <- function(azureActiveContext, storageAccount, storageKey
     storageKey <- refreshStorageKey(azureActiveContext, storageAccount, resourceGroup)
   }
 
-    if (length(storageKey) < 1) {
-      stop("Error: No storageKey provided: Use storageKey argument or set in AzureContext")
-    }
-  
+  if (length(storageKey) < 1) {
+    stop("Error: No storageKey provided: Use storageKey argument or set in AzureContext")
+  }
 
   URL <- paste0("http://", storageAccount, ".blob.core.windows.net/", container, "?restype=container&comp=list")
-  D1 <- Sys.getlocale("LC_TIME")
-  Sys.setlocale("LC_TIME", "us")
-  Sys.setlocale("LC_TIME", D1)
-  D1 <- format(Sys.time(), "%a, %d %b %Y %H:%M:%S %Z", tz = "GMT")
+  r <- callAzureStorageApi(URL, 
+    storageKey = storageKey, storageAccount = storageAccount, container = container,
+    verbose = verbose)
 
-  SIG <- getSig(azureActiveContext, url = URL, verb = "GET", key = storageKey,
-                storageAccount = storageAccount, container = container,
-                CMD = "\ncomp:list\nrestype:container", dateS = D1)
-  
-  AT <- paste0("SharedKey ", storageAccount, ":", SIG)
-  r <- GET(URL, add_headers(.headers = c(Authorization = AT, `Content-Length` = "0",
-                                         `x-ms-version` = "2015-04-05",
-                                         `x-ms-date` = D1)),
-           verbosity)
 
 
   if (status_code(r) == 404) {
@@ -371,33 +360,15 @@ azureGetBlob <- function(azureActiveContext, blob, directory, type = "text",
   blob <- paste0(directory, blob)
   blob <- gsub("^/", "", blob)
   blob <- gsub("^\\./", "", blob)
-  cat(blob)
-
-  URL <- paste("http://", storageAccount, ".blob.core.windows.net/", container, "/",
-               blob, sep = "")
-
-
-  D1 <- Sys.getlocale("LC_TIME")
-  Sys.setlocale("LC_TIME", "C")
-  # `x-ms-date` <- format(Sys.time(),'%a, %d %b %Y %H:%M:%S %Z',
-  # tz='GMT')
-  Sys.setlocale("LC_TIME", D1)
-  D1 <- format(Sys.time(), "%a, %d %b %Y %H:%M:%S %Z", tz = "GMT")
-
-  SIG <- getSig(azureActiveContext, url = URL, verb = "GET", key = storageKey,
-                storageAccount = storageAccount, container = container,
-                CMD = paste0("/", blob), dateS = D1)
-
-  AT <- paste0("SharedKey ", storageAccount, ":", SIG)
-
-  r <- GET(URL, add_headers(.headers = c(Authorization = AT, `Content-Length` = "0",
-                                         `x-ms-version` = "2015-04-05",
-                                         `x-ms-date` = D1)),
-           verbosity)
+``
+  URL <- paste0("http://", storageAccount, ".blob.core.windows.net/", container, "/", blob)
+  r <- callAzureStorageApi(URL, 
+    storageKey = storageKey, storageAccount = storageAccount, container = container,
+    CMD = paste0("/", blob)
+    )
 
   if (status_code(r) == 404) {
-    cat(blob)
-    warning("file not found")
+    warning("blob not found")
     return(NULL)
   } else if (status_code(r) != 200)
     stopWithAzureError(r)
