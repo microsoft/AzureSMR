@@ -16,39 +16,39 @@ extractUrlArguments <- function(x) {
 callAzureStorageApi <- function(url, verb = "GET", storageKey, storageAccount,
                    headers = NULL, container = NULL, CMD, size = NULL, contenttype = NULL,
                    verbose = FALSE) {
-  dateSig <- format(Sys.time(), "%a, %d %b %Y %H:%M:%S %Z", tz = "GMT")
+  dateStamp <- format(Sys.time(), "%a, %d %b %Y %H:%M:%S %Z", tz = "GMT")
 
   verbosity <- if (verbose) httr::verbose(TRUE) else NULL
 
   if (missing(CMD) || is.null(CMD)) CMD <- extractUrlArguments(url)
 
-  sig <- createAzureStorageSignature(url = URL, verb = verb, key = storageKey,
-                storageAccount = storageAccount, container = container,
-                CMD = CMD, dateSig = dateSig, verbose = verbose)
+  sig <- createAzureStorageSignature(url = URL, verb = verb, 
+    key = storageKey, storageAccount = storageAccount, container = container,
+    headers = headers, CMD = CMD, contenttype = contenttype, dateStamp = dateStamp, verbose = verbose)
 
   at <- paste0("SharedKey ", storageAccount, ":", sig)
 
   GET(url, add_headers(.headers = c(Authorization = at, 
                                     `Content-Length` = "0",
                                     `x-ms-version` = "2015-04-05",
-                                    `x-ms-date` = dateSig)
+                                    `x-ms-date` = dateStamp)
                                     ),
     verbosity)
-
 }
 
 
-createAzureStorageSignature <- function(url, verb, key, storageAccount,
-                   headers = NULL, container = NULL, CMD = NULL, size = NULL, contenttype = NULL,
-                   dateSig, verbose = FALSE) {
-  if (missing(dateSig)) {
-    dateSig <- format(Sys.time(), "%a, %d %b %Y %H:%M:%S %Z", tz = "GMT")
+createAzureStorageSignature <- function(url, verb, 
+  key, storageAccount, container = NULL,
+  headers = NULL, CMD = NULL, size = NULL, contenttype = NULL, dateStamp, verbose = FALSE) {
+
+  if (missing(dateStamp)) {
+    dateStamp <- format(Sys.time(), "%a, %d %b %Y %H:%M:%S %Z", tz = "GMT")
   }
 
   arg1 <- if (length(headers)) {
-    paste0(headers, "\nx-ms-date:", dateSig, "\nx-ms-version:2015-04-05")
+    paste0(headers, "\nx-ms-date:", dateStamp, "\nx-ms-version:2015-04-05")
   } else {
-    paste0("x-ms-date:", dateSig, "\nx-ms-version:2015-04-05")
+    paste0("x-ms-date:", dateStamp, "\nx-ms-version:2015-04-05")
   }
 
   arg2 <- paste0("/", storageAccount, "/", container, CMD)
@@ -125,4 +125,16 @@ refreshStorageKey <- function(azureActiveContext, storageAccount, resourceGroup)
   } else {
     azureActiveContext$storageKey
   }
+}
+
+
+updateAzureActiveContext <- function(x, storageAccount, storageKey, resourceGroup, container, blob) {
+  # updates the active azure context in place
+  if (!is.azureActiveContext(x)) return(FALSE)
+  if (!missing(storageAccount)) x$storageAccount <- storageAccount
+  if (!missing(resourceGroup))  x$resourceGroup  <- resourceGroup
+  if (!missing(storageKey))     x$storageKey     <- storageKey
+  if (!missing(container)) x$container <- container
+  if (!missing(blob)) x$blob <- blob
+  TRUE
 }

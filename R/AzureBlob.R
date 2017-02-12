@@ -11,9 +11,7 @@ azureListStorageBlobs <- function(azureActiveContext, storageAccount, storageKey
                              container, resourceGroup, subscriptionID,
                              azToken, verbose = FALSE) {
 
-  #if (!missing(azureActiveContext)) {
-    #azureCheckToken(azureActiveContext)
-  #}
+  if (!missing(azureActiveContext)) azureCheckToken(azureActiveContext)
 
   if (missing(resourceGroup) && !missing(azureActiveContext)) {
     resourceGroup <- azureActiveContext$resourceGroup
@@ -85,16 +83,16 @@ azureListStorageBlobs <- function(azureActiveContext, storageAccount, storageKey
     )
   }
 
+  updateAzureActiveContext(azureActiveContext,
+    storageAccount = storageAccount,
+    resourceGroup = resourceGroup,
+    storageKey = storageKey
+  )
 
   getXmlBlob <- function(x, property, path = "//blobs//blob//properties/"){
     pth <- paste0(path, property)
     xpathSApply(y, pth, xmlValue)
   }
-
-
-  azureActiveContext$storageAccount <- storageAccount
-  azureActiveContext$resourceGroup <- resourceGroup
-  azureActiveContext$storageKey <- storageKey
 
   data.frame(
     name            = getXmlBlob(y, "name", path = "//blobs//blob//"),
@@ -122,7 +120,9 @@ azureListStorageBlobs <- function(azureActiveContext, storageAccount, storageKey
 azureBlobLS <- function(azureActiveContext, directory, recursive = FALSE,
                         storageAccount, storageKey, container, resourceGroup, subscriptionID,
                         azToken, verbose = FALSE) {
-  azureCheckToken(azureActiveContext)
+
+  if (!missing(azureActiveContext)) azureCheckToken(azureActiveContext)
+
   if (missing(subscriptionID)) {
     subscriptionID <- azureActiveContext$subscriptionID
   } else (subscriptionID <- subscriptionID)
@@ -280,7 +280,7 @@ azureBlobLS <- function(azureActiveContext, directory, recursive = FALSE,
 #' @inheritParams azureSAGetKey
 #' @inheritParams azureBlobLS
 
-#' @param type String, either "text" or "raw"
+#' @param type String, either "text" or "raw". Passed to \code{\link[httr]{content}}
 #'
 #' @family blob store functions
 #' @export
@@ -288,30 +288,22 @@ azureBlobLS <- function(azureActiveContext, directory, recursive = FALSE,
 azureGetBlob <- function(azureActiveContext, blob, directory, type = "text",
                          storageAccount, storageKey, container, resourceGroup, subscriptionID,
                          azToken, verbose = FALSE) {
-  #if (!missing(azureActiveContext) || !is.null(azureActiveContext)) {
-    #azureCheckToken(azureActiveContext)
-  #}
+  if (!missing(azureActiveContext)) azureCheckToken(azureActiveContext)
 
-  #if (missing(subscriptionID)) {
-    #subscriptionID <- azureActiveContext$subscriptionID
-  #} 
-  #if (missing(azToken)) {
-    #azToken <- azureActiveContext$Token
-  #} 
-
-  if (missing(resourceGroup)) {
+  if (missing(resourceGroup) && !missing(azureActiveContext)) {
     resourceGroup <- azureActiveContext$resourceGroup
-  } 
-  if (missing(storageAccount)) {
+  }
+
+  if (missing(storageAccount) && !missing(azureActiveContext) && !is.null(azureActiveContext)) {
     storageAccount <- azureActiveContext$storageAccount
-  } 
-  if (missing(storageKey)) {
+  }
+  if (missing(storageKey) && !missing(azureActiveContext)) {
     storageKey <- azureActiveContext$storageKey
-  } 
-  if (missing(container)) {
+  }
+  if (missing(container) && !missing(azureActiveContext)) {
     container <- azureActiveContext$container
-  } 
-  if (missing(blob)) {
+  }
+  if (missing(blob) && !missing(azureActiveContext)) {
     blob <- azureActiveContext$blob
   } 
   verbosity <- if (verbose)
@@ -329,8 +321,6 @@ azureGetBlob <- function(azureActiveContext, blob, directory, type = "text",
   if (length(blob) < 1) {
     stop("Error: No blob provided: Use blob argument or set in AzureContext")
   }
-
-  #storageKey <- refreshStorageKey(azureActiveContext, storageAccount, resourceGroup)
 
   if (length(storageKey) < 1) {
     stop("Error: No storageKey provided: Use storageKey argument or set in AzureContext")
@@ -360,7 +350,7 @@ azureGetBlob <- function(azureActiveContext, blob, directory, type = "text",
   blob <- paste0(directory, blob)
   blob <- gsub("^/", "", blob)
   blob <- gsub("^\\./", "", blob)
-``
+
   URL <- paste0("http://", storageAccount, ".blob.core.windows.net/", container, "/", blob)
   r <- callAzureStorageApi(URL, 
     storageKey = storageKey, storageAccount = storageAccount, container = container,
@@ -373,14 +363,15 @@ azureGetBlob <- function(azureActiveContext, blob, directory, type = "text",
   } else if (status_code(r) != 200)
     stopWithAzureError(r)
 
-  r2 <- content(r, type, encoding = "UTF-8")
+  updateAzureActiveContext(azureActiveContext,
+    storageAccount = storageAccount,
+    resourceGroup = resourceGroup,
+    storageKey = storageKey,
+    container = container,
+    blob = blob
+  )
 
-  azureActiveContext$storageAccount <- storageAccount
-  azureActiveContext$resourceGroup <- resourceGroup
-  azureActiveContext$storageKey <- storageKey
-  azureActiveContext$container <- container
-  azureActiveContext$blob <- blob
-  return(r2)
+  content(r, type, encoding = "UTF-8")
 }
 
 
