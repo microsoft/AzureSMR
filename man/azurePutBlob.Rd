@@ -5,17 +5,16 @@
 \title{Write contents to a specifed Storage blob.}
 \usage{
 azurePutBlob(azureActiveContext, blob, contents = "", file = "", directory,
-  storageAccount, storageKey, container, resourceGroup, subscriptionID, azToken,
-  verbose = FALSE)
+  storageAccount, storageKey, container, resourceGroup, verbose = FALSE)
 }
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 
 \item{blob}{Blob name}
 
-\item{contents}{- Object to Store or Value}
+\item{contents}{- Object or value to store}
 
-\item{file}{- Local filename to Store in Azure blob}
+\item{file}{- Local filename to store in Azure blob}
 
 \item{directory}{Blob store directory to list for content}
 
@@ -26,10 +25,6 @@ azurePutBlob(azureActiveContext, blob, contents = "", file = "", directory,
 \item{container}{Storage container name. See \code{\link{azureListStorageContainers}}}
 
 \item{resourceGroup}{Name of the resource group}
-
-\item{subscriptionID}{Set the subscriptionID.  This is obtained automatically by \code{\link{azureAuthenticate}} when only a single subscriptionID is available via Active Directory}
-
-\item{azToken}{Azure authentication token, obtained by \code{\link{azureAuthenticate}}}
 
 \item{verbose}{Print Tracing information (Default False)}
 }
