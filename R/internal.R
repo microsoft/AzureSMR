@@ -37,7 +37,7 @@ callAzureStorageApi <- function(url, verb = "GET", storageKey, storageAccount,
                                     `x-ms-date` = dateStamp)
                                     ),
     verbosity),
-"PUT" = PUT(url, add_headers(.headers = c(Authorization = at,
+  "PUT" = PUT(url, add_headers(.headers = c(Authorization = at,
                                          `Content-Length` = nchar(content),
                                          `x-ms-version` = "2015-04-05",
                                          `x-ms-date` = dateStamp,
@@ -150,4 +150,26 @@ updateAzureActiveContext <- function(x, storageAccount, storageKey, resourceGrou
   if (!missing(blob)) x$blob <- blob
   if (!missing(directory)) x$directory <- directory
   TRUE
+}
+
+validateStorageArguments <- function(resourceGroup, storageAccount, container, storageKey) {
+  msg <- character(0)
+  pasten <- function(x, ...) paste(x, ..., collapse = "", sep = "\n")
+  if (!missing(resourceGroup) && (is.null(resourceGroup) || length(resourceGroup) == 0)) {
+    msg <- pasten(msg, "- No resourceGroup provided. Use resourceGroup argument or set in AzureContext")
+  }
+  if (!missing(storageAccount) && (is.null(storageAccount) || length(storageAccount) == 0)) {
+    msg <- pasten(msg, "- No storageAccount provided. Use storageAccount argument or set in AzureContext")
+  }
+  if (!missing(container) && (is.null(container) || length(container) == 0)) {
+    msg <- pasten(msg, "- No container provided. Use container argument or set in AzureContext")
+  }
+  if (!missing(storageKey) && (is.null(storageKey) || length(storageKey) == 0)) {
+    msg <- pasten(msg, "- No storageKey provided. Use storageKey argument or set in AzureContext")
+  }
+
+  if (length(msg) > 0) {
+    stop(msg, call. = FALSE)
+  }
+  msg
 }
