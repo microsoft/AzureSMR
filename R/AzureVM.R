@@ -160,13 +160,13 @@ azureStartVM <- function(azureActiveContext, resourceGroup, vmName, mode = "Sync
       if (rc1 == "NA")
         rc1 <- "*"
 
-      cat(rc1)
+      message(rc1)
 
       if (a > 500)
         (break)()
       Sys.sleep(5)
     }
-    writeLines(paste("Finished: ", Sys.time()))
+    message("Finished: ", Sys.time())
     return("Done")
   }
   writeLines(paste("Start request Submitted: ", Sys.time()))
@@ -264,17 +264,17 @@ azureStopVM <- function(azureActiveContext, resourceGroup, vmName, mode = "Sync"
         rc1 <- "-"
       }
 
-      cat(rc1)
+      message(rc1)
 
       if (a > 500)
         (break)()
       Sys.sleep(5)
     }
-    writeLines(paste("Finished: ", Sys.time()))
-    return("Done")
+    message("Finished: ", Sys.time())
+    return(TRUE)
   }
-  writeLines(paste("Stop request Submitted: ", Sys.time()))
-  return("")
+  message("Stop request Submitted: ", Sys.time())
+  return(TRUE)
 }
 
 
@@ -431,7 +431,7 @@ azureDeleteVM <- function(azureActiveContext, resourceGroup, vmName, subscriptio
         rc <- "-"
       }
 
-      cat(rc)
+      message(rc)
 
       if (a > 500)
         (break)()

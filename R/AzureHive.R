@@ -130,9 +130,9 @@ azureHiveSQL <- function(azureActiveContext, CMD, clustername, hdiAdmin,
     if (DUR < 5)
       DUR <- DUR + 1
     if (df$status$state == "PREP")
-      cat("P")
+      message("P")
     if (df$status$state == "RUNNING")
-      cat("R")
+      message("R")
     # print(df$status$state)
 
     r <- GET(URL, add_headers(.headers = c(`Content-type` = "application/json")),
@@ -142,13 +142,11 @@ azureHiveSQL <- function(azureActiveContext, CMD, clustername, hdiAdmin,
     df <- fromJSON(rl)
   }
   if (df$status$state == "SUCCEEDED")
-    cat("S")
+    message("S")
   if (df$status$state == "FAILED")
-    cat("F")
+    message("F")
 
   STATE <- df$status$state
-  writeLines("")
-  writeLines(paste("Finished Running statement: ", Sys.time()))
-  # print(df)
-  return("Done")
+  message("Finished Running statement: ", Sys.time())
+  return(TRUE)
 }
