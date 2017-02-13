@@ -14,7 +14,8 @@ extractUrlArguments <- function(x) {
 }
 
 callAzureStorageApi <- function(url, verb = "GET", storageKey, storageAccount,
-                   headers = NULL, container = NULL, CMD, size = NULL, contenttype = NULL,
+                   headers = NULL, container = NULL, CMD, size = nchar(content), contenttype = NULL,
+                   content = NULL,
                    verbose = FALSE) {
   dateStamp <- format(Sys.time(), "%a, %d %b %Y %H:%M:%S %Z", tz = "GMT")
 
@@ -22,18 +23,29 @@ callAzureStorageApi <- function(url, verb = "GET", storageKey, storageAccount,
 
   if (missing(CMD) || is.null(CMD)) CMD <- extractUrlArguments(url)
 
-  sig <- createAzureStorageSignature(url = URL, verb = verb, 
-    key = storageKey, storageAccount = storageAccount, container = container,
-    headers = headers, CMD = CMD, contenttype = contenttype, dateStamp = dateStamp, verbose = verbose)
+    sig <- createAzureStorageSignature(url = URL, verb = verb,
+      key = storageKey, storageAccount = storageAccount, container = container,
+      headers = headers, CMD = CMD, size = size,
+      contenttype = contenttype, dateStamp = dateStamp, verbose = verbose)
 
   at <- paste0("SharedKey ", storageAccount, ":", sig)
 
-  GET(url, add_headers(.headers = c(Authorization = at, 
+  switch(verb, 
+  "GET" = GET(url, add_headers(.headers = c(Authorization = at,
                                     `Content-Length` = "0",
                                     `x-ms-version` = "2015-04-05",
                                     `x-ms-date` = dateStamp)
                                     ),
+    verbosity),
+"PUT" = PUT(url, add_headers(.headers = c(Authorization = at,
+                                         `Content-Length` = nchar(content),
+                                         `x-ms-version` = "2015-04-05",
+                                         `x-ms-date` = dateStamp,
+                                         `x-ms-blob-type` = "Blockblob",
+                                         `Content-type` = "text/plain; charset=UTF-8")),
+           body = content,
     verbosity)
+  )
 }
 
 
@@ -128,7 +140,7 @@ refreshStorageKey <- function(azureActiveContext, storageAccount, resourceGroup)
 }
 
 
-updateAzureActiveContext <- function(x, storageAccount, storageKey, resourceGroup, container, blob) {
+updateAzureActiveContext <- function(x, storageAccount, storageKey, resourceGroup, container, blob, directory) {
   # updates the active azure context in place
   if (!is.azureActiveContext(x)) return(FALSE)
   if (!missing(storageAccount)) x$storageAccount <- storageAccount
@@ -136,5 +148,6 @@ updateAzureActiveContext <- function(x, storageAccount, storageKey, resourceGrou
   if (!missing(storageKey))     x$storageKey     <- storageKey
   if (!missing(container)) x$container <- container
   if (!missing(blob)) x$blob <- blob
+  if (!missing(directory)) x$directory <- directory
   TRUE
 }
