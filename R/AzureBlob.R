@@ -5,10 +5,16 @@
 #' @inheritParams azureAuthenticate
 #' @inheritParams azureSAGetKey
 #'
+#' @param maxresults Optional. Specifies the maximum number of blobs to return, including all BlobPrefix elements. If the request does not specify maxresults or specifies a value greater than 5,000, the server will return up to 5,000 items.  Setting maxresults to a value less than or equal to zero results in error response code 400(Bad Request) .
+#' @param prefix Optional. Filters the results to return only blobs whose names begin with the specified prefix.
+#' @param delimiter Optional. When the request includes this parameter, the operation returns a BlobPrefix element in the response body that acts as a placeholder for all blobs whose names begin with the same substring up to the appearance of the delimiter character. The delimiter may be a single character or a string.
+#' @param Optional. A string value that identifies the portion of the list to be returned with the next list operation. The operation returns a marker value within the response body if the list returned was not complete. The marker value may then be used in a subsequent call to request the next set of list items.  The marker value is opaque to the client.
+#'
+#' @return Returns a data frame. This data frame has an attribute called "marker" that can be used with the "marker" argument to return the next set of values.
 #' @family blob store functions
 #' @export
 azureListStorageBlobs <- function(azureActiveContext, storageAccount, storageKey,
-                             container, resourceGroup, verbose = FALSE) {
+                             container, resourceGroup, maxresults, prefix, delimiter, marker, verbose = FALSE) {
 
   if (!missing(azureActiveContext)) azureCheckToken(azureActiveContext)
 
@@ -28,25 +34,21 @@ azureListStorageBlobs <- function(azureActiveContext, storageAccount, storageKey
   verbosity <- if (verbose)
     httr::verbose(TRUE) else NULL
 
-  if (length(resourceGroup) < 1) {
-    stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
-  }
-  if (length(storageAccount) < 1) {
-    stop("Error: No storageAccount provided: Use storageAccount argument or set in AzureContext")
-  }
-  if (length(container) < 1) {
-    stop("Error: No container provided: Use container argument or set in AzureContext")
-  }
-
   if (missing(storageKey) && !missing(azureActiveContext) && !is.null(azureActiveContext)) {
     storageKey <- refreshStorageKey(azureActiveContext, storageAccount, resourceGroup)
   }
 
-  if (length(storageKey) < 1) {
-    stop("Error: No storageKey provided: Use storageKey argument or set in AzureContext")
-  }
+  validateStorageArguments(resourceGroup = resourceGroup, 
+    storageAccount = storage.mode,
+    container = container, 
+    storageKey = storage.mode
+  )
 
   URL <- paste0("http://", storageAccount, ".blob.core.windows.net/", container, "?restype=container&comp=list")
+  if (!missing(maxresults)  && !is.null(maxresults)) URL <- paste0(URL, "&maxresults=", maxresults)
+  if (!missing(prefix) && !is.null(prefix)) URL <- paste0(URL, "&prefix=", prefix)
+  if (!missing(delimiter) && !is.null(delimiter)) URL <- paste0(URL, "&delimiter=", delimiter)
+  if (!missing(marker) && !is.null(marker)) URL <- paste0(URL, "&marker=", marker)
   r <- callAzureStorageApi(URL, 
     storageKey = storageKey, storageAccount = storageAccount, container = container,
     verbose = verbose)
@@ -62,6 +64,7 @@ azureListStorageBlobs <- function(azureActiveContext, storageAccount, storageKey
   r <- content(r, "text", encoding = "UTF-8")
 
   y <- htmlParse(r, encoding = "UTF-8")
+
 
   namesx <- xpathApply(y, "//blobs//blob//name", xmlValue)
 
@@ -91,7 +94,7 @@ azureListStorageBlobs <- function(azureActiveContext, storageAccount, storageKey
     xpathSApply(y, pth, xmlValue)
   }
 
-  data.frame(
+  z <- data.frame(
     name            = getXmlBlob(y, "name", path = "//blobs//blob//"),
     lastModified    = getXmlBlob(y, "last-modified"),
     length          = getXmlBlob(y, "content-length"),
@@ -100,6 +103,8 @@ azureListStorageBlobs <- function(azureActiveContext, storageAccount, storageKey
     stringsAsFactors = FALSE,
     check.names = FALSE
   )
+  attr(z, "marker") <- xpathSApply(y, "//nextmarker", xmlValue)
+  z
 }
 
 
@@ -198,7 +203,7 @@ azureBlobLS <- function(azureActiveContext, directory, recursive = FALSE,
     azureActiveContext$directory <- DIR
   azureActiveContext$container <- container
   azureActiveContext$container <- container
-  cat(paste0("Current directory - ", storageAccount, " >  ", container, " : ", DIR, "\n\n"))
+  message(paste0("Current directory - ", storageAccount, " >  ", container, " : ", DIR, "\n\n"))
 
   DIR <- gsub("//", "/", DIR)
   Depth <- length(strsplit(DIR, "/")[[1]])
@@ -697,10 +702,8 @@ azureDeleteBlob <- function(azureActiveContext, blob, directory,
   blob <- paste0(DIR, blob)
   blob <- gsub("^/", "", blob)
   blob <- gsub("^\\./", "", blob)
-  cat(blob)
 
-  URL <- paste("http://", storageAccount, ".blob.core.windows.net/", container, "/",
-               blob, sep = "")
+  URL <- paste0("http://", storageAccount, ".blob.core.windows.net/", container, "/", blob)
 
 
   D1 <- Sys.getlocale("LC_TIME")
@@ -721,8 +724,10 @@ azureDeleteBlob <- function(azureActiveContext, blob, directory,
               verbosity)
 
   if (status_code(r) == 202) {
-    return("Blob delete request accepted")
+    message("Blob delete request accepted")
   }
-  else
+  else {
     stopWithAzureError(r)
+  }
+  return(TRUE)
 }
