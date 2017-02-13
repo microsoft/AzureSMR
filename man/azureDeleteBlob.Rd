@@ -5,7 +5,7 @@
 \title{Delete a specifed Storage blob.}
 \usage{
 azureDeleteBlob(azureActiveContext, blob, directory, storageAccount, storageKey,
-  container, resourceGroup, subscriptionID, azToken, verbose = FALSE)
+  container, resourceGroup, verbose = FALSE)
 }
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by AzureSMR}
@@ -21,10 +21,6 @@ azureDeleteBlob(azureActiveContext, blob, directory, storageAccount, storageKey,
 \item{container}{Storage container name. See \code{\link{azureListStorageContainers}}}
 
 \item{resourceGroup}{Name of the resource group}
-
-\item{subscriptionID}{Set the subscriptionID.  This is obtained automatically by \code{\link{azureAuthenticate}} when only a single subscriptionID is available via Active Directory}
-
-\item{azToken}{Azure authentication token, obtained by \code{\link{azureAuthenticate}}}
 
 \item{verbose}{Print Tracing information (Default False)}
 }

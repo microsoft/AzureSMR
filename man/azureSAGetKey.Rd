@@ -4,15 +4,13 @@
 \alias{azureSAGetKey}
 \title{Get the Storage Keys for Specified Storage Account.}
 \usage{
-azureSAGetKey(azureActiveContext, storageAccount, azToken, resourceGroup,
-  subscriptionID, verbose = FALSE)
+azureSAGetKey(azureActiveContext, storageAccount, resourceGroup, subscriptionID,
+  verbose = FALSE)
 }
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 
 \item{storageAccount}{storageAccount}
-
-\item{azToken}{Token Object (or use azureActiveContext)}
 
 \item{resourceGroup}{Name of the resource group}
 

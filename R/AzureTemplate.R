@@ -126,14 +126,14 @@ azureDeployTemplate <- function(azureActiveContext, deplname, templateURL,
         rc <- "A"
       }
 
-      cat(rc)
+      message(rc)
 
       if (a > 500)
         (break)()
       Sys.sleep(5)
     }
   }
-  writeLines(paste("Deployment", deplname, "Submitted: ", Sys.time()))
+  message("Deployment", deplname, "Submitted: ", Sys.time())
   return(TRUE)
 }
 

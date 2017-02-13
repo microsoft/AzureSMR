@@ -4,15 +4,13 @@
 \alias{azureDeletestorageAccount}
 \title{Delete an Azure Storage Account.}
 \usage{
-azureDeletestorageAccount(azureActiveContext, storageAccount, azToken,
-  resourceGroup, subscriptionID, verbose = FALSE)
+azureDeletestorageAccount(azureActiveContext, storageAccount, resourceGroup,
+  subscriptionID, verbose = FALSE)
 }
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 
 \item{storageAccount}{Name of the azure storage account}
-
-\item{azToken}{Azure authentication token, obtained by \code{\link{azureAuthenticate}}}
 
 \item{resourceGroup}{Name of the resource group}
 

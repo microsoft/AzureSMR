@@ -5,7 +5,7 @@
 \title{Azure blob change current directory.}
 \usage{
 azureBlobCD(azureActiveContext, directory, container, file, storageAccount,
-  storageKey, resourceGroup, subscriptionID, azToken, verbose = FALSE)
+  storageKey, resourceGroup, verbose = FALSE)
 }
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by AzureSMR}
@@ -14,17 +14,13 @@ azureBlobCD(azureActiveContext, directory, container, file, storageAccount,
 
 \item{container}{Storage container name. See \code{\link{azureListStorageContainers}}}
 
-\item{file}{- Local filename to Store in Azure blob}
+\item{file}{- Local filename to store in Azure blob}
 
 \item{storageAccount}{Name of the azure storage account}
 
 \item{storageKey}{Storage key associated with storage account}
 
 \item{resourceGroup}{Name of the resource group}
-
-\item{subscriptionID}{Set the subscriptionID.  This is obtained automatically by \code{\link{azureAuthenticate}} when only a single subscriptionID is available via Active Directory}
-
-\item{azToken}{Azure authentication token, obtained by \code{\link{azureAuthenticate}}}
 
 \item{verbose}{Print Tracing information (Default False)}
 }

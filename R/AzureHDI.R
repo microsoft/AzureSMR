@@ -272,7 +272,7 @@ azureResizeHDI <- function(azureActiveContext, clustername, role = "worker",
       rc <- azureListHDI(azureActiveContext, clustername = clustername)
       rc1 <- rc[9, 1]
       if (rc1 == "Running") {
-        cat("R")
+        message("R")
         writeLines("")
         writeLines(paste("Finished Resizing Sucessfully: ", Sys.time()))
         (break)()
@@ -297,7 +297,7 @@ azureResizeHDI <- function(azureActiveContext, clustername, role = "worker",
       if (rc1 == "HdInsightConfiguration") {
         rc1 <- "R"
       }
-      cat(rc1)
+      message(rc1)
 
       if (a > 500)
         (break)()
@@ -436,7 +436,7 @@ azureCreateHDI <- function(azureActiveContext, clustername, location, kind = "sp
     stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
   }
 
-  cat("Fetching Storage Key..")
+  message("Fetching Storage Key..")
   storageKey <- azureSAGetKey(azureActiveContext, resourceGroup = RGI, storageAccount = storageAccount)
 
   HIVE <- FALSE
@@ -620,7 +620,7 @@ azureCreateHDI <- function(azureActiveContext, clustername, location, kind = "sp
       rc <- azureListHDI(azureActiveContext, clustername = clustername)
       rc1 <- rc[8, 1]
       if (rc1 == "Succeeded") {
-        cat("S")
+        message("S")
         writeLines("")
         writeLines(paste("Finished Creating Sucessfully: ", Sys.time()))
         (break)()
@@ -634,7 +634,7 @@ azureCreateHDI <- function(azureActiveContext, clustername, location, kind = "sp
       if (rc1 == "InProgress") {
         rc1 <- "R"
       }
-      cat(rc1)
+      message(rc1)
       if (a > 500)
         (break)()
       Sys.sleep(5)
