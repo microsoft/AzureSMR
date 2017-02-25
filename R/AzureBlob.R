@@ -484,9 +484,13 @@ azurePutBlob <- function(azureActiveContext, blob, contents = "", file = "",
 
   if (!missing(contents) && !missing(file))
     stop("Provided either Content OR file Argument")
-
-
-  STK <- refreshStorageKey(azureActiveContext, SAI, RGI)
+  
+  if (missing(storageKey)) {
+    STK <- refreshStorageKey(azureActiveContext, SAI, RGI)  
+  } else {
+    STK <- storageKey
+  }
+  
 
   if (length(STK) < 1) {
     stop("Error: No storageKey provided: Use storageKey argument or set in AzureContext")
