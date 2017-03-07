@@ -121,8 +121,10 @@ azureSAGetKey <- function(azureActiveContext, storageAccount, azToken,
 #' @inheritParams azureSAGetKey
 
 #' @family Storage account functions
+#' @param location A string for the location to create storage account
 #' @export
 azureCreateStorageAccount <- function(azureActiveContext, storageAccount,
+                                      location = "northeurope",
                                       azToken, resourceGroup, subscriptionID, verbose = FALSE) {
   azureCheckToken(azureActiveContext)
 
@@ -175,11 +177,14 @@ azureCreateStorageAccount <- function(azureActiveContext, storageAccount,
   }"
 
   bodyI <- "{
-  \"location\": \"northeurope\",
+  \"location\": \"llllllll\",
   \"sku\": {
   \"name\": \"Standard_LRS\"
   }}"
 
+  
+  bodyI <- gsub("llllllll", location, bodyI)
+  
   URL <- paste("https://management.azure.com/subscriptions/", SUBIDI,
                "/resourceGroups/", RGI, "/providers/Microsoft.Storage/storageAccounts/",
                storageAccount, "?api-version=2016-01-01", sep = "")
