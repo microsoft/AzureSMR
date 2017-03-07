@@ -4,13 +4,16 @@
 \alias{azureCreateStorageAccount}
 \title{Create an Azure Storage Account.}
 \usage{
-azureCreateStorageAccount(azureActiveContext, storageAccount, azToken,
-  resourceGroup, subscriptionID, verbose = FALSE)
+azureCreateStorageAccount(azureActiveContext, storageAccount,
+  location = "northeurope", azToken, resourceGroup, subscriptionID,
+  verbose = FALSE)
 }
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 
 \item{storageAccount}{Name of the azure storage account}
+
+\item{location}{A string for the location to create storage account}
 
 \item{azToken}{Azure authentication token, obtained by \code{\link{azureAuthenticate}}}
 
