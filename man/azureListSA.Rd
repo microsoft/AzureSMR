@@ -4,7 +4,7 @@
 \alias{azureListSA}
 \title{List storage accounts.}
 \usage{
-azureListSA(azureActiveContext, resourceGroup, subscriptionID, azToken,
+azureListSA(azureActiveContext, resourceGroup, subscriptionID,
   verbose = FALSE)
 }
 \arguments{
@@ -13,8 +13,6 @@ azureListSA(azureActiveContext, resourceGroup, subscriptionID, azToken,
 \item{resourceGroup}{Name of the resource group}
 
 \item{subscriptionID}{Set the subscriptionID.  This is obtained automatically by \code{\link{azureAuthenticate}} when only a single subscriptionID is available via Active Directory}
-
-\item{azToken}{Azure authentication token, obtained by \code{\link{azureAuthenticate}}}
 
 \item{verbose}{Print Tracing information (Default False)}
 }

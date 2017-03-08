@@ -8,27 +8,15 @@
 #' @family Storage account functions
 #' @export
 azureListSA <- function(azureActiveContext, resourceGroup, subscriptionID,
-                        azToken, verbose = FALSE) {
+                        verbose = FALSE) {
   if (missing(resourceGroup)) {
-    RGI <- azureActiveContext$resourceGroup
-  } else {
-    RGI = resourceGroup
-  }
-  if (missing(azToken)) {
-    ATI <- azureActiveContext$Token
-  } else {
-    ATI = azToken
-  }
+    resourceGroup <- azureActiveContext$resourceGroup
+  } 
 
   if (missing(subscriptionID)) {
-    SUBIDI <- azureActiveContext$subscriptionID
-  } else {
-    SUBIDI = subscriptionID
-  }
-  if (!length(ATI)) {
-    stop("Error: No Token / Not currently Authenticated.")
-  }
-  if (!length(SUBIDI)) {
+    subscriptionID <- azureActiveContext$subscriptionID
+  } 
+  if (!length(subscriptionID)) {
     stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
   }
   verbosity <- if (verbose) httr::verbose(TRUE) else NULL
@@ -39,13 +27,13 @@ azureListSA <- function(azureActiveContext, resourceGroup, subscriptionID,
   } else {
     azureListAllResources(azureActiveContext,
                           type = "Microsoft.Storage/storageAccounts",
-                          resourceGroup = RGI)
+                          resourceGroup = resourceGroup)
 
   }
 
   rownames(SA) <- NULL
   SA$storageAccount <- extractStorageAccount(SA$id)
-  return(SA)
+  SA
 }
 
 
@@ -54,38 +42,28 @@ azureListSA <- function(azureActiveContext, resourceGroup, subscriptionID,
 #' @inheritParams setAzureContext
 #' @inheritParams azureAuthenticate
 #' @param storageAccount storageAccount
-#' @param azToken Token Object (or use azureActiveContext)
 #'
 #' @family Storage account functions
 #' @export
-azureSAGetKey <- function(azureActiveContext, storageAccount, azToken,
+azureSAGetKey <- function(azureActiveContext, storageAccount, 
                           resourceGroup, subscriptionID, verbose = FALSE) {
   azureCheckToken(azureActiveContext)
 
   if (missing(resourceGroup)) {
-    RGI <- azureActiveContext$resourceGroup
-  } else {
-    RGI = resourceGroup
-  }
-  if (missing(azToken)) {
-    ATI <- azureActiveContext$Token
-  } else {
-    ATI = azToken
-  }
+    resourceGroup <- azureActiveContext$resourceGroup
+  } 
 
   if (missing(subscriptionID)) {
-    SUBIDI <- azureActiveContext$subscriptionID
-  } else (SUBIDI = subscriptionID)
+    subscriptionID <- azureActiveContext$subscriptionID
+  }
+
   if (!length(storageAccount)) {
     stop("Error: No Valid storageAccount provided")
   }
-  if (length(RGI) < 1) {
+  if (length(resourceGroup) < 1) {
     stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
   }
-  if (!length(ATI)) {
-    stop("Error: No Token / Not currently Authenticated.")
-  }
-  if (!length(SUBIDI)) {
+  if (!length(subscriptionID)) {
     stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
   }
   verbosity <- if (verbose)
@@ -93,12 +71,12 @@ azureSAGetKey <- function(azureActiveContext, storageAccount, azToken,
 
   message("Fetching Storage Key..")
 
-  URL <- paste("https://management.azure.com/subscriptions/", SUBIDI,
-               "/resourceGroups/", RGI, "/providers/Microsoft.Storage/storageAccounts/",
+  URL <- paste("https://management.azure.com/subscriptions/", subscriptionID,
+               "/resourceGroups/", resourceGroup, "/providers/Microsoft.Storage/storageAccounts/",
                storageAccount, "/listkeys?api-version=2016-01-01", sep = "")
 
   r <- POST(URL, add_headers(.headers = c(Host = "management.azure.com",
-                                          Authorization = ATI,
+                                          Authorization = azureActiveContext$Token,
                                           `Content-type` = "application/json")),
             verbosity)
 
@@ -109,7 +87,7 @@ azureSAGetKey <- function(azureActiveContext, storageAccount, azToken,
   azureActiveContext$storageAccountK <- storageAccount
   azureActiveContext$resourceGroup   <- resourceGroup
   azureActiveContext$storageKey      <- df$keys$value[1]
-  return(azureActiveContext$storageKey)
+  azureActiveContext$storageKey
 }
 
 
@@ -123,35 +101,23 @@ azureSAGetKey <- function(azureActiveContext, storageAccount, azToken,
 #' @family Storage account functions
 #' @export
 azureCreateStorageAccount <- function(azureActiveContext, storageAccount,
-                                      azToken, resourceGroup, subscriptionID, verbose = FALSE) {
+                                      resourceGroup, subscriptionID, verbose = FALSE) {
   azureCheckToken(azureActiveContext)
 
   if (missing(resourceGroup)) {
-    RGI <- azureActiveContext$resourceGroup
-  } else {
-    RGI <- resourceGroup
-  }
-  if (missing(azToken)) {
-    ATI <- azureActiveContext$Token
-  } else {
-    ATI <- azToken
-  }
+    resourceGroup <- azureActiveContext$resourceGroup
+  } 
 
   if (missing(subscriptionID)) {
-    SUBIDI <- azureActiveContext$subscriptionID
-  } else {
-    SUBIDI <- subscriptionID
-  }
+    subscriptionID <- azureActiveContext$subscriptionID
+  } 
   if (!length(storageAccount)) {
     stop("Error: No Valid storageAccount provided")
   }
-  if (length(RGI) < 1) {
+  if (length(resourceGroup) < 1) {
     stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
   }
-  if (!length(ATI)) {
-    stop("Error: No Token / Not currently Authenticated.")
-  }
-  if (!length(SUBIDI)) {
+  if (!length(subscriptionID)) {
     stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
   }
   verbosity <- if (verbose)
@@ -159,20 +125,20 @@ azureCreateStorageAccount <- function(azureActiveContext, storageAccount,
 
   # https://management.azure.com/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupname}/providers/Microsoft.Storage/storageAccounts/{accountname}?api-version={api-version}
 
-  bodyI = "
-  {
-  \"location\": \"northeurope\",
-  \"tags\": {
-  \"key1\": \"value1\"
-  },
-  \"properties\": {
-  \"accessTier\": \"Hot\"
-  },
-  \"sku\": {
-  \"name\": \"Standard_LRS\"
-  },
-  \"kind\": \"Storage\"
-  }"
+  #bodyI = "
+  #{
+  #\"location\": \"northeurope\",
+  #\"tags\": {
+  #\"key1\": \"value1\"
+  #},
+  #\"properties\": {
+  #\"accessTier\": \"Hot\"
+  #},
+  #\"sku\": {
+  #\"name\": \"Standard_LRS\"
+  #},
+  #\"kind\": \"Storage\"
+  #}"
 
   bodyI <- "{
   \"location\": \"northeurope\",
@@ -180,19 +146,19 @@ azureCreateStorageAccount <- function(azureActiveContext, storageAccount,
   \"name\": \"Standard_LRS\"
   }}"
 
-  URL <- paste("https://management.azure.com/subscriptions/", SUBIDI,
-               "/resourceGroups/", RGI, "/providers/Microsoft.Storage/storageAccounts/",
+  URL <- paste("https://management.azure.com/subscriptions/", subscriptionID,
+               "/resourceGroups/", resourceGroup, "/providers/Microsoft.Storage/storageAccounts/",
                storageAccount, "?api-version=2016-01-01", sep = "")
 
   r <- PUT(URL, add_headers(.headers = c(Host = "management.azure.com",
-                                         Authorization = ATI,
+                                         Authorization = azureActiveContext$Token,
                                          `Content-type` = "application/json")),
            body = bodyI,
            encode = "json", verbosity)
 
   if (status_code(r) == 409) {
     warning("409: Conflict : Account already exists with the same name")
-    return(NULL)
+    return(FALSE)
   }
 
 
@@ -205,7 +171,8 @@ azureCreateStorageAccount <- function(azureActiveContext, storageAccount,
   rl <- content(r, "text", encoding = "UTF-8")
   azureActiveContext$storageAccount <- storageAccount
   azureActiveContext$resourceGroup  <- resourceGroup
-  return("Create request Accepted. It can take a few moments to provision the storage account")
+  message("Create request Accepted. It can take a few moments to provision the storage account")
+  TRUE
 }
 
 
@@ -218,58 +185,47 @@ azureCreateStorageAccount <- function(azureActiveContext, storageAccount,
 #' @family Storage account functions
 #' @export
 azureDeletestorageAccount <- function(azureActiveContext, storageAccount,
-                                      azToken, resourceGroup, subscriptionID, verbose = FALSE) {
+                                      resourceGroup, subscriptionID, verbose = FALSE) {
   azureCheckToken(azureActiveContext)
 
   if (missing(resourceGroup)) {
-    RGI <- azureActiveContext$resourceGroup
-  } else {
-    RGI <- resourceGroup
-  }
-  if (missing(azToken)) {
-    ATI <- azureActiveContext$Token
-  } else (ATI = azToken)
+    resourceGroup <- azureActiveContext$resourceGroup
+  } 
 
   if (missing(subscriptionID)) {
-    SUBIDI <- azureActiveContext$subscriptionID
-  } else {
-    SUBIDI <- subscriptionID
-  }
+    subscriptionID <- azureActiveContext$subscriptionID
+  } 
   if (!length(storageAccount)) {
     stop("Error: No Valid storageAccount provided")
   }
-  if (length(RGI) < 1) {
+  if (length(resourceGroup) < 1) {
     stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
   }
-  if (!length(ATI)) {
-    stop("Error: No Token / Not currently Authenticated.")
-  }
-  if (!length(SUBIDI)) {
+  if (!length(subscriptionID)) {
     stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
   }
   verbosity <- if (verbose) httr::verbose(TRUE) else NULL
 
 
-  URL <- paste("https://management.azure.com/subscriptions/", SUBIDI,
-               "/resourceGroups/", RGI, "/providers/Microsoft.Storage/storageAccounts/",
-               storageAccount, "?api-version=2016-01-01", sep = "")
+  URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
+               "/resourceGroups/", resourceGroup, "/providers/Microsoft.Storage/storageAccounts/",
+               storageAccount, "?api-version=2016-01-01")
 
   r <- DELETE(URL, add_headers(.headers = c(Host = "management.azure.com",
-                                            Authorization = ATI,
+                                            Authorization = azureActiveContext$Token,
                                             `Content-type` = "application/json")),
               verbosity)
 
   if (status_code(r) == 204) {
-    stop(paste0("Error: Storage Account not found"))
+    stop("Error: Storage Account not found")
   }
   if (status_code(r) == 409) {
-    stop(paste0("Error: An operation for the storage account is in progress."))
+    stop("Error: An operation for the storage account is in progress.")
   }
   if (status_code(r) != 200) stopWithAzureError(r)
 
-  rl <- content(r, "text", encoding = "UTF-8")
   azureActiveContext$storageAccount <- storageAccount
   azureActiveContext$resourceGroup <- resourceGroup
-  return("Done")
+  TRUE
 }
 

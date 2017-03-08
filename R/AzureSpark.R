@@ -282,7 +282,7 @@ azureSparkCMD <- function(azureActiveContext, CMD, clustername, hdiAdmin,
     Sys.sleep(DUR)
     if (DUR < 5)
       DUR <- DUR + 1
-    cat("R")
+    message("R")
     r <- GET(URL, add_headers(.headers = c(`Content-type` = "application/json")),
              authenticate(HA, HP))
     rl <- content(r, "text", encoding = "UTF-8")
@@ -290,9 +290,8 @@ azureSparkCMD <- function(azureActiveContext, CMD, clustername, hdiAdmin,
     df <- fromJSON(rl)
 
   }
-  cat("C")
-  writeLines("")
-  writeLines(paste("Finished Running statement: ", Sys.time()))
+  message("C")
+  message("Finished Running statement: ", Sys.time())
   RET <- df$output$data[1]
   # rownames(RET) <- 'Return Value'
   return(toString(RET))
@@ -382,7 +381,7 @@ azureSparkJob <- function(azureActiveContext, FILE, clustername, hdiAdmin,
     Sys.sleep(DUR)
     if (DUR < 5)
       DUR <- DUR + 1
-    cat("R")
+    message("R")
     r <- GET(URL, add_headers(.headers = c(`Content-type` = "application/json")),
              authenticate(HA, HP), verbosity)
     rl <- content(r, "text", encoding = "UTF-8")
@@ -391,7 +390,7 @@ azureSparkJob <- function(azureActiveContext, FILE, clustername, hdiAdmin,
     if (length(df$appInfo$driverlogUrl))
       LOGURL2 <- df$appInfo$driverlogUrl
   }
-  cat("C")
+  message("C")
   STATE <- df$state
   writeLines("")
   writeLines(paste("Finished Running statement: ", Sys.time()))

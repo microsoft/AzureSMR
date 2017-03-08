@@ -5,8 +5,7 @@
 \title{Get contents from a specifed Storage blob.}
 \usage{
 azureGetBlob(azureActiveContext, blob, directory, type = "text",
-  storageAccount, storageKey, container, resourceGroup, subscriptionID, azToken,
-  verbose = FALSE)
+  storageAccount, storageKey, container, resourceGroup, verbose = FALSE)
 }
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by AzureSMR}
@@ -15,7 +14,7 @@ azureGetBlob(azureActiveContext, blob, directory, type = "text",
 
 \item{directory}{Blob store directory to list for content}
 
-\item{type}{String, either "text" or "raw"}
+\item{type}{String, either "text" or "raw". Passed to \code{\link[httr]{content}}}
 
 \item{storageAccount}{Name of the azure storage account}
 
@@ -24,10 +23,6 @@ azureGetBlob(azureActiveContext, blob, directory, type = "text",
 \item{container}{Storage container name. See \code{\link{azureListStorageContainers}}}
 
 \item{resourceGroup}{Name of the resource group}
-
-\item{subscriptionID}{Set the subscriptionID.  This is obtained automatically by \code{\link{azureAuthenticate}} when only a single subscriptionID is available via Active Directory}
-
-\item{azToken}{Azure authentication token, obtained by \code{\link{azureAuthenticate}}}
 
 \item{verbose}{Print Tracing information (Default False)}
 }

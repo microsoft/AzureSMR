@@ -59,10 +59,10 @@ test_that("Can connect to storage account", {
   expect_is(res, "data.frame")
   expect_equal(ncol(res), 8)
 
-  sub_id  <<- res$storageAccount[1]
-  rg_temp <<- res$resourceGroup[1]
-  res <- azureSAGetKey(asc, storageAccount = sub_id, resourceGroup = rg_temp)
-  expect_is(res, "character")
+  #sub_id  <<- res$storageAccount[1]
+  #rg_temp <<- res$resourceGroup[1]
+  #res <- azureSAGetKey(asc, storageAccount = sub_id, resourceGroup = rg_temp)
+  #expect_is(res, "character")
 })
 
 test_that("Can create storage account", {
@@ -70,7 +70,7 @@ test_that("Can create storage account", {
 
   res <- azureCreateStorageAccount(asc, storageAccount = sa_name, resourceGroup = resourceGroup_name)
   if(res == "Account already exists with the same name") skip("Account already exists with the same name")
-  expect_equal(res, "Create request Accepted. It can take a few moments to provision the storage account")
+  expect_equal(res, TRUE)
 
   wait_for_azure(
     sa_name %in% sort(azureListSA(asc)$storageAccount)
@@ -85,6 +85,7 @@ test_that("Can connect to container", {
                                     resourceGroup = sa$resourceGroup[1])
   expect_is(res, "data.frame")
   expect_equal(ncol(res), 5)
+  expect_equal(nrow(res), 0)
 })
 
 test_that("Can create container", {
@@ -104,13 +105,17 @@ test_that("Can create container", {
 
 test_that("Can put, list, get and delete a blob", {
   skip_if_missing_config(settingsfile)
+expect_warning({
   res <- azureListStorageBlobs(asc, container = "tempcontainer")
+})
   expect_is(res, "data.frame")
   expect_equal(ncol(res), 5)
   expect_equal(nrow(res), 0)
 
   res <- azurePutBlob(asc, blob = "iris", contents = "iris", container = "tempcontainer")
+  expect_true(res)
   res <- azurePutBlob(asc, blob = "foo", contents = "foo", container = "tempcontainer")
+  expect_true(res)
 
   res <- azureListStorageBlobs(asc, container = "tempcontainer")
   expect_is(res, "data.frame")
@@ -121,7 +126,9 @@ test_that("Can put, list, get and delete a blob", {
   res <- azureDeleteBlob(asc, blob = "foo", container = "tempcontainer")
   res <- azureDeleteBlob(asc, blob = "iris", container = "tempcontainer")
 
-  res <- azureListStorageBlobs(asc, container = "tempcontainer")
+  expect_warning({
+    res <- azureListStorageBlobs(asc, container = "tempcontainer")
+  }, "container is empty")
   expect_is(res, "data.frame")
   expect_equal(ncol(res), 5)
   expect_equal(nrow(res), 0)
@@ -153,7 +160,7 @@ test_that("Can delete storage account", {
   skip_if_missing_config(settingsfile)
 
   res <- azureDeletestorageAccount(asc, storageAccount = sa_name, resourceGroup = resourceGroup_name)
-  expect_equal(res, "Done")
+  expect_equal(res, TRUE)
   wait_for_azure(
     !(sa_name %in% azureListSA(asc)$storageAccount)
   )

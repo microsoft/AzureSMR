@@ -70,6 +70,7 @@ azureAuthenticate <- function(azureActiveContext, tenantID, clientID, authKey, v
 #' @family Resources
 #' @export
 azureCheckToken <- function(azureActiveContext) {
+  if (missing(azureActiveContext) || is.null(azureActiveContext)) return(NA)
   if (is.null(azureActiveContext$EXPIRY))
     stop("Not Authenticated: Use azureAuthenticate")
 
@@ -77,5 +78,5 @@ azureCheckToken <- function(azureActiveContext) {
     message("Azure Token Expired: Attempting automatic renewal")
     azureAuthenticate(azureActiveContext)
   }
-  return("OK")
+  return(TRUE)
 }
