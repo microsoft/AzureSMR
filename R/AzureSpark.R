@@ -191,7 +191,7 @@ azureSparkStopSession <- function(azureActiveContext, clustername, hdiAdmin,
 
   if (status_code(r) != "200")
     stop(paste("Error Return Code:", status_code(r)))
-  return("Done")
+  return(TRUE)
 }
 
 
@@ -275,8 +275,8 @@ azureSparkCMD <- function(azureActiveContext, CMD, clustername, hdiAdmin,
   URL <- paste("https://", CN, ".azurehdinsight.net/livy/", rh$location,
                sep = "")
   # print(URL)
-  writeLines(paste("CMD Running: ", Sys.time()))
-  writeLines("Running(R), Completed(C)")
+  message(paste("CMD Running: ", Sys.time()))
+  message("Running(R), Completed(C)")
 
   while (df$state == "running") {
     Sys.sleep(DUR)
@@ -373,8 +373,8 @@ azureSparkJob <- function(azureActiveContext, FILE, clustername, hdiAdmin,
   URL <- paste("https://", CN, ".azurehdinsight.net/livy/batches/", BI,
                sep = "")
   # print(URL)
-  writeLines(paste("CMD Running: ", Sys.time()))
-  writeLines("Running(R), Completed(C)")
+  message(paste("CMD Running: ", Sys.time()))
+  message("Running(R), Completed(C)")
   LOGURL2 <- ""
 
   while (df$state == "running") {
@@ -392,8 +392,8 @@ azureSparkJob <- function(azureActiveContext, FILE, clustername, hdiAdmin,
   }
   message("C")
   STATE <- df$state
-  writeLines("")
-  writeLines(paste("Finished Running statement: ", Sys.time()))
+  message("")
+  message(paste("Finished Running statement: ", Sys.time()))
 
   # BID = gsub('application_','container_',df$appId) print(df$log[2])
   # HN<- strsplit(df$log[2], ' ')
