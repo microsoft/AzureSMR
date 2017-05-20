@@ -5,10 +5,10 @@
 #' @inheritParams azureAuthenticate
 #' @inheritParams azureSAGetKey
 #'
-#' @param maxresults Optional. Specifies the maximum number of blobs to return, including all BlobPrefix elements. If the request does not specify maxresults or specifies a value greater than 5,000, the server will return up to 5,000 items.  Setting maxresults to a value less than or equal to zero results in error response code 400(Bad Request) .
+#' @param maxresults Optional. Specifies the maximum number of blobs to return, including all BlobPrefix elements. If the request does not specify maxresults or specifies a value greater than 5,000, the server will return up to 5,000 items.  Setting maxresults to a value less than or equal to zero results in error response code 400 (Bad Request).
 #' @param prefix Optional. Filters the results to return only blobs whose names begin with the specified prefix.
 #' @param delimiter Optional. When the request includes this parameter, the operation returns a BlobPrefix element in the response body that acts as a placeholder for all blobs whose names begin with the same substring up to the appearance of the delimiter character. The delimiter may be a single character or a string.
-#' @param Optional. A string value that identifies the portion of the list to be returned with the next list operation. The operation returns a marker value within the response body if the list returned was not complete. The marker value may then be used in a subsequent call to request the next set of list items.  The marker value is opaque to the client.
+#' @param marker Optional. A string value that identifies the portion of the list to be returned with the next list operation. The operation returns a marker value within the response body if the list returned was not complete. The marker value may then be used in a subsequent call to request the next set of list items.  The marker value is opaque to the client.
 #'
 #' @return Returns a data frame. This data frame has an attribute called "marker" that can be used with the "marker" argument to return the next set of values.
 #' @family blob store functions
@@ -275,7 +275,7 @@ azureBlobLS <- function(azureActiveContext, directory, recursive = FALSE,
 #' @inheritParams azureSAGetKey
 #' @inheritParams azureBlobLS
 
-#' @param type String, either "text" or "raw". Passed to \code{\link[httr]{content}}
+#' @param type String, either "text" or "raw". Passed to `httr::content`
 #'
 #' @family blob store functions
 #' @export
@@ -713,7 +713,7 @@ azureDeleteBlob <- function(azureActiveContext, blob, directory,
 
   SIG <- getSig(azureActiveContext, url = URL, verb = "DELETE", key = storageKey,
                 storageAccount = storageAccount, container = container,
-                CMD = paste0("/", blob), dateS = D1)
+                CMD = paste0("/", blob), dateSig = D1)
 
   AT <- paste0("SharedKey ", storageAccount, ":", SIG)
 
