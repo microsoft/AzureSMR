@@ -17,7 +17,7 @@ callAzureStorageApi <- function(url, verb = "GET", storageKey, storageAccount,
                    headers = NULL, container = NULL, CMD, size = nchar(content), contenttype = NULL,
                    content = NULL,
                    verbose = FALSE) {
-  dateStamp <- format(Sys.time(), "%a, %d %b %Y %H:%M:%S %Z", tz = "GMT")
+  dateStamp <- httr::http_date(Sys.time())
 
   verbosity <- if (verbose) httr::verbose(TRUE) else NULL
 
@@ -54,7 +54,7 @@ createAzureStorageSignature <- function(url, verb,
   headers = NULL, CMD = NULL, size = NULL, contenttype = NULL, dateStamp, verbose = FALSE) {
 
   if (missing(dateStamp)) {
-    dateStamp <- format(Sys.time(), "%a, %d %b %Y %H:%M:%S %Z", tz = "GMT")
+    dateStamp <- httr::http_date(Sys.time())
   }
 
   arg1 <- if (length(headers)) {
@@ -82,7 +82,7 @@ getSig <- function(azureActiveContext, url, verb, key, storageAccount,
                    dateSig, verbose = FALSE) {
 
   if (missing(dateSig)) {
-    dateSig <- format(Sys.time(), "%a, %d %b %Y %H:%M:%S %Z", tz = "GMT")
+    dateSig <- httr::http_date(Sys.time())
   }
 
   arg1 <- if (length(headers)) {
