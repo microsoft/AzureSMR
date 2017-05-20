@@ -128,8 +128,8 @@ azureStartVM <- function(azureActiveContext, resourceGroup, vmName, mode = "Sync
   azureActiveContext$vmName <- vmNameI
   if (toupper(mode) == "SYNC") {
     rc <- "running"
-    writeLines(paste("azureStartVM: Request Submitted: ", Sys.time()))
-    writeLines("Updating(U), deallocating(D), starting(S), Deallocated(-) ")
+    message(paste("azureStartVM: Request Submitted: ", Sys.time()))
+    message("Updating(U), deallocating(D), starting(S), Deallocated(-) ")
     a <- 1
     Sys.sleep(5)
     while (a > 0) {
@@ -137,8 +137,8 @@ azureStartVM <- function(azureActiveContext, resourceGroup, vmName, mode = "Sync
       # rc1 <- rc$displayStatus[2] print(rc) print(rc1)
       a <- a + 1
       if (grepl("running", rc1)) {
-        writeLines("")
-        writeLines(paste("Finished Started Sucessfully: ", Sys.time()))
+        message("")
+        message(paste("Finished Started Sucessfully: ", Sys.time()))
         (break)()
       }
       if (grepl("Updating", rc1)) {
@@ -167,10 +167,10 @@ azureStartVM <- function(azureActiveContext, resourceGroup, vmName, mode = "Sync
       Sys.sleep(5)
     }
     message("Finished: ", Sys.time())
-    return("Done")
+    return(TRUE)
   }
-  writeLines(paste("Start request Submitted: ", Sys.time()))
-  return("")
+  message(paste("Start request Submitted: ", Sys.time()))
+  return(TRUE)
 }
 
 
@@ -237,14 +237,14 @@ azureStopVM <- function(azureActiveContext, resourceGroup, vmName, mode = "Sync"
 
   if (toupper(mode) == "SYNC") {
     rc <- "running"
-    writeLines(paste("azureStopVM: Request Submitted: ", Sys.time()))
-    writeLines("Updating(U), deallocating(D), starting(S), Stopped/Deallocated(-) ")
+    message(paste("azureStopVM: Request Submitted: ", Sys.time()))
+    message("Updating(U), deallocating(D), starting(S), Stopped/Deallocated(-) ")
     a <- 1
     while (a > 0) {
       rc1 <- azureVMStatus(azureActiveContext)
       if (grepl("deallocated", rc1)) {
-        writeLines("")
-        writeLines(paste("Finished Deallocated Sucessfully: ",
+        message("")
+        message(paste("Finished Deallocated Sucessfully: ",
                          Sys.time()))
         (break)()
       }
@@ -407,14 +407,14 @@ azureDeleteVM <- function(azureActiveContext, resourceGroup, vmName, subscriptio
 
   if (toupper(mode) == "SYNC") {
     rc <- "running"
-    writeLines(paste("azureDeleteVM: Request Submitted: ", Sys.time()))
-    writeLines("Updating(U), Deleting(D), Stopped/Deallocated(-) ")
+    message(paste("azureDeleteVM: Request Submitted: ", Sys.time()))
+    message("Updating(U), Deleting(D), Stopped/Deallocated(-) ")
     a <- 1
     while (a > 0) {
       rc <- azureVMStatus(ignore = "Y")
       if (grepl("NA", rc)) {
-        writeLines("")
-        writeLines(paste("Finished Deleted Sucessfully: ", Sys.time()))
+        message("")
+        message(paste("Finished Deleted Sucessfully: ", Sys.time()))
         (break)()
       }
 
@@ -438,7 +438,7 @@ azureDeleteVM <- function(azureActiveContext, resourceGroup, vmName, subscriptio
       Sys.sleep(5)
     }
   }
-  writeLines(paste("Finished: ", Sys.time()))
+  message(paste("Finished: ", Sys.time()))
   return(rc)
 }
 

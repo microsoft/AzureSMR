@@ -121,8 +121,8 @@ azureHiveSQL <- function(azureActiveContext, CMD, clustername, hdiAdmin,
   rl <- content(r, "text", encoding = "UTF-8")
   df <- fromJSON(rl)
 
-  writeLines(paste("CMD Running: ", Sys.time()))
-  writeLines("Prep(P), Running(R), Completed(C)")
+  message(paste("CMD Running: ", Sys.time()))
+  message("Prep(P), Running(R), Completed(C)")
   DUR <- 2
   # print(df$status$state)
   while (df$status$state == "RUNNING" | df$status$state == "PREP") {

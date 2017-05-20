@@ -7,7 +7,7 @@
 #' @inheritParams setAzureContext
 #' @family azureActiveContext functions
 #'
-#' @seealso \code{\link{setAzureContext}}
+#' @seealso `setAzureContext`
 #' @export
 createAzureContext <- function(tenantID, clientID, authKey){
   azEnv <- new.env(parent = globalenv())
@@ -33,24 +33,24 @@ dumpAzureContext <- function(azureActiveContext){
 
 #' Updates azureActiveContext object.
 #'
-#' Updates the value of an azureActiveContext object, created by \code{\link{createAzureContext}}
+#' Updates the value of an azureActiveContext object, created by `createAzureContext`
 #'
 #' @param azureActiveContext A container used for caching variables used by AzureSMR
 #' @param tenantID The Tenant ID provided during creation of the Active Directory application / service principal
 #' @param clientID The Client ID provided during creation of the Active Directory application / service principal
 #' @param authKey The Authentication Key provided during creation of the Active Directory application / service principal
-#' @param subscriptionID Set the subscriptionID.  This is obtained automatically by \code{\link{azureAuthenticate}} when only a single subscriptionID is available via Active Directory
-#' @param azToken Azure authentication token, obtained by \code{\link{azureAuthenticate}}
+#' @param subscriptionID Set the subscriptionID.  This is obtained automatically by `azureAuthenticate` when only a single subscriptionID is available via Active Directory
+#' @param azToken Azure authentication token, obtained by `azureAuthenticate`
 #' @param resourceGroup Name of the resource group
 #' @param vmName Name of the virtual Machine
 #' @param storageAccount Name of the azure storage account
 #' @param storageKey Storage key associated with storage account
 #' @param blob Blob name
-#' @param clustername Cluster name, used for HDI and Spark clusters. See \code{\link{azureCreateHDI}}
-#' @param sessionID Spark sessionID. See \code{\link{azureSparkCMD}}
+#' @param clustername Cluster name, used for HDI and Spark clusters. See `azureCreateHDI`
+#' @param sessionID Spark sessionID. See `azureSparkCMD`
 #' @param hdiAdmin HDInsight admin username
 #' @param hdiPassword  HDInsight admin password
-#' @param container Storage container name. See \code{\link{azureListStorageContainers}}
+#' @param container Storage container name. See `azureListStorageContainers`
 #' @param kind HDinsight kind: "hadoop","spark" or "pyspark"
 #'
 #' @family azureActiveContext functions

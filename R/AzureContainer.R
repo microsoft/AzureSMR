@@ -57,7 +57,7 @@ azureListStorageContainers <- function(azureActiveContext, storageAccount, stora
   D1 <- format(Sys.time(), "%a, %d %b %Y %H:%M:%S %Z", tz = "GMT")
 
   SIG <- getSig(azureActiveContext, url = URL, verb = "GET", key = STK, storageAccount = SAI,
-                CMD = "\ncomp:list", dateS = D1)
+                CMD = "\ncomp:list", dateSig = D1)
 
   AT <- paste0("SharedKey ", SAI, ":", SIG)
 
@@ -177,7 +177,7 @@ azureCreateStorageContainer <- function(azureActiveContext, container, storageAc
 
   SIG <- getSig(azureActiveContext, url = URL, verb = "PUT", key = STK,
                 storageAccount = SAI, container = CNTR,
-                CMD = "\nrestype:container", dateS = D1)
+                CMD = "\nrestype:container", dateSig = D1)
 
   AT <- paste0("SharedKey ", SAI, ":", SIG)
   r <- PUT(URL, add_headers(.headers = c(Authorization = AT, `Content-Length` = "0",
@@ -261,7 +261,7 @@ azureDeleteStorageContainer <- function(azureActiveContext, container, storageAc
   azureActiveContext$resourceGroup <- RGI
   SIG <- getSig(azureActiveContext, url = URL, verb = "DELETE", key = STK,
                 storageAccount = SAI,
-                CMD = paste0(CNTR, "\nrestype:container"), dateS = D1)
+                CMD = paste0(CNTR, "\nrestype:container"), dateSig = D1)
 
   AT <- paste0("SharedKey ", SAI, ":", SIG)
 

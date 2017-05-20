@@ -23,7 +23,7 @@ callAzureStorageApi <- function(url, verb = "GET", storageKey, storageAccount,
 
   if (missing(CMD) || is.null(CMD)) CMD <- extractUrlArguments(url)
 
-    sig <- createAzureStorageSignature(url = URL, verb = verb,
+    sig <- createAzureStorageSignature(url = url, verb = verb,
       key = storageKey, storageAccount = storageAccount, container = container,
       headers = headers, CMD = CMD, size = size,
       contenttype = contenttype, dateStamp = dateStamp, verbose = verbose)

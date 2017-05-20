@@ -10,13 +10,15 @@ azureBlobFind(azureActiveContext, file, storageAccount, storageKey, container,
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 
-\item{file}{- Local filename to store in Azure blob}
+\item{file}{\itemize{
+\item Local filename to store in Azure blob
+}}
 
 \item{storageAccount}{Name of the azure storage account}
 
 \item{storageKey}{Storage key associated with storage account}
 
-\item{container}{Storage container name. See \code{\link{azureListStorageContainers}}}
+\item{container}{Storage container name. See \code{azureListStorageContainers}}
 
 \item{resourceGroup}{Name of the resource group}
 

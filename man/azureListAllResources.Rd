@@ -14,7 +14,7 @@ azureListAllResources(azureActiveContext, resourceGroup, subscriptionID,
 
 \item{subscriptionID}{subscriptionID Object (or use azureActiveContext)}
 
-\item{azToken}{Azure authentication token, obtained by \code{\link{azureAuthenticate}}}
+\item{azToken}{Azure authentication token, obtained by \code{azureAuthenticate}}
 
 \item{name}{filter by resource name}
 

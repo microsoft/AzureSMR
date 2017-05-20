@@ -6,7 +6,7 @@
 #' @param object Object to create, test or print
 #' @param ... Ignored
 #'
-#' @seealso \code{\link{createAzureContext}}
+#' @seealso `createAzureContext`
 #' @export
 #' @rdname Internal
 as.azureActiveContext <- function(x){

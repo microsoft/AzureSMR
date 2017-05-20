@@ -10,7 +10,7 @@ azureHiveStatus(azureActiveContext, clustername, hdiAdmin, hdiPassword,
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 
-\item{clustername}{Cluster name, used for HDI and Spark clusters. See \code{\link{azureCreateHDI}}}
+\item{clustername}{Cluster name, used for HDI and Spark clusters. See \code{azureCreateHDI}}
 
 \item{hdiAdmin}{HDInsight admin username}
 

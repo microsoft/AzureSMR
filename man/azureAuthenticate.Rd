@@ -25,7 +25,7 @@ Retunrs Azure Tokem and sets AzureContext Token
 Authenticates against Azure Active directory application.
 }
 \note{
-See \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/} to learn how to set up an Active directory application
+See \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/} for instructions to set up an Active Directory application
 }
 \references{
 \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/}

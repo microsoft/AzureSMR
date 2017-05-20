@@ -12,13 +12,13 @@ azureSparkCMD(azureActiveContext, CMD, clustername, hdiAdmin, hdiPassword,
 
 \item{CMD}{CMD}
 
-\item{clustername}{Cluster name, used for HDI and Spark clusters. See \code{\link{azureCreateHDI}}}
+\item{clustername}{Cluster name, used for HDI and Spark clusters. See \code{azureCreateHDI}}
 
 \item{hdiAdmin}{HDInsight admin username}
 
 \item{hdiPassword}{HDInsight admin password}
 
-\item{sessionID}{Spark sessionID. See \code{\link{azureSparkCMD}}}
+\item{sessionID}{Spark sessionID. See \code{azureSparkCMD}}
 
 \item{verbose}{Print Tracing information (Default False)}
 }

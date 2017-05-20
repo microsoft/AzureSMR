@@ -3,42 +3,44 @@
 #' @inheritParams setAzureContext
 #' @param verbose Print Tracing information (Default False)
 #'
-#' @note See \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/} to learn how to set up an Active directory application
+#' @note See \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/} for instructions to set up an Active Directory application
 #' @references \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/}
 #'
 #' @return Retunrs Azure Tokem and sets AzureContext Token
 #' @family Resources
+#' 
+#' @importFrom utils URLencode
 #' @export
 azureAuthenticate <- function(azureActiveContext, tenantID, clientID, authKey, verbose = FALSE) {
 
   if (missing(tenantID)) {
-    AtenantID <- azureActiveContext$tenantID
-  } else (AtenantID <- tenantID)
+    tenantID <- azureActiveContext$tenantID
+  } else (tenantID <- tenantID)
   if (missing(clientID)) {
-    AclientID <- azureActiveContext$clientID
-  } else (AclientID <- clientID)
+    clientID <- azureActiveContext$clientID
+  } else (clientID <- clientID)
   if (missing(authKey)) {
-    AauthKey <- azureActiveContext$authKey
-  } else (AauthKey <- authKey)
+    authKey <- azureActiveContext$authKey
+  } else (authKey <- authKey)
 
-  if (!length(AtenantID)) {
+  if (!length(tenantID)) {
     stop("Error: No tenantID provided: Use tenantID argument or set in AzureContext")
   }
-  if (!length(AclientID)) {
+  if (!length(clientID)) {
     stop("Error: No clientID provided: Use clientID argument or set in AzureContext")
   }
-  if (!length(AauthKey)) {
+  if (!length(authKey)) {
     stop("Error: No authKey provided: Use authKey argument or set in AzureContext")
   }
   verbosity <- if (verbose)
     httr::verbose(TRUE) else NULL
 
-  URLGT <- paste0("https://login.microsoftonline.com/", AtenantID, "/oauth2/token?api-version=1.0")
+  URLGT <- paste0("https://login.microsoftonline.com/", tenantID, "/oauth2/token?api-version=1.0")
 
-  AauthKeyE <- URLencode(AauthKey, reserved = TRUE)
+  authKeyEncoded <- URLencode(authKey, reserved = TRUE)
 
   bodyGT <- paste0("grant_type=client_credentials&resource=https%3A%2F%2Fmanagement.azure.com%2F&client_id=",
-                   AclientID, "&client_secret=", AauthKeyE)
+                   clientID, "&client_secret=", authKeyEncoded)
 
   r <- httr::POST(URLGT,
                   add_headers(
@@ -53,9 +55,9 @@ azureAuthenticate <- function(azureActiveContext, tenantID, clientID, authKey, v
 
 
   azureActiveContext$Token  <- AT
-  azureActiveContext$tenantID    <- AtenantID
-  azureActiveContext$clientID    <- AclientID
-  azureActiveContext$authKey    <- AauthKey
+  azureActiveContext$tenantID    <- tenantID
+  azureActiveContext$clientID    <- clientID
+  azureActiveContext$authKey    <- authKey
   azureActiveContext$EXPIRY <- Sys.time() + 3598
   SUBS <- azureListSubscriptions(azureActiveContext)
   return("Authentication Suceeded : Key Obtained")

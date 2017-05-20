@@ -18,7 +18,7 @@ azureBlobLS(azureActiveContext, directory, recursive = FALSE, storageAccount,
 
 \item{storageKey}{Storage key associated with storage account}
 
-\item{container}{Storage container name. See \code{\link{azureListStorageContainers}}}
+\item{container}{Storage container name. See \code{azureListStorageContainers}}
 
 \item{resourceGroup}{Name of the resource group}
 

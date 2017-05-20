@@ -17,9 +17,9 @@ setAzureContext(azureActiveContext, tenantID, clientID, authKey, azToken,
 
 \item{authKey}{The Authentication Key provided during creation of the Active Directory application / service principal}
 
-\item{azToken}{Azure authentication token, obtained by \code{\link{azureAuthenticate}}}
+\item{azToken}{Azure authentication token, obtained by \code{azureAuthenticate}}
 
-\item{subscriptionID}{Set the subscriptionID.  This is obtained automatically by \code{\link{azureAuthenticate}} when only a single subscriptionID is available via Active Directory}
+\item{subscriptionID}{Set the subscriptionID.  This is obtained automatically by \code{azureAuthenticate} when only a single subscriptionID is available via Active Directory}
 
 \item{resourceGroup}{Name of the resource group}
 
@@ -27,7 +27,7 @@ setAzureContext(azureActiveContext, tenantID, clientID, authKey, azToken,
 
 \item{storageAccount}{Name of the azure storage account}
 
-\item{container}{Storage container name. See \code{\link{azureListStorageContainers}}}
+\item{container}{Storage container name. See \code{azureListStorageContainers}}
 
 \item{blob}{Blob name}
 
@@ -37,14 +37,14 @@ setAzureContext(azureActiveContext, tenantID, clientID, authKey, azToken,
 
 \item{hdiPassword}{HDInsight admin password}
 
-\item{clustername}{Cluster name, used for HDI and Spark clusters. See \code{\link{azureCreateHDI}}}
+\item{clustername}{Cluster name, used for HDI and Spark clusters. See \code{azureCreateHDI}}
 
 \item{kind}{HDinsight kind: "hadoop","spark" or "pyspark"}
 
-\item{sessionID}{Spark sessionID. See \code{\link{azureSparkCMD}}}
+\item{sessionID}{Spark sessionID. See \code{azureSparkCMD}}
 }
 \description{
-Updates the value of an azureActiveContext object, created by \code{\link{createAzureContext}}
+Updates the value of an azureActiveContext object, created by \code{createAzureContext}
 }
 \seealso{
 Other azureActiveContext functions: \code{\link{createAzureContext}}

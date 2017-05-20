@@ -96,20 +96,20 @@ azureDeployTemplate <- function(azureActiveContext, deplname, templateURL,
   df <- fromJSON(rl)
   if (toupper(mode) == "SYNC") {
     rc <- "running"
-    writeLines(paste("azureDeployTemplate: Request Submitted: ", Sys.time()))
-    writeLines("Running(R), Succeeded(S)")
+    message(paste("azureDeployTemplate: Request Submitted: ", Sys.time()))
+    message("Running(R), Succeeded(S)")
     a <- 1
     while (a > 0) {
       rc <- azureDeployStatus(azureActiveContext, deplname = deplname,
                               resourceGroup = RGI)
       if (grepl("Succeeded", rc)) {
-        writeLines("")
-        writeLines(paste("Finished Deploying Sucessfully: ", Sys.time()))
+        message("")
+        message(paste("Finished Deploying Sucessfully: ", Sys.time()))
         (break)()
       }
       if (grepl("Error", rc) || grepl("Failed", rc)) {
-        writeLines("")
-        writeLines(paste("Error Deploying: ", Sys.time()))
+        message("")
+        message(paste("Error Deploying: ", Sys.time()))
         (break)()
       }
 

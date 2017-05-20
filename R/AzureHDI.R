@@ -265,22 +265,22 @@ azureResizeHDI <- function(azureActiveContext, clustername, role = "worker",
   RT <- "Request accepted"
   if (toupper(mode) == "SYNC") {
     azureActiveContext$resourceGroup <- RGI
-    writeLines(paste("azureResizeHDI: Request Submitted: ", Sys.time()))
-    writeLines("Accepted(A), Resizing(R), Succeeded(S)")
+    message(paste("azureResizeHDI: Request Submitted: ", Sys.time()))
+    message("Accepted(A), Resizing(R), Succeeded(S)")
     a <- 1
     while (a > 0) {
       rc <- azureListHDI(azureActiveContext, clustername = clustername)
       rc1 <- rc[9, 1]
       if (rc1 == "Running") {
         message("R")
-        writeLines("")
-        writeLines(paste("Finished Resizing Sucessfully: ", Sys.time()))
+        message("")
+        message(paste("Finished Resizing Sucessfully: ", Sys.time()))
         (break)()
       }
 
       if (rc1 == "Error") {
-        writeLines("")
-        writeLines(paste("Error Resizing: ", Sys.time()))
+        message("")
+        message(paste("Error Resizing: ", Sys.time()))
         (break)()
       }
 
@@ -305,9 +305,9 @@ azureResizeHDI <- function(azureActiveContext, clustername, role = "worker",
     }
     # RT <- clusters[12,1]
   }
-  writeLines(paste("Finished: ", Sys.time()))
+  message(paste("Finished: ", Sys.time()))
 
-  return("Done")
+  return(TRUE)
 }
 
 
@@ -613,21 +613,21 @@ azureCreateHDI <- function(azureActiveContext, clustername, location, kind = "sp
   rl <- content(r, "text", encoding = "UTF-8")
   if (toupper(mode) == "SYNC") {
     azureActiveContext$resourceGroup <- RGI
-    writeLines(paste("azureResizeHDI: Request Submitted: ", Sys.time()))
-    writeLines("Runing(C), Succeeded(S)")
+    message(paste("azureResizeHDI: Request Submitted: ", Sys.time()))
+    message("Runing(C), Succeeded(S)")
     a <- 1
     while (a > 0) {
       rc <- azureListHDI(azureActiveContext, clustername = clustername)
       rc1 <- rc[8, 1]
       if (rc1 == "Succeeded") {
         message("S")
-        writeLines("")
-        writeLines(paste("Finished Creating Sucessfully: ", Sys.time()))
+        message("")
+        message(paste("Finished Creating Sucessfully: ", Sys.time()))
         (break)()
       }
       if (rc1 == "Error") {
-        writeLines("")
-        writeLines(paste("Error Creating: ", Sys.time()))
+        message("")
+        message(paste("Error Creating: ", Sys.time()))
         (break)()
       }
       a <- a + 1
@@ -644,8 +644,8 @@ azureCreateHDI <- function(azureActiveContext, clustername, location, kind = "sp
   azureActiveContext$hdiAdmin <- adminUser
   azureActiveContext$hdiPassword  <- adminPassword
   azureActiveContext$clustername <- clustername
-  writeLines(paste("Finished: ", Sys.time()))
-  return("Done")}
+  message(paste("Finished: ", Sys.time()))
+  return(TRUE)}
 
 
 #' Run Script Action on HDI Cluster.

@@ -12,9 +12,11 @@ azureBlobCD(azureActiveContext, directory, container, file, storageAccount,
 
 \item{directory}{Blob store directory to list for content}
 
-\item{container}{Storage container name. See \code{\link{azureListStorageContainers}}}
+\item{container}{Storage container name. See \code{azureListStorageContainers}}
 
-\item{file}{- Local filename to store in Azure blob}
+\item{file}{\itemize{
+\item Local filename to store in Azure blob
+}}
 
 \item{storageAccount}{Name of the azure storage account}
 
