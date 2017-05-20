@@ -394,8 +394,8 @@ azurePutBlob <- function(azureActiveContext, blob, contents = "", file = "",
     storageAccount <- azureActiveContext$storageAccount
   }
   if (missing(storageKey)) {
-    storageKey <- azureActiveContext$storageKey
-  }
+    STK <- azureActiveContext$storageKey
+  } else (STK <- storageKey)
   if (missing(container)) {
     container <- azureActiveContext$container
   }
