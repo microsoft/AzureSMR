@@ -20,7 +20,7 @@ Create a container (azureContextObject) for holding variables used by the AzureS
 See the Azure documentation (\url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/}) for information to configure an Active Directory application.
 }
 \seealso{
-\code{\link{setAzureContext}}
+\code{setAzureContext}
 
 Other azureActiveContext functions: \code{\link{setAzureContext}}
 }

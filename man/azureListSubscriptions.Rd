@@ -9,7 +9,7 @@ azureListSubscriptions(azureActiveContext, azToken, verbose = FALSE)
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 
-\item{azToken}{Azure authentication token, obtained by \code{\link{azureAuthenticate}}}
+\item{azToken}{Azure authentication token, obtained by \code{azureAuthenticate}}
 
 \item{verbose}{Print Tracing information (Default False)}
 }

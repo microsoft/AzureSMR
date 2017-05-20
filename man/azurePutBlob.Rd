@@ -12,9 +12,13 @@ azurePutBlob(azureActiveContext, blob, contents = "", file = "", directory,
 
 \item{blob}{Blob name}
 
-\item{contents}{- Object or value to store}
+\item{contents}{\itemize{
+\item Object or value to store
+}}
 
-\item{file}{- Local filename to store in Azure blob}
+\item{file}{\itemize{
+\item Local filename to store in Azure blob
+}}
 
 \item{directory}{Blob store directory to list for content}
 
@@ -22,7 +26,7 @@ azurePutBlob(azureActiveContext, blob, contents = "", file = "", directory,
 
 \item{storageKey}{Storage key associated with storage account}
 
-\item{container}{Storage container name. See \code{\link{azureListStorageContainers}}}
+\item{container}{Storage container name. See \code{azureListStorageContainers}}
 
 \item{resourceGroup}{Name of the resource group}
 

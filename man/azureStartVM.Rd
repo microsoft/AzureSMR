@@ -16,9 +16,9 @@ azureStartVM(azureActiveContext, resourceGroup, vmName, mode = "Sync",
 
 \item{mode}{Wait for operation to complete 'Sync' (Default)}
 
-\item{subscriptionID}{Set the subscriptionID.  This is obtained automatically by \code{\link{azureAuthenticate}} when only a single subscriptionID is available via Active Directory}
+\item{subscriptionID}{Set the subscriptionID.  This is obtained automatically by \code{azureAuthenticate} when only a single subscriptionID is available via Active Directory}
 
-\item{azToken}{Azure authentication token, obtained by \code{\link{azureAuthenticate}}}
+\item{azToken}{Azure authentication token, obtained by \code{azureAuthenticate}}
 
 \item{verbose}{Print Tracing information (Default False)}
 }
