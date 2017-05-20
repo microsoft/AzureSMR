@@ -1,4 +1,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+.rxproj$
+.rxproj.user$
+.vs/*
 CONTRIBUTING.md
 README.md
