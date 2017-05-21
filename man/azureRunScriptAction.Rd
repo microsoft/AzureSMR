@@ -6,7 +6,7 @@
 \usage{
 azureRunScriptAction(azureActiveContext, scriptname = "script1", scriptURL,
   headNode = TRUE, workerNode = FALSE, edgeNode = FALSE, clustername,
-  resourceGroup, parameters = "", azToken, subscriptionID, verbose = FALSE)
+  resourceGroup, parameters = "", subscriptionID, verbose = FALSE)
 }
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by AzureSMR}
@@ -21,15 +21,13 @@ azureRunScriptAction(azureActiveContext, scriptname = "script1", scriptURL,
 
 \item{edgeNode}{install on worker nodes (default FALSE)}
 
-\item{clustername}{Cluster name, used for HDI and Spark clusters. See \code{azureCreateHDI}}
+\item{clustername}{Cluster name, used for HDI and Spark clusters. See \code{\link[=azureCreateHDI]{azureCreateHDI()}}}
 
 \item{resourceGroup}{Name of the resource group}
 
 \item{parameters}{parameters}
 
-\item{azToken}{Azure authentication token, obtained by \code{azureAuthenticate}}
-
-\item{subscriptionID}{Set the subscriptionID.  This is obtained automatically by \code{azureAuthenticate} when only a single subscriptionID is available via Active Directory}
+\item{subscriptionID}{Set the subscriptionID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
 
 \item{verbose}{Print Tracing information (Default False)}
 }

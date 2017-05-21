@@ -2,21 +2,19 @@
 % Please edit documentation in R/AzureHDI.R
 \name{azureHDIConf}
 \alias{azureHDIConf}
-\title{Get Configuration Information for a specified clustername.}
+\title{Get Configuration Information for a specified cluster name.}
 \usage{
 azureHDIConf(azureActiveContext, clustername, resourceGroup, subscriptionID,
-  azToken, name, type, location, verbose = FALSE)
+  name, type, location, verbose = FALSE)
 }
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 
-\item{clustername}{Cluster name, used for HDI and Spark clusters. See \code{azureCreateHDI}}
+\item{clustername}{Cluster name, used for HDI and Spark clusters. See \code{\link[=azureCreateHDI]{azureCreateHDI()}}}
 
 \item{resourceGroup}{Name of the resource group}
 
-\item{subscriptionID}{Set the subscriptionID.  This is obtained automatically by \code{azureAuthenticate} when only a single subscriptionID is available via Active Directory}
-
-\item{azToken}{Azure authentication token, obtained by \code{azureAuthenticate}}
+\item{subscriptionID}{Set the subscriptionID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
 
 \item{name}{filter by resource name}
 
@@ -30,7 +28,7 @@ azureHDIConf(azureActiveContext, clustername, resourceGroup, subscriptionID,
 Returns Dataframe of HDInsight Clusters information
 }
 \description{
-Get Configuration Information for a specified clustername.
+Get Configuration Information for a specified cluster name.
 }
 \seealso{
 Other HDInsight functions: \code{\link{azureCreateHDI}},

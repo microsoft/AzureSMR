@@ -2,7 +2,7 @@
 % Please edit documentation in R/AzureHive.R
 \name{azureHiveStatus}
 \alias{azureHiveStatus}
-\title{Get Status of a HDI Hive Service/version.}
+\title{Get Status of a HDI Hive Service / version.}
 \usage{
 azureHiveStatus(azureActiveContext, clustername, hdiAdmin, hdiPassword,
   verbose = FALSE)
@@ -10,7 +10,7 @@ azureHiveStatus(azureActiveContext, clustername, hdiAdmin, hdiPassword,
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 
-\item{clustername}{Cluster name, used for HDI and Spark clusters. See \code{azureCreateHDI}}
+\item{clustername}{Cluster name, used for HDI and Spark clusters. See \code{\link[=azureCreateHDI]{azureCreateHDI()}}}
 
 \item{hdiAdmin}{HDInsight admin username}
 
@@ -19,7 +19,7 @@ azureHiveStatus(azureActiveContext, clustername, hdiAdmin, hdiPassword,
 \item{verbose}{Print Tracing information (Default False)}
 }
 \description{
-Get Status of a HDI Hive Service/version.
+Get Status of a HDI Hive Service / version.
 }
 \seealso{
 Other Hive functions: \code{\link{azureHiveSQL}}

@@ -18,7 +18,7 @@ azureBlobFind(azureActiveContext, file, storageAccount, storageKey, container,
 
 \item{storageKey}{Storage key associated with storage account}
 
-\item{container}{Storage container name. See \code{azureListStorageContainers}}
+\item{container}{Storage container name. See \code{\link[=azureListStorageContainers]{azureListStorageContainers()}}}
 
 \item{resourceGroup}{Name of the resource group}
 
@@ -28,7 +28,7 @@ azureBlobFind(azureActiveContext, file, storageAccount, storageKey, container,
 Find file in a Storage account directory.
 }
 \seealso{
-Other blob store functions: \code{\link{azureBlobCD}},
+Other Blob store functions: \code{\link{azureBlobCD}},
   \code{\link{azureBlobLS}}, \code{\link{azureDeleteBlob}},
   \code{\link{azureGetBlob}},
   \code{\link{azureListStorageBlobs}},

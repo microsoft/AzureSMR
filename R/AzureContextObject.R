@@ -1,21 +1,21 @@
 #' Create an AzureContext.
 #'
-#' Create a container (azureContextObject) for holding variables used by the AzureSMR package.  If the Tenant ID, Client ID and Authenication Key are provided the function will attempt to authenticate the session.
+#' Create a container (azureContextObject) for holding variables used by the `AzureSMR` package.  If the Tenant ID, Client ID and Authenication Key are provided the function will attempt to authenticate the session.
 #'
 #' See the Azure documentation (\url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/}) for information to configure an Active Directory application.
 #'
 #' @inheritParams setAzureContext
 #' @family azureActiveContext functions
 #'
-#' @seealso `setAzureContext`
+#' @seealso [setAzureContext()]
 #' @export
 createAzureContext <- function(tenantID, clientID, authKey){
   azEnv <- new.env(parent = globalenv())
   azEnv <- as.azureActiveContext(azEnv)
 
-  if (!missing(tenantID)) azEnv$tenantID <- tenantID else  azEnv$tenantID <- "?"
-  if (!missing(clientID)) azEnv$clientID <- clientID else  azEnv$tenantID <- "?"
-  if (!missing(authKey)) azEnv$authKey <- authKey else  azEnv$tenantID <- "?"
+  if (!missing(tenantID)) azEnv$tenantID <- tenantID else azEnv$tenantID <- "?"
+  if (!missing(clientID)) azEnv$clientID <- clientID else azEnv$tenantID <- "?"
+  if (!missing(authKey))  azEnv$authKey <- authKey   else azEnv$tenantID <- "?"
 
   if (!missing(tenantID) && !missing(clientID) && !missing(authKey) )
       azureAuthenticate(azEnv,tenantID, clientID, authKey)
@@ -33,34 +33,34 @@ dumpAzureContext <- function(azureActiveContext){
 
 #' Updates azureActiveContext object.
 #'
-#' Updates the value of an azureActiveContext object, created by `createAzureContext`
+#' Updates the value of an azureActiveContext object, created by [createAzureContext()]
 #'
 #' @param azureActiveContext A container used for caching variables used by AzureSMR
 #' @param tenantID The Tenant ID provided during creation of the Active Directory application / service principal
 #' @param clientID The Client ID provided during creation of the Active Directory application / service principal
 #' @param authKey The Authentication Key provided during creation of the Active Directory application / service principal
-#' @param subscriptionID Set the subscriptionID.  This is obtained automatically by `azureAuthenticate` when only a single subscriptionID is available via Active Directory
-#' @param azToken Azure authentication token, obtained by `azureAuthenticate`
+#' @param subscriptionID Set the subscriptionID.  This is obtained automatically by [azureAuthenticate()] when only a single subscriptionID is available via Active Directory
+#' @param azToken Azure authentication token, obtained by [azureAuthenticate()]
 #' @param resourceGroup Name of the resource group
 #' @param vmName Name of the virtual Machine
 #' @param storageAccount Name of the azure storage account
 #' @param storageKey Storage key associated with storage account
 #' @param blob Blob name
-#' @param clustername Cluster name, used for HDI and Spark clusters. See `azureCreateHDI`
-#' @param sessionID Spark sessionID. See `azureSparkCMD`
+#' @param clustername Cluster name, used for HDI and Spark clusters. See [azureCreateHDI()]
+#' @param sessionID Spark sessionID. See [azureSparkCMD()]
 #' @param hdiAdmin HDInsight admin username
 #' @param hdiPassword  HDInsight admin password
-#' @param container Storage container name. See `azureListStorageContainers`
+#' @param container Storage container name. See [azureListStorageContainers()]
 #' @param kind HDinsight kind: "hadoop","spark" or "pyspark"
 #'
 #' @family azureActiveContext functions
 #' @export
-setAzureContext <- function(azureActiveContext,tenantID, clientID, authKey,azToken,
-                            subscriptionID,resourceGroup,
-                            storageKey,storageAccount,
-                            container,blob,
+setAzureContext <- function(azureActiveContext, tenantID, clientID, authKey, azToken,
+                            subscriptionID, resourceGroup,
+                            storageKey, storageAccount,
+                            container, blob,
                             vmName,
-                            hdiAdmin,hdiPassword ,clustername,kind,sessionID)
+                            hdiAdmin, hdiPassword, clustername, kind, sessionID)
 {
   if (!missing(tenantID)) azureActiveContext$tenantID <- tenantID
   if (!missing(clientID)) azureActiveContext$clientID <- clientID

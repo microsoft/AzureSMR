@@ -6,32 +6,30 @@
 #' @family Virtual machine functions
 #' @export
 azureListVM <- function(azureActiveContext, resourceGroup, location, subscriptionID,
-                        azToken, verbose = FALSE) {
+                        verbose = FALSE) {
   azureCheckToken(azureActiveContext)
-  if (missing(azToken)) {
     AT <- azureActiveContext$Token
-  } else (AT <- azToken)
   if (missing(subscriptionID)) {
-    SUBIDI <- azureActiveContext$subscriptionID
-  } else (SUBIDI <- subscriptionID)
+    subscriptionID <- azureActiveContext$subscriptionID
+  } else (subscriptionID <- subscriptionID)
   if (missing(resourceGroup)) {
-    RGI <- azureActiveContext$resourceGroup
-  } else (RGI <- resourceGroup)
+    resourceGroup <- azureActiveContext$resourceGroup
+  } else (resourceGroup <- resourceGroup)
   verbosity <- if (verbose)
     httr::verbose(TRUE) else NULL
 
-  if (!length(RGI)) {
+  if (!length(resourceGroup)) {
     stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
   }
-  if (!length(SUBIDI)) {
+  if (!length(subscriptionID)) {
     stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
   }
   if (!length(AT)) {
     stop("Error: No Token / Not currently Authenticated")
   }
 
-  URL <- paste("https://management.azure.com/subscriptions/", SUBIDI,
-               "/resourceGroups/", RGI, "/providers/Microsoft.Compute/virtualmachines?api-version=2015-05-01-preview",
+  URL <- paste("https://management.azure.com/subscriptions/", subscriptionID,
+               "/resourceGroups/", resourceGroup, "/providers/Microsoft.Compute/virtualmachines?api-version=2015-05-01-preview",
                sep = "")
 
   r <- GET(URL, add_headers(.headers = c(Host = "management.azure.com",
@@ -62,8 +60,8 @@ azureListVM <- function(azureActiveContext, resourceGroup, location, subscriptio
 
   colnames(dfn) <- c("name", "location", "type", "OS", "state", "admin",
                      "ID")
-  azureActiveContext$subscriptionID <- SUBIDI
-  azureActiveContext$resourceGroup <- RGI
+  azureActiveContext$subscriptionID <- subscriptionID
+  azureActiveContext$resourceGroup <- resourceGroup
 
   return(dfn)
 }
@@ -78,27 +76,26 @@ azureListVM <- function(azureActiveContext, resourceGroup, location, subscriptio
 #' @family Virtual machine functions
 #' @export
 azureStartVM <- function(azureActiveContext, resourceGroup, vmName, mode = "Sync",
-                         subscriptionID, azToken, verbose = FALSE) {
+                         subscriptionID, verbose = FALSE) {
   azureCheckToken(azureActiveContext)
-  if (missing(azToken)) {
-    AT <- azureActiveContext$Token
-  } else (AT <- azToken)
+  AT <- azureActiveContext$Token
+
   if (missing(subscriptionID)) {
-    SUBIDI <- azureActiveContext$subscriptionID
-  } else (SUBIDI <- subscriptionID)
+    subscriptionID <- azureActiveContext$subscriptionID
+  } else (subscriptionID <- subscriptionID)
   if (missing(resourceGroup)) {
-    RGI <- azureActiveContext$resourceGroup
-  } else (RGI <- resourceGroup)
+    resourceGroup <- azureActiveContext$resourceGroup
+  } else (resourceGroup <- resourceGroup)
   if (missing(vmName)) {
     vmNameI <- azureActiveContext$vmNameI
   } else (vmNameI <- vmName)
   verbosity <- if (verbose)
     httr::verbose(TRUE) else NULL
 
-  if (!length(RGI)) {
+  if (!length(resourceGroup)) {
     stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
   }
-  if (!length(SUBIDI)) {
+  if (!length(subscriptionID)) {
     stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
   }
   if (!length(AT)) {
@@ -108,8 +105,8 @@ azureStartVM <- function(azureActiveContext, resourceGroup, vmName, mode = "Sync
     stop("No VM name provided")
   }
 
-  URL <- paste("https://management.azure.com/subscriptions/", SUBIDI,
-               "/resourceGroups/", RGI, "/providers/Microsoft.Compute/virtualmachines/",
+  URL <- paste("https://management.azure.com/subscriptions/", subscriptionID,
+               "/resourceGroups/", resourceGroup, "/providers/Microsoft.Compute/virtualmachines/",
                vmNameI, "/start?api-version=2015-05-01-preview", sep = "")
   # print(URL)
 
@@ -123,8 +120,8 @@ azureStartVM <- function(azureActiveContext, resourceGroup, vmName, mode = "Sync
   rl <- content(r, "text", encoding = "UTF-8")
 
   # print(rl) df <- fromJSON(rl) dfn <- as.data.frame(df$value$name)
-  azureActiveContext$subscriptionID <- SUBIDI
-  azureActiveContext$resourceGroup <- RGI
+  azureActiveContext$subscriptionID <- subscriptionID
+  azureActiveContext$resourceGroup <- resourceGroup
   azureActiveContext$vmName <- vmNameI
   if (toupper(mode) == "SYNC") {
     rc <- "running"
@@ -183,28 +180,26 @@ azureStartVM <- function(azureActiveContext, resourceGroup, vmName, mode = "Sync
 #' @family Virtual machine functions
 #' @export
 azureStopVM <- function(azureActiveContext, resourceGroup, vmName, mode = "Sync",
-                        subscriptionID, azToken, verbose = FALSE) {
+                        subscriptionID, verbose = FALSE) {
   azureCheckToken(azureActiveContext)
+  AT <- azureActiveContext$Token
 
-  if (missing(azToken)) {
-    AT <- azureActiveContext$Token
-  } else (AT <- azToken)
   if (missing(subscriptionID)) {
-    SUBIDI <- azureActiveContext$subscriptionID
-  } else (SUBIDI <- subscriptionID)
+    subscriptionID <- azureActiveContext$subscriptionID
+  } else (subscriptionID <- subscriptionID)
   if (missing(resourceGroup)) {
-    RGI <- azureActiveContext$resourceGroup
-  } else (RGI <- resourceGroup)
+    resourceGroup <- azureActiveContext$resourceGroup
+  } else (resourceGroup <- resourceGroup)
   if (missing(vmName)) {
     vmNameI <- azureActiveContext$vmName
   } else (vmNameI <- vmName)
   verbosity <- if (verbose)
     httr::verbose(TRUE) else NULL
 
-  if (!length(RGI)) {
+  if (!length(resourceGroup)) {
     stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
   }
-  if (!length(SUBIDI)) {
+  if (!length(subscriptionID)) {
     stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
   }
   if (!length(AT)) {
@@ -214,8 +209,8 @@ azureStopVM <- function(azureActiveContext, resourceGroup, vmName, mode = "Sync"
     stop("No VM name provided")
   }
 
-  URL <- paste("https://management.azure.com/subscriptions/", SUBIDI,
-               "/resourceGroups/", RGI, "/providers/Microsoft.Compute/virtualmachines/",
+  URL <- paste("https://management.azure.com/subscriptions/", subscriptionID,
+               "/resourceGroups/", resourceGroup, "/providers/Microsoft.Compute/virtualmachines/",
                vmNameI, "/deallocate?api-version=2015-05-01-preview", sep = "")
   # print(URL)
 
@@ -231,8 +226,8 @@ azureStopVM <- function(azureActiveContext, resourceGroup, vmName, mode = "Sync"
   # df <- fromJSON(rl)
 
   # dfn <- as.data.frame(df$value$name)
-  azureActiveContext$subscriptionID <- SUBIDI
-  azureActiveContext$resourceGroup <- RGI
+  azureActiveContext$subscriptionID <- subscriptionID
+  azureActiveContext$resourceGroup <- resourceGroup
   azureActiveContext$vmName <- vmNameI
 
   if (toupper(mode) == "SYNC") {
@@ -288,28 +283,26 @@ azureStopVM <- function(azureActiveContext, resourceGroup, vmName, mode = "Sync"
 #' @family Virtual machine functions
 #' @export
 azureVMStatus <- function(azureActiveContext, resourceGroup, vmName, subscriptionID,
-                          azToken, ignore = "N", verbose = FALSE) {
+                          ignore = "N", verbose = FALSE) {
   azureCheckToken(azureActiveContext)
+  AT <- azureActiveContext$Token
 
-  if (missing(azToken)) {
-    AT <- azureActiveContext$Token
-  } else (AT <- azToken)
   if (missing(subscriptionID)) {
-    SUBIDI <- azureActiveContext$subscriptionID
-  } else (SUBIDI <- subscriptionID)
+    subscriptionID <- azureActiveContext$subscriptionID
+  } else (subscriptionID <- subscriptionID)
   if (missing(resourceGroup)) {
-    RGI <- azureActiveContext$resourceGroup
-  } else (RGI <- resourceGroup)
+    resourceGroup <- azureActiveContext$resourceGroup
+  } else (resourceGroup <- resourceGroup)
   if (missing(vmName)) {
     vmNameI <- azureActiveContext$vmName
   } else (vmNameI <- vmName)
   verbosity <- if (verbose)
     httr::verbose(TRUE) else NULL
 
-  if (!length(RGI)) {
+  if (!length(resourceGroup)) {
     stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
   }
-  if (!length(SUBIDI)) {
+  if (!length(subscriptionID)) {
     stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
   }
   if (!length(AT)) {
@@ -319,8 +312,8 @@ azureVMStatus <- function(azureActiveContext, resourceGroup, vmName, subscriptio
     stop("No VM name provided")
   }
 
-  URL <- paste("https://management.azure.com/subscriptions/", SUBIDI,
-               "/resourceGroups/", RGI, "/providers/Microsoft.Compute/virtualmachines/",
+  URL <- paste("https://management.azure.com/subscriptions/", subscriptionID,
+               "/resourceGroups/", resourceGroup, "/providers/Microsoft.Compute/virtualmachines/",
                vmNameI, "/InstanceView?api-version=2015-05-01-preview", sep = "")
   # print(URL)
 
@@ -352,27 +345,26 @@ azureVMStatus <- function(azureActiveContext, resourceGroup, vmName, subscriptio
 #' @family Virtual machine functions
 #' @export
 azureDeleteVM <- function(azureActiveContext, resourceGroup, vmName, subscriptionID,
-                          azToken, mode = "Sync", verbose = FALSE) {
+                          mode = "Sync", verbose = FALSE) {
   azureCheckToken(azureActiveContext)
-  if (missing(azToken)) {
-    AT <- azureActiveContext$Token
-  } else (AT <- azToken)
+  AT <- azureActiveContext$Token
+
   if (missing(subscriptionID)) {
-    SUBIDI <- azureActiveContext$subscriptionID
-  } else (SUBIDI <- subscriptionID)
+    subscriptionID <- azureActiveContext$subscriptionID
+  } else (subscriptionID <- subscriptionID)
   if (missing(resourceGroup)) {
-    RGI <- azureActiveContext$resourceGroup
-  } else (RGI <- resourceGroup)
+    resourceGroup <- azureActiveContext$resourceGroup
+  } else (resourceGroup <- resourceGroup)
   if (missing(vmName)) {
     vmNameI <- azureActiveContext$vmNameI
   } else (vmNameI <- vmName)
   verbosity <- if (verbose)
     httr::verbose(TRUE) else NULL
 
-  if (!length(RGI)) {
+  if (!length(resourceGroup)) {
     stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
   }
-  if (!length(SUBIDI)) {
+  if (!length(subscriptionID)) {
     stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
   }
   if (!length(AT)) {
@@ -382,8 +374,8 @@ azureDeleteVM <- function(azureActiveContext, resourceGroup, vmName, subscriptio
     stop("No VM name provided")
   }
 
-  URL <- paste("https://management.azure.com/subscriptions/", SUBIDI,
-               "/resourceGroups/", RGI, "/providers/Microsoft.Compute/virtualmachines/",
+  URL <- paste("https://management.azure.com/subscriptions/", subscriptionID,
+               "/resourceGroups/", resourceGroup, "/providers/Microsoft.Compute/virtualmachines/",
                vmNameI, "?api-version=2015-05-01-preview", sep = "")
   # print(URL)
   print(URL)
@@ -401,8 +393,8 @@ azureDeleteVM <- function(azureActiveContext, resourceGroup, vmName, subscriptio
   # df <- fromJSON(rl)
 
   # dfn <- as.data.frame(df$value$name)
-  azureActiveContext$subscriptionID <- SUBIDI
-  azureActiveContext$resourceGroup <- RGI
+  azureActiveContext$subscriptionID <- subscriptionID
+  azureActiveContext$resourceGroup <- resourceGroup
   azureActiveContext$vmName <- vmNameI
 
   if (toupper(mode) == "SYNC") {
@@ -450,32 +442,31 @@ azureDeleteVM <- function(azureActiveContext, resourceGroup, vmName, subscriptio
 #' @family Virtual machine functions
 #' @export
 azureListScaleSets <- function(azureActiveContext, resourceGroup, location, subscriptionID,
-                        azToken, verbose = FALSE) {
+                        verbose = FALSE) {
   azureCheckToken(azureActiveContext)
-  if (missing(azToken)) {
-    AT <- azureActiveContext$Token
-  } else (AT <- azToken)
+  AT <- azureActiveContext$Token
+
   if (missing(subscriptionID)) {
-    SUBIDI <- azureActiveContext$subscriptionID
-  } else (SUBIDI <- subscriptionID)
+    subscriptionID <- azureActiveContext$subscriptionID
+  } else (subscriptionID <- subscriptionID)
   if (missing(resourceGroup)) {
-    RGI <- azureActiveContext$resourceGroup
-  } else (RGI <- resourceGroup)
+    resourceGroup <- azureActiveContext$resourceGroup
+  } else (resourceGroup <- resourceGroup)
   verbosity <- if (verbose)
     httr::verbose(TRUE) else NULL
   
-  if (!length(RGI)) {
+  if (!length(resourceGroup)) {
     stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
   }
-  if (!length(SUBIDI)) {
+  if (!length(subscriptionID)) {
     stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
   }
   if (!length(AT)) {
     stop("Error: No Token / Not currently Authenticated")
   }
   
-  URL <- paste("https://management.azure.com/subscriptions/", SUBIDI,
-               "/resourceGroups/", RGI, "/providers/Microsoft.Compute/virtualMachineScaleSets?api-version=2016-03-30",
+  URL <- paste("https://management.azure.com/subscriptions/", subscriptionID,
+               "/resourceGroups/", resourceGroup, "/providers/Microsoft.Compute/virtualMachineScaleSets?api-version=2016-03-30",
                sep = "")
   
   r <- GET(URL, add_headers(.headers = c(Host = "management.azure.com",
@@ -507,8 +498,8 @@ azureListScaleSets <- function(azureActiveContext, resourceGroup, location, subs
 
   colnames(dfn) <- c("name", "location", "Skuname", "skutier", "capacity", "image",
                      "ver")
-  azureActiveContext$subscriptionID <- SUBIDI
-  azureActiveContext$resourceGroup <- RGI
+  azureActiveContext$subscriptionID <- subscriptionID
+  azureActiveContext$resourceGroup <- resourceGroup
   
   return(dfn)
 }
@@ -521,32 +512,31 @@ azureListScaleSets <- function(azureActiveContext, resourceGroup, location, subs
 #' @family Virtual machine functions
 #' @export
 azureListScaleSetNetwork <- function(azureActiveContext,resourceGroup, location, subscriptionID,
-                               azToken, verbose = FALSE) {
+                               verbose = FALSE) {
   azureCheckToken(azureActiveContext)
-  if (missing(azToken)) {
-    AT <- azureActiveContext$Token
-  } else (AT <- azToken)
+  AT <- azureActiveContext$Token
+  
   if (missing(subscriptionID)) {
-    SUBIDI <- azureActiveContext$subscriptionID
-  } else (SUBIDI <- subscriptionID)
+    subscriptionID <- azureActiveContext$subscriptionID
+  } else (subscriptionID <- subscriptionID)
   if (missing(resourceGroup)) {
-    RGI <- azureActiveContext$resourceGroup
-  } else (RGI <- resourceGroup)
+    resourceGroup <- azureActiveContext$resourceGroup
+  } else (resourceGroup <- resourceGroup)
   verbosity <- if (verbose)
     httr::verbose(TRUE) else NULL
   
-  if (!length(RGI)) {
+  if (!length(resourceGroup)) {
     stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
   }
-  if (!length(SUBIDI)) {
+  if (!length(subscriptionID)) {
     stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
   }
   if (!length(AT)) {
     stop("Error: No Token / Not currently Authenticated")
   }
   
-  URL <- paste("https://management.azure.com/subscriptions/", SUBIDI,
-               "/resourceGroups/", RGI, "/providers/Microsoft.Network/loadBalancers/","?api-version=2016-03-30",
+  URL <- paste("https://management.azure.com/subscriptions/", subscriptionID,
+               "/resourceGroups/", resourceGroup, "/providers/Microsoft.Network/loadBalancers/","?api-version=2016-03-30",
                sep = "")
   
   r <- GET(URL, add_headers(.headers = c(Host = "management.azure.com",
@@ -560,8 +550,8 @@ azureListScaleSetNetwork <- function(azureActiveContext,resourceGroup, location,
   {
      for (lb in lbs)
      {
-       URL <- paste("https://management.azure.com/subscriptions/", SUBIDI,
-                    "/resourceGroups/", RGI, "/providers/Microsoft.Network/loadBalancers/",lb,"?api-version=2016-03-30",
+       URL <- paste("https://management.azure.com/subscriptions/", subscriptionID,
+                    "/resourceGroups/", resourceGroup, "/providers/Microsoft.Network/loadBalancers/",lb,"?api-version=2016-03-30",
                     sep = "")
        r <- GET(URL, add_headers(.headers = c(Host = "management.azure.com",
                                               Authorization = AT, `Content-type` = "application/json")), verbosity)
@@ -583,8 +573,8 @@ azureListScaleSetNetwork <- function(azureActiveContext,resourceGroup, location,
     colnames(dfn) <- c("lbname","domainName","publicIP", "inPort", "outPort")
   }
   
-  URL <- paste("https://management.azure.com/subscriptions/", SUBIDI,
-               "/resourceGroups/", RGI, "/providers/Microsoft.Network/publicIPAddresses","?api-version=2016-03-30",
+  URL <- paste("https://management.azure.com/subscriptions/", subscriptionID,
+               "/resourceGroups/", resourceGroup, "/providers/Microsoft.Network/publicIPAddresses","?api-version=2016-03-30",
                sep = "")
   
   r <- GET(URL, add_headers(.headers = c(Host = "management.azure.com",
@@ -598,8 +588,8 @@ azureListScaleSetNetwork <- function(azureActiveContext,resourceGroup, location,
   {
     for (pip in pips)
     {
-      URL <- paste("https://management.azure.com/subscriptions/", SUBIDI,
-                   "/resourceGroups/", RGI, "/providers/Microsoft.Network/publicIPAddresses/",pip,"?api-version=2016-03-30",
+      URL <- paste("https://management.azure.com/subscriptions/", subscriptionID,
+                   "/resourceGroups/", resourceGroup, "/providers/Microsoft.Network/publicIPAddresses/",pip,"?api-version=2016-03-30",
                    sep = "")
       r <- GET(URL, add_headers(.headers = c(Host = "management.azure.com",
                                              Authorization = AT, `Content-type` = "application/json")), verbosity)
@@ -614,8 +604,8 @@ azureListScaleSetNetwork <- function(azureActiveContext,resourceGroup, location,
     }
   }
   
-  azureActiveContext$subscriptionID <- SUBIDI
-  azureActiveContext$resourceGroup <- RGI
+  azureActiveContext$subscriptionID <- subscriptionID
+  azureActiveContext$resourceGroup <- resourceGroup
   
   return(dfn)
 }
@@ -629,27 +619,26 @@ azureListScaleSetNetwork <- function(azureActiveContext,resourceGroup, location,
 #' @family Virtual machine functions
 #' @export
 azureListScaleSetVM <- function(azureActiveContext, scaleSet, resourceGroup, location, subscriptionID,
-                                azToken, verbose = FALSE) {
+                                verbose = FALSE) {
   azureCheckToken(azureActiveContext)
-  if (missing(azToken)) {
-    AT <- azureActiveContext$Token
-  } else (AT <- azToken)
+  AT <- azureActiveContext$Token
+
   if (missing(subscriptionID)) {
-    SUBIDI <- azureActiveContext$subscriptionID
-  } else (SUBIDI <- subscriptionID)
+    subscriptionID <- azureActiveContext$subscriptionID
+  } else (subscriptionID <- subscriptionID)
   if (missing(resourceGroup)) {
-    RGI <- azureActiveContext$resourceGroup
-  } else (RGI <- resourceGroup)
+    resourceGroup <- azureActiveContext$resourceGroup
+  } else (resourceGroup <- resourceGroup)
   verbosity <- if (verbose)
     httr::verbose(TRUE) else NULL
   
-  if (!length(RGI)) {
+  if (!length(resourceGroup)) {
     stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
   }
   if (!length(scaleSet)) {
     stop("Error: No scaleSet provided")
   }
-  if (!length(SUBIDI)) {
+  if (!length(subscriptionID)) {
     stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
   }
   if (!length(AT)) {
@@ -657,8 +646,8 @@ azureListScaleSetVM <- function(azureActiveContext, scaleSet, resourceGroup, loc
   }
   
   
-  URL <- paste("https://management.azure.com/subscriptions/", SUBIDI,
-               "/resourceGroups/", RGI, "/providers/Microsoft.Compute/virtualMachineScaleSets/",scaleSet,"/virtualMachines?api-version=2016-03-30",
+  URL <- paste("https://management.azure.com/subscriptions/", subscriptionID,
+               "/resourceGroups/", resourceGroup, "/providers/Microsoft.Compute/virtualMachineScaleSets/",scaleSet,"/virtualMachines?api-version=2016-03-30",
                sep = "")
   
   r <- GET(URL, add_headers(.headers = c(Host = "management.azure.com",
@@ -682,8 +671,8 @@ azureListScaleSetVM <- function(azureActiveContext, scaleSet, resourceGroup, loc
   dfn[1:clust, 4] <- df$value$properties$provisioningState
 
   colnames(dfn) <- c("name","id", "computerName", "state")
-  azureActiveContext$subscriptionID <- SUBIDI
-  azureActiveContext$resourceGroup <- RGI
+  azureActiveContext$subscriptionID <- subscriptionID
+  azureActiveContext$resourceGroup <- resourceGroup
   
   return(dfn)
 }

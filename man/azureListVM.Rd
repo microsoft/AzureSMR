@@ -5,7 +5,7 @@
 \title{List VMs in a Subscription.}
 \usage{
 azureListVM(azureActiveContext, resourceGroup, location, subscriptionID,
-  azToken, verbose = FALSE)
+  verbose = FALSE)
 }
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by AzureSMR}
@@ -14,9 +14,7 @@ azureListVM(azureActiveContext, resourceGroup, location, subscriptionID,
 
 \item{location}{Azure region, e.g. 'westeurope' or 'southcentralus'}
 
-\item{subscriptionID}{Set the subscriptionID.  This is obtained automatically by \code{azureAuthenticate} when only a single subscriptionID is available via Active Directory}
-
-\item{azToken}{Azure authentication token, obtained by \code{azureAuthenticate}}
+\item{subscriptionID}{Set the subscriptionID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
 
 \item{verbose}{Print Tracing information (Default False)}
 }

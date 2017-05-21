@@ -5,7 +5,7 @@
 \title{Delete a Virtual Machine.}
 \usage{
 azureDeleteVM(azureActiveContext, resourceGroup, vmName, subscriptionID,
-  azToken, mode = "Sync", verbose = FALSE)
+  mode = "Sync", verbose = FALSE)
 }
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by AzureSMR}
@@ -14,9 +14,7 @@ azureDeleteVM(azureActiveContext, resourceGroup, vmName, subscriptionID,
 
 \item{vmName}{Virtual Machine name}
 
-\item{subscriptionID}{Set the subscriptionID.  This is obtained automatically by \code{azureAuthenticate} when only a single subscriptionID is available via Active Directory}
-
-\item{azToken}{Azure authentication token, obtained by \code{azureAuthenticate}}
+\item{subscriptionID}{Set the subscriptionID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
 
 \item{mode}{Wait for operation to complete 'Sync' (Default)}
 

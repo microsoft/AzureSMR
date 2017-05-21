@@ -45,7 +45,7 @@ azureSparkNewSession <- function(azureActiveContext, clustername, hdiAdmin,
   URL <- paste("https://", CN, ".azurehdinsight.net/livy/sessions", sep = "")
 
   # URL <-
-  # paste('https://management.azure.com/subscriptions/',SUBIDI,'/resourceGroups/',RGI,'/providers/Microsoft.HDInsight/clusters/',clustername,'?api-version=2015-03-01-preview',sep='')
+  # paste('https://management.azure.com/subscriptions/',subscriptionID,'/resourceGroups/',resourceGroup,'/providers/Microsoft.HDInsight/clusters/',clustername,'?api-version=2015-03-01-preview',sep='')
 
   # print(URL)
 
@@ -105,7 +105,7 @@ azureSparkListSessions <- function(azureActiveContext, clustername, hdiAdmin,
   URL <- paste("https://", CN, ".azurehdinsight.net/livy/sessions", sep = "")
 
   # URL <-
-  # paste('https://management.azure.com/subscriptions/',SUBIDI,'/resourceGroups/',RGI,'/providers/Microsoft.HDInsight/clusters/',clustername,'?api-version=2015-03-01-preview',sep='')
+  # paste('https://management.azure.com/subscriptions/',subscriptionID,'/resourceGroups/',resourceGroup,'/providers/Microsoft.HDInsight/clusters/',clustername,'?api-version=2015-03-01-preview',sep='')
 
   # print(URL)
 
@@ -178,7 +178,7 @@ azureSparkStopSession <- function(azureActiveContext, clustername, hdiAdmin,
                SI, sep = "")
 
   # URL <-
-  # paste('https://management.azure.com/subscriptions/',SUBIDI,'/resourceGroups/',RGI,'/providers/Microsoft.HDInsight/clusters/',clustername,'?api-version=2015-03-01-preview',sep='')
+  # paste('https://management.azure.com/subscriptions/',subscriptionID,'/resourceGroups/',resourceGroup,'/providers/Microsoft.HDInsight/clusters/',clustername,'?api-version=2015-03-01-preview',sep='')
 
   # print(URL)
 
@@ -247,7 +247,7 @@ azureSparkCMD <- function(azureActiveContext, CMD, clustername, hdiAdmin,
                SI, "/statements", sep = "")
 
   # URL <-
-  # paste('https://management.azure.com/subscriptions/',SUBIDI,'/resourceGroups/',RGI,'/providers/Microsoft.HDInsight/clusters/',clustername,'?api-version=2015-03-01-preview',sep='')
+  # paste('https://management.azure.com/subscriptions/',subscriptionID,'/resourceGroups/',resourceGroup,'/providers/Microsoft.HDInsight/clusters/',clustername,'?api-version=2015-03-01-preview',sep='')
 
   # print(URL) print(typeof(CMD))
   bodyI <- list(code = CMD)
@@ -344,7 +344,7 @@ azureSparkJob <- function(azureActiveContext, FILE, clustername, hdiAdmin,
   URL <- paste("https://", CN, ".azurehdinsight.net/livy/batches", sep = "")
 
   # URL <-
-  # paste('https://management.azure.com/subscriptions/',SUBIDI,'/resourceGroups/',RGI,'/providers/Microsoft.HDInsight/clusters/',clustername,'?api-version=2015-03-01-preview',sep='')
+  # paste('https://management.azure.com/subscriptions/',subscriptionID,'/resourceGroups/',resourceGroup,'/providers/Microsoft.HDInsight/clusters/',clustername,'?api-version=2015-03-01-preview',sep='')
 
   # print(URL) print(typeof(CMD))
   bodyI <- list(file = FILE)
@@ -454,7 +454,7 @@ azureSparkListJobs <- function(azureActiveContext, clustername, hdiAdmin,
   URL <- paste("https://", CN, ".azurehdinsight.net/livy/batches", sep = "")
 
   # URL <-
-  # paste('https://management.azure.com/subscriptions/',SUBIDI,'/resourceGroups/',RGI,'/providers/Microsoft.HDInsight/clusters/',clustername,'?api-version=2015-03-01-preview',sep='')
+  # paste('https://management.azure.com/subscriptions/',subscriptionID,'/resourceGroups/',resourceGroup,'/providers/Microsoft.HDInsight/clusters/',clustername,'?api-version=2015-03-01-preview',sep='')
 
   # print(URL)
 

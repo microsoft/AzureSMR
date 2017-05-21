@@ -5,12 +5,12 @@
 \title{Create Storage containers in a specified Storage Account.}
 \usage{
 azureCreateStorageContainer(azureActiveContext, container, storageAccount,
-  storageKey, resourceGroup, azToken, subscriptionID, verbose = FALSE)
+  storageKey, resourceGroup, subscriptionID, verbose = FALSE)
 }
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 
-\item{container}{Storage container name. See \code{azureListStorageContainers}}
+\item{container}{Storage container name. See \code{\link[=azureListStorageContainers]{azureListStorageContainers()}}}
 
 \item{storageAccount}{Name of the azure storage account}
 
@@ -18,9 +18,7 @@ azureCreateStorageContainer(azureActiveContext, container, storageAccount,
 
 \item{resourceGroup}{Name of the resource group}
 
-\item{azToken}{Azure authentication token, obtained by \code{azureAuthenticate}}
-
-\item{subscriptionID}{Set the subscriptionID.  This is obtained automatically by \code{azureAuthenticate} when only a single subscriptionID is available via Active Directory}
+\item{subscriptionID}{Set the subscriptionID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
 
 \item{verbose}{Print Tracing information (Default False)}
 }
@@ -28,6 +26,6 @@ azureCreateStorageContainer(azureActiveContext, container, storageAccount,
 Create Storage containers in a specified Storage Account.
 }
 \seealso{
-Other container functions: \code{\link{azureDeleteStorageContainer}},
+Other Container functions: \code{\link{azureDeleteStorageContainer}},
   \code{\link{azureListStorageContainers}}
 }

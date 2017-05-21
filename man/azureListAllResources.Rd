@@ -4,17 +4,15 @@
 \alias{azureListAllResources}
 \title{Get all Resource in default Subscription.}
 \usage{
-azureListAllResources(azureActiveContext, resourceGroup, subscriptionID,
-  azToken, name, type, location, verbose = FALSE)
+azureListAllResources(azureActiveContext, resourceGroup, subscriptionID, name,
+  type, location, verbose = FALSE)
 }
 \arguments{
 \item{azureActiveContext}{Azure Context Object}
 
-\item{resourceGroup}{resourceGroup Object (or use azureActiveContext)}
+\item{resourceGroup}{resourceGroup Object (or use \code{azureActiveContext})}
 
-\item{subscriptionID}{subscriptionID Object (or use azureActiveContext)}
-
-\item{azToken}{Azure authentication token, obtained by \code{azureAuthenticate}}
+\item{subscriptionID}{subscriptionID Object (or use \code{azureActiveContext})}
 
 \item{name}{filter by resource name}
 

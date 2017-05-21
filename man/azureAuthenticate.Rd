@@ -19,7 +19,7 @@ azureAuthenticate(azureActiveContext, tenantID, clientID, authKey,
 \item{verbose}{Print Tracing information (Default False)}
 }
 \value{
-Retunrs Azure Tokem and sets AzureContext Token
+Returns Azure token and sets AzureContext token
 }
 \description{
 Authenticates against Azure Active directory application.
@@ -31,5 +31,5 @@ See \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group
 \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/}
 }
 \seealso{
-Other Resources: \code{\link{azureCheckToken}}
+Other Azure resource functions: \code{\link{azureCheckToken}}
 }

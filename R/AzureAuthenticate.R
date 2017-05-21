@@ -6,8 +6,8 @@
 #' @note See \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/} for instructions to set up an Active Directory application
 #' @references \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/}
 #'
-#' @return Retunrs Azure Tokem and sets AzureContext Token
-#' @family Resources
+#' @return Returns Azure token and sets AzureContext token
+#' @family Azure resource functions
 #' 
 #' @importFrom utils URLencode
 #' @export
@@ -65,11 +65,11 @@ azureAuthenticate <- function(azureActiveContext, tenantID, clientID, authKey, v
 
 
 
-#' Check the timestamp of a Token and Renew if needed.
+#' Check the timestamp of a token and renew if needed.
 #'
 #' @inheritParams setAzureContext
 #' @inheritParams azureAuthenticate
-#' @family Resources
+#' @family Azure resource functions
 #' @export
 azureCheckToken <- function(azureActiveContext) {
   if (missing(azureActiveContext) || is.null(azureActiveContext)) return(NA)
