@@ -234,7 +234,7 @@ azureDeleteDeploy <- function(azureActiveContext, deplname, resourceGroup,
   print(rl)
   df <- fromJSON(rl)
   print(df)
-  return("OK")
+  return(TRUE)
 }
 
 #' Cancel Template Deployment.

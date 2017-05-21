@@ -180,14 +180,17 @@ azureCreateStorageContainer <- function(azureActiveContext, container, storageAc
            verbosity)
 
   if (status_code(r) == 201) {
-    return("OK. Container created.")
+    message("OK. Container created.")
+    return(TRUE)
   }
   if (status_code(r) == 409) {
-    return("OK. The specified container already exists.")
+    message("OK. The specified container already exists.")
+    return(TRUE)
   }
 
   stopWithAzureError(r)
-  return("OK")
+  message("OK")
+  return(TRUE)
 }
 
 
@@ -262,8 +265,10 @@ azureDeleteStorageContainer <- function(azureActiveContext, container, storageAc
               verbosity)
 
   if (status_code(r) == 202) {
-    return("container delete request accepted")
+    message("container delete request accepted")
+    return(TRUE)
   }
   stop(paste0("Error: Return code(", status_code(r), ")"))
-  return("OK")
+  message("OK")
+  return(TRUE)
 }
