@@ -15,6 +15,7 @@ as.azureActiveContext <- function(x){
 }
 
 #' @export
+#' @rdname Internal
 is.azureActiveContext <- function(x){
   inherits(x, "azureActiveContext")
 }

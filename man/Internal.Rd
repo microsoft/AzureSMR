@@ -2,9 +2,12 @@
 % Please edit documentation in R/methods.R
 \name{as.azureActiveContext}
 \alias{as.azureActiveContext}
+\alias{is.azureActiveContext}
 \title{azureActiveContext object.}
 \usage{
 as.azureActiveContext(x)
+
+is.azureActiveContext(x)
 }
 \arguments{
 \item{x}{Object to create, test or print}

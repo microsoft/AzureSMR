@@ -75,13 +75,6 @@ azureListRG <- function(azureActiveContext, subscriptionID, verbose = FALSE) {
   return(dfn)
 }
 
-
-#' @export
-AzureListRG <- function(...) {
-  .Deprecated("azureListRG")
-}
-
-
 #' Get all Resource in default Subscription.
 #'
 #' @inheritParams setAzureContext

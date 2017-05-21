@@ -56,7 +56,7 @@ sc
 
 To get an authorisation token use `azureAuthenticate()`. Note this token will time our after a period and therefore you need to run it again occasionally. TIP: Use AzureAuthenticate before a long running task.
 
-The `azureListSubscriptions()` funtion lists all the available subscriptions. If you only have one it sets the default Subscription in the `azureActiveContext` to that subscription ID.
+The `azureListSubscriptions()` function lists all the available subscriptions. If you only have one it sets the default Subscription in the `azureActiveContext` to that subscription ID.
 
 
 ```{r, eval=FALSE}
@@ -109,13 +109,13 @@ In order to access Storage Blobs you need to have a key. Use `azureSAGetKey()` t
 
 
 ```{r, eval=FALSE}
-sKey <- AzureSAGetKey(sc, resourceGroup = "Analytics", storageAccount = "analyticsfiles")
+sKey <- azureSAGetKey(sc, resourceGroup = "Analytics", storageAccount = "analyticsfiles")
 ```
 
 To list containers in a storage account use `azureListContainers()`
 
 ```{r, eval=FALSE}
-azListContainers(sc, storageAccount = "analyticsfiles", containers = "Test")
+azureListContainers(sc, storageAccount = "analyticsfiles", containers = "Test")
 ```
 
 
@@ -128,7 +128,7 @@ azureListStorageBlobs(sc, storageAccount = "analyticsfiles", container = "test")
 To Write a Blobs use `azurePutBlob()`
 
 ```{r, eval=FALSE}
-AzurePutBlob(sc, StorageAccount = "analyticsfiles", container = "test", 
+azurePutBlob(sc, StorageAccount = "analyticsfiles", container = "test", 
              contents = "Hello World",
              blob = "HELLO") 
 ```
@@ -199,11 +199,11 @@ These functions facilitate the use of hive jobs on a HDInsight Cluster
 azureHiveStatus(sc, clusterName = "{hdicluster}", 
                 hdiAdmin = "admin", 
                 hdiPassword = "********")
-AzureHiveSQL(sc, 
+azureHiveSQL(sc, 
              CMD = "select * from airports", 
              Path = "wasb://{container}@{hdicluster}.blob.core.windows.net/")
 
-stdout <- AzureGetBlob(sc, Container = "test", Blob = "stdout")
+stdout <- azureGetBlob(sc, Container = "test", Blob = "stdout")
  
 read.delim(text=stdout,  header=TRUE, fill=TRUE)
 
