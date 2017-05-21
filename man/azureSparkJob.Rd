@@ -12,7 +12,7 @@ azureSparkJob(azureActiveContext, FILE, clustername, hdiAdmin, hdiPassword,
 
 \item{FILE}{file}
 
-\item{clustername}{Cluster name, used for HDI and Spark clusters. See \code{azureCreateHDI}}
+\item{clustername}{Cluster name, used for HDI and Spark clusters. See \code{\link[=azureCreateHDI]{azureCreateHDI()}}}
 
 \item{hdiAdmin}{HDInsight admin username}
 

@@ -12,7 +12,7 @@ azureHiveSQL(azureActiveContext, CMD, clustername, hdiAdmin, hdiPassword,
 
 \item{CMD}{SQl COmmand String}
 
-\item{clustername}{Cluster name, used for HDI and Spark clusters. See \code{azureCreateHDI}}
+\item{clustername}{Cluster name, used for HDI and Spark clusters. See \code{\link[=azureCreateHDI]{azureCreateHDI()}}}
 
 \item{hdiAdmin}{HDInsight admin username}
 

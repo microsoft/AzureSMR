@@ -5,16 +5,14 @@
 \title{Delete a resourceGroup with all Resources.}
 \usage{
 azureDeleteResourceGroup(azureActiveContext, resourceGroup, subscriptionID,
-  azToken, type, verbose = FALSE)
+  type, verbose = FALSE)
 }
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 
 \item{resourceGroup}{Name of the resource group}
 
-\item{subscriptionID}{Set the subscriptionID.  This is obtained automatically by \code{azureAuthenticate} when only a single subscriptionID is available via Active Directory}
-
-\item{azToken}{Azure authentication token, obtained by \code{azureAuthenticate}}
+\item{subscriptionID}{Set the subscriptionID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
 
 \item{type}{filter by resource type}
 

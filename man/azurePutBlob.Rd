@@ -26,7 +26,7 @@ azurePutBlob(azureActiveContext, blob, contents = "", file = "", directory,
 
 \item{storageKey}{Storage key associated with storage account}
 
-\item{container}{Storage container name. See \code{azureListStorageContainers}}
+\item{container}{Storage container name. See \code{\link[=azureListStorageContainers]{azureListStorageContainers()}}}
 
 \item{resourceGroup}{Name of the resource group}
 
@@ -36,7 +36,7 @@ azurePutBlob(azureActiveContext, blob, contents = "", file = "", directory,
 Write contents to a specifed Storage blob.
 }
 \seealso{
-Other blob store functions: \code{\link{azureBlobCD}},
+Other Blob store functions: \code{\link{azureBlobCD}},
   \code{\link{azureBlobFind}}, \code{\link{azureBlobLS}},
   \code{\link{azureDeleteBlob}},
   \code{\link{azureGetBlob}},

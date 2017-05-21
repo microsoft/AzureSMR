@@ -2,24 +2,19 @@
 % Please edit documentation in R/AzureResources.R
 \name{azureListRG}
 \alias{azureListRG}
-\alias{AzureListRG}
 \title{Get all resource groups in subscription ID.}
 \usage{
-azureListRG(azureActiveContext, subscriptionID, azToken, verbose = FALSE)
-
-AzureListRG(azureActiveContext, subscriptionID, azToken, verbose = FALSE)
+azureListRG(azureActiveContext, subscriptionID, verbose = FALSE)
 }
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 
-\item{subscriptionID}{Set the subscriptionID.  This is obtained automatically by \code{azureAuthenticate} when only a single subscriptionID is available via Active Directory}
-
-\item{azToken}{Azure authentication token, obtained by \code{azureAuthenticate}}
+\item{subscriptionID}{Set the subscriptionID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
 
 \item{verbose}{Print Tracing information (Default False)}
 }
 \value{
-Returns Dataframe of resourceGroups
+Dataframe of resourceGroups
 }
 \description{
 Get all resource groups in subscription ID.

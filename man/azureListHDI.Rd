@@ -2,21 +2,19 @@
 % Please edit documentation in R/AzureHDI.R
 \name{azureListHDI}
 \alias{azureListHDI}
-\title{Get all HDInsight Clusters in default Subscription or details for a specified clustername.}
+\title{Get all HDInsight Clusters in default Subscription or details for a specified cluster name.}
 \usage{
 azureListHDI(azureActiveContext, resourceGroup, clustername = "*",
-  subscriptionID, azToken, name, type, location, verbose = FALSE)
+  subscriptionID, name, type, location, verbose = FALSE)
 }
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 
 \item{resourceGroup}{Name of the resource group}
 
-\item{clustername}{Cluster name, used for HDI and Spark clusters. See \code{azureCreateHDI}}
+\item{clustername}{Cluster name, used for HDI and Spark clusters. See \code{\link[=azureCreateHDI]{azureCreateHDI()}}}
 
-\item{subscriptionID}{Set the subscriptionID.  This is obtained automatically by \code{azureAuthenticate} when only a single subscriptionID is available via Active Directory}
-
-\item{azToken}{Azure authentication token, obtained by \code{azureAuthenticate}}
+\item{subscriptionID}{Set the subscriptionID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
 
 \item{name}{filter by resource name}
 
@@ -30,7 +28,7 @@ azureListHDI(azureActiveContext, resourceGroup, clustername = "*",
 Returns Dataframe of HDInsight Clusters
 }
 \description{
-Get all HDInsight Clusters in default Subscription or details for a specified clustername.
+Get all HDInsight Clusters in default Subscription or details for a specified cluster name.
 }
 \seealso{
 Other HDInsight functions: \code{\link{azureCreateHDI}},

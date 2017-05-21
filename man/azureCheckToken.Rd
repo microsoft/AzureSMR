@@ -2,7 +2,7 @@
 % Please edit documentation in R/AzureAuthenticate.R
 \name{azureCheckToken}
 \alias{azureCheckToken}
-\title{Check the timestamp of a Token and Renew if needed.}
+\title{Check the timestamp of a token and renew if needed.}
 \usage{
 azureCheckToken(azureActiveContext)
 }
@@ -10,8 +10,8 @@ azureCheckToken(azureActiveContext)
 \item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 }
 \description{
-Check the timestamp of a Token and Renew if needed.
+Check the timestamp of a token and renew if needed.
 }
 \seealso{
-Other Resources: \code{\link{azureAuthenticate}}
+Other Azure resource functions: \code{\link{azureAuthenticate}}
 }

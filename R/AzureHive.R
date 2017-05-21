@@ -1,4 +1,4 @@
-#' Get Status of a HDI Hive Service/version.
+#' Get Status of a HDI Hive Service / version.
 #'
 #' @inheritParams setAzureContext
 #' @inheritParams azureAuthenticate

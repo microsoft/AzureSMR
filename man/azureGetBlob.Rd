@@ -14,13 +14,13 @@ azureGetBlob(azureActiveContext, blob, directory, type = "text",
 
 \item{directory}{Blob store directory to list for content}
 
-\item{type}{String, either "text" or "raw". Passed to \code{httr::content}}
+\item{type}{String, either "text" or "raw". Passed to \code{\link[httr:content]{httr::content()}}}
 
 \item{storageAccount}{Name of the azure storage account}
 
 \item{storageKey}{Storage key associated with storage account}
 
-\item{container}{Storage container name. See \code{azureListStorageContainers}}
+\item{container}{Storage container name. See \code{\link[=azureListStorageContainers]{azureListStorageContainers()}}}
 
 \item{resourceGroup}{Name of the resource group}
 
@@ -30,7 +30,7 @@ azureGetBlob(azureActiveContext, blob, directory, type = "text",
 Get contents from a specifed Storage blob.
 }
 \seealso{
-Other blob store functions: \code{\link{azureBlobCD}},
+Other Blob store functions: \code{\link{azureBlobCD}},
   \code{\link{azureBlobFind}}, \code{\link{azureBlobLS}},
   \code{\link{azureDeleteBlob}},
   \code{\link{azureListStorageBlobs}},

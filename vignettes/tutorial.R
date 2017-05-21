@@ -14,7 +14,7 @@
 
 ## ---- eval=FALSE---------------------------------------------------------
 #  # list resource groups
-#  AzureListRG(sc)
+#  azureListRG(sc)
 #  
 #  # list all resources
 #  azureListAllResources(sc)
@@ -51,7 +51,7 @@
 #  azureListStorageBlobs(sc, storageAccount = "analyticsfiles", container = "test")
 
 ## ---- eval=FALSE---------------------------------------------------------
-#  AzurePutBlob(sc, StorageAccount = "analyticsfiles", container = "test",
+#  azurePutBlob(sc, StorageAccount = "analyticsfiles", container = "test",
 #               contents = "Hello World",
 #               blob = "HELLO")
 

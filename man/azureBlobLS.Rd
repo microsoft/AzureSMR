@@ -18,7 +18,7 @@ azureBlobLS(azureActiveContext, directory, recursive = FALSE, storageAccount,
 
 \item{storageKey}{Storage key associated with storage account}
 
-\item{container}{Storage container name. See \code{azureListStorageContainers}}
+\item{container}{Storage container name. See \code{\link[=azureListStorageContainers]{azureListStorageContainers()}}}
 
 \item{resourceGroup}{Name of the resource group}
 
@@ -28,7 +28,7 @@ azureBlobLS(azureActiveContext, directory, recursive = FALSE, storageAccount,
 List blob files in a Storage account directory.
 }
 \seealso{
-Other blob store functions: \code{\link{azureBlobCD}},
+Other Blob store functions: \code{\link{azureBlobCD}},
   \code{\link{azureBlobFind}},
   \code{\link{azureDeleteBlob}},
   \code{\link{azureGetBlob}},

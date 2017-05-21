@@ -15,23 +15,21 @@
 azureDeployTemplate <- function(azureActiveContext, deplname, templateURL,
                                 paramURL, templateJSON, paramJSON, mode = "Sync",
                                 resourceGroup, subscriptionID,
-                                azToken, verbose = FALSE) {
+                                verbose = FALSE) {
   azureCheckToken(azureActiveContext)
 
-  if (missing(azToken)) {
-    AT <- azureActiveContext$Token
-  } else (AT <- azToken)
+  AT <- azureActiveContext$Token
   if (missing(subscriptionID)) {
-    SUBIDI <- azureActiveContext$subscriptionID
-  } else (SUBIDI <- subscriptionID)
+    subscriptionID <- azureActiveContext$subscriptionID
+  } else (subscriptionID <- subscriptionID)
   if (missing(resourceGroup)) {
-    RGI <- azureActiveContext$resourceGroup
-  } else (RGI <- resourceGroup)
+    resourceGroup <- azureActiveContext$resourceGroup
+  } else (resourceGroup <- resourceGroup)
 
-  if (!length(RGI)) {
+  if (!length(resourceGroup)) {
     stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
   }
-  if (!length(SUBIDI)) {
+  if (!length(subscriptionID)) {
     stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
   }
   if (!length(AT)) {
@@ -48,8 +46,8 @@ azureDeployTemplate <- function(azureActiveContext, deplname, templateURL,
   verbosity <- if (verbose)
     httr::verbose(TRUE) else NULL
 
-  URL <- paste("https://management.azure.com/subscriptions/", SUBIDI,
-               "/resourceGroups/", RGI, "/providers/microsoft.resources/deployments/",
+  URL <- paste("https://management.azure.com/subscriptions/", subscriptionID,
+               "/resourceGroups/", resourceGroup, "/providers/microsoft.resources/deployments/",
                deplname, "?api-version=2016-06-01", sep = "")
   # print(URL)
 
@@ -101,7 +99,7 @@ azureDeployTemplate <- function(azureActiveContext, deplname, templateURL,
     a <- 1
     while (a > 0) {
       rc <- azureDeployStatus(azureActiveContext, deplname = deplname,
-                              resourceGroup = RGI)
+                              resourceGroup = resourceGroup)
       if (grepl("Succeeded", rc)) {
         message("")
         message(paste("Finished Deploying Sucessfully: ", Sys.time()))
@@ -147,24 +145,22 @@ azureDeployTemplate <- function(azureActiveContext, deplname, templateURL,
 #' @family Template functions
 #' @export
 azureDeployStatus <- function(azureActiveContext, deplname, resourceGroup,
-                              subscriptionID, azToken, verbose = FALSE) {
+                              subscriptionID, verbose = FALSE) {
   azureCheckToken(azureActiveContext)
-  if (missing(azToken)) {
-    AT <- azureActiveContext$Token
-  } else (AT <- azToken)
+  AT <- azureActiveContext$Token
   if (missing(subscriptionID)) {
-    SUBIDI <- azureActiveContext$subscriptionID
-  } else (SUBIDI <- subscriptionID)
+    subscriptionID <- azureActiveContext$subscriptionID
+  } else (subscriptionID <- subscriptionID)
   if (missing(resourceGroup)) {
-    RGI <- azureActiveContext$resourceGroup
-  } else (RGI <- resourceGroup)
+    resourceGroup <- azureActiveContext$resourceGroup
+  } else (resourceGroup <- resourceGroup)
   verbosity <- if (verbose)
     httr::verbose(TRUE) else NULL
 
-  if (!length(RGI)) {
+  if (!length(resourceGroup)) {
     stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
   }
-  if (!length(SUBIDI)) {
+  if (!length(subscriptionID)) {
     stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
   }
   if (!length(AT)) {
@@ -174,8 +170,8 @@ azureDeployStatus <- function(azureActiveContext, deplname, resourceGroup,
     stop("No deplname provided")
   }
 
-  URL <- paste("https://management.azure.com/subscriptions/", SUBIDI,
-               "/resourceGroups/", RGI, "/providers/microsoft.resources/deployments/",
+  URL <- paste("https://management.azure.com/subscriptions/", subscriptionID,
+               "/resourceGroups/", resourceGroup, "/providers/microsoft.resources/deployments/",
                deplname, "?api-version=2016-06-01", sep = "")
   # print(URL)
 
@@ -200,25 +196,23 @@ azureDeployStatus <- function(azureActiveContext, deplname, resourceGroup,
 #' @family Template functions
 #' @export
 azureDeleteDeploy <- function(azureActiveContext, deplname, resourceGroup,
-                              subscriptionID, azToken, verbose = FALSE) {
+                              subscriptionID, verbose = FALSE) {
   azureCheckToken(azureActiveContext)
 
-  if (missing(azToken)) {
-    AT <- azureActiveContext$Token
-  } else (AT <- azToken)
+  AT <- azureActiveContext$Token
   if (missing(subscriptionID)) {
-    SUBIDI <- azureActiveContext$subscriptionID
-  } else (SUBIDI <- subscriptionID)
+    subscriptionID <- azureActiveContext$subscriptionID
+  } else (subscriptionID <- subscriptionID)
   if (missing(resourceGroup)) {
-    RGI <- azureActiveContext$resourceGroup
-  } else (RGI <- resourceGroup)
+    resourceGroup <- azureActiveContext$resourceGroup
+  } else (resourceGroup <- resourceGroup)
   verbosity <- if (verbose)
     httr::verbose(TRUE) else NULL
 
-  if (!length(RGI)) {
+  if (!length(resourceGroup)) {
     stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
   }
-  if (!length(SUBIDI)) {
+  if (!length(subscriptionID)) {
     stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
   }
   if (!length(AT)) {
@@ -228,8 +222,8 @@ azureDeleteDeploy <- function(azureActiveContext, deplname, resourceGroup,
     stop("No deplname provided")
   }
 
-  URL <- paste("https://management.azure.com/subscriptions/", SUBIDI,
-               "/resourceGroups/", RGI, "/providers/microsoft.resources/deployments/",
+  URL <- paste("https://management.azure.com/subscriptions/", subscriptionID,
+               "/resourceGroups/", resourceGroup, "/providers/microsoft.resources/deployments/",
                deplname, "?api-version=2016-06-01", sep = "")
   # print(URL)
 
@@ -252,26 +246,24 @@ azureDeleteDeploy <- function(azureActiveContext, deplname, resourceGroup,
 #' @family Template functions
 #' @export
 azureCancelDeploy <- function(azureActiveContext, deplname, resourceGroup,
-                              subscriptionID, azToken, verbose = FALSE) {
+                              subscriptionID, verbose = FALSE) {
 
   azureCheckToken(azureActiveContext)
 
-  if (missing(azToken)) {
-    AT <- azureActiveContext$Token
-  } else (AT <- azToken)
+  AT <- azureActiveContext$Token
   if (missing(subscriptionID)) {
-    SUBIDI <- azureActiveContext$subscriptionID
-  } else (SUBIDI <- subscriptionID)
+    subscriptionID <- azureActiveContext$subscriptionID
+  } else (subscriptionID <- subscriptionID)
   if (missing(resourceGroup)) {
-    RGI <- azureActiveContext$resourceGroup
-  } else (RGI <- resourceGroup)
+    resourceGroup <- azureActiveContext$resourceGroup
+  } else (resourceGroup <- resourceGroup)
   verbosity <- if (verbose)
     httr::verbose(TRUE) else NULL
 
-  if (!length(RGI)) {
+  if (!length(resourceGroup)) {
     stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
   }
-  if (!length(SUBIDI)) {
+  if (!length(subscriptionID)) {
     stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
   }
   if (!length(AT)) {
@@ -281,8 +273,8 @@ azureCancelDeploy <- function(azureActiveContext, deplname, resourceGroup,
     stop("No deplname provided")
   }
 
-  URL <- paste("https://management.azure.com/subscriptions/", SUBIDI,
-               "/resourceGroups/", RGI, "/providers/microsoft.resources/deployments/",
+  URL <- paste("https://management.azure.com/subscriptions/", subscriptionID,
+               "/resourceGroups/", resourceGroup, "/providers/microsoft.resources/deployments/",
                deplname, "/cancel?api-version=2016-06-01", sep = "")
   # print(URL)
 

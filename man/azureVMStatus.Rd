@@ -5,7 +5,7 @@
 \title{Get Status of a Virtual Machine.}
 \usage{
 azureVMStatus(azureActiveContext, resourceGroup, vmName, subscriptionID,
-  azToken, ignore = "N", verbose = FALSE)
+  ignore = "N", verbose = FALSE)
 }
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by AzureSMR}
@@ -14,9 +14,7 @@ azureVMStatus(azureActiveContext, resourceGroup, vmName, subscriptionID,
 
 \item{vmName}{Name of the virtual Machine}
 
-\item{subscriptionID}{Set the subscriptionID.  This is obtained automatically by \code{azureAuthenticate} when only a single subscriptionID is available via Active Directory}
-
-\item{azToken}{Azure authentication token, obtained by \code{azureAuthenticate}}
+\item{subscriptionID}{Set the subscriptionID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
 
 \item{ignore}{ignore}
 

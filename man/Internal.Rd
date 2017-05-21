@@ -3,28 +3,20 @@
 \name{as.azureActiveContext}
 \alias{as.azureActiveContext}
 \alias{is.azureActiveContext}
-\alias{print.azureActiveContext}
-\alias{str.azureActiveContext}
 \title{azureActiveContext object.}
 \usage{
 as.azureActiveContext(x)
 
 is.azureActiveContext(x)
-
-\method{print}{azureActiveContext}(x, ...)
-
-\method{str}{azureActiveContext}(object, ...)
 }
 \arguments{
 \item{x}{Object to create, test or print}
 
 \item{...}{Ignored}
-
-\item{object}{Object to create, test or print}
 }
 \description{
 Functions for creating and displaying information about azureActiveContext objects.
 }
 \seealso{
-\code{createAzureContext}
+\code{\link[=createAzureContext]{createAzureContext()}}
 }

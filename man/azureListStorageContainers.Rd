@@ -5,7 +5,7 @@
 \title{List Storage containers for Specified Storage Account.}
 \usage{
 azureListStorageContainers(azureActiveContext, storageAccount, storageKey,
-  resourceGroup, azToken, subscriptionID, verbose = FALSE)
+  resourceGroup, subscriptionID, verbose = FALSE)
 }
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by AzureSMR}
@@ -16,9 +16,7 @@ azureListStorageContainers(azureActiveContext, storageAccount, storageKey,
 
 \item{resourceGroup}{Name of the resource group}
 
-\item{azToken}{Azure authentication token, obtained by \code{azureAuthenticate}}
-
-\item{subscriptionID}{Set the subscriptionID.  This is obtained automatically by \code{azureAuthenticate} when only a single subscriptionID is available via Active Directory}
+\item{subscriptionID}{Set the subscriptionID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
 
 \item{verbose}{Print Tracing information (Default False)}
 }
@@ -26,6 +24,6 @@ azureListStorageContainers(azureActiveContext, storageAccount, storageKey,
 List Storage containers for Specified Storage Account.
 }
 \seealso{
-Other container functions: \code{\link{azureCreateStorageContainer}},
+Other Container functions: \code{\link{azureCreateStorageContainer}},
   \code{\link{azureDeleteStorageContainer}}
 }

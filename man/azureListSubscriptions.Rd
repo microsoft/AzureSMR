@@ -2,22 +2,20 @@
 % Please edit documentation in R/AzureResources.R
 \name{azureListSubscriptions}
 \alias{azureListSubscriptions}
-\title{Get available Subscriptions.}
+\title{Get available subscriptions.}
 \usage{
-azureListSubscriptions(azureActiveContext, azToken, verbose = FALSE)
+azureListSubscriptions(azureActiveContext, verbose = FALSE)
 }
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by AzureSMR}
 
-\item{azToken}{Azure authentication token, obtained by \code{azureAuthenticate}}
-
 \item{verbose}{Print Tracing information (Default False)}
 }
 \value{
-Returns Dataframe of subscriptionID sets AzureContext subscriptionID
+Dataframe of subscriptionID; Sets AzureContext subscriptionID
 }
 \description{
-Get available Subscriptions.
+Get available subscriptions.
 }
 \seealso{
 Other Resource group functions: \code{\link{azureCreateResourceGroup}},

@@ -2,9 +2,19 @@
 #'
 #' The AzureSMR package connects R to the Azure Service Manager API.
 #'
-#' This enables you to use and change many Azure resources, including:
+#' This enables you to use and change many Azure resources. The following is an incomplete list of available functions:
 #'
-#' * Storage blobs
+#' * Create an Azure context:
+#'   - [createAzureContext()]
+#' * Resources and resource groups:
+#'   - [azureListAllResources()]
+#'   - [azureCreateResourceGroup()]
+#'   - [azureListRG()]
+#' * Storage accounts and blobs:
+#'   - [azureListSA()]
+#'   - [azureCreateStorageAccount()]
+#'   - [azureListStorageContainers()]
+#'   - [azureListStorageBlobs()]
 #' * HDInsight (Nodes, Hive, Spark)
 #' * Azure Resource Manager
 #' * Virtual Machines

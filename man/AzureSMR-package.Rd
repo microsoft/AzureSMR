@@ -9,9 +9,25 @@
 The AzureSMR package connects R to the Azure Service Manager API.
 }
 \details{
-This enables you to use and change many Azure resources, including:
+This enables you to use and change many Azure resources. The following is an incomplete list of available functions:
 \itemize{
-\item Storage blobs
+\item Create an Azure context:
+\itemize{
+\item \code{\link[=createAzureContext]{createAzureContext()}}
+}
+\item Resources and resource groups:
+\itemize{
+\item \code{\link[=azureListAllResources]{azureListAllResources()}}
+\item \code{\link[=azureCreateResourceGroup]{azureCreateResourceGroup()}}
+\item \code{\link[=azureListRG]{azureListRG()}}
+}
+\item Storage accounts and blobs:
+\itemize{
+\item \code{\link[=azureListSA]{azureListSA()}}
+\item \code{\link[=azureCreateStorageAccount]{azureCreateStorageAccount()}}
+\item \code{\link[=azureListStorageContainers]{azureListStorageContainers()}}
+\item \code{\link[=azureListStorageBlobs]{azureListStorageBlobs()}}
+}
 \item HDInsight (Nodes, Hive, Spark)
 \item Azure Resource Manager
 \item Virtual Machines

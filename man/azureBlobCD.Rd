@@ -12,7 +12,7 @@ azureBlobCD(azureActiveContext, directory, container, file, storageAccount,
 
 \item{directory}{Blob store directory to list for content}
 
-\item{container}{Storage container name. See \code{azureListStorageContainers}}
+\item{container}{Storage container name. See \code{\link[=azureListStorageContainers]{azureListStorageContainers()}}}
 
 \item{file}{\itemize{
 \item Local filename to store in Azure blob
@@ -30,7 +30,7 @@ azureBlobCD(azureActiveContext, directory, container, file, storageAccount,
 Azure blob change current directory.
 }
 \seealso{
-Other blob store functions: \code{\link{azureBlobFind}},
+Other Blob store functions: \code{\link{azureBlobFind}},
   \code{\link{azureBlobLS}}, \code{\link{azureDeleteBlob}},
   \code{\link{azureGetBlob}},
   \code{\link{azureListStorageBlobs}},

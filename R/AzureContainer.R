@@ -4,29 +4,26 @@
 #' @inheritParams azureAuthenticate
 #' @inheritParams azureSAGetKey
 
-#' @family container functions
+#' @family Container functions
 #'
 #' @export
 azureListStorageContainers <- function(azureActiveContext, storageAccount, storageKey,
-                                  resourceGroup, azToken, subscriptionID, verbose = FALSE) {
+                                  resourceGroup, subscriptionID, verbose = FALSE) {
   azureCheckToken(azureActiveContext)
 
   if (missing(subscriptionID)) {
-    SUBIDI <- azureActiveContext$subscriptionID
-  } else (SUBIDI <- subscriptionID)
-  if (missing(azToken)) {
-    ATI <- azureActiveContext$Token
-  } else (ATI <- azToken)
+    subscriptionID <- azureActiveContext$subscriptionID
+  } else (subscriptionID <- subscriptionID)
   if (missing(resourceGroup)) {
-    RGI <- azureActiveContext$resourceGroup
-  } else (RGI <- resourceGroup)
+    resourceGroup <- azureActiveContext$resourceGroup
+  } else (resourceGroup <- resourceGroup)
   if (missing(storageAccount)) {
     SAI <- azureActiveContext$storageAccount
   } else (SAI <- storageAccount)
   verbosity <- if (verbose)
     httr::verbose(TRUE) else NULL
 
-  if (length(RGI) < 1) {
+  if (length(resourceGroup) < 1) {
     stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
   }
   if (length(SAI) < 1) {
@@ -36,7 +33,7 @@ azureListStorageContainers <- function(azureActiveContext, storageAccount, stora
   STK <- if (length(azureActiveContext$storageAccountK) < 1 ||
       SAI != azureActiveContext$storageAccountK ||
       length(azureActiveContext$storageKey) < 1) {
-    azureSAGetKey(azureActiveContext, resourceGroup = RGI, storageAccount = SAI)
+    azureSAGetKey(azureActiveContext, resourceGroup = resourceGroup, storageAccount = SAI)
   } else {
     azureActiveContext$storageKey
   }
@@ -87,7 +84,7 @@ azureListStorageContainers <- function(azureActiveContext, storageAccount, stora
   }
 
   azureActiveContext$storageAccount <- SAI
-  azureActiveContext$resourceGroup  <- RGI
+  azureActiveContext$resourceGroup  <- resourceGroup
   azureActiveContext$storageKey     <- STK
 
   data.frame(
@@ -109,22 +106,19 @@ azureListStorageContainers <- function(azureActiveContext, storageAccount, stora
 #' @inheritParams azureAuthenticate
 #' @inheritParams azureSAGetKey
 
-#' @family container functions
+#' @family Container functions
 #'
 #' @export
 azureCreateStorageContainer <- function(azureActiveContext, container, storageAccount,
-                                   storageKey, resourceGroup, azToken, subscriptionID, verbose = FALSE) {
+                                   storageKey, resourceGroup, subscriptionID, verbose = FALSE) {
   # azureCheckToken(azureActiveContext)
 
   if (missing(subscriptionID)) {
-    SUBIDI <- azureActiveContext$subscriptionID
-  } else (SUBIDI <- subscriptionID)
-  if (missing(azToken)) {
-    ATI <- azureActiveContext$Token
-  } else (ATI <- azToken)
+    subscriptionID <- azureActiveContext$subscriptionID
+  } else (subscriptionID <- subscriptionID)
   if (missing(resourceGroup)) {
-    RGI <- azureActiveContext$resourceGroup
-  } else (RGI <- resourceGroup)
+    resourceGroup <- azureActiveContext$resourceGroup
+  } else (resourceGroup <- resourceGroup)
   if (missing(storageAccount)) {
     SAI <- azureActiveContext$storageAccount
   } else (SAI <- storageAccount)
@@ -137,14 +131,14 @@ azureCreateStorageContainer <- function(azureActiveContext, container, storageAc
   verbosity <- if (verbose)
     httr::verbose(TRUE) else NULL
 
-  if (length(RGI) < 1) {
+  if (length(resourceGroup) < 1) {
     stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
   }
   if (length(SAI) < 1) {
     stop("Error: No storageAccount provided: Use storageAccount argument or set in AzureContext")
   }
 
-  STK <- refreshStorageKey(azureActiveContext, SAI, RGI)
+  STK <- refreshStorageKey(azureActiveContext, SAI, resourceGroup)
 
   if (length(STK) < 1) {
     stop("Error: No storageKey provided: Use storageKey argument or set in AzureContext")
@@ -165,7 +159,7 @@ azureCreateStorageContainer <- function(azureActiveContext, container, storageAc
 
   azureActiveContext$container <- container
   azureActiveContext$storageAccount <- SAI
-  azureActiveContext$resourceGroup <- RGI
+  azureActiveContext$resourceGroup <- resourceGroup
 
   URL <- paste("http://", SAI, ".blob.core.windows.net/", container,
                "?restype=container", sep = "")
@@ -203,22 +197,19 @@ azureCreateStorageContainer <- function(azureActiveContext, container, storageAc
 #' @inheritParams azureAuthenticate
 #' @inheritParams azureSAGetKey
 
-#' @family container functions
+#' @family Container functions
 #'
 #' @export
 azureDeleteStorageContainer <- function(azureActiveContext, container, storageAccount,
-                                   storageKey, resourceGroup, azToken, subscriptionID, verbose = FALSE) {
+                                   storageKey, resourceGroup, subscriptionID, verbose = FALSE) {
   azureCheckToken(azureActiveContext)
 
   if (missing(subscriptionID)) {
-    SUBIDI <- azureActiveContext$subscriptionID
-  } else (SUBIDI <- subscriptionID)
-  if (missing(azToken)) {
-    ATI <- azureActiveContext$Token
-  } else (ATI <- azToken)
+    subscriptionID <- azureActiveContext$subscriptionID
+  } else (subscriptionID <- subscriptionID)
   if (missing(resourceGroup)) {
-    RGI <- azureActiveContext$resourceGroup
-  } else (RGI <- resourceGroup)
+    resourceGroup <- azureActiveContext$resourceGroup
+  } else (resourceGroup <- resourceGroup)
   if (missing(storageAccount)) {
     SAI <- azureActiveContext$storageAccount
   } else (SAI <- storageAccount)
@@ -233,14 +224,14 @@ azureDeleteStorageContainer <- function(azureActiveContext, container, storageAc
 
   CNTR <- container
 
-  if (length(RGI) < 1) {
+  if (length(resourceGroup) < 1) {
     stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
   }
   if (length(SAI) < 1) {
     stop("Error: No storageAccount provided: Use storageAccount argument or set in AzureContext")
   }
 
-  STK <- refreshStorageKey(azureActiveContext, SAI, RGI)
+  STK <- refreshStorageKey(azureActiveContext, SAI, resourceGroup)
   if (length(STK) < 1) {
     stop("Error: No storageKey provided: Use storageKey argument or set in AzureContext")
   }
@@ -258,7 +249,7 @@ azureDeleteStorageContainer <- function(azureActiveContext, container, storageAc
 
   azureActiveContext$container <- CNTR
   azureActiveContext$storageAccount <- SAI
-  azureActiveContext$resourceGroup <- RGI
+  azureActiveContext$resourceGroup <- resourceGroup
   SIG <- getSig(azureActiveContext, url = URL, verb = "DELETE", key = STK,
                 storageAccount = SAI,
                 CMD = paste0(CNTR, "\nrestype:container"), dateSig = D1)
