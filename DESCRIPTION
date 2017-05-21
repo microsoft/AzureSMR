@@ -5,8 +5,8 @@ Description: Helps users to manage Azure Services and objects from within an
     Machines and HDInsight (Spark, Hive). Requires that an Active Directory
     application and service principal has been configured to access Azure resources.
 Type: Package
-Version: 0.2.2
-Date: 2016-12-22
+Version: 0.2.3
+Date: 2017-05-21
 Authors@R: c(
       person(family="Microsoft Corporation", role="cph"),
       person("Alan", "Weaver", role=c("aut", "cre"), email="alanwe@microsoft.com"),
