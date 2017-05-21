@@ -493,5 +493,5 @@ azureSparkListJobs <- function(azureActiveContext, clustername, hdiAdmin,
 azureSparkShowURL <- function(azureActiveContext, URL) {
   if (!missing(URL))
     browseURL(URL) else browseURL(azureActiveContext$log)
-  return("")
+  return(TRUE)
 }

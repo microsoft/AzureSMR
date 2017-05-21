@@ -60,7 +60,8 @@ azureAuthenticate <- function(azureActiveContext, tenantID, clientID, authKey, v
   azureActiveContext$authKey    <- authKey
   azureActiveContext$EXPIRY <- Sys.time() + 3598
   SUBS <- azureListSubscriptions(azureActiveContext)
-  return("Authentication Suceeded : Key Obtained")
+  message("Authentication Suceeded : Key Obtained")
+  return(TRUE)
 }
 
 

@@ -353,7 +353,8 @@ azureDeleteHDI <- function(azureActiveContext, clustername, subscriptionID,
 
   rl <- content(r, "text", encoding = "UTF-8")
 
-  return("Delete Request Accepted")
+  message("Delete Request Accepted")
+  return(TRUE)
 }
 
 
@@ -745,7 +746,8 @@ azureRunScriptAction <- function(azureActiveContext, scriptname = "script1", scr
   }
 
   azureActiveContext$clustername <- CN
-  return("Accepted")
+  message("Accepted")
+  return(TRUE)
 }
 
 

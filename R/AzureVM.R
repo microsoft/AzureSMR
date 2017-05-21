@@ -328,13 +328,17 @@ azureVMStatus <- function(azureActiveContext, resourceGroup, vmName, subscriptio
   dfn <- as.data.frame(df$statuses)
 
   clust <- nrow(dfn)
-  if (clust < 1 && ignore == "Y")
-    return("NA")
+  if (clust < 1 && ignore == "Y") {
+    message("NA")
+    return(TRUE)
+  }
+
   if (clust < 1)
     stop("No Virtual Machines found")
   return(paste(df$statuses$displayStatus, collapse = ", "))
 
-  return("Submitted")
+  message("Submitted")
+  return(TRUE)
 }
 
 

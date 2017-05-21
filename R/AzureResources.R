@@ -194,7 +194,8 @@ azureCreateResourceGroup <- function(azureActiveContext, resourceGroup,
   if (length(df$error$code) && df$error$code == "locationNotAvailableForresourceGroup")
     stop(df$message)
 
-  return("Create Request Submitted")
+  message("Create Request Submitted")
+  return(TRUE)
 }
 
 
@@ -252,5 +253,6 @@ azureDeleteResourceGroup <- function(azureActiveContext, resourceGroup,
     df <- fromJSON(rl)
     stop(df$error$message)
   }
-  return("Delete Request Submitted")
+  message("Delete Request Submitted")
+  return(TRUE)
 }
