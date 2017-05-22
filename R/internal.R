@@ -104,12 +104,14 @@ getSig <- function(azureActiveContext, url, verb, key, storageAccount,
   }
 
 
-stopWithAzureError <- function(r){
-
+stopWithAzureError <- function(r) {
+  #if (status_code(r) %in% c(200, 201, 202, 204)) return()
+  #browser()
+  if(status_code(r) < 300) return()
   msg <- paste0(as.character(sys.call(1))[1], "()") # Name of calling fucntion
   addToMsg <- function(x){
     if(is.null(x)) x else paste(msg, x, sep = "\n")
-  }
+    }
   if(inherits(content(r), "xml_document")){
     rr <- XML::xmlToList(XML::xmlParse(content(r)))
     msg <- addToMsg(rr$Code)
@@ -118,6 +120,7 @@ stopWithAzureError <- function(r){
     rr <- content(r)
     msg <- addToMsg(rr$code)
     msg <- addToMsg(rr$message)
+    msg <- addToMsg(rr$error$message)
   }
   msg <- addToMsg(paste0("Return code: ", status_code(r)))
   stop(msg, call. = FALSE)

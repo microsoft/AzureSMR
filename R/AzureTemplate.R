@@ -1,4 +1,6 @@
-#' Deploy an Azure Resource Manager Template.
+#' Deploy a resource from an Azure Resource Manager (ARM) template.
+#'
+#' Deploy a resource from a template. See https://github.com/Azure/azure-quickstart-templates
 #'
 #' @inheritParams setAzureContext
 #' @inheritParams azureAuthenticate
@@ -21,10 +23,10 @@ azureDeployTemplate <- function(azureActiveContext, deplname, templateURL,
   AT <- azureActiveContext$Token
   if (missing(subscriptionID)) {
     subscriptionID <- azureActiveContext$subscriptionID
-  } else (subscriptionID <- subscriptionID)
+  } 
   if (missing(resourceGroup)) {
     resourceGroup <- azureActiveContext$resourceGroup
-  } else (resourceGroup <- resourceGroup)
+  } 
 
   if (!length(resourceGroup)) {
     stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
@@ -49,91 +51,61 @@ azureDeployTemplate <- function(azureActiveContext, deplname, templateURL,
   URL <- paste("https://management.azure.com/subscriptions/", subscriptionID,
                "/resourceGroups/", resourceGroup, "/providers/microsoft.resources/deployments/",
                deplname, "?api-version=2016-06-01", sep = "")
-  # print(URL)
 
-  if (missing(templateJSON)) {
+  bodyI <- if (missing(templateJSON)) {
     if (missing(paramURL)) {
-      if (missing(paramJSON))
-        bodyI <- paste("{\"properties\": {\"templateLink\": { \"uri\": \"",
-                       templateURL, "\",\"contentversion\": \"1.0.0.0\"},\"mode\": \"Incremental\",\"debugSetting\": {\"detailLevel\": \"requestContent, responseContent\"}}}",
-                       sep = "") else bodyI <- paste("{\"properties\": {", paramJSON, ",\"templateLink\": { \"uri\": \"",
-                                                     templateURL, "\",\"contentversion\": \"1.0.0.0\"},\"mode\": \"Incremental\",\"debugSetting\": {\"detailLevel\": \"requestContent, responseContent\"}}}",
-                                                     sep = "")
-    } else bodyI <- paste("{\"properties\": {\"templateLink\": { \"uri\": \"",
-                          templateURL, "\",\"contentversion\": \"1.0.0.0\"},  \"mode\": \"Incremental\",  \"parametersLink\": {\"uri\": \"",
-                          paramURL, "\",\"contentversion\": \"1.0.0.0\"},\"debugSetting\": {\"detailLevel\": \"requestContent, responseContent\"}}}",
-                          sep = "")
+      if (missing(paramJSON)) {
+        paste0('{"properties": ',
+             '{"templateLink": { "uri": "', templateURL, '","contentversion": "1.0.0.0"},',
+             '"mode": "Incremental","debugSetting": {"detailLevel": "requestContent, responseContent"}}}'
+      )
+      } else {
+        paste0('{"properties": {', paramJSON,
+             ',"templateLink": { "uri": "', templateURL, '","contentversion": "1.0.0.0"},',
+             '"mode": "Incremental","debugSetting": {"detailLevel": "requestContent, responseContent"}}}'
+      )
+      }
+    } else {
+      paste0('{"properties": {"templateLink": { "uri": "', templateURL, '","contentversion": "1.0.0.0"},',
+           '"mode": "Incremental",  "parametersLink": {"uri": "', paramURL, '","contentversion": "1.0.0.0"},',
+           '"debugSetting": {"detailLevel": "requestContent, responseContent"}}}'
+    )
+    }
   } else {
     if (missing(paramURL)) {
-      if (missing(paramJSON))
-        bodyI <- paste("{\"properties\": {\"template\": ", templateJSON,
-                       ",\"mode\": \"Incremental\",\"debugSetting\": {\"detailLevel\": \"requestContent, responseContent\"}}}",
-                       sep = "") else bodyI <- paste("{\"properties\": {", paramJSON, ",\"template\": ",
-                                                     templateJSON, ",\"mode\": \"Incremental\",\"debugSetting\": {\"detailLevel\": \"requestContent, responseContent\"}}}",
-                                                     sep = "")
-    } else bodyI <- paste("{\"properties\": {\"template\": ", templateJSON,
-                          ",  \"mode\": \"Incremental\",  \"parametersLink\": {\"uri\": \"",
-                          paramURL, "\",\"contentversion\": \"1.0.0.0\"},\"debugSetting\": {\"detailLevel\": \"requestContent, responseContent\"}}}",
-                          sep = "")
+      if (missing(paramJSON)) {
+        paste0('{"properties": {"template": ', templateJSON,
+             ',"mode": "Incremental","debugSetting": {"detailLevel": "requestContent, responseContent"}}}'
+      )
+      } else {
+        paste0('{"properties": {', paramJSON,
+             ',"template": ', templateJSON,
+             ',"mode": "Incremental","debugSetting": {"detailLevel": "requestContent, responseContent"}}}'
+      )
+      }
+    } else {
+      paste0('{"properties": {"template": ', templateJSON,
+           ',  "mode": "Incremental",  "parametersLink": {"uri": "', paramURL,
+           '","contentversion": "1.0.0.0"},"debugSetting": {"detailLevel": "requestContent, responseContent"}}}')
+    }
   }
 
   r <- PUT(URL, add_headers(.headers = c(Host = "management.azure.com",
                                          Authorization = AT, `Content-type` = "application/json")), body = bodyI,
            verbosity)
 
-    rl <- content(r, "text", encoding = "UTF-8")
-    if (verbose == TRUE && status_code(r) != 200 && status_code(r) != 201 && status_code(r) !=
-      202) print (rl)
+  stopWithAzureError(r)
   
-  # print(paste(deplname,'Submitted'))
-  if (status_code(r) != 200 && status_code(r) != 201 && status_code(r) !=
-      202) {
-    stopWithAzureError(r)
-  }
-  # print (rl)
-  df <- fromJSON(rl)
   if (toupper(mode) == "SYNC") {
-    rc <- "running"
-    message(paste("azureDeployTemplate: Request Submitted: ", Sys.time()))
-    message("Running(R), Succeeded(S)")
-    a <- 1
-    while (a > 0) {
-      rc <- azureDeployStatus(azureActiveContext, deplname = deplname,
-                              resourceGroup = resourceGroup)
-      if (grepl("Succeeded", rc)) {
-        message("")
-        message(paste("Finished Deploying Sucessfully: ", Sys.time()))
-        (break)()
-      }
-      if (grepl("Error", rc) || grepl("Failed", rc)) {
-        message("")
-        message(paste("Error Deploying: ", Sys.time()))
-        (break)()
-      }
-
-      a <- a + 1
-      if (grepl("Succeeded", rc)) {
-        rc <- "S"
-      } else if (grepl("Running", rc)) {
-        rc <- "R"
-      } else if (grepl("updating", rc)) {
-        rc <- "U"
-      } else if (grepl("Starting", rc)) {
-        rc <- "S"
-      } else if (grepl("Accepted", rc)) {
-        rc <- "A"
-      }
-
-      message(rc)
-
-      if (a > 500)
-        (break)()
-      Sys.sleep(5)
-    }
+    z <- pollStatusTemplate(azureActiveContext, deplname, resourceGroup)
+    if(!z) return(FALSE)
   }
-  message("Deployment", deplname, "Submitted: ", Sys.time())
+  message("")
+  message(paste("Deployment", deplname, "submitted: ", Sys.time()))
   return(TRUE)
 }
+
+
 
 
 #' Check Template Deployment Status.
@@ -181,8 +153,10 @@ azureDeployStatus <- function(azureActiveContext, deplname, resourceGroup,
 
   df <- fromJSON(rl)
   # print(df)
-  return(df$properties$provisioningState)
+  return(df)
 }
+
+azureDeployStatusSummary <- function(x) x$properties$provisioningState
 
 
 #' Delete Template Deployment.

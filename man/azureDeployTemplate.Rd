@@ -2,7 +2,7 @@
 % Please edit documentation in R/AzureTemplate.R
 \name{azureDeployTemplate}
 \alias{azureDeployTemplate}
-\title{Deploy an Azure Resource Manager Template.}
+\title{Deploy a resource from an Azure Resource Manager (ARM) template.}
 \usage{
 azureDeployTemplate(azureActiveContext, deplname, templateURL, paramURL,
   templateJSON, paramJSON, mode = "Sync", resourceGroup, subscriptionID,
@@ -30,7 +30,7 @@ azureDeployTemplate(azureActiveContext, deplname, templateURL, paramURL,
 \item{verbose}{Print Tracing information (Default False)}
 }
 \description{
-Deploy an Azure Resource Manager Template.
+Deploy a resource from a template. See https://github.com/Azure/azure-quickstart-templates
 }
 \seealso{
 Other Template functions: \code{\link{azureCancelDeploy}},

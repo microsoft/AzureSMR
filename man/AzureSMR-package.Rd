@@ -31,6 +31,13 @@ This enables you to use and change many Azure resources. The following is an inc
 \item HDInsight (Nodes, Hive, Spark)
 \item Azure Resource Manager
 \item Virtual Machines
+\itemize{
+\item To create a virtual machine, use \code{\link[=azureDeployTemplate]{azureDeployTemplate()}} with a suitable template
+\item Start a VM: \code{\link[=azureStartVM]{azureStartVM()}}
+\item Stop a VM: \code{\link[=azureStopVM]{azureStopVM()}}
+\item Get status: \code{\link[=azureVMStatus]{azureVMStatus()}}
+\item List VMs: \code{\link[=azureListVM]{azureListVM()}}
+}
 }
 }
 \keyword{package}

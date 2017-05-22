@@ -18,6 +18,11 @@
 #' * HDInsight (Nodes, Hive, Spark)
 #' * Azure Resource Manager
 #' * Virtual Machines
+#'   - To create a virtual machine, use [azureDeployTemplate()] with a suitable template
+#'   - Start a VM: [azureStartVM()]
+#'   - Stop a VM: [azureStopVM()]
+#'   - Get status: [azureVMStatus()]
+#'   - List VMs: [azureListVM()]
 #'
 #'
 #' @name AzureSMR-package

@@ -60,7 +60,7 @@ azureAuthenticate <- function(azureActiveContext, tenantID, clientID, authKey, v
   azureActiveContext$authKey    <- authKey
   azureActiveContext$EXPIRY <- Sys.time() + 3598
   SUBS <- azureListSubscriptions(azureActiveContext)
-  message("Authentication Suceeded : Key Obtained")
+  if(verbose) message("Authentication succeeded: key obtained")
   return(TRUE)
 }
 
@@ -75,10 +75,10 @@ azureAuthenticate <- function(azureActiveContext, tenantID, clientID, authKey, v
 azureCheckToken <- function(azureActiveContext) {
   if (missing(azureActiveContext) || is.null(azureActiveContext)) return(NA)
   if (is.null(azureActiveContext$EXPIRY))
-    stop("Not Authenticated: Use azureAuthenticate")
+    stop("Not authenticated: Use azureAuthenticate()")
 
   if (azureActiveContext$EXPIRY < Sys.time()) {
-    message("Azure Token Expired: Attempting automatic renewal")
+    message("Azure token expired: attempting automatic renewal")
     azureAuthenticate(azureActiveContext)
   }
   return(TRUE)
