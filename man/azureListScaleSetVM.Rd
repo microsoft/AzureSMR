@@ -8,7 +8,7 @@ azureListScaleSetVM(azureActiveContext, scaleSet, resourceGroup, location,
   subscriptionID, verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by AzureSMR}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
 
 \item{scaleSet}{name of the scale refer to (azureListScaleSets)}
 
@@ -16,7 +16,7 @@ azureListScaleSetVM(azureActiveContext, scaleSet, resourceGroup, location,
 
 \item{location}{Azure region, e.g. 'westeurope' or 'southcentralus'}
 
-\item{subscriptionID}{Set the subscriptionID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
+\item{subscriptionID}{Subscription ID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
 
 \item{verbose}{Print Tracing information (Default False)}
 }

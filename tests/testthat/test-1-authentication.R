@@ -19,11 +19,7 @@ test_that("Can authenticate to Azure Service Manager API", {
   with(config,
        setAzureContext(asc, tenantID = tenantID, clientID = clientID, authKey = authKey)
   )
-  expect_message({
-    res <- azureAuthenticate(asc)
-    }, "Authentication succeeded: Key obtained"
-  )
-  expect_true(res)
+  expect_true(azureAuthenticate(asc))
 
 })
 
@@ -31,7 +27,7 @@ asc <- createAzureContext()
 with(config,
      setAzureContext(asc, tenantID = tenantID, clientID = clientID, authKey = authKey)
 )
-azureAuthenticate(asc)
+azureAuthenticate(asc, verbose = FALSE)
 
 
 test_that("Can connect to workspace with config file", {

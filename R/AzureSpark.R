@@ -21,8 +21,8 @@ azureSparkNewSession <- function(azureActiveContext, clustername, hdiAdmin,
   if (missing(kind)) {
     KI <- azureActiveContext$kind
   } else (KI = kind)
-  verbosity <- if (verbose)
-    httr::verbose(TRUE) else NULL
+  verbosity <- set_verbosity(verbose)
+
 
   if (!length(CN)) {
     stop("Error: No Valid clustername provided")
@@ -85,8 +85,8 @@ azureSparkListSessions <- function(azureActiveContext, clustername, hdiAdmin,
   if (missing(hdiPassword)) {
     HP <- azureActiveContext$hdiPassword
   } else (HP = hdiPassword)
-  verbosity <- if (verbose)
-    httr::verbose(TRUE) else NULL
+  verbosity <- set_verbosity(verbose)
+
 
   if (!length(CN)) {
     stop("Error: No Valid clustername provided")
@@ -153,8 +153,8 @@ azureSparkStopSession <- function(azureActiveContext, clustername, hdiAdmin,
   if (missing(sessionID)) {
     SI <- azureActiveContext$sessionID
   } else (SI = sessionID)
-  verbosity <- if (verbose)
-    httr::verbose(TRUE) else NULL
+  verbosity <- set_verbosity(verbose)
+
 
   if (!length(CN)) {
     stop("Error: No clustername provided")
@@ -222,8 +222,8 @@ azureSparkCMD <- function(azureActiveContext, CMD, clustername, hdiAdmin,
   if (missing(CMD)) {
     stop("Error: No CMD provided")
   }
-  verbosity <- if (verbose)
-    httr::verbose(TRUE) else NULL
+  verbosity <- set_verbosity(verbose)
+
 
   if (!length(CN)) {
     stop("Error: No Valid clustername provided")
@@ -324,8 +324,8 @@ azureSparkJob <- function(azureActiveContext, FILE, clustername, hdiAdmin,
   if (missing(FILE)) {
     stop("Error: No CMD provided")
   }
-  verbosity <- if (verbose)
-    httr::verbose(TRUE) else NULL
+  verbosity <- set_verbosity(verbose)
+
 
   if (!length(CN)) {
     stop("Error: No Valid clustername provided")
@@ -434,8 +434,8 @@ azureSparkListJobs <- function(azureActiveContext, clustername, hdiAdmin,
   if (missing(hdiPassword)) {
     HP <- azureActiveContext$hdiPassword
   } else (HP = hdiPassword)
-  verbosity <- if (verbose)
-    httr::verbose(TRUE) else NULL
+  verbosity <- set_verbosity(verbose)
+
 
   if (!length(CN)) {
     stop("Error: No Valid clustername provided")

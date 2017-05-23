@@ -39,7 +39,7 @@ pollStatusTemplate <- function(azureActiveContext, deplname, resourceGroup) {
 pollStatusVM <- function(azureActiveContext) {
 
   message("Request Submitted: ", Sys.time())
-  message("Key: R - running, (.) - deallocating,  - deallocated, + - starting, S - stopped")
+  message("Key: R - running, (.) - deallocating, D - deallocated, + - starting, S - stopped")
   iteration <- 0
   waiting <- TRUE
   while (iteration < 500 && waiting) {

@@ -8,7 +8,7 @@ azureSparkCMD(azureActiveContext, CMD, clustername, hdiAdmin, hdiPassword,
   sessionID, verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by AzureSMR}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
 
 \item{CMD}{CMD}
 

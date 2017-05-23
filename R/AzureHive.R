@@ -17,8 +17,8 @@ azureHiveStatus <- function(azureActiveContext, clustername, hdiAdmin,
   if (missing(hdiPassword)) {
     HP <- azureActiveContext$hdiPassword
   } else (HP = hdiPassword)
-  verbosity <- if (verbose)
-    httr::verbose(TRUE) else NULL
+  verbosity <- set_verbosity(verbose)
+
 
   if (!length(CN)) {
     stop("Error: No Valid clustername provided")
@@ -75,8 +75,8 @@ azureHiveSQL <- function(azureActiveContext, CMD, clustername, hdiAdmin,
   if (missing(CMD)) {
     stop("Error: No Valid Command(CMD) provided")
   }
-  verbosity <- if (verbose)
-    httr::verbose(TRUE) else NULL
+  verbosity <- set_verbosity(verbose)
+
 
   if (!length(CN)) {
     stop("Error: No Valid clustername provided")

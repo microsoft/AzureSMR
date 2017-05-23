@@ -8,7 +8,7 @@ azureDeleteBlob(azureActiveContext, blob, directory, storageAccount, storageKey,
   container, resourceGroup, verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by AzureSMR}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
 
 \item{blob}{Blob name}
 

@@ -8,7 +8,7 @@ azureBlobFind(azureActiveContext, file, storageAccount, storageKey, container,
   resourceGroup, verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by AzureSMR}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
 
 \item{file}{\itemize{
 \item Local filename to store in Azure blob

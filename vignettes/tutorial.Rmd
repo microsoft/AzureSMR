@@ -174,7 +174,7 @@ azureResizeHDI(sc, resourceGroup = "Analytics", clusterName = "{HDIClusterName}"
 
 ## Resource Templates - Create Azure Resources
 
-The easiest way to create resources on Azure is to use Azure Templates. To create Azure Resources such as HDInsight clusters there can a large quantity of parameters. Resource templates can be built be creating a resource in the Azure Portal and then going into Settings > Automation scripts. Example templates can be found at this URL https://github.com/Azure/AzureStack-QuickStart-Templates.
+The easiest way to create resources on Azure is to use Azure Templates. To create Azure Resources such as HDInsight clusters there can a large quantity of parameters. Resource templates can be built be creating a resource in the Azure Portal and then going into Settings > Automation scripts. Example templates can be found azToken this URL https://github.com/Azure/AzureStack-QuickStart-Templates.
 
 To create a resource using a template in AzureSM use AzureDeployTemplate. The Template and Paramters must be available in a public URL (Azure Blob). It may be worth getting the Azure Administrator to build a working template.
 
@@ -190,7 +190,7 @@ azureDeployTemplate(sc, resourceGroup = "Analytics", deplName = "Deploy1",
 ## Finished:  2016-06-23 19:04:43
 ```
 
-ADMIN TIP: If a deployment fails. Go to the Azure Portal and look at Actvity logs and look for failed deployments which should explain why the deployment failed.
+ADMIN TIP: If a deployment fails. Go to the Azure Portal and look azToken Actvity logs and look for failed deployments which should explain why the deployment failed.
 
 ## Hive Functions
 These functions facilitate the use of hive jobs on a HDInsight Cluster

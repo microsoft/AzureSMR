@@ -12,17 +12,17 @@ azureListHDI <- function(azureActiveContext, resourceGroup, clustername = "*",
                          subscriptionID, name, type, location, verbose = FALSE) {
 
   azureCheckToken(azureActiveContext)
-  AT <- azureActiveContext$Token
+  azToken <- azureActiveContext$Token
   if (missing(subscriptionID)) {
     subscriptionID <- azureActiveContext$subscriptionID
   } else (subscriptionID <- subscriptionID)
   if (missing(resourceGroup)) {
     resourceGroup <- azureActiveContext$resourceGroup
   } else (resourceGroup <- resourceGroup)
-  verbosity <- if (verbose)
-    httr::verbose(TRUE) else NULL
+  verbosity <- set_verbosity(verbose)
+     
 
-  if (!length(AT)) {
+  if (!length(azToken)) {
     stop("Error: No Token / Not currently Authenticated.")
   }
   if (!length(subscriptionID)) {
@@ -42,7 +42,7 @@ azureListHDI <- function(azureActiveContext, resourceGroup, clustername = "*",
   }
 
   r <- GET(URL, add_headers(.headers = c(Host = "management.azure.com",
-                                         Authorization = AT,
+                                         Authorization = azToken,
                                          `Content-type` = "application/json")),
            verbosity)
   rl <- content(r, "text")
@@ -132,7 +132,7 @@ azureListHDI <- function(azureActiveContext, resourceGroup, clustername = "*",
 azureHDIConf <- function(azureActiveContext, clustername, resourceGroup,
                          subscriptionID, name, type, location, verbose = FALSE) {
   azureCheckToken(azureActiveContext)
-  AT <- azureActiveContext$Token
+  azToken <- azureActiveContext$Token
   if (missing(subscriptionID)) {
     subscriptionID <- azureActiveContext$subscriptionID
   } else (subscriptionID <- subscriptionID)
@@ -142,10 +142,10 @@ azureHDIConf <- function(azureActiveContext, clustername, resourceGroup,
   if (missing(clustername)) {
     CN <- azureActiveContext$clustername
   } else (CN <- clustername)
-  verbosity <- if (verbose)
-    httr::verbose(TRUE) else NULL
+  verbosity <- set_verbosity(verbose)
+     
 
-  if (!length(AT)) {
+  if (!length(azToken)) {
     stop("Error: No Token / Not currently Authenticated.")
   }
   if (!length(subscriptionID)) {
@@ -160,7 +160,7 @@ azureHDIConf <- function(azureActiveContext, clustername, resourceGroup,
                clustername, "?api-version=2015-03-01-preview", sep = "")
 
   r <- GET(URL, add_headers(.headers = c(Host = "management.azure.com",
-                                         Authorization = AT, `Content-type` = "application/json")), verbosity)
+                                         Authorization = azToken, `Content-type` = "application/json")), verbosity)
   rl <- content(r, "text")
 
   df <- fromJSON(rl)
@@ -213,7 +213,7 @@ azureResizeHDI <- function(azureActiveContext, clustername, role = "worker",
                            size = 2, mode = "Sync", subscriptionID,
                            resourceGroup, verbose = FALSE) {
   azureCheckToken(azureActiveContext)
-  AT <- azureActiveContext$Token
+  azToken <- azureActiveContext$Token
 
   if (missing(resourceGroup)) {
     resourceGroup <- azureActiveContext$resourceGroup
@@ -221,8 +221,8 @@ azureResizeHDI <- function(azureActiveContext, clustername, role = "worker",
   if (missing(subscriptionID)) {
     subscriptionID <- azureActiveContext$subscriptionID
   } else (subscriptionID <- subscriptionID)
-  verbosity <- if (verbose)
-    httr::verbose(TRUE) else NULL
+  verbosity <- set_verbosity(verbose)
+     
 
   if (!length(resourceGroup)) {
     stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
@@ -236,8 +236,8 @@ azureResizeHDI <- function(azureActiveContext, clustername, role = "worker",
   if (!length(resourceGroup)) {
     stop("Error: No New role size provided")
   }
-  verbosity <- if (verbose)
-    httr::verbose(TRUE) else NULL
+  verbosity <- set_verbosity(verbose)
+     
 
   URL <- paste("https://management.azure.com/subscriptions/", subscriptionID,
                "/resourceGroups/", resourceGroup, "/providers/Microsoft.HDInsight/clusters/",
@@ -247,7 +247,7 @@ azureResizeHDI <- function(azureActiveContext, clustername, role = "worker",
   bodyI <- list(targetInstanceCount = size)
 
   r <- POST(URL, add_headers(.headers = c(Host = "management.azure.com",
-                                          Authorization = AT,
+                                          Authorization = azToken,
                                           `Content-type` = "application/json")),
             body = bodyI,
             encode = "json", verbosity)
@@ -318,7 +318,7 @@ azureDeleteHDI <- function(azureActiveContext, clustername, subscriptionID,
                            resourceGroup, verbose = FALSE) {
 
   azureCheckToken(azureActiveContext)
-  ATI <- azureActiveContext$Token
+  azToken <- azureActiveContext$Token
   if (missing(clustername)) {
     CN <- azureActiveContext$clustername
   } else (CN <- clustername)
@@ -328,8 +328,8 @@ azureDeleteHDI <- function(azureActiveContext, clustername, subscriptionID,
   if (missing(subscriptionID)) {
     subscriptionID <- azureActiveContext$subscriptionID
   } else (subscriptionID <- subscriptionID)
-  verbosity <- if (verbose)
-    httr::verbose(TRUE) else NULL
+  verbosity <- set_verbosity(verbose)
+     
 
   if (!length(CN)) {
     stop("Error: No Valid clustername provided")
@@ -344,7 +344,7 @@ azureDeleteHDI <- function(azureActiveContext, clustername, subscriptionID,
 
 
   r <- DELETE(URL, add_headers(.headers = c(Host = "management.azure.com",
-                                            Authorization = ATI,
+                                            Authorization = azToken,
                                             `Content-type` = "application/json")),
               verbosity)
   if (status_code(r) != 202) {
@@ -391,7 +391,7 @@ azureCreateHDI <- function(azureActiveContext, clustername, location, kind = "sp
                            vmSize = "Large",
                            subscriptionID, mode = "Sync", verbose = FALSE) {
   azureCheckToken(azureActiveContext)
-  ATI <- azureActiveContext$Token
+  azToken <- azureActiveContext$Token
 
   if (missing(resourceGroup)) {
     resourceGroup <- azureActiveContext$resourceGroup
@@ -399,7 +399,7 @@ azureCreateHDI <- function(azureActiveContext, clustername, location, kind = "sp
   if (missing(subscriptionID)) {
     subscriptionID <- azureActiveContext$subscriptionID
   } else (subscriptionID <- subscriptionID)
-  verbosity <- if (verbose) httr::verbose(TRUE) else NULL
+  verbosity <- set_verbosity(verbose)  
 
   if (!length(storageAccount)) {
     stop("Error: No Storage Account (StorageAcc) provided")
@@ -445,11 +445,11 @@ azureCreateHDI <- function(azureActiveContext, clustername, location, kind = "sp
     }
   }
 
-  msg <- "The Admin Password must be greater than 6 characters and contain at least one uppercase char, one lowercase char and one digit"
+  msg <- "The Admin Password must be greater than 6 characters and contain azToken least one uppercase char, one lowercase char and one digit"
   if ((!grepl("[A-Z]", adminPassword))) warning(msg)
   if ((!grepl("[a-z]", adminPassword))) warning(msg)
   if ((!grepl("[0-9]", adminPassword))) warning(msg)
-  msg <- "The SSH Password must be greater than 6 characters and contain at least one uppercase char, one lowercase char and one digit"
+  msg <- "The SSH Password must be greater than 6 characters and contain azToken least one uppercase char, one lowercase char and one digit"
   if ((!grepl("[A-Z]", sshPassword))) warning(msg)
   if ((!grepl("[a-z]", sshPassword))) warning(msg)
   if ((!grepl("[0-9]", sshPassword))) warning(msg)
@@ -594,7 +594,7 @@ azureCreateHDI <- function(azureActiveContext, clustername, location, kind = "sp
                "?api-version=2015-03-01-preview")
 
     r <- PUT(URL, add_headers(.headers = c(Host = "management.azure.com",
-                                           Authorization = ATI,
+                                           Authorization = azToken,
                                            `Content-type` = "application/json")),
              body = bodyI,
              encode = "json",
@@ -663,7 +663,7 @@ azureRunScriptAction <- function(azureActiveContext, scriptname = "script1", scr
                                  clustername, resourceGroup,
                                  parameters = "", subscriptionID, verbose = FALSE) {
   azureCheckToken(azureActiveContext)
-  ATI <- azureActiveContext$Token
+  azToken <- azureActiveContext$Token
 
   if (missing(clustername)) {
     CN <- azureActiveContext$clustername
@@ -674,8 +674,8 @@ azureRunScriptAction <- function(azureActiveContext, scriptname = "script1", scr
   if (missing(subscriptionID)) {
     subscriptionID <- azureActiveContext$subscriptionID
   } else (subscriptionID <- subscriptionID)
-  verbosity <- if (verbose)
-    httr::verbose(TRUE) else NULL
+  verbosity <- set_verbosity(verbose)
+     
 
   if (!length(CN)) {
     stop("Error: No Valid clustername provided")
@@ -729,7 +729,7 @@ azureRunScriptAction <- function(azureActiveContext, scriptname = "script1", scr
                CN, "/executeScriptActions?api-version=2015-03-01-preview", sep = "")
 
   r <- POST(URL, add_headers(.headers = c(Host = "management.azure.com",
-                                          Authorization = ATI,
+                                          Authorization = azToken,
                                           `Content-type` = "application/json")),
             body = bodyI,
             encode = "json", verbosity)
@@ -764,7 +764,7 @@ azureScriptActionHistory <- function(azureActiveContext, resourceGroup,
                                      clustername = "*", subscriptionID, 
                                      name, type, verbose = FALSE) {
   azureCheckToken(azureActiveContext)
-  AT <- azureActiveContext$Token
+  azToken <- azureActiveContext$Token
 
   if (missing(clustername)) {
     CN <- azureActiveContext$clustername
@@ -775,10 +775,10 @@ azureScriptActionHistory <- function(azureActiveContext, resourceGroup,
   if (missing(resourceGroup)) {
     resourceGroup <- azureActiveContext$resourceGroup
   } else (resourceGroup <- resourceGroup)
-  verbosity <- if (verbose)
-    httr::verbose(TRUE) else NULL
+  verbosity <- set_verbosity(verbose)
+     
 
-  if (!length(AT)) {
+  if (!length(azToken)) {
     stop("Error: No Token / Not currently Authenticated.")
   }
   if (!length(subscriptionID)) {
@@ -796,7 +796,7 @@ azureScriptActionHistory <- function(azureActiveContext, resourceGroup,
                sep = "")
 
   r <- GET(URL, add_headers(.headers = c(Host = "management.azure.com",
-                                         Authorization = AT,
+                                         Authorization = azToken,
                                          `Content-type` = "application/json")),
            verbosity)
   rl <- content(r, "text")

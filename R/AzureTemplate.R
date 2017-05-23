@@ -20,7 +20,7 @@ azureDeployTemplate <- function(azureActiveContext, deplname, templateURL,
                                 verbose = FALSE) {
   azureCheckToken(azureActiveContext)
 
-  AT <- azureActiveContext$Token
+  azToken <- azureActiveContext$Token
   if (missing(subscriptionID)) {
     subscriptionID <- azureActiveContext$subscriptionID
   } 
@@ -34,7 +34,7 @@ azureDeployTemplate <- function(azureActiveContext, deplname, templateURL,
   if (!length(subscriptionID)) {
     stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
   }
-  if (!length(AT)) {
+  if (!length(azToken)) {
     stop("Error: No Token / Not currently Authenticated")
   }
   if (!length(deplname)) {
@@ -45,8 +45,8 @@ azureDeployTemplate <- function(azureActiveContext, deplname, templateURL,
     stop("No templateURL or templateJSON provided")
   }
 
-  verbosity <- if (verbose)
-    httr::verbose(TRUE) else NULL
+  verbosity <- set_verbosity(verbose)
+ 
 
   URL <- paste("https://management.azure.com/subscriptions/", subscriptionID,
                "/resourceGroups/", resourceGroup, "/providers/microsoft.resources/deployments/",
@@ -91,7 +91,7 @@ azureDeployTemplate <- function(azureActiveContext, deplname, templateURL,
   }
 
   r <- PUT(URL, add_headers(.headers = c(Host = "management.azure.com",
-                                         Authorization = AT, `Content-type` = "application/json")), body = bodyI,
+                                         Authorization = azToken, `Content-type` = "application/json")), body = bodyI,
            verbosity)
 
   stopWithAzureError(r)
@@ -119,15 +119,15 @@ azureDeployTemplate <- function(azureActiveContext, deplname, templateURL,
 azureDeployStatus <- function(azureActiveContext, deplname, resourceGroup,
                               subscriptionID, verbose = FALSE) {
   azureCheckToken(azureActiveContext)
-  AT <- azureActiveContext$Token
+  azToken <- azureActiveContext$Token
   if (missing(subscriptionID)) {
     subscriptionID <- azureActiveContext$subscriptionID
   } else (subscriptionID <- subscriptionID)
   if (missing(resourceGroup)) {
     resourceGroup <- azureActiveContext$resourceGroup
   } else (resourceGroup <- resourceGroup)
-  verbosity <- if (verbose)
-    httr::verbose(TRUE) else NULL
+  verbosity <- set_verbosity(verbose)
+ 
 
   if (!length(resourceGroup)) {
     stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
@@ -135,7 +135,7 @@ azureDeployStatus <- function(azureActiveContext, deplname, resourceGroup,
   if (!length(subscriptionID)) {
     stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
   }
-  if (!length(AT)) {
+  if (!length(azToken)) {
     stop("Error: No Token / Not currently Authenticated")
   }
   if (!length(deplname)) {
@@ -148,7 +148,7 @@ azureDeployStatus <- function(azureActiveContext, deplname, resourceGroup,
   # print(URL)
 
   r <- GET(URL, add_headers(.headers = c(Host = "management.azure.com",
-                                         Authorization = AT, `Content-type` = "application/json")), verbosity)
+                                         Authorization = azToken, `Content-type` = "application/json")), verbosity)
   rl <- content(r, "text", encoding = "UTF-8")
 
   df <- fromJSON(rl)
@@ -173,15 +173,15 @@ azureDeleteDeploy <- function(azureActiveContext, deplname, resourceGroup,
                               subscriptionID, verbose = FALSE) {
   azureCheckToken(azureActiveContext)
 
-  AT <- azureActiveContext$Token
+  azToken <- azureActiveContext$Token
   if (missing(subscriptionID)) {
     subscriptionID <- azureActiveContext$subscriptionID
   } else (subscriptionID <- subscriptionID)
   if (missing(resourceGroup)) {
     resourceGroup <- azureActiveContext$resourceGroup
   } else (resourceGroup <- resourceGroup)
-  verbosity <- if (verbose)
-    httr::verbose(TRUE) else NULL
+  verbosity <- set_verbosity(verbose)
+ 
 
   if (!length(resourceGroup)) {
     stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
@@ -189,7 +189,7 @@ azureDeleteDeploy <- function(azureActiveContext, deplname, resourceGroup,
   if (!length(subscriptionID)) {
     stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
   }
-  if (!length(AT)) {
+  if (!length(azToken)) {
     stop("Error: No Token / Not currently Authenticated")
   }
   if (!length(deplname)) {
@@ -202,7 +202,7 @@ azureDeleteDeploy <- function(azureActiveContext, deplname, resourceGroup,
   # print(URL)
 
   r <- DELETE(URL, add_headers(.headers = c(Host = "management.azure.com",
-                                            Authorization = AT, `Content-type` = "application/json")))
+                                            Authorization = azToken, `Content-type` = "application/json")))
   print(http_status(r))
   rl <- content(r, "text", encoding = "UTF-8")
   print(rl)
@@ -224,15 +224,15 @@ azureCancelDeploy <- function(azureActiveContext, deplname, resourceGroup,
 
   azureCheckToken(azureActiveContext)
 
-  AT <- azureActiveContext$Token
+  azToken <- azureActiveContext$Token
   if (missing(subscriptionID)) {
     subscriptionID <- azureActiveContext$subscriptionID
   } else (subscriptionID <- subscriptionID)
   if (missing(resourceGroup)) {
     resourceGroup <- azureActiveContext$resourceGroup
   } else (resourceGroup <- resourceGroup)
-  verbosity <- if (verbose)
-    httr::verbose(TRUE) else NULL
+  verbosity <- set_verbosity(verbose)
+ 
 
   if (!length(resourceGroup)) {
     stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
@@ -240,7 +240,7 @@ azureCancelDeploy <- function(azureActiveContext, deplname, resourceGroup,
   if (!length(subscriptionID)) {
     stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
   }
-  if (!length(AT)) {
+  if (!length(azToken)) {
     stop("Error: No Token / Not currently Authenticated")
   }
   if (!length(deplname)) {
@@ -253,7 +253,7 @@ azureCancelDeploy <- function(azureActiveContext, deplname, resourceGroup,
   # print(URL)
 
   r <- POST(URL, add_headers(.headers = c(Host = "management.azure.com",
-                                          Authorization = AT, `Content-type` = "application/json")), verbosity)
+                                          Authorization = azToken, `Content-type` = "application/json")), verbosity)
   rl <- content(r, "text", encoding = "UTF-8")
   df <- fromJSON(rl)
   return(df$category)

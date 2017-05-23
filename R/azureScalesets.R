@@ -8,7 +8,7 @@
 azureListScaleSets <- function(azureActiveContext, resourceGroup, location, subscriptionID,
                         verbose = FALSE) {
   azureCheckToken(azureActiveContext)
-  AT <- azureActiveContext$Token
+  azToken <- azureActiveContext$Token
 
   if (missing(subscriptionID)) {
     subscriptionID <- azureActiveContext$subscriptionID
@@ -16,8 +16,8 @@ azureListScaleSets <- function(azureActiveContext, resourceGroup, location, subs
   if (missing(resourceGroup)) {
     resourceGroup <- azureActiveContext$resourceGroup
   } else (resourceGroup <- resourceGroup)
-  verbosity <- if (verbose)
-    httr::verbose(TRUE) else NULL
+  verbosity <- set_verbosity(verbose)
+ 
 
   if (!length(resourceGroup)) {
     stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
@@ -25,7 +25,7 @@ azureListScaleSets <- function(azureActiveContext, resourceGroup, location, subs
   if (!length(subscriptionID)) {
     stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
   }
-  if (!length(AT)) {
+  if (!length(azToken)) {
     stop("Error: No Token / Not currently Authenticated")
   }
 
@@ -34,7 +34,7 @@ azureListScaleSets <- function(azureActiveContext, resourceGroup, location, subs
                sep = "")
 
   r <- GET(URL, add_headers(.headers = c(Host = "management.azure.com",
-                                         Authorization = AT, `Content-type` = "application/json")), verbosity)
+                                         Authorization = azToken, `Content-type` = "application/json")), verbosity)
   rl <- content(r, "text", encoding = "UTF-8")
   df <- fromJSON(rl)
   dfn <- as.data.frame(df$value$name)
@@ -78,7 +78,7 @@ azureListScaleSets <- function(azureActiveContext, resourceGroup, location, subs
 azureListScaleSetNetwork <- function(azureActiveContext, resourceGroup, location, subscriptionID,
                                verbose = FALSE) {
   azureCheckToken(azureActiveContext)
-  AT <- azureActiveContext$Token
+  azToken <- azureActiveContext$Token
 
   if (missing(subscriptionID)) {
     subscriptionID <- azureActiveContext$subscriptionID
@@ -86,8 +86,8 @@ azureListScaleSetNetwork <- function(azureActiveContext, resourceGroup, location
   if (missing(resourceGroup)) {
     resourceGroup <- azureActiveContext$resourceGroup
   } else (resourceGroup <- resourceGroup)
-  verbosity <- if (verbose)
-    httr::verbose(TRUE) else NULL
+  verbosity <- set_verbosity(verbose)
+ 
 
   if (!length(resourceGroup)) {
     stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
@@ -95,7 +95,7 @@ azureListScaleSetNetwork <- function(azureActiveContext, resourceGroup, location
   if (!length(subscriptionID)) {
     stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
   }
-  if (!length(AT)) {
+  if (!length(azToken)) {
     stop("Error: No Token / Not currently Authenticated")
   }
 
@@ -104,7 +104,7 @@ azureListScaleSetNetwork <- function(azureActiveContext, resourceGroup, location
                sep = "")
 
   r <- GET(URL, add_headers(.headers = c(Host = "management.azure.com",
-                                         Authorization = AT, `Content-type` = "application/json")), verbosity)
+                                         Authorization = azToken, `Content-type` = "application/json")), verbosity)
   rl <- content(r, "text", encoding = "UTF-8")
   df <- fromJSON(rl)
   lbs <- df$value$name
@@ -116,7 +116,7 @@ azureListScaleSetNetwork <- function(azureActiveContext, resourceGroup, location
                     "/resourceGroups/", resourceGroup, "/providers/Microsoft.Network/loadBalancers/", lb, "?api-version=2016-03-30",
                     sep = "")
       r <- GET(URL, add_headers(.headers = c(Host = "management.azure.com",
-                                              Authorization = AT, `Content-type` = "application/json")), verbosity)
+                                              Authorization = azToken, `Content-type` = "application/json")), verbosity)
       rl <- content(r, "text", encoding = "UTF-8")
       df2 <- fromJSON(rl)
       dfn3 <- as.data.frame(df2$properties$inboundNatRules$name)
@@ -140,7 +140,7 @@ azureListScaleSetNetwork <- function(azureActiveContext, resourceGroup, location
                sep = "")
 
   r <- GET(URL, add_headers(.headers = c(Host = "management.azure.com",
-                                         Authorization = AT, `Content-type` = "application/json")), verbosity)
+                                         Authorization = azToken, `Content-type` = "application/json")), verbosity)
   rl <- content(r, "text", encoding = "UTF-8")
   df <- fromJSON(rl)
   pips <- df$value$name
@@ -152,7 +152,7 @@ azureListScaleSetNetwork <- function(azureActiveContext, resourceGroup, location
                    "/resourceGroups/", resourceGroup, "/providers/Microsoft.Network/publicIPAddresses/", pip, "?api-version=2016-03-30",
                    sep = "")
       r <- GET(URL, add_headers(.headers = c(Host = "management.azure.com",
-                                             Authorization = AT, `Content-type` = "application/json")), verbosity)
+                                             Authorization = azToken, `Content-type` = "application/json")), verbosity)
       rl <- content(r, "text", encoding = "UTF-8")
       df2 <- fromJSON(rl)
       clust <- nrow(dfn)
@@ -181,7 +181,7 @@ azureListScaleSetNetwork <- function(azureActiveContext, resourceGroup, location
 azureListScaleSetVM <- function(azureActiveContext, scaleSet, resourceGroup, location, subscriptionID,
                                 verbose = FALSE) {
   azureCheckToken(azureActiveContext)
-  AT <- azureActiveContext$Token
+  azToken <- azureActiveContext$Token
 
   if (missing(subscriptionID)) {
     subscriptionID <- azureActiveContext$subscriptionID
@@ -189,8 +189,8 @@ azureListScaleSetVM <- function(azureActiveContext, scaleSet, resourceGroup, loc
   if (missing(resourceGroup)) {
     resourceGroup <- azureActiveContext$resourceGroup
   } else (resourceGroup <- resourceGroup)
-  verbosity <- if (verbose)
-    httr::verbose(TRUE) else NULL
+  verbosity <- set_verbosity(verbose)
+ 
 
   if (!length(resourceGroup)) {
     stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
@@ -201,7 +201,7 @@ azureListScaleSetVM <- function(azureActiveContext, scaleSet, resourceGroup, loc
   if (!length(subscriptionID)) {
     stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
   }
-  if (!length(AT)) {
+  if (!length(azToken)) {
     stop("Error: No Token / Not currently Authenticated")
   }
 
@@ -211,7 +211,7 @@ azureListScaleSetVM <- function(azureActiveContext, scaleSet, resourceGroup, loc
                sep = "")
 
   r <- GET(URL, add_headers(.headers = c(Host = "management.azure.com",
-                                         Authorization = AT, `Content-type` = "application/json")), verbosity)
+                                         Authorization = azToken, `Content-type` = "application/json")), verbosity)
   rl <- content(r, "text", encoding = "UTF-8")
   df <- fromJSON(rl)
   dfn <- as.data.frame(df$value$name)

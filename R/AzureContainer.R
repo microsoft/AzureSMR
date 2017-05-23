@@ -20,8 +20,7 @@ azureListStorageContainers <- function(azureActiveContext, storageAccount, stora
   if (missing(storageAccount)) {
     SAI <- azureActiveContext$storageAccount
   } else (SAI <- storageAccount)
-  verbosity <- if (verbose)
-    httr::verbose(TRUE) else NULL
+  verbosity <- set_verbosity(verbose)
 
   if (length(resourceGroup) < 1) {
     stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
@@ -30,7 +29,7 @@ azureListStorageContainers <- function(azureActiveContext, storageAccount, stora
     stop("Error: No storageAccount provided: Use storageAccount argument or set in AzureContext")
   }
 
-  STK <- if (length(azureActiveContext$storageAccountK) < 1 ||
+  storageKey <- if (length(azureActiveContext$storageAccountK) < 1 ||
       SAI != azureActiveContext$storageAccountK ||
       length(azureActiveContext$storageKey) < 1) {
     azureSAGetKey(azureActiveContext, resourceGroup = resourceGroup, storageAccount = SAI)
@@ -39,13 +38,13 @@ azureListStorageContainers <- function(azureActiveContext, storageAccount, stora
   }
 
 
-  if (length(STK) < 1) {
+  if (length(storageKey) < 1) {
     stop("Error: No storageKey provided: Use storageKey argument or set in AzureContext")
   }
 
   URL <- paste("http://", SAI, ".blob.core.windows.net/?comp=list", sep = "")
 
-  # r<-OLDazureblobCall(azureActiveContext,URL, 'GET', key=STK)
+  # r<-OLDazureblobCall(azureActiveContext,URL, 'GET', key=storageKey)
 
   D1 <- Sys.getlocale("LC_TIME")
   Sys.setlocale("LC_TIME", "C")
@@ -53,12 +52,12 @@ azureListStorageContainers <- function(azureActiveContext, storageAccount, stora
   Sys.setlocale("LC_TIME", D1)
   D1 <- format(Sys.time(), "%a, %d %b %Y %H:%M:%S %Z", tz = "GMT")
 
-  SIG <- getSig(azureActiveContext, url = URL, verb = "GET", key = STK, storageAccount = SAI,
+  SIG <- getSig(azureActiveContext, url = URL, verb = "GET", key = storageKey, storageAccount = SAI,
                 CMD = "\ncomp:list", dateSig = D1)
 
-  AT <- paste0("SharedKey ", SAI, ":", SIG)
+  azToken <- paste0("SharedKey ", SAI, ":", SIG)
 
-  r <- GET(URL, add_headers(.headers = c(Authorization = AT, `Content-Length` = "0",
+  r <- GET(URL, add_headers(.headers = c(Authorization = azToken, `Content-Length` = "0",
                                          `x-ms-version` = "2015-04-05",
                                          `x-ms-date` = D1)),
            verbosity)
@@ -85,7 +84,7 @@ azureListStorageContainers <- function(azureActiveContext, storageAccount, stora
 
   azureActiveContext$storageAccount <- SAI
   azureActiveContext$resourceGroup  <- resourceGroup
-  azureActiveContext$storageKey     <- STK
+  azureActiveContext$storageKey     <- storageKey
 
   data.frame(
     name            = xpathSApply(y, "//containers//container/name", xmlValue),
@@ -123,13 +122,12 @@ azureCreateStorageContainer <- function(azureActiveContext, container, storageAc
     SAI <- azureActiveContext$storageAccount
   } else (SAI <- storageAccount)
   if (missing(storageKey)) {
-    STK <- azureActiveContext$storageKey
-  } else (STK <- storageKey)
+    storageKey <- azureActiveContext$storageKey
+  } else (storageKey <- storageKey)
   if (missing(container)) {
     stop("Error: No container name provided")
   }
-  verbosity <- if (verbose)
-    httr::verbose(TRUE) else NULL
+  verbosity <- set_verbosity(verbose)
 
   if (length(resourceGroup) < 1) {
     stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
@@ -138,9 +136,9 @@ azureCreateStorageContainer <- function(azureActiveContext, container, storageAc
     stop("Error: No storageAccount provided: Use storageAccount argument or set in AzureContext")
   }
 
-  STK <- refreshStorageKey(azureActiveContext, SAI, resourceGroup)
+  storageKey <- refreshStorageKey(azureActiveContext, SAI, resourceGroup)
 
-  if (length(STK) < 1) {
+  if (length(storageKey) < 1) {
     stop("Error: No storageKey provided: Use storageKey argument or set in AzureContext")
   }
 
@@ -148,7 +146,7 @@ azureCreateStorageContainer <- function(azureActiveContext, container, storageAc
                "?restype=container", sep = "")
 
 
-  # r<-OLDazureblobCall(azureActiveContext,URL, 'GET', key=STK)
+  # r<-OLDazureblobCall(azureActiveContext,URL, 'GET', key=storageKey)
 
   D1 <- Sys.getlocale("LC_TIME")
   Sys.setlocale("LC_TIME", "C")
@@ -169,12 +167,12 @@ azureCreateStorageContainer <- function(azureActiveContext, container, storageAc
   Sys.setlocale("LC_TIME", D1)
   D1 <- format(Sys.time(), "%a, %d %b %Y %H:%M:%S %Z", tz = "GMT")
 
-  SIG <- getSig(azureActiveContext, url = URL, verb = "PUT", key = STK,
+  SIG <- getSig(azureActiveContext, url = URL, verb = "PUT", key = storageKey,
                 storageAccount = SAI, container = CNTR,
                 CMD = "\nrestype:container", dateSig = D1)
 
-  AT <- paste0("SharedKey ", SAI, ":", SIG)
-  r <- PUT(URL, add_headers(.headers = c(Authorization = AT, `Content-Length` = "0",
+  azToken <- paste0("SharedKey ", SAI, ":", SIG)
+  r <- PUT(URL, add_headers(.headers = c(Authorization = azToken, `Content-Length` = "0",
                                          `x-ms-version` = "2015-04-05",
                                          `x-ms-date` = D1)),
            verbosity)
@@ -217,13 +215,12 @@ azureDeleteStorageContainer <- function(azureActiveContext, container, storageAc
     SAI <- azureActiveContext$storageAccount
   } else (SAI <- storageAccount)
   if (missing(storageKey)) {
-    STK <- azureActiveContext$storageKey
-  } else (STK <- storageKey)
+    storageKey <- azureActiveContext$storageKey
+  } else (storageKey <- storageKey)
   if (missing(container)) {
     stop("Error: No container name provided")
   }
-  verbosity <- if (verbose)
-    httr::verbose(TRUE) else NULL
+  verbosity <- set_verbosity(verbose)
 
   CNTR <- container
 
@@ -234,8 +231,8 @@ azureDeleteStorageContainer <- function(azureActiveContext, container, storageAc
     stop("Error: No storageAccount provided: Use storageAccount argument or set in AzureContext")
   }
 
-  STK <- refreshStorageKey(azureActiveContext, SAI, resourceGroup)
-  if (length(STK) < 1) {
+  storageKey <- refreshStorageKey(azureActiveContext, SAI, resourceGroup)
+  if (length(storageKey) < 1) {
     stop("Error: No storageKey provided: Use storageKey argument or set in AzureContext")
   }
 
@@ -253,13 +250,13 @@ azureDeleteStorageContainer <- function(azureActiveContext, container, storageAc
   azureActiveContext$container <- CNTR
   azureActiveContext$storageAccount <- SAI
   azureActiveContext$resourceGroup <- resourceGroup
-  SIG <- getSig(azureActiveContext, url = URL, verb = "DELETE", key = STK,
+  SIG <- getSig(azureActiveContext, url = URL, verb = "DELETE", key = storageKey,
                 storageAccount = SAI,
                 CMD = paste0(CNTR, "\nrestype:container"), dateSig = D1)
 
-  AT <- paste0("SharedKey ", SAI, ":", SIG)
+  azToken <- paste0("SharedKey ", SAI, ":", SIG)
 
-  r <- DELETE(URL, add_headers(.headers = c(Authorization = AT, `Content-Length` = "0",
+  r <- DELETE(URL, add_headers(.headers = c(Authorization = azToken, `Content-Length` = "0",
                                             `x-ms-version` = "2015-04-05",
                                             `x-ms-date` = D1)),
               verbosity)

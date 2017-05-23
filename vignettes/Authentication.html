@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 
@@ -50,7 +50,7 @@ code > span.op { color: #666666; } /* Operator */
 code > span.bu { } /* BuiltIn */
 code > span.ex { } /* Extension */
 code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
+code > span.azToken { color: #7d9029; } /* Attribute */
 code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
 code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
@@ -87,14 +87,14 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><p>You probably want to create a new application so type a name for it in the Search box (I called mine AzureSMR). The search result will come back with no results and a button that says <code>ADD AN APPLICATION</code> -&gt; which you should click.</p></li>
 <li><p>Give the application a name and choose <code>WEB APPLICATION AND/OR WEB API</code>. Then go to the next page <code>-&gt;</code>.</p></li>
 <li><p>Provide some dummy URLs. They are not used but they must be valid URLs. Click on the tick to continue to create the application.</p></li>
-<li><p>Under the Configure menu button take note of the client ID.9. Under the Keys section choose a 1 year duration (or 2) and click the Save button at the bottom of the screen. A key is generated which you should copy now and save it somewhere.</p></li>
+<li><p>Under the Configure menu button take note of the client ID.9. Under the Keys section choose a 1 year duration (or 2) and click the Save button azToken the bottom of the screen. A key is generated which you should copy now and save it somewhere.</p></li>
 <li><p>We also need the <em>tenant ID</em>. Click the <code>VIEW ENDPOINTS</code> button on the bottom of the screen and find a list of endpoints all including the tenant ID as a sequence of hexadecimals.</p></li>
 <li><p>Now we need to set up the applications permissions. Click the <code>Add application</code> button. In the resulting window scroll to <code>Windows Azure Service Management API</code> and select it. Then click the Tick icon.</p></li>
 <li><p>Under the resulting “permissions to other applications” section, for the Windows Azure Service Management API entry, from the “Delegated Permissions:0” drop down tick the Access Azure Service Management as organization.</p></li>
-<li><p>Click on the Save icon at the bottom of the window again.</p></li>
+<li><p>Click on the Save icon azToken the bottom of the window again.</p></li>
 <li><p>Now we need to assign the application a role and to do so we go to the (new) Azure portal. <a href="https://portal.azure.com/" class="uri">https://portal.azure.com/</a></p></li>
 </ol>
-<p>To apply access control at Resource Group</p>
+<p>To apply access control azToken Resource Group</p>
 <ol start="15" style="list-style-type: decimal">
 <li><p>Click on Resource Groups menu item on the left in the portal.</p></li>
 <li><p>Identify the resource group you will associate with this application.</p></li>
@@ -103,7 +103,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><p>Choose the role as Owner and under the user search box enter the name of the App, e.g., AzureSMR.</p></li>
 <li><p>Select the resulting list item for that App then click Select in that scope then OK in the “Add access” scope. The user will be added to the list.</p></li>
 </ol>
-<p>Alternatively you can access control at Subscription Level</p>
+<p>Alternatively you can access control azToken Subscription Level</p>
 <ol start="15" style="list-style-type: decimal">
 <li><p>Click on Subscriptions on the left menu item in the portal.</p></li>
 <li><p>Identify the Subscription you will associate with this application.</p></li>

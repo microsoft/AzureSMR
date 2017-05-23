@@ -1,3 +1,15 @@
+azureApiHeaders <- function(token) {
+  headers <- c(Host = "management.azure.com",
+               Authorization = token,
+                `Content-type` = "application/json")
+  httr::add_headers(.headers = headers)
+}
+
+# convert verbose=TRUE to httr verbose
+set_verbosity <- function(verbose = FALSE) {
+  if (verbose) httr::verbose(TRUE) else NULL
+}
+
 extractUrlArguments <- function(x) {
   ptn <- ".*\\?(.*?)"
   args <- grepl("\\?", x)
@@ -19,7 +31,7 @@ callAzureStorageApi <- function(url, verb = "GET", storageKey, storageAccount,
                    verbose = FALSE) {
   dateStamp <- httr::http_date(Sys.time())
 
-  verbosity <- if (verbose) httr::verbose(TRUE) else NULL
+  verbosity <- set_verbosity(verbose) 
 
   if (missing(CMD) || is.null(CMD)) CMD <- extractUrlArguments(url)
 
@@ -28,16 +40,16 @@ callAzureStorageApi <- function(url, verb = "GET", storageKey, storageAccount,
       headers = headers, CMD = CMD, size = size,
       contenttype = contenttype, dateStamp = dateStamp, verbose = verbose)
 
-  at <- paste0("SharedKey ", storageAccount, ":", sig)
+  azToken <- paste0("SharedKey ", storageAccount, ":", sig)
 
   switch(verb, 
-  "GET" = GET(url, add_headers(.headers = c(Authorization = at,
+  "GET" = GET(url, add_headers(.headers = c(Authorization = azToken,
                                     `Content-Length` = "0",
                                     `x-ms-version` = "2015-04-05",
                                     `x-ms-date` = dateStamp)
                                     ),
     verbosity),
-  "PUT" = PUT(url, add_headers(.headers = c(Authorization = at,
+  "PUT" = PUT(url, add_headers(.headers = c(Authorization = azToken,
                                          `Content-Length` = nchar(content),
                                          `x-ms-version` = "2015-04-05",
                                          `x-ms-date` = dateStamp,

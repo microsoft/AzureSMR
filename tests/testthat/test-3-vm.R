@@ -88,9 +88,4 @@ test_that("Can delete resource group", {
       res <- azureDeleteResourceGroup(asc, resourceGroup = resourceGroup_name)
     }, "Delete Request Submitted"
   )
-  wait_for_azure(
-    !(resourceGroup_name %in% azureListRG(asc)$resourceGroup)
-  )
-  expect_false(resourceGroup_name %in% sort(azureListRG(asc)$resourceGroup))
-
 })

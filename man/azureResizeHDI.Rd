@@ -8,7 +8,7 @@ azureResizeHDI(azureActiveContext, clustername, role = "worker", size = 2,
   mode = "Sync", subscriptionID, resourceGroup, verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by AzureSMR}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
 
 \item{clustername}{Cluster name, used for HDI and Spark clusters. See \code{\link[=azureCreateHDI]{azureCreateHDI()}}}
 
@@ -18,7 +18,7 @@ azureResizeHDI(azureActiveContext, clustername, role = "worker", size = 2,
 
 \item{mode}{Provisioning mode, "Sync" or "Async". Use "Async" to immediately return to R session after submission of request}
 
-\item{subscriptionID}{Set the subscriptionID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
+\item{subscriptionID}{Subscription ID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
 
 \item{resourceGroup}{Name of the resource group}
 

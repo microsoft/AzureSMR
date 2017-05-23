@@ -8,7 +8,7 @@ azureBlobLS(azureActiveContext, directory, recursive = FALSE, storageAccount,
   storageKey, container, resourceGroup, verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by AzureSMR}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
 
 \item{directory}{Blob store directory to list for content}
 

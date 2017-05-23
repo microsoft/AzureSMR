@@ -8,7 +8,7 @@ azureAuthenticate(azureActiveContext, tenantID, clientID, authKey,
   verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by AzureSMR}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
 
 \item{tenantID}{The Tenant ID provided during creation of the Active Directory application / service principal}
 
@@ -19,7 +19,7 @@ azureAuthenticate(azureActiveContext, tenantID, clientID, authKey,
 \item{verbose}{Print Tracing information (Default False)}
 }
 \value{
-Returns Azure token and sets AzureContext token
+If successful, returns TRUE
 }
 \description{
 Authenticates against Azure Active directory application.

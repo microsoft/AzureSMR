@@ -8,7 +8,7 @@ azureSparkJob(azureActiveContext, FILE, clustername, hdiAdmin, hdiPassword,
   log = "URL", verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by AzureSMR}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
 
 \item{FILE}{file}
 

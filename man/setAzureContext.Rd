@@ -9,7 +9,7 @@ setAzureContext(azureActiveContext, tenantID, clientID, authKey, azToken,
   vmName, hdiAdmin, hdiPassword, clustername, kind, sessionID)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by AzureSMR}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
 
 \item{tenantID}{The Tenant ID provided during creation of the Active Directory application / service principal}
 
@@ -19,7 +19,7 @@ setAzureContext(azureActiveContext, tenantID, clientID, authKey, azToken,
 
 \item{azToken}{Azure authentication token, obtained by \code{\link[=azureAuthenticate]{azureAuthenticate()}}}
 
-\item{subscriptionID}{Set the subscriptionID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
+\item{subscriptionID}{Subscription ID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
 
 \item{resourceGroup}{Name of the resource group}
 
@@ -31,7 +31,7 @@ setAzureContext(azureActiveContext, tenantID, clientID, authKey, azToken,
 
 \item{blob}{Blob name}
 
-\item{vmName}{Name of the virtual Machine}
+\item{vmName}{Name of the virtual machine}
 
 \item{hdiAdmin}{HDInsight admin username}
 
@@ -44,7 +44,7 @@ setAzureContext(azureActiveContext, tenantID, clientID, authKey, azToken,
 \item{sessionID}{Spark sessionID. See \code{\link[=azureSparkCMD]{azureSparkCMD()}}}
 }
 \description{
-Updates the value of an azureActiveContext object, created by \code{\link[=createAzureContext]{createAzureContext()}}
+Updates the value of an \code{azureActiveContext} object, created by \code{\link[=createAzureContext]{createAzureContext()}}
 }
 \seealso{
 Other azureActiveContext functions: \code{\link{createAzureContext}}

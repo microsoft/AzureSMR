@@ -19,7 +19,7 @@ azureListSA <- function(azureActiveContext, resourceGroup, subscriptionID,
   if (!length(subscriptionID)) {
     stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
   }
-  verbosity <- if (verbose) httr::verbose(TRUE) else NULL
+  verbosity <- set_verbosity(verbose) 
 
   SA <- if(missing(resourceGroup)) {
     azureListAllResources(azureActiveContext,
@@ -66,8 +66,8 @@ azureSAGetKey <- function(azureActiveContext, storageAccount,
   if (!length(subscriptionID)) {
     stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
   }
-  verbosity <- if (verbose)
-    httr::verbose(TRUE) else NULL
+  verbosity <- set_verbosity(verbose)
+
 
   message("Fetching Storage Key..")
 
@@ -121,8 +121,8 @@ azureCreateStorageAccount <- function(azureActiveContext, storageAccount,
   if (!length(subscriptionID)) {
     stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
   }
-  verbosity <- if (verbose)
-    httr::verbose(TRUE) else NULL
+  verbosity <- set_verbosity(verbose)
+
 
   # https://management.azure.com/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupname}/providers/Microsoft.Storage/storageAccounts/{accountname}?api-version={api-version}
 
@@ -208,7 +208,7 @@ azureDeletestorageAccount <- function(azureActiveContext, storageAccount,
   if (!length(subscriptionID)) {
     stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
   }
-  verbosity <- if (verbose) httr::verbose(TRUE) else NULL
+  verbosity <- set_verbosity(verbose) 
 
 
   URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
