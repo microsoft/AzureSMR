@@ -2,7 +2,7 @@
 % Please edit documentation in R/AzureBlob.R
 \name{azureDeleteBlob}
 \alias{azureDeleteBlob}
-\title{Delete a specifed Storage blob.}
+\title{Delete a specifed storage blob.}
 \usage{
 azureDeleteBlob(azureActiveContext, blob, directory, storageAccount, storageKey,
   container, resourceGroup, verbose = FALSE)
@@ -25,7 +25,7 @@ azureDeleteBlob(azureActiveContext, blob, directory, storageAccount, storageKey,
 \item{verbose}{Print Tracing information (Default False)}
 }
 \description{
-Delete a specifed Storage blob.
+Delete a specifed storage blob.
 }
 \seealso{
 Other Blob store functions: \code{\link{azureBlobCD}},

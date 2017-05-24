@@ -11,13 +11,13 @@ azureDeployTemplate(azureActiveContext, deplname, templateURL, paramURL,
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
 
-\item{deplname}{deplname}
+\item{deplname}{Deployment name}
 
-\item{templateURL}{templateURL}
+\item{templateURL}{URL that contains the ARM template to deploy. You must specify either \code{templateURL} OR \code{templateJSON}}
 
-\item{paramURL}{paramURL}
+\item{paramURL}{URL that contains the template parameters. You must specify either \code{paramULR} OR \code{paramJSON}}
 
-\item{templateJSON}{templateJSON}
+\item{templateJSON}{character vector that contains the ARM template to deploy. You must specify either \code{templateJSON} OR \code{templateURL}}
 
 \item{paramJSON}{paramJSON}
 

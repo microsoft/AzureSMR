@@ -2,7 +2,7 @@
 % Please edit documentation in R/AzureTemplate.R
 \name{azureDeleteDeploy}
 \alias{azureDeleteDeploy}
-\title{Delete Template Deployment.}
+\title{Delete template deployment.}
 \usage{
 azureDeleteDeploy(azureActiveContext, deplname, resourceGroup, subscriptionID,
   verbose = FALSE)
@@ -10,7 +10,7 @@ azureDeleteDeploy(azureActiveContext, deplname, resourceGroup, subscriptionID,
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
 
-\item{deplname}{deplname}
+\item{deplname}{Deployment name}
 
 \item{resourceGroup}{Name of the resource group}
 
@@ -19,7 +19,7 @@ azureDeleteDeploy(azureActiveContext, deplname, resourceGroup, subscriptionID,
 \item{verbose}{Print Tracing information (Default False)}
 }
 \description{
-Delete Template Deployment.
+Delete template deployment.
 }
 \seealso{
 Other Template functions: \code{\link{azureCancelDeploy}},

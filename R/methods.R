@@ -151,3 +151,13 @@ is_blob <- function(x) {
 on_failure(is_blob) <- function(call, env) {
   paste0(deparse(call$x), "Provide a valid blob, or set using createAzureContext()")
 }
+
+# --- deployment name
+
+is_deployment_name <- function(x) {
+  is.character(x) && length(x) == 1 && nchar(x) > 0
+}
+
+on_failure(is_deployment_name) <- function(call, env) {
+  paste0(deparse(call$x), "Provide a deplname")
+}

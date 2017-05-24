@@ -2,7 +2,7 @@
 % Please edit documentation in R/AzureTemplate.R
 \name{azureDeployStatus}
 \alias{azureDeployStatus}
-\title{Check Template Deployment Status.}
+\title{Check template deployment Status.}
 \usage{
 azureDeployStatus(azureActiveContext, deplname, resourceGroup, subscriptionID,
   verbose = FALSE)
@@ -10,7 +10,7 @@ azureDeployStatus(azureActiveContext, deplname, resourceGroup, subscriptionID,
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
 
-\item{deplname}{deplname}
+\item{deplname}{Deployment name}
 
 \item{resourceGroup}{Name of the resource group}
 
@@ -19,7 +19,7 @@ azureDeployStatus(azureActiveContext, deplname, resourceGroup, subscriptionID,
 \item{verbose}{Print Tracing information (Default False)}
 }
 \description{
-Check Template Deployment Status.
+Check template deployment Status.
 }
 \seealso{
 Other Template functions: \code{\link{azureCancelDeploy}},

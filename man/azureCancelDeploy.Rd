@@ -2,7 +2,7 @@
 % Please edit documentation in R/AzureTemplate.R
 \name{azureCancelDeploy}
 \alias{azureCancelDeploy}
-\title{Cancel Template Deployment.}
+\title{Cancel template deployment.}
 \usage{
 azureCancelDeploy(azureActiveContext, deplname, resourceGroup, subscriptionID,
   verbose = FALSE)
@@ -10,7 +10,7 @@ azureCancelDeploy(azureActiveContext, deplname, resourceGroup, subscriptionID,
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
 
-\item{deplname}{deplname}
+\item{deplname}{Deployment name}
 
 \item{resourceGroup}{Name of the resource group}
 
@@ -19,7 +19,7 @@ azureCancelDeploy(azureActiveContext, deplname, resourceGroup, subscriptionID,
 \item{verbose}{Print Tracing information (Default False)}
 }
 \description{
-Cancel Template Deployment.
+Cancel template deployment.
 }
 \seealso{
 Other Template functions: \code{\link{azureDeleteDeploy}},

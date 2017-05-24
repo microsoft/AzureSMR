@@ -2,7 +2,7 @@
 % Please edit documentation in R/AzureBlob.R
 \name{azureBlobFind}
 \alias{azureBlobFind}
-\title{Find file in a Storage account directory.}
+\title{Find file in a storage account directory.}
 \usage{
 azureBlobFind(azureActiveContext, file, storageAccount, storageKey, container,
   resourceGroup, verbose = FALSE)
@@ -25,7 +25,7 @@ azureBlobFind(azureActiveContext, file, storageAccount, storageKey, container,
 \item{verbose}{Print Tracing information (Default False)}
 }
 \description{
-Find file in a Storage account directory.
+Find file in a storage account directory.
 }
 \seealso{
 Other Blob store functions: \code{\link{azureBlobCD}},
