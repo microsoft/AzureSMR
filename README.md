@@ -1,24 +1,23 @@
-# AzureSMR
+# AzureSMR: Manage and Interact with Azure Resources.
 
-R Package for managing a selection of Azure resources. Targeted at data scientists who need to control Azure Resources within an R session without needing to bother system administrators. 
+[![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
+ 
+---
+ 
+ `AzureSMR` is an R Package for managing a selection of Azure resources, using the Azure Service Manager API. The package exposes function to manage resources, resource groups, storage (blobs and containers), ARM templates, virtual machines and HDInsight (nodes, Hive and Spark).  To use the package, you must configure an Azure Active Directory application and service principal in the Azure portal.
 
-APIs include Storage Blobs, HDInsight(Nodes, Hive, Spark), ARM, VMs.
+To get started with this package, see the vignettes:
 
-To get started with this package, see the Vignettes:
+  * [Tutorial](http://htmlpreview.github.io/?https://github.com/Microsoft/AzureSMR/blob/master/vignettes/tutorial.html)
+  * [Getting Authenticated](http://htmlpreview.github.io/?https://github.com/Microsoft/AzureSMR/blob/master/vignettes/Authentication.html)
 
-  * [Tutorial](https://github.com/Microsoft/AzureSMR/blob/master/vignettes/tutorial.Rmd)
-  * [Getting Authenticated](https://github.com/Microsoft/AzureSMR/blob/master/vignettes/Authentication.Rmd)
+To access the package help, just type `?AzureSMR` into your code editor.
 
-There is also help pages within the package that can be accessed from IDEs like RStudio. Just type AzureSM into search when the package is loaded to see a list of functions/help pages.
-
-Note: The package imports standard R packages including `httr` and `jsonlite`. This means it can run in any open source R Session. 
+Technical note: The package connects to Azure using standard CRAN packages (for example `httr` and `jsonlite`). This means you can use open source R to connect to Azure - you don't need Microsoft R Server.
 
 
 ## Code of conduct
 
-This project has adopted the [Microsoft Open Source Code of
-Conduct](https://opensource.microsoft.com/codeofconduct/).
-For more information see the [Code of Conduct
-FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
-contact [opencode@microsoft.com](mailto:opencode@microsoft.com)
-with any additional questions or comments.
+This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).  
+For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
+contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
