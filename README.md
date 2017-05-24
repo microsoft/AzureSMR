@@ -1,6 +1,6 @@
 # AzureSMR
 
-R Package for managing a selection of Azure resources. Targeted at Data Scientists who need to control Azure Resources within an R session without needing to bother system administrators. 
+R Package for managing a selection of Azure resources. Targeted at data scientists who need to control Azure Resources within an R session without needing to bother system administrators. 
 
 APIs include Storage Blobs, HDInsight(Nodes, Hive, Spark), ARM, VMs.
 
