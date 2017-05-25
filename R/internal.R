@@ -88,19 +88,35 @@ createAzureStorageSignature <- function(url, verb,
 }
 
 
+#x_ms_date <- function() {
+  #english <- "English_United Kingdom.1252"
+  #old_locale <- Sys.getlocale(category = "LC_TIME")
+  #on.exit(Sys.setlocale(locale = old_locale))
+  #Sys.setlocale(category = "LC_TIME", locale = english)
+  #strftime(Sys.time(), "%a, %d %b %Y %H:%M:%S %Z", tz = "GMT")
+#}
+
+x_ms_date <- function() httr::http_date(Sys.time())
+
+azure_storage_header <- function(shared_key, date = x_ms_date(), content_length = 0) {
+  if(!is.character(shared_key)) stop("Expecting a character for `shared_key`")
+  headers <- c(
+      Authorization = shared_key,
+      `Content-Length` = as.character(content_length),
+      `x-ms-version` = "2015-04-05",
+      `x-ms-date` = date
+  )
+  add_headers(.headers = headers)
+}
 
 getSig <- function(azureActiveContext, url, verb, key, storageAccount,
                    headers = NULL, container = NULL, CMD = NULL, size = NULL, contenttype = NULL,
-                   dateSig, verbose = FALSE) {
-
-  if (missing(dateSig)) {
-    dateSig <- httr::http_date(Sys.time())
-  }
+                   date = x_ms_date(), verbose = FALSE) {
 
   arg1 <- if (length(headers)) {
-    paste0(headers, "\nx-ms-date:", dateSig, "\nx-ms-version:2015-04-05")
+    paste0(headers, "\nx-ms-date:", date, "\nx-ms-version:2015-04-05")
   } else {
-    paste0("x-ms-date:", dateSig, "\nx-ms-version:2015-04-05")
+    paste0("x-ms-date:", date, "\nx-ms-version:2015-04-05")
   }
 
   arg2 <- paste0("/", storageAccount, "/", container, CMD)

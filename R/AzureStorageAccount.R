@@ -9,31 +9,24 @@
 #' @export
 azureListSA <- function(azureActiveContext, resourceGroup, subscriptionID,
                         verbose = FALSE) {
-  if (missing(resourceGroup)) {
-    resourceGroup <- azureActiveContext$resourceGroup
-  } 
+  assert_that(is.azureActiveContext(azureActiveContext))
+  azureCheckToken(azureActiveContext)
+  azToken <- azureActiveContext$Token
 
-  if (missing(subscriptionID)) {
-    subscriptionID <- azureActiveContext$subscriptionID
-  } 
-  if (!length(subscriptionID)) {
-    stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
-  }
+  if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
+  assert_that(is_subscription_id(subscriptionID))
   verbosity <- set_verbosity(verbose) 
 
-  SA <- if(missing(resourceGroup)) {
-    azureListAllResources(azureActiveContext,
-                          type = "Microsoft.Storage/storageAccounts")
+  type_sa <- "Microsoft.Storage/storageAccounts"
+
+  z <- if(missing(resourceGroup)) {
+    azureListAllResources(azureActiveContext, type = type_sa)
   } else {
-    azureListAllResources(azureActiveContext,
-                          type = "Microsoft.Storage/storageAccounts",
-                          resourceGroup = resourceGroup)
-
+    azureListAllResources(azureActiveContext, type = type_sa, resourceGroup = resourceGroup)
   }
-
-  rownames(SA) <- NULL
-  SA$storageAccount <- extractStorageAccount(SA$id)
-  SA
+  rownames(z) <- NULL
+  z$storageAccount <- extractStorageAccount(z$id)
+  z
 }
 
 
@@ -47,47 +40,35 @@ azureListSA <- function(azureActiveContext, resourceGroup, subscriptionID,
 #' @export
 azureSAGetKey <- function(azureActiveContext, storageAccount, 
                           resourceGroup, subscriptionID, verbose = FALSE) {
+  assert_that(is.azureActiveContext(azureActiveContext))
   azureCheckToken(azureActiveContext)
+  azToken <- azureActiveContext$Token
 
-  if (missing(resourceGroup)) {
-    resourceGroup <- azureActiveContext$resourceGroup
-  } 
+  if (missing(resourceGroup)) resourceGroup <- azureActiveContext$resourceGroup
+  if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
 
-  if (missing(subscriptionID)) {
-    subscriptionID <- azureActiveContext$subscriptionID
-  }
-
-  if (!length(storageAccount)) {
-    stop("Error: No Valid storageAccount provided")
-  }
-  if (length(resourceGroup) < 1) {
-    stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
-  }
-  if (!length(subscriptionID)) {
-    stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
-  }
+  assert_that(is_storage_account(storageAccount))
+  assert_that(is_resource_group(resourceGroup))
+  assert_that(is_subscription_id(subscriptionID))
   verbosity <- set_verbosity(verbose)
-
 
   message("Fetching Storage Key..")
 
-  URL <- paste("https://management.azure.com/subscriptions/", subscriptionID,
+  URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
                "/resourceGroups/", resourceGroup, "/providers/Microsoft.Storage/storageAccounts/",
-               storageAccount, "/listkeys?api-version=2016-01-01", sep = "")
+               storageAccount, "/listkeys?api-version=2016-01-01")
 
-  r <- POST(URL, add_headers(.headers = c(Host = "management.azure.com",
-                                          Authorization = azureActiveContext$Token,
-                                          `Content-type` = "application/json")),
-            verbosity)
-
+  r <- POST(URL, azureApiHeaders(azToken), verbosity)
+  stopWithAzureError(r)
 
   rl <- content(r, "text", encoding = "UTF-8")
   df <- fromJSON(rl)
   azureActiveContext$storageAccount  <- storageAccount
   azureActiveContext$storageAccountK <- storageAccount
   azureActiveContext$resourceGroup   <- resourceGroup
-  azureActiveContext$storageKey      <- df$keys$value[1]
-  azureActiveContext$storageKey
+  azureActiveContext$storageKey <- df$keys$value[1]
+
+  return(azureActiveContext$storageKey)
 }
 
 

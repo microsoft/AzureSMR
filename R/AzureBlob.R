@@ -39,7 +39,7 @@ azureListStorageBlobs <- function(azureActiveContext, storageAccount, storageKey
   if (!missing(marker) && !is.null(marker)) URL <- paste0(URL, "&marker=", marker)
 
   r <- callAzureStorageApi(URL, 
-    storageKey = storageKey, storageAccount = storageAccount, container = container,
+    storageKey = storageKey, storageAccount = storageAccount, container = container, 
     verbose = verbose)
 
   if (status_code(r) == 404) {
@@ -388,10 +388,8 @@ azurePutBlob <- function(azureActiveContext, blob, contents = "", file = "",
   if (status_code(r) == 404) {
     warning("Azure response: container not found")
     return(NULL)
-  } else {
-    if (!status_code(r) %in% c(200, 201))
-      stopWithAzureError(r)
-    }
+  }
+  stopWithAzureError(r)
 
   updateAzureActiveContext(azureActiveContext, blob = blob)
   message("blob:", blob, " Saved:", nchar(contents), "bytes written")
@@ -582,25 +580,16 @@ azureDeleteBlob <- function(azureActiveContext, blob, directory,
 
   URL <- paste0("http://", storageAccount, ".blob.core.windows.net/", container, "/", blob)
 
-
-  D1 <- Sys.getlocale("LC_TIME")
-  Sys.setlocale("LC_TIME", "C")
-  Sys.setlocale("LC_TIME", D1)
-  D1 <- format(Sys.time(), "%a, %d %b %Y %H:%M:%S %Z", tz = "GMT")
-
+  xdate <- x_ms_date()
   SIG <- getSig(azureActiveContext, url = URL, verb = "DELETE", key = storageKey,
                 storageAccount = storageAccount, container = container,
-                CMD = paste0("/", blob), dateSig = D1)
+                CMD = paste0("/", blob), date = xdate)
 
-  azToken <- paste0("SharedKey ", storageAccount, ":", SIG)
+  sharedKey <- paste0("SharedKey ", storageAccount, ":", SIG)
 
-  r <- DELETE(URL, add_headers(.headers = c(Authorization = azToken,
-                                            `Content-Length` = "0",
-                                            `x-ms-version` = "2015-04-05",
-                                            `x-ms-date` = D1)),
-              verbosity)
+  r <- DELETE(URL, azure_storage_header(sharedKey, date = xdate), verbosity)
 
-    stopWithAzureError(r)
+  stopWithAzureError(r)
   if (status_code(r) == 202) message("Blob delete request accepted")
   return(TRUE)
 }
