@@ -10,7 +10,7 @@ azureListScaleSetVM(azureActiveContext, scaleSet, resourceGroup, location,
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
 
-\item{scaleSet}{name of the scale refer to (azureListScaleSets)}
+\item{scaleSet}{Character vector with name of the scaleset (see also \code{\link[=azureListScaleSets]{azureListScaleSets()}})}
 
 \item{resourceGroup}{Name of the resource group}
 

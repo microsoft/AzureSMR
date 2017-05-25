@@ -131,7 +131,7 @@ is_container <- function(x) {
 on_failure(is_container) <- function(call, env) {
   paste0(deparse(call$x), "Provide a valid container, or set using createAzureContext()")
 }
-
+7
 # --- storage_key
 
 is_storage_key <- function(x) {
@@ -160,4 +160,14 @@ is_deployment_name <- function(x) {
 
 on_failure(is_deployment_name) <- function(call, env) {
   paste0(deparse(call$x), "Provide a deplname")
+}
+
+# --- scaleset
+
+is_scaleset <- function(x) {
+  is.character(x) && length(x) == 1 && nchar(x) > 0
+}
+
+on_failure(is_scaleset) <- function(call, env) {
+  paste0(deparse(call$x), "Provide a scaleset")
 }

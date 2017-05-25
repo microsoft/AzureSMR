@@ -2,7 +2,7 @@
 % Please edit documentation in R/azureScalesets.R
 \name{azureListScaleSetNetwork}
 \alias{azureListScaleSetNetwork}
-\title{List scale set network information with a ResourceGroup}
+\title{List load balancers and ip addresses in a resource group}
 \usage{
 azureListScaleSetNetwork(azureActiveContext, resourceGroup, location,
   subscriptionID, verbose = FALSE)
@@ -19,7 +19,10 @@ azureListScaleSetNetwork(azureActiveContext, resourceGroup, location,
 \item{verbose}{Print Tracing information (Default False)}
 }
 \description{
-List scale set network information with a ResourceGroup
+List load balancers and ip addresses in a resource group
+}
+\references{
+https://docs.microsoft.com/en-us/rest/api/network/loadbalancer/list-load-balancers-within-a-resource-group
 }
 \seealso{
 Other Virtual machine functions: \code{\link{azureDeleteVM}},
