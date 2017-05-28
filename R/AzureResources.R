@@ -41,8 +41,8 @@ azureListRG <- function(azureActiveContext, subscriptionID, verbose = FALSE) {
   if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
   assert_that(is_subscription_id(subscriptionID))
 
-  URLRG <- paste("https://management.azure.com/subscriptions/", subscriptionID,
-                 "/resourcegroups?api-version=2015-01-01", sep = "")
+  URLRG <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
+                 "/resourcegroups?api-version=2015-01-01")
 
   r <- GET(URLRG, azureApiHeaders(azToken), verbosity)
   stopWithAzureError(r)
@@ -53,6 +53,13 @@ azureListRG <- function(azureActiveContext, subscriptionID, verbose = FALSE) {
   names(dfn) <- c("name", "location", "ID")
   dfn$resourceGroup <- extractResourceGroupname(dfn$ID)
   return(dfn)
+}
+
+getResourceGroupLocation <- function(azureActiveContext, resourceGroup) {
+  assert_that(is.azureActiveContext(azureActiveContext))
+  assert_that(is_resource_group(resourceGroup))
+  z <- azureListRG(azureActiveContext)
+  z[z[["name"]] == resourceGroup, "location"]
 }
 
 #' Get all Resource in default Subscription.
@@ -80,9 +87,11 @@ azureListAllResources <- function(azureActiveContext, resourceGroup, subscriptio
   verbosity <- set_verbosity(verbose)
 
 
-  url <- paste("https://management.azure.com/subscriptions/", subscriptionID,
-                 "/resources?api-version=2015-01-01", sep = "")
+  url <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
+                 "/resources?api-version=2015-01-01")
   r <- GET(url, azureApiHeaders(azToken), verbosity)
+  stopWithAzureError(r)
+
   rl <- content(r, "text", encoding = "UTF-8")
   df <- fromJSON(rl)
   dfn <- df$value[, c("name", "type", "location", "id")]
@@ -159,24 +168,18 @@ azureDeleteResourceGroup <- function(azureActiveContext, resourceGroup,
   azToken <- azureActiveContext$Token
 
   if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
-  if (missing(resourceGroup)) stop("Please supply Resource Group to Confirm")
   verbosity <- set_verbosity(verbose)
 
   assert_that(is_resource_group(resourceGroup))
   assert_that(is_subscription_id(subscriptionID))
 
-  url <- paste("https://management.azure.com/subscriptions/", subscriptionID,
-                 "/resourcegroups/", resourceGroup, "?api-version=2015-01-01", sep = "")
+  url <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
+                 "/resourcegroups/", resourceGroup, "?api-version=2015-01-01")
   r <- DELETE(url, azureApiHeaders(azToken), verbosity)
   if (status_code(r) == 404) {
     stop(paste0("Error: Resource Group Not Found(", status_code(r), ")"))
   }
   stopWithAzureError(r)
-  rl <- content(r, "text", encoding = "UTF-8")
-  if (nchar(rl) > 1) {
-    df <- fromJSON(rl)
-    stop(df$error$message)
-  }
   message("Delete Request Submitted")
   return(TRUE)
 }

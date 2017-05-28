@@ -36,7 +36,7 @@ str.azureActiveContext <- function(object, ...){
 }
 
 on_failure(is.azureActiveContext) <- function(call, env) {
-  paste0(deparse(call$x), " is not a valid azureActiveContext. See createAzureContext()")
+  "Provide a valid azureActiveContext. See createAzureContext()"
 }
 
 #--------------------------------------------------------------------------
@@ -47,7 +47,7 @@ is_resource_group <- function(x) {
 }
 
 on_failure(is_resource_group) <- function(call, env) {
-  paste0(deparse(call$x), "Provide a valid resourceGroup argument, or set using createAzureContext()")
+  "Provide a valid resourceGroup argument, or set using createAzureContext()"
 }
 
 
@@ -58,7 +58,7 @@ is_subscription_id <- function(x) {
 }
 
 on_failure(is_subscription_id) <- function(call, env) {
-  paste0(deparse(call$x), "Provide a valid subscriptionID argument, or set using createAzureContext()")
+  "Provide a valid subscriptionID argument, or set using createAzureContext()"
 }
 
 # --- location
@@ -68,7 +68,7 @@ is_location <- function(x) {
 }
 
 on_failure(is_location) <- function(call, env) {
-  paste0(deparse(call$x), "Provide a valid location (Azure region, e.g. 'South Central US')")
+  "Provide a valid location (Azure region, e.g. 'South Central US')"
 }
 
 
@@ -79,7 +79,7 @@ is_tenant_id <- function(x) {
 }
 
 on_failure(is_tenant_id) <- function(call, env) {
-  paste0(deparse(call$x), "Provide a valid tenantID argument, or set using createAzureContext()")
+  "Provide a valid tenantID argument, or set using createAzureContext()"
 }
 
 # --- client ID
@@ -89,7 +89,7 @@ is_client_id <- function(x) {
 }
 
 on_failure(is_client_id) <- function(call, env) {
-  paste0(deparse(call$x), "Provide a valid clientID argument, or set using createAzureContext()")
+  "Provide a valid clientID argument, or set using createAzureContext()"
 }
 
 # --- authKey
@@ -99,7 +99,7 @@ is_authKey <- function(x) {
 }
 
 on_failure(is_authKey) <- function(call, env) {
-  paste0(deparse(call$x), "Provide a valid autkKeyID argument, or set using createAzureContext()")
+  "Provide a valid autkKeyID argument, or set using createAzureContext()"
 }
 
 # --- vm_name
@@ -109,17 +109,27 @@ is_vm_name <- function(x) {
 }
 
 on_failure(is_vm_name) <- function(call, env) {
-  paste0(deparse(call$x), "Provide a valid vm_name (Azure region, e.g. 'South Central US')")
+  "Provide a valid vm_name (Azure region, e.g. 'South Central US')"
 }
 
 # --- storage_account
 
 is_storage_account <- function(x) {
-  is.character(x) && length(x) == 1 && nchar(x) > 0
+  is.character(x) && length(x) == 1 && assert_that(is_valid_storage_account(x))
 }
 
 on_failure(is_storage_account) <- function(call, env) {
-  paste0(deparse(call$x), "Provide a valid storageAccount, or set using createAzureContext()")
+  "Provide a valid storageAccount, or set using createAzureContext()"
+}
+
+is_valid_storage_account <- function(x) {
+  nchar(x) >= 3 && nchar(x) <= 24 && grepl("^[a-z0-9]*$", x)
+}
+
+on_failure(is_valid_storage_account) <- function(call, env) {
+    paste("Storage account name must be between 3 and 24 characters in length",
+        "and use numbers and lower - case letters only.",
+        sep = "\n")
 }
 
 # --- container
@@ -129,7 +139,7 @@ is_container <- function(x) {
 }
 
 on_failure(is_container) <- function(call, env) {
-  paste0(deparse(call$x), "Provide a valid container, or set using createAzureContext()")
+  "Provide a valid container, or set using createAzureContext()"
 }
 7
 # --- storage_key
@@ -139,7 +149,7 @@ is_storage_key <- function(x) {
 }
 
 on_failure(is_storage_key) <- function(call, env) {
-  paste0(deparse(call$x), "Provide a valid storageKey, or set using createAzureContext()")
+  "Provide a valid storageKey, or set using createAzureContext()"
 }
 
 # --- blob
@@ -149,7 +159,7 @@ is_blob <- function(x) {
 }
 
 on_failure(is_blob) <- function(call, env) {
-  paste0(deparse(call$x), "Provide a valid blob, or set using createAzureContext()")
+  "Provide a valid blob, or set using createAzureContext()"
 }
 
 # --- deployment name
@@ -159,7 +169,7 @@ is_deployment_name <- function(x) {
 }
 
 on_failure(is_deployment_name) <- function(call, env) {
-  paste0(deparse(call$x), "Provide a deplname")
+  "Provide a deplname"
 }
 
 # --- scaleset
@@ -169,5 +179,79 @@ is_scaleset <- function(x) {
 }
 
 on_failure(is_scaleset) <- function(call, env) {
-  paste0(deparse(call$x), "Provide a scaleset")
+  "Provide a scaleset"
+}
+
+# --- clustername
+
+is_clustername <- function(x) {
+  !missing(x) && is.character(x) && length(x) == 1 && nchar(x) > 0
+}
+
+on_failure(is_clustername) <- function(call, env) {
+  "Provide a clustername"
+}
+
+# --- admin user
+
+is_admin_user <- function(x) {
+  is.character(x) && length(x) == 1 && nchar(x) > 0
+}
+
+on_failure(is_admin_user) <- function(call, env) {
+  "Provide an adminUser"
+}
+
+# --- admin password
+
+is_valid_admin_password <- function(x) {
+  nchar(x) >= 6 && 
+  grepl("[A-Z]", x) && 
+  grepl("[a-z]", x) && 
+  grepl("[0-9]", x)
+}
+
+on_failure(is_valid_admin_password) <- function(call, env) {
+  paste("The admin password must be greater than 6 characters and contain",
+   "at least one uppercase char, one lowercase char and one digit", 
+   sep = "\n")
+}
+
+is_admin_password <- function(x) {
+  is.character(x) && length(x) == 1 && 
+  assert_that(is_valid_admin_password(x))
+}
+
+on_failure(is_admin_password) <- function(call, env) {
+  "Provide an adminPassword"
+}
+
+# --- ssh user
+
+is_ssh_user <- function(x) {
+  is.character(x) && length(x) == 1 && nchar(x) > 0
+}
+
+on_failure(is_ssh_user) <- function(call, env) {
+  "Provide an sshUser"
+}
+
+# --- ssh password
+
+is_valid_ssh_password <- function(x) {
+  nchar(x) >= 6 && grepl("[A-Z]", x) && grepl("[a-z]", x) && grepl("0-9", x)
+}
+
+on_failure(is_valid_ssh_password) <- function(call, env) {
+  paste("The ssh password must be greater than 6 characters and contain", 
+  "at least one uppercase char, one lowercase char and one digit", 
+  sep = "\n")
+}
+
+is_ssh_password <- function(x) {
+  is.character(x) && length(x) == 1 && nchar(x) > 0
+}
+
+on_failure(is_ssh_password) <- function(call, env) {
+  "Provide an sshPassword"
 }

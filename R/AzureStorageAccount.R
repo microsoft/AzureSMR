@@ -55,7 +55,8 @@ azureSAGetKey <- function(azureActiveContext, storageAccount,
   message("Fetching Storage Key..")
 
   URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
-               "/resourceGroups/", resourceGroup, "/providers/Microsoft.Storage/storageAccounts/",
+               "/resourceGroups/", resourceGroup, 
+               "/providers/Microsoft.Storage/storageAccounts/",
                storageAccount, "/listkeys?api-version=2016-01-01")
 
   r <- POST(URL, azureApiHeaders(azToken), verbosity)
@@ -83,80 +84,54 @@ azureSAGetKey <- function(azureActiveContext, storageAccount,
 #' @export
 azureCreateStorageAccount <- function(azureActiveContext, storageAccount,
                                       location = "northeurope",
-                                      resourceGroup, subscriptionID, verbose = FALSE) {
+                                      resourceGroup, subscriptionID, 
+                                      asynchronous = FALSE, verbose = FALSE) {
+  assert_that(is.azureActiveContext(azureActiveContext))
   azureCheckToken(azureActiveContext)
+  azToken <- azureActiveContext$Token
 
-  if (missing(resourceGroup)) {
-    resourceGroup <- azureActiveContext$resourceGroup
-  } 
+  if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
+  if (missing(resourceGroup)) resourceGroup <- azureActiveContext$resourceGroup
+  assert_that(is_resource_group(resourceGroup))
+  assert_that(is_subscription_id(subscriptionID))
+  assert_that(is_storage_account(storageAccount))
 
-  if (missing(subscriptionID)) {
-    subscriptionID <- azureActiveContext$subscriptionID
-  } 
-  if (!length(storageAccount)) {
-    stop("Error: No Valid storageAccount provided")
-  }
-  if (length(resourceGroup) < 1) {
-    stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
-  }
-  if (!length(subscriptionID)) {
-    stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
-  }
   verbosity <- set_verbosity(verbose)
 
-
-  # https://management.azure.com/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupname}/providers/Microsoft.Storage/storageAccounts/{accountname}?api-version={api-version}
-
-  #bodyI = "
-  #{
-  #\"location\": \"northeurope\",
-  #\"tags\": {
-  #\"key1\": \"value1\"
-  #},
-  #\"properties\": {
-  #\"accessTier\": \"Hot\"
-  #},
-  #\"sku\": {
-  #\"name\": \"Standard_LRS\"
-  #},
-  #\"kind\": \"Storage\"
-  #}"
-
-  bodyI <- "{
-  \"location\": \"llllllll\",
-  \"sku\": {
-  \"name\": \"Standard_LRS\"
-  }}"
-  
+  bodyI <- '{
+  "location": "llllllll",
+  "sku": {
+  "name": "Standard_LRS"
+  }}'
   
   bodyI <- gsub("llllllll", location, bodyI)
   
-  URL <- paste("https://management.azure.com/subscriptions/", subscriptionID,
+  URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
                "/resourceGroups/", resourceGroup, "/providers/Microsoft.Storage/storageAccounts/",
-               storageAccount, "?api-version=2016-01-01", sep = "")
+               storageAccount, "?api-version=2016-01-01")
 
-  r <- PUT(URL, add_headers(.headers = c(Host = "management.azure.com",
-                                         Authorization = azureActiveContext$Token,
-                                         `Content-type` = "application/json")),
-           body = bodyI,
-           encode = "json", verbosity)
+  r <- PUT(URL, azureApiHeaders(azToken), body = bodyI, encode = "json", verbosity)
 
   if (status_code(r) == 409) {
-    warning("409: Conflict : Account already exists with the same name")
-    return(FALSE)
+    message("409: Conflict : Account already exists with the same name")
+    return(TRUE)
   }
-
 
   if (status_code(r) == 200) {
     message("Account already exists with the same properties")
-  } else if (status_code(r) != 202) {
-    stopWithAzureError(r)
   }
+  stopWithAzureError(r)
 
   rl <- content(r, "text", encoding = "UTF-8")
   azureActiveContext$storageAccount <- storageAccount
   azureActiveContext$resourceGroup  <- resourceGroup
   message("Create request Accepted. It can take a few moments to provision the storage account")
+
+  if (!asynchronous) {a
+    wait_for_azure(
+      storageAccount %in% azureListSA(azureActiveContext)$storageAccount
+      )
+  }
   TRUE
 }
 

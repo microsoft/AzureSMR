@@ -137,8 +137,9 @@ stopWithAzureError <- function(r) {
   #browser()
   if(status_code(r) < 300) return()
   msg <- paste0(as.character(sys.call(1))[1], "()") # Name of calling fucntion
-  addToMsg <- function(x){
-    if(is.null(x)) x else paste(msg, x, sep = "\n")
+  addToMsg <- function(x) {
+    if (!is.null(x)) x <- strwrap(x)
+    if(is.null(x)) msg else c(msg, x)
     }
   if(inherits(content(r), "xml_document")){
     rr <- XML::xmlToList(XML::xmlParse(content(r)))
@@ -151,6 +152,7 @@ stopWithAzureError <- function(r) {
     msg <- addToMsg(rr$error$message)
   }
   msg <- addToMsg(paste0("Return code: ", status_code(r)))
+  msg <- paste(msg, collapse = "\n")
   stop(msg, call. = FALSE)
 }
 

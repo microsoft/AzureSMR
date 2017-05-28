@@ -131,9 +131,9 @@ azureDeleteDeploy <- function(azureActiveContext, deplname, resourceGroup,
   assert_that(is_subscription_id(subscriptionID))
   assert_that(is_deployment_name(deplname))
 
-  URL <- paste("https://management.azure.com/subscriptions/", subscriptionID,
+  URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
                "/resourceGroups/", resourceGroup, "/providers/microsoft.resources/deployments/",
-               deplname, "?api-version=2016-06-01", sep = "")
+               deplname, "?api-version=2016-06-01")
 
   r <- DELETE(URL, azureApiHeaders(azToken), verbosity)
   rl <- content(r, "text", encoding = "UTF-8")
