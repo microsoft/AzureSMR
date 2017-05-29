@@ -2,22 +2,22 @@
 % Please edit documentation in R/AzureTemplate.R
 \name{azureDeployTemplate}
 \alias{azureDeployTemplate}
-\title{Deploy an Azure Resource Manager Template.}
+\title{Deploy a resource from an Azure Resource Manager (ARM) template.}
 \usage{
 azureDeployTemplate(azureActiveContext, deplname, templateURL, paramURL,
   templateJSON, paramJSON, mode = "Sync", resourceGroup, subscriptionID,
   verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by AzureSMR}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
 
-\item{deplname}{deplname}
+\item{deplname}{Deployment name}
 
-\item{templateURL}{templateURL}
+\item{templateURL}{URL that contains the ARM template to deploy. You must specify either \code{templateURL} OR \code{templateJSON}}
 
-\item{paramURL}{paramURL}
+\item{paramURL}{URL that contains the template parameters. You must specify either \code{paramULR} OR \code{paramJSON}}
 
-\item{templateJSON}{templateJSON}
+\item{templateJSON}{character vector that contains the ARM template to deploy. You must specify either \code{templateJSON} OR \code{templateURL}}
 
 \item{paramJSON}{paramJSON}
 
@@ -25,12 +25,12 @@ azureDeployTemplate(azureActiveContext, deplname, templateURL, paramURL,
 
 \item{resourceGroup}{Name of the resource group}
 
-\item{subscriptionID}{Set the subscriptionID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
+\item{subscriptionID}{Subscription ID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
 
 \item{verbose}{Print Tracing information (Default False)}
 }
 \description{
-Deploy an Azure Resource Manager Template.
+Deploy a resource from a template. See https://github.com/Azure/azure-quickstart-templates
 }
 \seealso{
 Other Template functions: \code{\link{azureCancelDeploy}},

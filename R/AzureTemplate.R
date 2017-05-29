@@ -1,142 +1,83 @@
-#' Deploy an Azure Resource Manager Template.
+#' Deploy a resource from an Azure Resource Manager (ARM) template.
+#'
+#' Deploy a resource from a template. See https://github.com/Azure/azure-quickstart-templates
 #'
 #' @inheritParams setAzureContext
 #' @inheritParams azureAuthenticate
 #' @inheritParams azureResizeHDI
 #'
-#' @param deplname deplname
-#' @param templateURL templateURL
-#' @param paramURL paramURL
-#' @param templateJSON templateJSON
+#' @param deplname Deployment name
+#' @param templateURL URL that contains the ARM template to deploy. You must specify either `templateURL` OR `templateJSON`
+#' @param paramURL URL that contains the template parameters. You must specify either `paramULR` OR `paramJSON`
+#' @param templateJSON character vector that contains the ARM template to deploy. You must specify either `templateJSON` OR `templateURL`
 #' @param paramJSON paramJSON
 #'
 #' @family Template functions
 #' @export
 azureDeployTemplate <- function(azureActiveContext, deplname, templateURL,
-                                paramURL, templateJSON, paramJSON, mode = "Sync",
+                                paramURL, templateJSON, paramJSON, mode = c("Sync", "Async"),
                                 resourceGroup, subscriptionID,
                                 verbose = FALSE) {
+  assert_that(is.azureActiveContext(azureActiveContext))
   azureCheckToken(azureActiveContext)
+  azToken <- azureActiveContext$Token
+  if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
+  if (missing(resourceGroup)) resourceGroup <- azureActiveContext$resourceGroup
 
-  AT <- azureActiveContext$Token
-  if (missing(subscriptionID)) {
-    subscriptionID <- azureActiveContext$subscriptionID
-  } else (subscriptionID <- subscriptionID)
-  if (missing(resourceGroup)) {
-    resourceGroup <- azureActiveContext$resourceGroup
-  } else (resourceGroup <- resourceGroup)
+  assert_that(is_resource_group(resourceGroup))
+  assert_that(is_subscription_id(subscriptionID))
+  assert_that(is_deployment_name(deplname))
 
-  if (!length(resourceGroup)) {
-    stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
-  }
-  if (!length(subscriptionID)) {
-    stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
-  }
-  if (!length(AT)) {
-    stop("Error: No Token / Not currently Authenticated")
-  }
-  if (!length(deplname)) {
-    stop("No deplname provided")
-  }
+  mode <- match.arg(mode)
 
   if (missing(templateURL) && missing(templateJSON)) {
     stop("No templateURL or templateJSON provided")
   }
 
-  verbosity <- if (verbose)
-    httr::verbose(TRUE) else NULL
+  verbosity <- set_verbosity(verbose)
 
-  URL <- paste("https://management.azure.com/subscriptions/", subscriptionID,
-               "/resourceGroups/", resourceGroup, "/providers/microsoft.resources/deployments/",
-               deplname, "?api-version=2016-06-01", sep = "")
-  # print(URL)
+  URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
+               "/resourceGroups/", resourceGroup, 
+               "/providers/microsoft.resources/deployments/", deplname, 
+               "?api-version=2016-06-01")
 
-  if (missing(templateJSON)) {
-    if (missing(paramURL)) {
-      if (missing(paramJSON))
-        bodyI <- paste("{\"properties\": {\"templateLink\": { \"uri\": \"",
-                       templateURL, "\",\"contentversion\": \"1.0.0.0\"},\"mode\": \"Incremental\",\"debugSetting\": {\"detailLevel\": \"requestContent, responseContent\"}}}",
-                       sep = "") else bodyI <- paste("{\"properties\": {", paramJSON, ",\"templateLink\": { \"uri\": \"",
-                                                     templateURL, "\",\"contentversion\": \"1.0.0.0\"},\"mode\": \"Incremental\",\"debugSetting\": {\"detailLevel\": \"requestContent, responseContent\"}}}",
-                                                     sep = "")
-    } else bodyI <- paste("{\"properties\": {\"templateLink\": { \"uri\": \"",
-                          templateURL, "\",\"contentversion\": \"1.0.0.0\"},  \"mode\": \"Incremental\",  \"parametersLink\": {\"uri\": \"",
-                          paramURL, "\",\"contentversion\": \"1.0.0.0\"},\"debugSetting\": {\"detailLevel\": \"requestContent, responseContent\"}}}",
-                          sep = "")
-  } else {
-    if (missing(paramURL)) {
-      if (missing(paramJSON))
-        bodyI <- paste("{\"properties\": {\"template\": ", templateJSON,
-                       ",\"mode\": \"Incremental\",\"debugSetting\": {\"detailLevel\": \"requestContent, responseContent\"}}}",
-                       sep = "") else bodyI <- paste("{\"properties\": {", paramJSON, ",\"template\": ",
-                                                     templateJSON, ",\"mode\": \"Incremental\",\"debugSetting\": {\"detailLevel\": \"requestContent, responseContent\"}}}",
-                                                     sep = "")
-    } else bodyI <- paste("{\"properties\": {\"template\": ", templateJSON,
-                          ",  \"mode\": \"Incremental\",  \"parametersLink\": {\"uri\": \"",
-                          paramURL, "\",\"contentversion\": \"1.0.0.0\"},\"debugSetting\": {\"detailLevel\": \"requestContent, responseContent\"}}}",
-                          sep = "")
-  }
+  combination <- paste0(if(!missing(templateURL)) "tu" else "tj" , 
+                        if (!missing(paramURL)) "pu" else if (!missing(paramJSON)) "pj" else "")
+  bodyI <- switch(
+    combination,
+    tu   = paste0('{"properties": ',
+                  '{"templateLink": { "uri": "', templateURL, '","contentversion": "1.0.0.0"},',
+                  '"mode": "Incremental","debugSetting": {"detailLevel": "requestContent, responseContent"}}}'),
+    tupj = paste0('{"properties": {', paramJSON,
+                  ',"templateLink": { "uri": "', templateURL, '","contentversion": "1.0.0.0"},',
+                  '"mode": "Incremental","debugSetting": {"detailLevel": "requestContent, responseContent"}}}'),
+    tupu = paste0('{"properties": {"templateLink": { "uri": "', templateURL, '","contentversion": "1.0.0.0"},',
+                  '"mode": "Incremental",  "parametersLink": {"uri": "', paramURL, '","contentversion": "1.0.0.0"},',
+                  '"debugSetting": {"detailLevel": "requestContent, responseContent"}}}'),
+    tj   = paste0('{"properties": {"template": ', templateJSON,
+                  ',"mode": "Incremental","debugSetting": {"detailLevel": "requestContent, responseContent"}}}'),
+    tjpj = paste0('{"properties": {', paramJSON,
+                  ',"template": ', templateJSON,
+                  ',"mode": "Incremental","debugSetting": {"detailLevel": "requestContent, responseContent"}}}'),
+    tjpu = paste0('{"properties": {"template": ', templateJSON,
+                  ',  "mode": "Incremental",  "parametersLink": {"uri": "', paramURL,
+                  '","contentversion": "1.0.0.0"},"debugSetting": {"detailLevel": "requestContent, responseContent"}}}')
+  )
 
-  r <- PUT(URL, add_headers(.headers = c(Host = "management.azure.com",
-                                         Authorization = AT, `Content-type` = "application/json")), body = bodyI,
-           verbosity)
-
-    rl <- content(r, "text", encoding = "UTF-8")
-    if (verbose == TRUE && status_code(r) != 200 && status_code(r) != 201 && status_code(r) !=
-      202) print (rl)
+  r <- PUT(URL, azureApiHeaders(azToken), body = bodyI, verbosity)
+  stopWithAzureError(r)
   
-  # print(paste(deplname,'Submitted'))
-  if (status_code(r) != 200 && status_code(r) != 201 && status_code(r) !=
-      202) {
-    stopWithAzureError(r)
+  if (mode == "Sync") {
+    z <- pollStatusTemplate(azureActiveContext, deplname, resourceGroup)
+    if(!z) return(FALSE)
   }
-  # print (rl)
-  df <- fromJSON(rl)
-  if (toupper(mode) == "SYNC") {
-    rc <- "running"
-    message(paste("azureDeployTemplate: Request Submitted: ", Sys.time()))
-    message("Running(R), Succeeded(S)")
-    a <- 1
-    while (a > 0) {
-      rc <- azureDeployStatus(azureActiveContext, deplname = deplname,
-                              resourceGroup = resourceGroup)
-      if (grepl("Succeeded", rc)) {
-        message("")
-        message(paste("Finished Deploying Sucessfully: ", Sys.time()))
-        (break)()
-      }
-      if (grepl("Error", rc) || grepl("Failed", rc)) {
-        message("")
-        message(paste("Error Deploying: ", Sys.time()))
-        (break)()
-      }
-
-      a <- a + 1
-      if (grepl("Succeeded", rc)) {
-        rc <- "S"
-      } else if (grepl("Running", rc)) {
-        rc <- "R"
-      } else if (grepl("updating", rc)) {
-        rc <- "U"
-      } else if (grepl("Starting", rc)) {
-        rc <- "S"
-      } else if (grepl("Accepted", rc)) {
-        rc <- "A"
-      }
-
-      message(rc)
-
-      if (a > 500)
-        (break)()
-      Sys.sleep(5)
-    }
-  }
-  message("Deployment", deplname, "Submitted: ", Sys.time())
+  message("")
+  message(paste("Deployment", deplname, "submitted: ", Sys.time()))
   return(TRUE)
 }
 
 
-#' Check Template Deployment Status.
+#' Check template deployment Status.
 #'
 #' @inheritParams setAzureContext
 #' @inheritParams azureAuthenticate
@@ -146,98 +87,67 @@ azureDeployTemplate <- function(azureActiveContext, deplname, templateURL,
 #' @export
 azureDeployStatus <- function(azureActiveContext, deplname, resourceGroup,
                               subscriptionID, verbose = FALSE) {
+  assert_that(is.azureActiveContext(azureActiveContext))
   azureCheckToken(azureActiveContext)
-  AT <- azureActiveContext$Token
-  if (missing(subscriptionID)) {
-    subscriptionID <- azureActiveContext$subscriptionID
-  } else (subscriptionID <- subscriptionID)
-  if (missing(resourceGroup)) {
-    resourceGroup <- azureActiveContext$resourceGroup
-  } else (resourceGroup <- resourceGroup)
-  verbosity <- if (verbose)
-    httr::verbose(TRUE) else NULL
+  azToken <- azureActiveContext$Token
+  if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
+  if (missing(resourceGroup)) resourceGroup <- azureActiveContext$resourceGroup
+  verbosity <- set_verbosity(verbose)
+ 
 
-  if (!length(resourceGroup)) {
-    stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
-  }
-  if (!length(subscriptionID)) {
-    stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
-  }
-  if (!length(AT)) {
-    stop("Error: No Token / Not currently Authenticated")
-  }
-  if (!length(deplname)) {
-    stop("No deplname provided")
-  }
+  assert_that(is_resource_group(resourceGroup))
+  assert_that(is_subscription_id(subscriptionID))
+  assert_that(is_deployment_name(deplname))
 
-  URL <- paste("https://management.azure.com/subscriptions/", subscriptionID,
+  URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
                "/resourceGroups/", resourceGroup, "/providers/microsoft.resources/deployments/",
-               deplname, "?api-version=2016-06-01", sep = "")
-  # print(URL)
+               deplname, "?api-version=2016-06-01")
+  r <- GET(URL, azureApiHeaders(azToken), verbosity)
+  stopWithAzureError(r)
 
-  r <- GET(URL, add_headers(.headers = c(Host = "management.azure.com",
-                                         Authorization = AT, `Content-type` = "application/json")), verbosity)
   rl <- content(r, "text", encoding = "UTF-8")
-
   df <- fromJSON(rl)
-  # print(df)
-  return(df$properties$provisioningState)
+  return(df)
 }
 
+azureDeployStatusSummary <- function(x) x$properties$provisioningState
 
-#' Delete Template Deployment.
+
+#' Delete template deployment.
 #'
 #' @inheritParams setAzureContext
 #' @inheritParams azureAuthenticate
 #' @inheritParams azureDeployTemplate
-# @param azureActiveContext Azure Context Object @param deplname
-# deplname
 #'
 #' @family Template functions
 #' @export
 azureDeleteDeploy <- function(azureActiveContext, deplname, resourceGroup,
                               subscriptionID, verbose = FALSE) {
+  assert_that(is.azureActiveContext(azureActiveContext))
   azureCheckToken(azureActiveContext)
+  azToken <- azureActiveContext$Token
+  if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
+  if (missing(resourceGroup)) resourceGroup <- azureActiveContext$resourceGroup
+  verbosity <- set_verbosity(verbose)
+ 
+  assert_that(is_resource_group(resourceGroup))
+  assert_that(is_subscription_id(subscriptionID))
+  assert_that(is_deployment_name(deplname))
 
-  AT <- azureActiveContext$Token
-  if (missing(subscriptionID)) {
-    subscriptionID <- azureActiveContext$subscriptionID
-  } else (subscriptionID <- subscriptionID)
-  if (missing(resourceGroup)) {
-    resourceGroup <- azureActiveContext$resourceGroup
-  } else (resourceGroup <- resourceGroup)
-  verbosity <- if (verbose)
-    httr::verbose(TRUE) else NULL
-
-  if (!length(resourceGroup)) {
-    stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
-  }
-  if (!length(subscriptionID)) {
-    stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
-  }
-  if (!length(AT)) {
-    stop("Error: No Token / Not currently Authenticated")
-  }
-  if (!length(deplname)) {
-    stop("No deplname provided")
-  }
-
-  URL <- paste("https://management.azure.com/subscriptions/", subscriptionID,
+  URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
                "/resourceGroups/", resourceGroup, "/providers/microsoft.resources/deployments/",
-               deplname, "?api-version=2016-06-01", sep = "")
-  # print(URL)
+               deplname, "?api-version=2016-06-01")
 
-  r <- DELETE(URL, add_headers(.headers = c(Host = "management.azure.com",
-                                            Authorization = AT, `Content-type` = "application/json")))
-  print(http_status(r))
+  r <- DELETE(URL, azureApiHeaders(azToken), verbosity)
   rl <- content(r, "text", encoding = "UTF-8")
-  print(rl)
+  stopWithAzureError(r)
   df <- fromJSON(rl)
-  print(df)
+  #print(df)
   return(TRUE)
 }
 
-#' Cancel Template Deployment.
+
+#' Cancel template deployment.
 #'
 #' @inheritParams setAzureContext
 #' @inheritParams azureAuthenticate
@@ -248,38 +158,24 @@ azureDeleteDeploy <- function(azureActiveContext, deplname, resourceGroup,
 azureCancelDeploy <- function(azureActiveContext, deplname, resourceGroup,
                               subscriptionID, verbose = FALSE) {
 
+  assert_that(is.azureActiveContext(azureActiveContext))
   azureCheckToken(azureActiveContext)
+  azToken <- azureActiveContext$Token
+  if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
+  if (missing(resourceGroup)) resourceGroup <- azureActiveContext$resourceGroup
+  verbosity <- set_verbosity(verbose)
+ 
+  assert_that(is_resource_group(resourceGroup))
+  assert_that(is_subscription_id(subscriptionID))
+  assert_that(is_deployment_name(deplname))
 
-  AT <- azureActiveContext$Token
-  if (missing(subscriptionID)) {
-    subscriptionID <- azureActiveContext$subscriptionID
-  } else (subscriptionID <- subscriptionID)
-  if (missing(resourceGroup)) {
-    resourceGroup <- azureActiveContext$resourceGroup
-  } else (resourceGroup <- resourceGroup)
-  verbosity <- if (verbose)
-    httr::verbose(TRUE) else NULL
-
-  if (!length(resourceGroup)) {
-    stop("Error: No resourceGroup provided: Use resourceGroup argument or set in AzureContext")
-  }
-  if (!length(subscriptionID)) {
-    stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
-  }
-  if (!length(AT)) {
-    stop("Error: No Token / Not currently Authenticated")
-  }
-  if (!length(deplname)) {
-    stop("No deplname provided")
-  }
-
-  URL <- paste("https://management.azure.com/subscriptions/", subscriptionID,
+  URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
                "/resourceGroups/", resourceGroup, "/providers/microsoft.resources/deployments/",
-               deplname, "/cancel?api-version=2016-06-01", sep = "")
-  # print(URL)
+               deplname, "/cancel?api-version=2016-06-01")
 
-  r <- POST(URL, add_headers(.headers = c(Host = "management.azure.com",
-                                          Authorization = AT, `Content-type` = "application/json")), verbosity)
+  r <- POST(URL, azureApiHeaders(azToken), verbosity)
+  stopWithAzureError(r)
+
   rl <- content(r, "text", encoding = "UTF-8")
   df <- fromJSON(rl)
   return(df$category)

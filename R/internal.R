@@ -1,3 +1,15 @@
+azureApiHeaders <- function(token) {
+  headers <- c(Host = "management.azure.com",
+               Authorization = token,
+                `Content-type` = "application/json")
+  httr::add_headers(.headers = headers)
+}
+
+# convert verbose=TRUE to httr verbose
+set_verbosity <- function(verbose = FALSE) {
+  if (verbose) httr::verbose(TRUE) else NULL
+}
+
 extractUrlArguments <- function(x) {
   ptn <- ".*\\?(.*?)"
   args <- grepl("\\?", x)
@@ -19,7 +31,7 @@ callAzureStorageApi <- function(url, verb = "GET", storageKey, storageAccount,
                    verbose = FALSE) {
   dateStamp <- httr::http_date(Sys.time())
 
-  verbosity <- if (verbose) httr::verbose(TRUE) else NULL
+  verbosity <- set_verbosity(verbose) 
 
   if (missing(CMD) || is.null(CMD)) CMD <- extractUrlArguments(url)
 
@@ -28,16 +40,16 @@ callAzureStorageApi <- function(url, verb = "GET", storageKey, storageAccount,
       headers = headers, CMD = CMD, size = size,
       contenttype = contenttype, dateStamp = dateStamp, verbose = verbose)
 
-  at <- paste0("SharedKey ", storageAccount, ":", sig)
+  azToken <- paste0("SharedKey ", storageAccount, ":", sig)
 
   switch(verb, 
-  "GET" = GET(url, add_headers(.headers = c(Authorization = at,
+  "GET" = GET(url, add_headers(.headers = c(Authorization = azToken,
                                     `Content-Length` = "0",
                                     `x-ms-version` = "2015-04-05",
                                     `x-ms-date` = dateStamp)
                                     ),
     verbosity),
-  "PUT" = PUT(url, add_headers(.headers = c(Authorization = at,
+  "PUT" = PUT(url, add_headers(.headers = c(Authorization = azToken,
                                          `Content-Length` = nchar(content),
                                          `x-ms-version` = "2015-04-05",
                                          `x-ms-date` = dateStamp,
@@ -76,19 +88,35 @@ createAzureStorageSignature <- function(url, verb,
 }
 
 
+#x_ms_date <- function() {
+  #english <- "English_United Kingdom.1252"
+  #old_locale <- Sys.getlocale(category = "LC_TIME")
+  #on.exit(Sys.setlocale(locale = old_locale))
+  #Sys.setlocale(category = "LC_TIME", locale = english)
+  #strftime(Sys.time(), "%a, %d %b %Y %H:%M:%S %Z", tz = "GMT")
+#}
+
+x_ms_date <- function() httr::http_date(Sys.time())
+
+azure_storage_header <- function(shared_key, date = x_ms_date(), content_length = 0) {
+  if(!is.character(shared_key)) stop("Expecting a character for `shared_key`")
+  headers <- c(
+      Authorization = shared_key,
+      `Content-Length` = as.character(content_length),
+      `x-ms-version` = "2015-04-05",
+      `x-ms-date` = date
+  )
+  add_headers(.headers = headers)
+}
 
 getSig <- function(azureActiveContext, url, verb, key, storageAccount,
                    headers = NULL, container = NULL, CMD = NULL, size = NULL, contenttype = NULL,
-                   dateSig, verbose = FALSE) {
-
-  if (missing(dateSig)) {
-    dateSig <- httr::http_date(Sys.time())
-  }
+                   date = x_ms_date(), verbose = FALSE) {
 
   arg1 <- if (length(headers)) {
-    paste0(headers, "\nx-ms-date:", dateSig, "\nx-ms-version:2015-04-05")
+    paste0(headers, "\nx-ms-date:", date, "\nx-ms-version:2015-04-05")
   } else {
-    paste0("x-ms-date:", dateSig, "\nx-ms-version:2015-04-05")
+    paste0("x-ms-date:", date, "\nx-ms-version:2015-04-05")
   }
 
   arg2 <- paste0("/", storageAccount, "/", container, CMD)
@@ -104,28 +132,35 @@ getSig <- function(azureActiveContext, url, verb, key, storageAccount,
   }
 
 
-stopWithAzureError <- function(r){
-
+stopWithAzureError <- function(r) {
+  #if (status_code(r) %in% c(200, 201, 202, 204)) return()
+  #browser()
+  if(status_code(r) < 300) return()
   msg <- paste0(as.character(sys.call(1))[1], "()") # Name of calling fucntion
-  addToMsg <- function(x){
-    if(is.null(x)) x else paste(msg, x, sep = "\n")
-  }
+  addToMsg <- function(x) {
+    if (!is.null(x)) x <- strwrap(x)
+    if(is.null(x)) msg else c(msg, x)
+    }
   if(inherits(content(r), "xml_document")){
     rr <- XML::xmlToList(XML::xmlParse(content(r)))
     msg <- addToMsg(rr$Code)
     msg <- addToMsg(rr$Message)
+    msg <- addToMsg(rr$AuthenticationErrorDetail)
   } else {
     rr <- content(r)
     msg <- addToMsg(rr$code)
     msg <- addToMsg(rr$message)
+    msg <- addToMsg(rr$error$message)
   }
   msg <- addToMsg(paste0("Return code: ", status_code(r)))
+  msg <- paste(msg, collapse = "\n")
   stop(msg, call. = FALSE)
 }
 
 extractResourceGroupname <- function(x) gsub(".*?/resourceGroups/(.*?)(/.*)*$",  "\\1", x)
 extractSubscriptionID    <- function(x) gsub(".*?/subscriptions/(.*?)(/.*)*$",   "\\1", x)
 extractStorageAccount    <- function(x) gsub(".*?/storageAccounts/(.*?)(/.*)*$", "\\1", x)
+
 
 refreshStorageKey <- function(azureActiveContext, storageAccount, resourceGroup){
   if (length(azureActiveContext$storageAccountK) < 1 ||

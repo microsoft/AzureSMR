@@ -24,16 +24,3 @@ skip_if_offline <- function(){
   }
 }
 
-# wait until request is completed
-wait_for_azure <- function(expr, pause = 3, times = 40){
-  Sys.sleep(2)
-  terminate <- FALSE
-  .counter <- 0
-  while(!terminate && .counter <= times){
-    terminate <- isTRUE(eval(expr))
-    if(terminate) break
-    .counter <- .counter + 1
-    Sys.sleep(pause)
-  }
-  terminate
-}

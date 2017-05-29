@@ -2,13 +2,13 @@
 % Please edit documentation in R/AzureBlob.R
 \name{azureGetBlob}
 \alias{azureGetBlob}
-\title{Get contents from a specifed Storage blob.}
+\title{Get contents from a specifed storage blob.}
 \usage{
 azureGetBlob(azureActiveContext, blob, directory, type = "text",
   storageAccount, storageKey, container, resourceGroup, verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by AzureSMR}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
 
 \item{blob}{Blob name}
 
@@ -27,7 +27,7 @@ azureGetBlob(azureActiveContext, blob, directory, type = "text",
 \item{verbose}{Print Tracing information (Default False)}
 }
 \description{
-Get contents from a specifed Storage blob.
+Get contents from a specifed storage blob.
 }
 \seealso{
 Other Blob store functions: \code{\link{azureBlobCD}},

@@ -10,7 +10,7 @@ dumpAzureContext(azureActiveContext)
 AzureListRG(...)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by AzureSMR}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
 
 \item{...}{passed to \code{\link[=azureListRG]{azureListRG()}}}
 }

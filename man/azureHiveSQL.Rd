@@ -8,7 +8,7 @@ azureHiveSQL(azureActiveContext, CMD, clustername, hdiAdmin, hdiPassword,
   path = "wasb:///tmp/", verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by AzureSMR}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
 
 \item{CMD}{SQl COmmand String}
 

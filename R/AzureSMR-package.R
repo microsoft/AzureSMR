@@ -15,17 +15,22 @@
 #'   - [azureCreateStorageAccount()]
 #'   - [azureListStorageContainers()]
 #'   - [azureListStorageBlobs()]
+#' * Virtual Machines
+#'   - To create a virtual machine, use [azureDeployTemplate()] with a suitable template
+#'   - Start a VM: [azureStartVM()]
+#'   - Stop a VM: [azureStopVM()]
+#'   - Get status: [azureVMStatus()]
+#'   - List VMs: [azureListVM()]
 #' * HDInsight (Nodes, Hive, Spark)
 #' * Azure Resource Manager
-#' * Virtual Machines
 #'
 #'
-#' @name AzureSMR-package
-#' @aliases AzureSMR
+#' @name AzureSMR
+#' @aliases AzureSMR-package
 #' @docType package
 #' @keywords package
 #'
-#' @importFrom utils browseURL ls.str
+#' @importFrom utils browseURL URLencode ls.str str
 #' @importFrom digest hmac
 #' @importFrom base64enc base64encode base64decode
 #' @importFrom plyr rbind.fill

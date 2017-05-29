@@ -6,34 +6,22 @@
 #' @note See \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/} for instructions to set up an Active Directory application
 #' @references \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/}
 #'
-#' @return Returns Azure token and sets AzureContext token
+#' @return If successful, returns TRUE
 #' @family Azure resource functions
 #' 
-#' @importFrom utils URLencode
 #' @export
 azureAuthenticate <- function(azureActiveContext, tenantID, clientID, authKey, verbose = FALSE) {
+  assert_that(is.azureActiveContext(azureActiveContext))
 
-  if (missing(tenantID)) {
-    tenantID <- azureActiveContext$tenantID
-  } else (tenantID <- tenantID)
-  if (missing(clientID)) {
-    clientID <- azureActiveContext$clientID
-  } else (clientID <- clientID)
-  if (missing(authKey)) {
-    authKey <- azureActiveContext$authKey
-  } else (authKey <- authKey)
+  if (missing(tenantID)) tenantID <- azureActiveContext$tenantID
+  if (missing(clientID)) clientID <- azureActiveContext$clientID 
+  if (missing(authKey)) authKey <- azureActiveContext$authKey
 
-  if (!length(tenantID)) {
-    stop("Error: No tenantID provided: Use tenantID argument or set in AzureContext")
-  }
-  if (!length(clientID)) {
-    stop("Error: No clientID provided: Use clientID argument or set in AzureContext")
-  }
-  if (!length(authKey)) {
-    stop("Error: No authKey provided: Use authKey argument or set in AzureContext")
-  }
-  verbosity <- if (verbose)
-    httr::verbose(TRUE) else NULL
+  assert_that(is_tenant_id(tenantID))
+  assert_that(is_client_id(clientID))
+  assert_that(is_authKey(authKey))
+  verbosity <- set_verbosity(verbose)
+
 
   URLGT <- paste0("https://login.microsoftonline.com/", tenantID, "/oauth2/token?api-version=1.0")
 
@@ -48,19 +36,19 @@ azureAuthenticate <- function(azureActiveContext, tenantID, clientID, authKey, v
                                  `Content-type` = "application/x-www-form-urlencoded")),
                   body = bodyGT,
                   verbosity)
+  stopWithAzureError(r)
+  
   j1 <- content(r, "parsed", encoding = "UTF-8")
-  if (status_code(r) != 200) stopWithAzureError(r)
 
-  AT <- paste("Bearer", j1$access_token)
+  azToken <- paste("Bearer", j1$access_token)
 
-
-  azureActiveContext$Token  <- AT
+  azureActiveContext$Token  <- azToken
   azureActiveContext$tenantID    <- tenantID
   azureActiveContext$clientID    <- clientID
   azureActiveContext$authKey    <- authKey
   azureActiveContext$EXPIRY <- Sys.time() + 3598
-  SUBS <- azureListSubscriptions(azureActiveContext)
-  message("Authentication Suceeded : Key Obtained")
+  azureListSubscriptions(azureActiveContext) # this sets the subscription ID
+  #if(verbose) message("Authentication succeeded: key obtained")
   return(TRUE)
 }
 
@@ -73,12 +61,12 @@ azureAuthenticate <- function(azureActiveContext, tenantID, clientID, authKey, v
 #' @family Azure resource functions
 #' @export
 azureCheckToken <- function(azureActiveContext) {
-  if (missing(azureActiveContext) || is.null(azureActiveContext)) return(NA)
+  if (missing(azureActiveContext) || is.null(azureActiveContext)) return(FALSE)
   if (is.null(azureActiveContext$EXPIRY))
-    stop("Not Authenticated: Use azureAuthenticate")
+    stop("Not authenticated: Use azureAuthenticate()")
 
   if (azureActiveContext$EXPIRY < Sys.time()) {
-    message("Azure Token Expired: Attempting automatic renewal")
+    message("Azure token expired: attempting automatic renewal")
     azureAuthenticate(azureActiveContext)
   }
   return(TRUE)

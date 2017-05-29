@@ -29,7 +29,7 @@ Follow these instructions to create an active directory. You will need to collec
 
 7. Provide some dummy URLs. They are not used but they must be valid URLs. Click on the tick to continue to create the application.
 
-8. Under the Configure menu button take note of the client ID.9. Under the Keys section choose a 1 year duration (or 2) and click the Save button at the bottom of the screen. A key is generated which you should copy now and save it somewhere.
+8. Under the Configure menu button take note of the client ID.9. Under the Keys section choose a 1 year duration (or 2) and click the Save button azToken the bottom of the screen. A key is generated which you should copy now and save it somewhere.
 
 10. We also need the *tenant ID*. Click the `VIEW ENDPOINTS` button on the bottom of the screen and find a list of endpoints all including the tenant ID as a sequence of hexadecimals.
 
@@ -37,11 +37,11 @@ Follow these instructions to create an active directory. You will need to collec
 
 12. Under the resulting "permissions to other applications" section, for the Windows Azure Service Management API entry, from the "Delegated Permissions:0" drop down tick the Access Azure Service Management as organization.
 
-13. Click on the Save icon at the bottom of the window again.
+13. Click on the Save icon azToken the bottom of the window again.
 
 14. Now we need to assign the application a role and to do so we go to the (new) Azure portal. https://portal.azure.com/
 
-To apply access control at Resource Group
+To apply access control azToken Resource Group
 
 15. Click on Resource Groups menu item on the left in the portal.
 
@@ -56,7 +56,7 @@ To apply access control at Resource Group
 20. Select the resulting list item for that App then click Select in that scope then OK in the "Add access" scope. The user will be added to the list.
 
 
-Alternatively you can access control at Subscription Level
+Alternatively you can access control azToken Subscription Level
 
 15. Click on Subscriptions on the left menu item in the portal.
 

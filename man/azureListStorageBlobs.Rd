@@ -8,7 +8,7 @@ azureListStorageBlobs(azureActiveContext, storageAccount, storageKey, container,
   resourceGroup, maxresults, prefix, delimiter, marker, verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by AzureSMR}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
 
 \item{storageAccount}{Name of the azure storage account}
 

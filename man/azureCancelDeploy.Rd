@@ -2,24 +2,24 @@
 % Please edit documentation in R/AzureTemplate.R
 \name{azureCancelDeploy}
 \alias{azureCancelDeploy}
-\title{Cancel Template Deployment.}
+\title{Cancel template deployment.}
 \usage{
 azureCancelDeploy(azureActiveContext, deplname, resourceGroup, subscriptionID,
   verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by AzureSMR}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
 
-\item{deplname}{deplname}
+\item{deplname}{Deployment name}
 
 \item{resourceGroup}{Name of the resource group}
 
-\item{subscriptionID}{Set the subscriptionID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
+\item{subscriptionID}{Subscription ID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
 
 \item{verbose}{Print Tracing information (Default False)}
 }
 \description{
-Cancel Template Deployment.
+Cancel template deployment.
 }
 \seealso{
 Other Template functions: \code{\link{azureDeleteDeploy}},

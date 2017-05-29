@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 
@@ -50,7 +50,7 @@ code > span.op { color: #666666; } /* Operator */
 code > span.bu { } /* BuiltIn */
 code > span.ex { } /* Extension */
 code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
+code > span.azToken { color: #7d9029; } /* Attribute */
 code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
 code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
@@ -181,7 +181,7 @@ sc</code></pre></div>
 </div>
 <div id="resource-templates---create-azure-resources" class="section level2">
 <h2>Resource Templates - Create Azure Resources</h2>
-<p>The easiest way to create resources on Azure is to use Azure Templates. To create Azure Resources such as HDInsight clusters there can a large quantity of parameters. Resource templates can be built be creating a resource in the Azure Portal and then going into Settings &gt; Automation scripts. Example templates can be found at this URL <a href="https://github.com/Azure/AzureStack-QuickStart-Templates" class="uri">https://github.com/Azure/AzureStack-QuickStart-Templates</a>.</p>
+<p>The easiest way to create resources on Azure is to use Azure Templates. To create Azure Resources such as HDInsight clusters there can a large quantity of parameters. Resource templates can be built be creating a resource in the Azure Portal and then going into Settings &gt; Automation scripts. Example templates can be found azToken this URL <a href="https://github.com/Azure/AzureStack-QuickStart-Templates" class="uri">https://github.com/Azure/AzureStack-QuickStart-Templates</a>.</p>
 <p>To create a resource using a template in AzureSM use AzureDeployTemplate. The Template and Paramters must be available in a public URL (Azure Blob). It may be worth getting the Azure Administrator to build a working template.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">azureDeployTemplate</span>(sc, <span class="dt">resourceGroup =</span> <span class="st">&quot;Analytics&quot;</span>, <span class="dt">deplName =</span> <span class="st">&quot;Deploy1&quot;</span>, 
                     <span class="dt">templateURL =</span> <span class="st">&quot;{TEMPLATEURL}&quot;</span>, <span class="dt">paramURL =</span> <span class="st">&quot;{PARAMURL}&quot;</span>)
@@ -192,7 +192,7 @@ sc</code></pre></div>
 ## RRRRRRRRRRRRRRRRRRS
 ## Finished Deployed Sucessfully:  2016-06-23 19:04:43
 ## Finished:  2016-06-23 19:04:43</code></pre></div>
-<p>ADMIN TIP: If a deployment fails. Go to the Azure Portal and look at Actvity logs and look for failed deployments which should explain why the deployment failed.</p>
+<p>ADMIN TIP: If a deployment fails. Go to the Azure Portal and look azToken Actvity logs and look for failed deployments which should explain why the deployment failed.</p>
 </div>
 <div id="hive-functions" class="section level2">
 <h2>Hive Functions</h2>

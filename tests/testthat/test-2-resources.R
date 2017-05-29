@@ -6,7 +6,7 @@ config <- read.AzureSMR.config(settingsfile)
 
 #  ------------------------------------------------------------------------
 
-context("Azure resources")
+context("Resources")
 
 asc <- createAzureContext()
 with(config,
@@ -42,8 +42,11 @@ test_that("Can connect to azure resources", {
 test_that("Can create resource group", {
   skip_if_missing_config(settingsfile)
 
-  res <- azureCreateResourceGroup(asc, location = "westeurope", resourceGroup = resourceGroup_name)
-  expect_equal(res, "Create Request Submitted")
+  expect_message({
+    res <- azureCreateResourceGroup(asc, location = "westeurope", resourceGroup = resourceGroup_name)
+  }, "Create Request Submitted"
+  )
+  expect_true(res)
 
   wait_for_azure(
     resourceGroup_name %in% azureListRG(asc)$resourceGroup
@@ -52,6 +55,7 @@ test_that("Can create resource group", {
 })
 
 
+context(" - storage account")
 test_that("Can connect to storage account", {
   skip_if_missing_config(settingsfile)
 
@@ -59,10 +63,6 @@ test_that("Can connect to storage account", {
   expect_is(res, "data.frame")
   expect_equal(ncol(res), 8)
 
-  #sub_id  <<- res$storageAccount[1]
-  #rg_temp <<- res$resourceGroup[1]
-  #res <- azureSAGetKey(asc, storageAccount = sub_id, resourceGroup = rg_temp)
-  #expect_is(res, "character")
 })
 
 test_that("Can create storage account", {
@@ -78,11 +78,16 @@ test_that("Can create storage account", {
   expect_true(sa_name %in% azureListSA(asc)$storageAccount)
 })
 
+
+context(" - container")
 test_that("Can connect to container", {
   skip_if_missing_config(settingsfile)
-  sa <- azureListSA(asc)[1, ]
-  res <- azureListStorageContainers(asc, storageAccount = sa$storageAccount[1],
-                                    resourceGroup = sa$resourceGroup[1])
+  sa <- azureListSA(asc)
+  idx <- match(sa_name, sa$storageAccount)
+  key <- storageKey <- azureSAGetKey(asc, resourceGroup = sa$resourceGroup[idx], storageAccount = sa$storageAccount[idx])
+  res <- azureListStorageContainers(asc, storageAccount = sa$storageAccount[idx],
+                                    resourceGroup = sa$resourceGroup[idx],
+                                    storageKey = key)
   expect_is(res, "data.frame")
   expect_equal(ncol(res), 5)
   expect_equal(nrow(res), 0)
@@ -91,7 +96,7 @@ test_that("Can connect to container", {
 test_that("Can create container", {
   skip_if_missing_config(settingsfile)
   res <- azureCreateStorageContainer(asc, container = "tempcontainer")
-  expect_true(grepl("OK", res))
+  expect_true(res)
 
   Sys.sleep(1)
 
@@ -103,6 +108,8 @@ test_that("Can create container", {
 
 })
 
+
+context(" - blob")
 test_that("Can put, list, get and delete a blob", {
   skip_if_missing_config(settingsfile)
 expect_warning({
@@ -135,7 +142,7 @@ expect_warning({
 
 })
 
-
+context(" - delete container")
 test_that("Can delete a container", {
   skip_if_missing_config(settingsfile)
 
@@ -144,8 +151,11 @@ test_that("Can delete a container", {
   expect_equal(ncol(res), 5)
   expect_equal(nrow(res), 1)
 
-  res <- azureDeleteStorageContainer(asc, container = "tempcontainer")
-  expect_equal(res,  "container delete request accepted")
+  expect_message({
+    res <- azureDeleteStorageContainer(asc, container = "tempcontainer")
+    }, "container delete request accepted"
+  )
+  expect_true(res)
 
   res <- azureListStorageContainers(asc)
   expect_is(res, "data.frame")
@@ -155,7 +165,7 @@ test_that("Can delete a container", {
 
 })
 
-
+context(" - delete storage account")
 test_that("Can delete storage account", {
   skip_if_missing_config(settingsfile)
 
@@ -167,17 +177,18 @@ test_that("Can delete storage account", {
   expect_false(sa_name %in% sort(azureListSA(asc)$storageAccount))
 })
 
+context(" - delete resource group")
 test_that("Can delete resource group", {
   skip_if_missing_config(settingsfile)
 
-  res <- azureDeleteResourceGroup(asc, resourceGroup = resourceGroup_name)
-  expect_equal(res, "Delete Request Submitted")
+  expect_message({
+    res <- azureDeleteResourceGroup(asc, resourceGroup = resourceGroup_name)
+    }, "Delete Request Submitted"
+  )
+  expect_true(res)
   wait_for_azure(
     !(resourceGroup_name %in% azureListRG(asc)$resourceGroup)
   )
   expect_false(resourceGroup_name %in% sort(azureListRG(asc)$resourceGroup))
 
 })
-
-
-

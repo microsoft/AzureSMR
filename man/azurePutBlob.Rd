@@ -2,13 +2,13 @@
 % Please edit documentation in R/AzureBlob.R
 \name{azurePutBlob}
 \alias{azurePutBlob}
-\title{Write contents to a specifed Storage blob.}
+\title{Write contents to a specifed storage blob.}
 \usage{
 azurePutBlob(azureActiveContext, blob, contents = "", file = "", directory,
   storageAccount, storageKey, container, resourceGroup, verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by AzureSMR}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
 
 \item{blob}{Blob name}
 
@@ -33,7 +33,7 @@ azurePutBlob(azureActiveContext, blob, contents = "", file = "", directory,
 \item{verbose}{Print Tracing information (Default False)}
 }
 \description{
-Write contents to a specifed Storage blob.
+Write contents to a specifed storage blob.
 }
 \seealso{
 Other Blob store functions: \code{\link{azureBlobCD}},
