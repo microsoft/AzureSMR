@@ -1,13 +1,11 @@
 if (interactive()) library("testthat")
 
-
 settingsfile <- system.file("tests/testthat/config.json", package = "AzureSMR")
 config <- read.AzureSMR.config(settingsfile)
 
 #  ------------------------------------------------------------------------
 
 context("HDI")
-
 
 asc <- createAzureContext()
 with(config,
@@ -32,16 +30,13 @@ test_that("Can create resource group", {
   expect_true(resourceGroup_name %in% azureListRG(asc)$resourceGroup)
 })
 
-azureListHDI(asc)
 
-context(" - create HDI cluster")
+# --------
+
+context(" - HDI validation")
 
 test_that("Can create HDI cluster", {
   skip_if_missing_config(settingsfile)
-  expect_error(
-    azureCreateHDI(asc),
-    "resourceGroup"
-  )
   expect_error(
     azureCreateHDI(asc, resourceGroup = resourceGroup_name),
     "clustername"
@@ -50,13 +45,24 @@ test_that("Can create HDI cluster", {
     azureCreateHDI(asc, resourceGroup = resourceGroup_name, clustername = "azuresmr_hdi_test"),
     "storageAccount"
   )
+  expect_message(
+    azureCreateHDI(asc, resourceGroup = resourceGroup_name, clustername = "azuresmr_hdi_test",
+    storageAccount = "azuresmrhditest",
+    adminUser = "Azuresmr_test1", adminPassword = "Password_1",
+    sshUser = "sssUser_test1", sshPassword = "Password_1",
+    debug = TRUE
+    ),
+    "creating storage account"
+  )
+
   expect_error(
     azureCreateHDI(asc, resourceGroup = resourceGroup_name, clustername = "azuresmr_hdi_test",
     storageAccount = "azuresmrhditest",
     adminUser = "Azuresmr_test1", adminPassword = "Azuresmr_test1",
-    sshUser = "sssUser_test1", sshPassword = "sshUser_test1"
+    sshUser = "sssUser_test1", sshPassword = "sssUser_test1",
+    debug = FALSE
     ),
-    "storageAccount"
+    "should not contain 3 consecutive letters from the username"
   )
 
   # debug - default
@@ -93,22 +99,60 @@ test_that("Can create HDI cluster", {
       ),
       "list"
   )
+})
+
+# --------
+
+context(" - create cluster with rserver")
+
+test_that("can create HDI cluster", {
 
   # create the actual instance - rserver
   expect_true(
-  azureCreateHDI(asc, resourceGroup = resourceGroup_name, clustername = "azuresmrhditest",
-      storageAccount = "azuresmrhditest",
-      adminUser = "x", adminPassword = "Azuresmr_test1",
-      sshUser = "sssUser_test1", sshPassword = "sshUser_test1",
-      kind = "rserver",
-      debug = FALSE
-      )
+    azureCreateHDI(asc, resourceGroup = resourceGroup_name, clustername = "azuresmrhditest",
+        storageAccount = paste0("azuresmrhdi", timestamp),
+        adminUser = "x", adminPassword = "Azuresmr_test1",
+        sshUser = "sssUser_test1", sshPassword = "sshUser_test1",
+        kind = "rserver",
+        debug = FALSE
+        )
     )
+})
 
-  azureListHDI(asc)
-  azureDeleteHDI(asc, clustername = "azuresmrhditest")
-  azureListHDI(asc)
-  pollStatusHDI(asc, clustername = "azuresmrhditest")
+
+# --------
+
+context(" - run action script")
+
+test_that("can run action scripts", {
+  # run an action script
+  expect_true(
+    azureRunScriptAction(asc,
+                       scriptname = "installPackages",
+                       scriptURL = "http://mrsactionscripts.blob.core.windows.net/rpackages-v01/InstallRPackages.sh",
+                       workerNode = TRUE, edgeNode = TRUE,
+                       parameters = "useCRAN stringr")
+  )
+
+  # retrieve action script history
+  z <- azureScriptActionHistory(asc)
+  expect_is(z, "data.frame")
+})
+
+# --------
+
+context(" - delete cluster")
+
+test_that("can delete HDI cluster", {
+  # list clusters
+  z <- azureListHDI(asc)
+  expect_is(z, "data.frame")
+
+  # delete cluster
+  expect_true(
+    azureDeleteHDI(asc, clustername = "azuresmrhditest")
+  )
+
   azureDeleteResourceGroup(asc, resourceGroup = resourceGroup_name)
 })
 
