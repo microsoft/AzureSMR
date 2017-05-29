@@ -128,7 +128,7 @@ is_valid_storage_account <- function(x) {
 
 on_failure(is_valid_storage_account) <- function(call, env) {
     paste("Storage account name must be between 3 and 24 characters in length",
-        "and use numbers and lower - case letters only.",
+        "and use numbers and lower-case letters only.",
         sep = "\n")
 }
 

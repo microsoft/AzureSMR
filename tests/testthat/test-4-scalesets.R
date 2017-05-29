@@ -1,41 +1,41 @@
-if (interactive()) library("testthat")
+#if (interactive()) library("testthat")
 
 
-settingsfile <- system.file("tests/testthat/config.json", package = "AzureSMR")
-config <- read.AzureSMR.config(settingsfile)
+#settingsfile <- system.file("tests/testthat/config.json", package = "AzureSMR")
+#config <- read.AzureSMR.config(settingsfile)
 
-#  ------------------------------------------------------------------------
+##  ------------------------------------------------------------------------
 
-context("Scalesets")
-
-
-asc <- createAzureContext()
-with(config,
-     setAzureContext(asc, tenantID = tenantID, clientID = clientID, authKey = authKey)
-)
+#context("Scalesets")
 
 
-azureAuthenticate(asc, verbose = FALSE)
+#asc <- createAzureContext()
+#with(config,
+     #setAzureContext(asc, tenantID = tenantID, clientID = clientID, authKey = authKey)
+#)
 
-timestamp <- format(Sys.time(), format = "%y%m%d%H%M")
-resourceGroup_name <- paste0("_AzureSMtest_", timestamp)
 
-#test_that("Can create resource group", {
-  #skip_if_missing_config(settingsfile)
+#azureAuthenticate(asc, verbose = FALSE)
 
-  #res <- azureCreateResourceGroup(asc, location = "westeurope", resourceGroup = resourceGroup_name)
-  #expect_true(res)
+#timestamp <- format(Sys.time(), format = "%y%m%d%H%M")
+#resourceGroup_name <- paste0("_AzureSMtest_", timestamp)
 
-  #wait_for_azure(
-    #resourceGroup_name %in% azureListRG(asc)$resourceGroup
-  #)
-  #expect_true(resourceGroup_name %in% azureListRG(asc)$resourceGroup)
-#})
+##test_that("Can create resource group", {
+  ##skip_if_missing_config(settingsfile)
 
-azureCreateHDI(asc)
+  ##res <- azureCreateResourceGroup(asc, location = "westeurope", resourceGroup = resourceGroup_name)
+  ##expect_true(res)
 
-azureListScaleSets(asc)
-azureListScaleSetNetwork(asc)
-azureListScaleSetVM(asc, scaleSet = "swarm-agent-D2D9AE69-vmss", resourceGroup = "THDELTEI-TEST-CONTAINER2")
-azureListScaleSetVM(asc, scaleSet = "swarm-agent-D2D9AE69-vmss")
+  ##wait_for_azure(
+    ##resourceGroup_name %in% azureListRG(asc)$resourceGroup
+  ##)
+  ##expect_true(resourceGroup_name %in% azureListRG(asc)$resourceGroup)
+##})
+
+#azureCreateHDI(asc)
+
+#azureListScaleSets(asc)
+#azureListScaleSetNetwork(asc)
+#azureListScaleSetVM(asc, scaleSet = "swarm-agent-D2D9AE69-vmss", resourceGroup = "THDELTEI-TEST-CONTAINER2")
+#azureListScaleSetVM(asc, scaleSet = "swarm-agent-D2D9AE69-vmss")
 

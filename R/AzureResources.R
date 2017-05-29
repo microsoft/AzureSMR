@@ -18,8 +18,8 @@ azureListSubscriptions <- function(azureActiveContext, verbose = FALSE) {
   stopWithAzureError(r)
 
   dfs <- lapply(content(r), data.frame, stringsAsFactors = FALSE)
-  df1 <- rbind.fill(dfs)
-  if (nrow(df1) == 1) azureActiveContext$subscriptionID <- df1[, 2]
+  df1 <- do.call(rbind, dfs))
+  if (nrow(df1) == 1) azureActiveContext$subscriptionID <- df1$subscriptionID[1]
   return(df1)
 }
 

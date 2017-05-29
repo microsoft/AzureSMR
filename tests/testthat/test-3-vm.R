@@ -41,12 +41,15 @@ test_that("Can create virtual machine from template", {
   azureTemplatesUrl <- "https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/"
   templateURL = paste0(azureTemplatesUrl, "101-vm-simple-linux/azuredeploy.json")
 
-  paramJSON <- '"parameters": {
+  paramJSON <- paste0('"parameters": {
       "adminUsername":  {"value": "azuresmr"},
       "adminPassword":  {"value": "Azuresmrtest123!"},
-      "dnsLabelPrefix": {"value": "azuresmr"}}'
+      "dnsLabelPrefix": {"value": "', paste0("azuresmr", timestamp), '"}}'
+      )
 
-  res <- azureDeployTemplate(asc, deplname = "Deploy2", templateURL = templateURL, paramJSON = paramJSON)
+  res <- azureDeployTemplate(asc, deplname = "Deploy2", 
+                             templateURL = templateURL, 
+                             paramJSON = paramJSON)
   expect_true(res)
 })
 

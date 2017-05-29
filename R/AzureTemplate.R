@@ -15,7 +15,7 @@
 #' @family Template functions
 #' @export
 azureDeployTemplate <- function(azureActiveContext, deplname, templateURL,
-                                paramURL, templateJSON, paramJSON, mode = "Sync",
+                                paramURL, templateJSON, paramJSON, mode = c("Sync", "Async"),
                                 resourceGroup, subscriptionID,
                                 verbose = FALSE) {
   assert_that(is.azureActiveContext(azureActiveContext))
@@ -28,6 +28,8 @@ azureDeployTemplate <- function(azureActiveContext, deplname, templateURL,
   assert_that(is_subscription_id(subscriptionID))
   assert_that(is_deployment_name(deplname))
 
+  mode <- match.arg(mode)
+
   if (missing(templateURL) && missing(templateJSON)) {
     stop("No templateURL or templateJSON provided")
   }
@@ -35,8 +37,9 @@ azureDeployTemplate <- function(azureActiveContext, deplname, templateURL,
   verbosity <- set_verbosity(verbose)
 
   URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
-               "/resourceGroups/", resourceGroup, "/providers/microsoft.resources/deployments/",
-               deplname, "?api-version=2016-06-01")
+               "/resourceGroups/", resourceGroup, 
+               "/providers/microsoft.resources/deployments/", deplname, 
+               "?api-version=2016-06-01")
 
   combination <- paste0(if(!missing(templateURL)) "tu" else "tj" , 
                         if (!missing(paramURL)) "pu" else if (!missing(paramJSON)) "pj" else "")
@@ -64,7 +67,7 @@ azureDeployTemplate <- function(azureActiveContext, deplname, templateURL,
   r <- PUT(URL, azureApiHeaders(azToken), body = bodyI, verbosity)
   stopWithAzureError(r)
   
-  if (toupper(mode) == "SYNC") {
+  if (mode == "Sync") {
     z <- pollStatusTemplate(azureActiveContext, deplname, resourceGroup)
     if(!z) return(FALSE)
   }

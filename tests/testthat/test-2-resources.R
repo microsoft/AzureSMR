@@ -63,10 +63,6 @@ test_that("Can connect to storage account", {
   expect_is(res, "data.frame")
   expect_equal(ncol(res), 8)
 
-  #sub_id  <<- res$storageAccount[1]
-  #rg_temp <<- res$resourceGroup[1]
-  #res <- azureSAGetKey(asc, storageAccount = sub_id, resourceGroup = rg_temp)
-  #expect_is(res, "character")
 })
 
 test_that("Can create storage account", {
@@ -86,9 +82,12 @@ test_that("Can create storage account", {
 context(" - container")
 test_that("Can connect to container", {
   skip_if_missing_config(settingsfile)
-  sa <- azureListSA(asc)[1, ]
-  res <- azureListStorageContainers(asc, storageAccount = sa$storageAccount[1],
-                                    resourceGroup = sa$resourceGroup[1])
+  sa <- azureListSA(asc)
+  idx <- match(sa_name, sa$storageAccount)
+  key <- storageKey <- azureSAGetKey(asc, resourceGroup = sa$resourceGroup[idx], storageAccount = sa$storageAccount[idx])
+  res <- azureListStorageContainers(asc, storageAccount = sa$storageAccount[idx],
+                                    resourceGroup = sa$resourceGroup[idx],
+                                    storageKey = key)
   expect_is(res, "data.frame")
   expect_equal(ncol(res), 5)
   expect_equal(nrow(res), 0)

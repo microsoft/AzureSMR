@@ -32,22 +32,21 @@ createAzureContext <- function(tenantID, clientID, authKey){
 #' @param clientID The Client ID provided during creation of the Active Directory application / service principal
 #' @param authKey The Authentication Key provided during creation of the Active Directory application / service principal
 #' @param subscriptionID Subscription ID.  This is obtained automatically by [azureAuthenticate()] when only a single subscriptionID is available via Active Directory
-#' @param azToken Azure authentication token, obtained by [azureAuthenticate()]
 #' @param resourceGroup Name of the resource group
 #' @param vmName Name of the virtual machine
-#' @param storageAccount Name of the azure storage account
+#' @param storageAccount Name of the azure storage account. Storage account names must be between 3 and 24 characters in length and use numbers and lower-case letters only.
 #' @param storageKey Storage key associated with storage account
 #' @param blob Blob name
 #' @param clustername Cluster name, used for HDI and Spark clusters. See [azureCreateHDI()]
 #' @param sessionID Spark sessionID. See [azureSparkCMD()]
-#' @param hdiAdmin HDInsight admin username
-#' @param hdiPassword  HDInsight admin password
+#' @param hdiAdmin HDInsight admin username. See [azureCreateHDI()]
+#' @param hdiPassword  HDInsight admin password. See [azureCreateHDI()]
 #' @param container Storage container name. See [azureListStorageContainers()]
-#' @param kind HDinsight kind: "hadoop","spark" or "pyspark"
+#' @param kind HDinsight kind: "hadoop","spark" or "rserver". See [azureCreateHDI()]
 #'
 #' @family azureActiveContext functions
 #' @export
-setAzureContext <- function(azureActiveContext, tenantID, clientID, authKey, azToken,
+setAzureContext <- function(azureActiveContext, tenantID, clientID, authKey, 
                             subscriptionID, resourceGroup,
                             storageKey, storageAccount,
                             container, blob,
@@ -57,14 +56,37 @@ setAzureContext <- function(azureActiveContext, tenantID, clientID, authKey, azT
   if (!missing(tenantID)) azureActiveContext$tenantID <- tenantID
   if (!missing(clientID)) azureActiveContext$clientID <- clientID
   if (!missing(authKey)) azureActiveContext$authKey <- authKey
-  if (!missing(azToken)) azureActiveContext$AZtoken <- azToken
-  if (!missing(subscriptionID)) azureActiveContext$subscriptionID <- subscriptionID
-  if (!missing(resourceGroup)) azureActiveContext$resourceGroup <- resourceGroup
-  if (!missing(storageKey)) azureActiveContext$storageKey <- storageKey
-  if (!missing(storageAccount)) azureActiveContext$storageAccount <- storageAccount
-  if (!missing(container)) azureActiveContext$container <- container
-  if (!missing(blob)) azureActiveContext$container <- blob
-  if (!missing(vmName)) azureActiveContext$vmName <- vmName
+
+  if (!missing(subscriptionID)) {
+    assert_that(is_subscription_id(subscriptionID))
+    azureActiveContext$subscriptionID <- subscriptionID
+  }
+  if (!missing(resourceGroup)) {
+    assert_that(is_resource_group(resourceGroup))
+    azureActiveContext$resourceGroup <- resourceGroup
+  }
+  if (!missing(storageKey)) {
+    assert_that(is_storage_key(storageKey))
+    azureActiveContext$storageKey <- storageKey
+  }
+  if (!missing(storageAccount)) {
+    assert_that(is_storage_account(storageAccount))
+    azureActiveContext$storageAccount <- storageAccount
+  }
+  if (!missing(container)) {
+    assert_that(is_container(container))
+    azureActiveContext$container <- container
+  }
+  if (!missing(blob)) {
+    assert_that(is_blob(blob))
+    azureActiveContext$container <- blob
+  }
+
+  if (!missing(vmName)) {
+    assert_that(is_vm_name(vmName))
+    azureActiveContext$vmName <- vmName
+  }
+
   if (!missing(clustername)) azureActiveContext$clustername <- clustername
   if (!missing(hdiAdmin)) azureActiveContext$hdiAdmin <- hdiAdmin
   if (!missing(hdiPassword)) azureActiveContext$hdiPassword  <- hdiPassword

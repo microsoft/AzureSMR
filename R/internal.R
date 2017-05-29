@@ -145,6 +145,7 @@ stopWithAzureError <- function(r) {
     rr <- XML::xmlToList(XML::xmlParse(content(r)))
     msg <- addToMsg(rr$Code)
     msg <- addToMsg(rr$Message)
+    msg <- addToMsg(rr$AuthenticationErrorDetail)
   } else {
     rr <- content(r)
     msg <- addToMsg(rr$code)
@@ -159,6 +160,7 @@ stopWithAzureError <- function(r) {
 extractResourceGroupname <- function(x) gsub(".*?/resourceGroups/(.*?)(/.*)*$",  "\\1", x)
 extractSubscriptionID    <- function(x) gsub(".*?/subscriptions/(.*?)(/.*)*$",   "\\1", x)
 extractStorageAccount    <- function(x) gsub(".*?/storageAccounts/(.*?)(/.*)*$", "\\1", x)
+
 
 refreshStorageKey <- function(azureActiveContext, storageAccount, resourceGroup){
   if (length(azureActiveContext$storageAccountK) < 1 ||
