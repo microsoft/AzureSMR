@@ -8,7 +8,7 @@ azureCreateHDI(azureActiveContext, resourceGroup, location, clustername,
   kind = c("rserver", "spark", "hadoop"), storageAccount, storageKey,
   version = "3.5", componentVersion = "1.6.2", workers = 2, adminUser,
   adminPassword, sshUser, sshPassword, hiveServer, hiveDB, hiveUser,
-  hivePassword, vmSize = "Small", subscriptionID, mode = c("Sync", "Async"),
+  hivePassword, vmSize = "Large", subscriptionID, mode = c("Sync", "Async"),
   verbose = FALSE, debug = FALSE)
 }
 \arguments{
@@ -66,6 +66,9 @@ Create HDInsight cluster.
 }
 \note{
 See \url{https://docs.microsoft.com/en-us/azure/hdinsight/hdinsight-component-versioning} to learn about HDInsight Versions
+}
+\references{
+https://docs.microsoft.com/en-us/rest/api/hdinsight/hdinsight-cluster#create
 }
 \seealso{
 Other HDInsight functions: \code{\link{azureDeleteHDI}},

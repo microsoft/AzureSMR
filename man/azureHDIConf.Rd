@@ -2,7 +2,7 @@
 % Please edit documentation in R/AzureHDI.R
 \name{azureHDIConf}
 \alias{azureHDIConf}
-\title{Get Configuration Information for a specified cluster name.}
+\title{Get configuration information for a specified cluster name.}
 \usage{
 azureHDIConf(azureActiveContext, clustername, resourceGroup, subscriptionID,
   name, type, location, verbose = FALSE)
@@ -28,7 +28,7 @@ azureHDIConf(azureActiveContext, clustername, resourceGroup, subscriptionID,
 Returns Dataframe of HDInsight Clusters information
 }
 \description{
-Get Configuration Information for a specified cluster name.
+Get configuration information for a specified cluster name.
 }
 \seealso{
 Other HDInsight functions: \code{\link{azureCreateHDI}},
