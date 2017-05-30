@@ -356,9 +356,9 @@ azureResizeHDI <- function(azureActiveContext, clustername,
 #' @inheritParams azureAuthenticate
 #' @inheritParams azureListHDI
 #'
-#' @return Returns Dataframe of HDInsight Clusters information
+#' @return Data frame with HDInsight clusters information
 #' @family HDInsight functions
-#' @reference https://docs.microsoft.com/en-us/rest/api/hdinsight/hdinsight-cluster#delete
+#' @references https://docs.microsoft.com/en-us/rest/api/hdinsight/hdinsight-cluster#delete
 #' @export
 azureDeleteHDI <- function(azureActiveContext, clustername, subscriptionID,
                            resourceGroup, verbose = FALSE) {
@@ -509,13 +509,15 @@ azureScriptActionHistory <- function(azureActiveContext, resourceGroup,
 }
 
 #' @export
+#' @param object azureScriptActionHistory object, created by [azureScriptActionHistory()]
+#' @param ... not used
 #' @rdname azureScriptActionHistory
-summary.azureScriptActionHistory <- function(x) {
-  do.call(rbind, lapply(x, function(x) {
+summary.azureScriptActionHistory <- function(object, ...) {
+  do.call(rbind, lapply(object, function(x) {
     data.frame(
-    x[c("name", "scriptExecutionId", "startTime")],
-    if (is.null(x$endTime)) list(endTime = NA) else x["endTime"],
-    x[c("status", "uri", "parameters")]
+      x[c("name", "scriptExecutionId", "startTime")],
+      if (is.null(x$endTime)) list(endTime = NA) else x["endTime"],
+      x[c("status", "uri", "parameters")]
     )
   }))
 }

@@ -135,7 +135,7 @@ pollStatusScriptAction <- function(azureActiveContext, scriptname) {
   while (iteration < 500 && waiting) {
 
     status <- azureScriptActionHistory(azureActiveContext)
-    idx <- which(sapply(z, "[[", "name") == scriptname)[1]
+    idx <- which(sapply(status, "[[", "name") == scriptname)[1]
     summary <- status[[idx]]$status
     rc <- switch(tolower(summary),
       accepted = "A",
@@ -144,7 +144,7 @@ pollStatusScriptAction <- function(azureActiveContext, scriptname) {
       failed = "F",
       inprogress = ".",
       "?"
-      )
+    )
 
     message(rc, appendLF = FALSE)
     if (rc %in% c("S", "E", "F")) {
@@ -160,7 +160,7 @@ pollStatusScriptAction <- function(azureActiveContext, scriptname) {
 
     iteration <- iteration + 1
     if (!rc %in% c("S", "E", "F")) Sys.sleep(5)
-    }
+  }
   message("")
   message("Script action completed: ", Sys.time())
   return(TRUE)
