@@ -124,3 +124,44 @@ pollStatusHDI <- function(azureActiveContext, clustername) {
   message("HDI request completed: ", Sys.time())
   return(TRUE)
 }
+
+
+pollStatusScriptAction <- function(azureActiveContext, scriptname) {
+
+  message("Script action request submitted: ", Sys.time())
+  message("Key: A - accepted, (.) - in progress, S - succeeded, E - error, F - failed")
+  iteration <- 0
+  waiting <- TRUE
+  while (iteration < 500 && waiting) {
+
+    status <- azureScriptActionHistory(azureActiveContext)
+    idx <- which(sapply(z, "[[", "name") == scriptname)[1]
+    summary <- status[[idx]]$status
+    rc <- switch(tolower(summary),
+      accepted = "A",
+      succeeded = "S",
+      error = "E",
+      failed = "F",
+      inprogress = ".",
+      "?"
+      )
+
+    message(rc, appendLF = FALSE)
+    if (rc %in% c("S", "E", "F")) {
+      waiting = FALSE
+    }
+    if (rc %in% c("E", "F")) {
+      message("")
+      warning(paste("Error deploying: ", Sys.time()), call. = FALSE, immediate. = TRUE)
+      return(FALSE)
+    }
+
+    if (rc == "?") message(summary)
+
+    iteration <- iteration + 1
+    if (!rc %in% c("S", "E", "F")) Sys.sleep(5)
+    }
+  message("")
+  message("Script action completed: ", Sys.time())
+  return(TRUE)
+}

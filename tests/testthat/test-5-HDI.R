@@ -148,6 +148,9 @@ test_that("can delete HDI cluster", {
   z <- azureListHDI(asc)
   expect_is(z, "data.frame")
 
+  z <- azureListHDI(asc, clustername = "azuresmrhditest", resourceGroup = resourceGroup_name)
+  expect_is(z, "data.frame")
+
   # delete cluster
   expect_true(
     azureDeleteHDI(asc, clustername = "azuresmrhditest")
