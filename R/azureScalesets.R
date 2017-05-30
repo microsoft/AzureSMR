@@ -83,7 +83,6 @@ azureListScaleSetNetwork <- function(azureActiveContext, resourceGroup, location
   lbs <- df$value$name
   dfn <- data.frame(lbname = "", publicIpAdress = "", inport = "", outport = "")
   clust <- length(lbs)
-  #browser()
   if (clust > 0) {
     for (i in seq_along(lbs)) {
       lb <- lbs[i]
@@ -142,7 +141,6 @@ azureListScaleSetNetwork <- function(azureActiveContext, resourceGroup, location
       clust <- nrow(dfn)
       clust2 <- length(df2$properties$ipAddress)
       if (clust2 > 0) {
-        #if (length(df2$properties$dnsSettings$fqdn) != length(df2$properties$ipAddress)) browser()
         data.frame(
           fqdn = if (is.null(df2$properties$dnsSettings$fqdn)) "" else df2$properties$dnsSettings$fqdn,
           ipAddress = df2$properties$ipAddress,

@@ -237,7 +237,6 @@ azureCreateHDI <- function(azureActiveContext, resourceGroup, location,
                "?api-version=2015-03-01-preview")
 
   r <- PUT(URL, azureApiHeaders(azToken), body = bodyI, encode = "json", verbosity)
-  #browser()
   stopWithAzureError(r)
 
   azureActiveContext$resourceGroup <- resourceGroup
@@ -453,7 +452,6 @@ azureRunScriptAction <- function(azureActiveContext, scriptname, scriptURL,
   r <- POST(URL, azureApiHeaders(azToken),
             body = bodyI,
             encode = "json", verbosity)
-  browser()
   stopWithAzureError(r)
 
   azureActiveContext$clustername <- clustername

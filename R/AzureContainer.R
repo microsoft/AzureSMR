@@ -28,7 +28,6 @@ azureListStorageContainers <- function(azureActiveContext, storageAccount, stora
   verbosity <- set_verbosity(verbose)
 
   URL <- paste0("http://", storageAccount, ".blob.core.windows.net/?comp=list")
-  #browser()
   xdate <- x_ms_date()
   SIG <- getSig(azureActiveContext, url = URL, verb = "GET", key = storageKey, storageAccount = storageAccount,
                 CMD = "\ncomp:list", date = xdate)
