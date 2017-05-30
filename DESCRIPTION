@@ -6,7 +6,7 @@ Description: Helps users to manage Azure Services and objects from within an
 	an Azure Active Directory application and service principal in the Azure portal.
 Type: Package
 Version: 0.2.4
-Date: 2017-05-29
+Date: 2017-05-30
 Authors@R: c(
       person(family="Microsoft Corporation", role="cph"),
       person("Alan", "Weaver", role=c("aut", "cre"), email="alanwe@microsoft.com"),
