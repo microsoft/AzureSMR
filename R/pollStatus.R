@@ -88,7 +88,7 @@ pollStatusVM <- function(azureActiveContext) {
 pollStatusHDI <- function(azureActiveContext, clustername) {
 
   message("HDI request submitted: ", Sys.time())
-  message("Key: (.) - in progress, S - succeeded, E - error")
+  message("Key: (.) - in progress, S - succeeded, E - error, F - failed")
   iteration <- 0
   waiting <- TRUE
   while (iteration < 500 && waiting) {
@@ -100,24 +100,25 @@ pollStatusHDI <- function(azureActiveContext, clustername) {
     rc <- switch(tolower(summary),
       succeeded = "S",
       error = "E",
+      failed = "F",
       inprogress = ".",
       "?"
       )
 
     message(rc, appendLF = FALSE)
-    if (rc %in% c("S", "E")) {
+    if (rc %in% c("S", "E", "F")) {
       waiting = FALSE
     }
-    if (rc == "E") {
-      warning(paste("Error deploying: ", Sys.time()))
-      warning(fromJSON(status$properties$error$details$message)$error$message)
+    if (rc %in% c("E", "F")) {
+      message("")
+      warning(paste("Error deploying: ", Sys.time()), call. = FALSE, immediate. = TRUE)
       return(FALSE)
     }
 
-    if (rc == "?") message(status)
+    if (rc == "?") message(summary)
 
     iteration <- iteration + 1
-    if (!rc %in% c("S", "E")) Sys.sleep(10)
+    if (!rc %in% c("S", "E", "F")) Sys.sleep(10)
     }
   message("")
   message("HDI request completed: ", Sys.time())

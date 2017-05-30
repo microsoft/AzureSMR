@@ -79,6 +79,7 @@ azureSAGetKey <- function(azureActiveContext, storageAccount,
 #' @inheritParams azureAuthenticate
 #' @inheritParams azureSAGetKey
 #' @param location A string for the location to create storage account
+#' @param asynchronous If TRUE, submits asynchronous request to Azure. Otherwise waits until storage account is created.
 #' @family Storage account functions
 #' @export
 azureCreateStorageAccount <- function(azureActiveContext, storageAccount,

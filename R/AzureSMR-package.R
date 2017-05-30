@@ -16,13 +16,18 @@
 #'   - [azureListStorageContainers()]
 #'   - [azureListStorageBlobs()]
 #' * Virtual Machines
+#'   - List VMs: [azureListVM()]
 #'   - To create a virtual machine, use [azureDeployTemplate()] with a suitable template
 #'   - Start a VM: [azureStartVM()]
 #'   - Stop a VM: [azureStopVM()]
 #'   - Get status: [azureVMStatus()]
-#'   - List VMs: [azureListVM()]
-#' * HDInsight (Nodes, Hive, Spark)
-#' * Azure Resource Manager
+#' * HDInsight clusters:
+#'   - [azureListHDI()]
+#'   - [azureCreateHDI()]
+#'   - [azureResizeHDI()]
+#'   - [azureDeleteHDI()]
+#'   - [azureRunScriptAction()]
+#'   - [azureScriptActionHistory()]
 #'
 #'
 #' @name AzureSMR
@@ -33,7 +38,6 @@
 #' @importFrom utils browseURL URLencode ls.str str
 #' @importFrom digest hmac
 #' @importFrom base64enc base64encode base64decode
-#' @importFrom plyr rbind.fill
 #' @importFrom jsonlite fromJSON
 #' @importFrom httr add_headers headers content status_code http_status authenticate
 #' @importFrom httr GET PUT DELETE POST

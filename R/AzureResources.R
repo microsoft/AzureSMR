@@ -4,7 +4,7 @@
 #' @inheritParams setAzureContext
 #' @inheritParams azureAuthenticate
 #'
-#' @return Dataframe of subscriptionID; Sets AzureContext subscriptionID
+#' @return data frame with subscriptionID; Sets AzureContext subscriptionID
 #' @family Resource group functions
 #' @export
 azureListSubscriptions <- function(azureActiveContext, verbose = FALSE) {
@@ -18,8 +18,8 @@ azureListSubscriptions <- function(azureActiveContext, verbose = FALSE) {
   stopWithAzureError(r)
 
   dfs <- lapply(content(r), data.frame, stringsAsFactors = FALSE)
-  df1 <- do.call(rbind, dfs))
-  if (nrow(df1) == 1) azureActiveContext$subscriptionID <- df1$subscriptionID[1]
+  df1 <- do.call(rbind, dfs)
+  if (nrow(df1) == 1) azureActiveContext$subscriptionID <- df1$subscriptionId[1]
   return(df1)
 }
 
