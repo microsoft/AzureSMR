@@ -6,7 +6,8 @@
 \usage{
 azureRunScriptAction(azureActiveContext, scriptname, scriptURL,
   headNode = TRUE, workerNode = FALSE, edgeNode = FALSE, clustername,
-  resourceGroup, parameters = "", subscriptionID, verbose = FALSE)
+  resourceGroup, parameters = "", subscriptionID, wait = TRUE,
+  verbose = FALSE)
 }
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
@@ -29,6 +30,8 @@ azureRunScriptAction(azureActiveContext, scriptname, scriptURL,
 
 \item{subscriptionID}{Subscription ID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
 
+\item{wait}{If TRUE, runs script action synchronously, i.e. waits for successfull completion. If FALSE, submits the action asynchronously}
+
 \item{verbose}{Print Tracing information (Default False)}
 }
 \value{
@@ -36,6 +39,9 @@ Returns Success Message
 }
 \description{
 Run script action on HDI cluster.
+}
+\references{
+https://docs.microsoft.com/en-us/rest/api/hdinsight/hdinsight-cluster#run-script-actions-on-a-running-cluster-linux-cluster-only
 }
 \seealso{
 Other HDInsight functions: \code{\link{azureCreateHDI}},

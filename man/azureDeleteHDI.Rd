@@ -19,10 +19,13 @@ azureDeleteHDI(azureActiveContext, clustername, subscriptionID, resourceGroup,
 \item{verbose}{Print Tracing information (Default False)}
 }
 \value{
-Returns Dataframe of HDInsight Clusters information
+Data frame with HDInsight clusters information
 }
 \description{
 Delete HDInsight cluster.
+}
+\references{
+https://docs.microsoft.com/en-us/rest/api/hdinsight/hdinsight-cluster#delete
 }
 \seealso{
 Other HDInsight functions: \code{\link{azureCreateHDI}},
