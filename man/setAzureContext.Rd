@@ -4,9 +4,9 @@
 \alias{setAzureContext}
 \title{Updates azureActiveContext object.}
 \usage{
-setAzureContext(azureActiveContext, tenantID, clientID, authKey, azToken,
-  subscriptionID, resourceGroup, storageKey, storageAccount, container, blob,
-  vmName, hdiAdmin, hdiPassword, clustername, kind, sessionID)
+setAzureContext(azureActiveContext, tenantID, clientID, authKey, subscriptionID,
+  resourceGroup, storageKey, storageAccount, container, blob, vmName, hdiAdmin,
+  hdiPassword, clustername, kind, sessionID)
 }
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
@@ -17,15 +17,13 @@ setAzureContext(azureActiveContext, tenantID, clientID, authKey, azToken,
 
 \item{authKey}{The Authentication Key provided during creation of the Active Directory application / service principal}
 
-\item{azToken}{Azure authentication token, obtained by \code{\link[=azureAuthenticate]{azureAuthenticate()}}}
-
 \item{subscriptionID}{Subscription ID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
 
 \item{resourceGroup}{Name of the resource group}
 
 \item{storageKey}{Storage key associated with storage account}
 
-\item{storageAccount}{Name of the azure storage account}
+\item{storageAccount}{Name of the azure storage account. Storage account names must be between 3 and 24 characters in length and use numbers and lower-case letters only.}
 
 \item{container}{Storage container name. See \code{\link[=azureListStorageContainers]{azureListStorageContainers()}}}
 
@@ -33,13 +31,13 @@ setAzureContext(azureActiveContext, tenantID, clientID, authKey, azToken,
 
 \item{vmName}{Name of the virtual machine}
 
-\item{hdiAdmin}{HDInsight admin username}
+\item{hdiAdmin}{HDInsight admin username. See \code{\link[=azureCreateHDI]{azureCreateHDI()}}}
 
-\item{hdiPassword}{HDInsight admin password}
+\item{hdiPassword}{HDInsight admin password. See \code{\link[=azureCreateHDI]{azureCreateHDI()}}}
 
 \item{clustername}{Cluster name, used for HDI and Spark clusters. See \code{\link[=azureCreateHDI]{azureCreateHDI()}}}
 
-\item{kind}{HDinsight kind: "hadoop","spark" or "pyspark"}
+\item{kind}{HDinsight kind: "hadoop","spark" or "rserver". See \code{\link[=azureCreateHDI]{azureCreateHDI()}}}
 
 \item{sessionID}{Spark sessionID. See \code{\link[=azureSparkCMD]{azureSparkCMD()}}}
 }

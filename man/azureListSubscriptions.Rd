@@ -12,7 +12,7 @@ azureListSubscriptions(azureActiveContext, verbose = FALSE)
 \item{verbose}{Print Tracing information (Default False)}
 }
 \value{
-Dataframe of subscriptionID; Sets AzureContext subscriptionID
+data frame with subscriptionID; Sets AzureContext subscriptionID
 }
 \description{
 Get available subscriptions.

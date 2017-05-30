@@ -5,18 +5,21 @@
 \title{Create an Azure Storage Account.}
 \usage{
 azureCreateStorageAccount(azureActiveContext, storageAccount,
-  location = "northeurope", resourceGroup, subscriptionID, verbose = FALSE)
+  location = "northeurope", resourceGroup, subscriptionID,
+  asynchronous = FALSE, verbose = FALSE)
 }
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
 
-\item{storageAccount}{Name of the azure storage account}
+\item{storageAccount}{Name of the azure storage account. Storage account names must be between 3 and 24 characters in length and use numbers and lower-case letters only.}
 
 \item{location}{A string for the location to create storage account}
 
 \item{resourceGroup}{Name of the resource group}
 
 \item{subscriptionID}{Subscription ID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
+
+\item{asynchronous}{If TRUE, submits asynchronous request to Azure. Otherwise waits until storage account is created.}
 
 \item{verbose}{Print Tracing information (Default False)}
 }

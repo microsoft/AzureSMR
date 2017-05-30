@@ -14,7 +14,7 @@ azureBlobLS(azureActiveContext, directory, recursive = FALSE, storageAccount,
 
 \item{recursive}{If TRUE, list blob store directories recursively}
 
-\item{storageAccount}{Name of the azure storage account}
+\item{storageAccount}{Name of the azure storage account. Storage account names must be between 3 and 24 characters in length and use numbers and lower-case letters only.}
 
 \item{storageKey}{Storage key associated with storage account}
 

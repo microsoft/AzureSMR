@@ -5,8 +5,8 @@
 \title{Deploy a resource from an Azure Resource Manager (ARM) template.}
 \usage{
 azureDeployTemplate(azureActiveContext, deplname, templateURL, paramURL,
-  templateJSON, paramJSON, mode = "Sync", resourceGroup, subscriptionID,
-  verbose = FALSE)
+  templateJSON, paramJSON, mode = c("Sync", "Async"), resourceGroup,
+  subscriptionID, verbose = FALSE)
 }
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}

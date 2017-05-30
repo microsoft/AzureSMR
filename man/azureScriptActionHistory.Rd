@@ -2,10 +2,13 @@
 % Please edit documentation in R/AzureHDI.R
 \name{azureScriptActionHistory}
 \alias{azureScriptActionHistory}
-\title{Get all HDInsight Script Action History for a specified cluster name.}
+\alias{summary.azureScriptActionHistory}
+\title{Get all HDInsight script action history for a specified cluster name.}
 \usage{
 azureScriptActionHistory(azureActiveContext, resourceGroup, clustername = "*",
   subscriptionID, name, type, verbose = FALSE)
+
+\method{summary}{azureScriptActionHistory}(object, ...)
 }
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
@@ -21,12 +24,19 @@ azureScriptActionHistory(azureActiveContext, resourceGroup, clustername = "*",
 \item{type}{filter by resource type}
 
 \item{verbose}{Print Tracing information (Default False)}
+
+\item{object}{azureScriptActionHistory object, created by \code{\link[=azureScriptActionHistory]{azureScriptActionHistory()}}}
+
+\item{...}{not used}
 }
 \value{
 Dataframe of HDInsight Clusters
 }
 \description{
-Get all HDInsight Script Action History for a specified cluster name.
+Get all HDInsight script action history for a specified cluster name.
+}
+\references{
+https://docs.microsoft.com/en-us/rest/api/hdinsight/hdinsight-cluster#list-all-persisted-script-actions-for-a-cluster-linux-cluster-only
 }
 \seealso{
 Other HDInsight functions: \code{\link{azureCreateHDI}},

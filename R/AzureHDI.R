@@ -5,8 +5,9 @@
 #' @inheritParams azureListAllResources
 #'
 #' @family HDInsight functions
+#' @references https://docs.microsoft.com/en-us/rest/api/hdinsight/hdinsight-cluster#list-by-subscription
 #'
-#' @return Returns Dataframe of HDInsight Clusters
+#' @return data frame with summary information of HDI clusters
 #' @export
 azureListHDI <- function(azureActiveContext, resourceGroup, clustername = "*",
                          subscriptionID, name, type, location, verbose = FALSE) {
@@ -17,7 +18,7 @@ azureListHDI <- function(azureActiveContext, resourceGroup, clustername = "*",
   if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
   if (missing(resourceGroup)) resourceGroup <- azureActiveContext$resourceGroup
   verbosity <- set_verbosity(verbose)
-     
+
   assert_that(is_subscription_id(subscriptionID))
   if (clustername != "*") {
     assert_that(is_clustername(clustername))
@@ -26,33 +27,36 @@ azureListHDI <- function(azureActiveContext, resourceGroup, clustername = "*",
 
   rg <- if (clustername == "*") "" else paste0("/resourceGroups/", resourceGroup)
   cn <- if (clustername == "*") "" else clustername
- 
+
   URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID, rg,
-           "/providers/Microsoft.HDInsight/clusters/", cn, 
+           "/providers/Microsoft.HDInsight/clusters/", cn,
            "?api-version=2015-03-01-preview")
 
   r <- GET(URL, azureApiHeaders(azToken), verbosity)
   stopWithAzureError(r)
- 
-  rc <- content(r)$value
-  z <- do.call(rbind, lapply(rc, function(x) {
-        as.data.frame(
+  rc <- content(r)
+  extract_one <- function(x) {
+     as.data.frame(
           c(
             x[c("name", "id", "location", "type")],
             x$properties[c("tier", "osType", "provisioningState", "clusterState", "createdDate")],
             x$properties$clusterDefinition[c("kind")]
-            )
-            )
-  }))
+            ))
+  }
+
+  z <- if (is.null(rc$value)) {
+    extract_one(rc)
+  } else {
+    do.call(rbind, lapply(rc$value, extract_one))
+  }
   
   azureActiveContext$resourceGroup <- resourceGroup
-
   return(z)
 }
 
 
 
-#' Get Configuration Information for a specified cluster name.
+#' Get configuration information for a specified cluster name.
 #'
 #' @inheritParams setAzureContext
 #' @inheritParams azureAuthenticate
@@ -64,69 +68,57 @@ azureListHDI <- function(azureActiveContext, resourceGroup, clustername = "*",
 #' @export
 azureHDIConf <- function(azureActiveContext, clustername, resourceGroup,
                          subscriptionID, name, type, location, verbose = FALSE) {
+  assert_that(is.azureActiveContext(azureActiveContext))
   azureCheckToken(azureActiveContext)
   azToken <- azureActiveContext$Token
-  if (missing(subscriptionID)) {
-    subscriptionID <- azureActiveContext$subscriptionID
-  } else (subscriptionID <- subscriptionID)
-  if (missing(resourceGroup)) {
-    resourceGroup <- azureActiveContext$resourceGroup
-  } else (resourceGroup <- resourceGroup)
-  if (missing(clustername)) {
-    clustername <- azureActiveContext$clustername
-  } else (clustername <- clustername)
+  if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
+  if (missing(resourceGroup)) resourceGroup <- azureActiveContext$resourceGroup
+  if (missing(clustername)) clustername <- azureActiveContext$clustername
+
   verbosity <- set_verbosity(verbose)
      
+  assert_that(is_subscription_id(subscriptionID))
+  assert_that(is_resource_group(resourceGroup))
+  assert_that(is_clustername(clustername))
 
-  if (!length(azToken)) {
-    stop("Error: No Token / Not currently Authenticated.")
-  }
-  if (!length(subscriptionID)) {
-    stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
-  }
-  if (!length(clustername)) {
-    stop("Error: No clustername Provided.")
-  }
+  URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
+               "/resourceGroups/", resourceGroup, 
+               "/providers/Microsoft.HDInsight/clusters/", clustername, 
+               "?api-version=2015-03-01-preview")
 
-  URL <- paste("https://management.azure.com/subscriptions/", subscriptionID,
-               "/resourceGroups/", resourceGroup, "/providers/Microsoft.HDInsight/clusters/",
-               clustername, "?api-version=2015-03-01-preview", sep = "")
+  r <- GET(URL, azureApiHeaders(azToken), verbosity)
+  browser()
+  rc <- content(r)
 
-  r <- GET(URL, add_headers(.headers = c(Host = "management.azure.com",
-                                         Authorization = azToken, `Content-type` = "application/json")), verbosity)
-  rl <- content(r, "text")
-
-  df <- fromJSON(rl)
-  dfn <- as.data.frame(df$name)
-  clust <- nrow(dfn)
-  if (clust < 1) {
-    warning("No HDInsight Clusters found")
-    return(NULL)
+  if (length(rc) == 0) {
+    warning("No HDInsight clusters found", immediate. = TRUE)
   }
 
-  dfn[1, 1] <- df$name
-  dfn[1, 2] <- df$id
-  dfn[1, 3] <- df$location
-  dfn[1, 4] <- df$type
-  dfn[1, 5] <- df$properties$tier
-  dfn[1, 6] <- df$properties$clusterDefinition$kind
-  dfn[1, 7] <- df$properties$osType
-  dfn[1, 8] <- df$properties$provisioningState
-  dfn[1, 9] <- df$properties$clusterState
-  dfn[1, 10] <- df$properties$createdDate
-  dfn[1, 11] <- df$properties$quotaInfo$coresUsed
-  roles1 <- df$properties$computeProfile$roles
-  rt <- ""
-  for (i in 1:nrow(roles1)) {
-    row <- roles1[i, ]
-    rt <- paste(rt, row$name, "(", row$targetInstanceCount, "*", row[,
-                                                                     3], ")")
-  }
-  dfn[1, 12] <- rt
-  colnames(dfn) <- c("name", "ID", "location", "type", "tier", "kind",
-                     "OS", "provState", "status", "created", "numCores", "information")
+  info <- paste(vapply(rc$properties$computeProfile$roles, function(x) {
+    sprintf("%s: %s * %s",
+      x$name,
+      x$targetInstanceCount,
+      x$hardwareProfile$vmSize)}, FUN.VALUE = character(1)
+    ), collapse = ", "
+  )
 
-  return(t(dfn))
+  dfn <- with(rc, data.frame(
+    name = name,
+    id = id,
+    location = location,
+    type = type,
+    tier = rc$properties$tier,
+    kind = rc$properties$clusterDefinition$kind,
+    osType = rc$properties$osType,
+    provisioningState = rc$properties$provisioningState,
+    status = rc$properties$clusterState,
+    created = rc$properties$createdDate,
+    numCores = rc$properties$quotaInfo$coresUsed,
+    information = info,
+    stringsAsFactors = FALSE
+    ))
+
+  return(dfn)
 }
 
 #' Create HDInsight cluster.
@@ -150,10 +142,12 @@ azureHDIConf <- function(azureActiveContext, clustername, resourceGroup,
 #' @param componentVersion Spark componentVersion. Default : 1.6.2
 #' @param vmSize Size of nodes: "Large", "Small", "Standard_D14_V2", etc.
 #' @param mode Provisioning mode, "Sync" or "Async". Use "Async" to immediately return to R session after submission of request
+#' @param debug Used for debugging purposes. If TRUE, returns json without attempting to connect to Azure
 #'
 #' @return Success message
 #' @family HDInsight functions
 #' @note See \url{https://docs.microsoft.com/en-us/azure/hdinsight/hdinsight-component-versioning} to learn about HDInsight Versions
+#' @references https://docs.microsoft.com/en-us/rest/api/hdinsight/hdinsight-cluster#create
 #' @export
 azureCreateHDI <- function(azureActiveContext, resourceGroup, location,
                            clustername, kind = c("rserver", "spark", "hadoop"),
@@ -162,7 +156,7 @@ azureCreateHDI <- function(azureActiveContext, resourceGroup, location,
                            workers = 2,
                            adminUser, adminPassword, sshUser, sshPassword,
                            hiveServer, hiveDB, hiveUser, hivePassword,
-                           vmSize = "Small",
+                           vmSize = "Large",
                            subscriptionID, mode = c("Sync", "Async"), 
                            verbose = FALSE, debug = FALSE) {
   assert_that(is.azureActiveContext(azureActiveContext))
@@ -245,7 +239,6 @@ azureCreateHDI <- function(azureActiveContext, resourceGroup, location,
                "?api-version=2015-03-01-preview")
 
   r <- PUT(URL, azureApiHeaders(azToken), body = bodyI, encode = "json", verbosity)
-  #browser()
   stopWithAzureError(r)
 
   azureActiveContext$resourceGroup <- resourceGroup
@@ -363,8 +356,9 @@ azureResizeHDI <- function(azureActiveContext, clustername,
 #' @inheritParams azureAuthenticate
 #' @inheritParams azureListHDI
 #'
-#' @return Returns Dataframe of HDInsight Clusters information
+#' @return Data frame with HDInsight clusters information
 #' @family HDInsight functions
+#' @references https://docs.microsoft.com/en-us/rest/api/hdinsight/hdinsight-cluster#delete
 #' @export
 azureDeleteHDI <- function(azureActiveContext, clustername, subscriptionID,
                            resourceGroup, verbose = FALSE) {
@@ -382,8 +376,9 @@ azureDeleteHDI <- function(azureActiveContext, clustername, subscriptionID,
   assert_that(is_clustername(clustername))
 
   URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
-               "/resourceGroups/", resourceGroup, "/providers/Microsoft.HDInsight/clusters/",
-               clustername, "?api-version=2015-03-01-preview")
+               "/resourceGroups/", resourceGroup, 
+               "/providers/Microsoft.HDInsight/clusters/", clustername, 
+               "?api-version=2015-03-01-preview")
 
   r <- DELETE(URL, azureApiHeaders(azToken), verbosity)
   stopWithAzureError(r)
@@ -405,14 +400,17 @@ azureDeleteHDI <- function(azureActiveContext, clustername, subscriptionID,
 #' @param workerNode install on worker nodes
 #' @param edgeNode install on worker nodes
 #' @param parameters parameters
+#' @param wait If TRUE, runs script action synchronously, i.e. waits for successfull completion. If FALSE, submits the action asynchronously
 #'
 #' @return Returns Success Message
 #' @family HDInsight functions
+#' @references https://docs.microsoft.com/en-us/rest/api/hdinsight/hdinsight-cluster#run-script-actions-on-a-running-cluster-linux-cluster-only
 #' @export
 azureRunScriptAction <- function(azureActiveContext, scriptname, scriptURL,
                                  headNode = TRUE, workerNode = FALSE, edgeNode = FALSE,
                                  clustername, resourceGroup,
-                                 parameters = "", subscriptionID, verbose = FALSE) {
+                                 parameters = "", subscriptionID, 
+                                 wait = TRUE, verbose = FALSE) {
   assert_that(is.azureActiveContext(azureActiveContext))
   azureCheckToken(azureActiveContext)
   azToken <- azureActiveContext$Token
@@ -426,13 +424,8 @@ azureRunScriptAction <- function(azureActiveContext, scriptname, scriptURL,
   assert_that(is_subscription_id(subscriptionID))
   assert_that(is_clustername(clustername))
 
-  if (!length(scriptname)) {
-    stop("Error: No Valid scriptname provided")
-  }
-  if (!length(scriptURL)) {
-    stop("Error: No Valid scriptURL provided")
-  }
-
+  if (!length(scriptname)) stop("Error: No Valid scriptname provided")
+  if (!length(scriptURL)) stop("Error: No Valid scriptURL provided")
   if (!any(headNode, workerNode, edgeNode)) {
     stop("Error: No role(headNode,workerNode,edgeNode) flag set to TRUE")
   }
@@ -465,6 +458,7 @@ azureRunScriptAction <- function(azureActiveContext, scriptname, scriptURL,
 
   azureActiveContext$clustername <- clustername
   message("Accepted")
+  if (wait) pollStatusScriptAction(azureActiveContext, scriptname = scriptname)
   return(TRUE)
 }
 
@@ -477,6 +471,7 @@ azureRunScriptAction <- function(azureActiveContext, scriptname, scriptURL,
 #'
 #' @return Dataframe of HDInsight Clusters
 #' @family HDInsight functions
+#' @references https://docs.microsoft.com/en-us/rest/api/hdinsight/hdinsight-cluster#list-all-persisted-script-actions-for-a-cluster-linux-cluster-only
 #' @export
 azureScriptActionHistory <- function(azureActiveContext, resourceGroup,
                                      clustername = "*", subscriptionID, 
@@ -503,20 +498,26 @@ azureScriptActionHistory <- function(azureActiveContext, resourceGroup,
   stopWithAzureError(r)
 
   rc <- content(r)$value
-
   if (length(rc) == 0) {
     message("No script action history found")
   }
+  class(rc) <- "azureScriptActionHistory"
 
-  dfn <- do.call(rbind, lapply(rc, function(x) {
-    data.frame(
-    x[c("name", "scriptExecutionId", "startTime")],
-    if (is.null(x$endTime)) list(endTime = NA) else x["endTime"], 
-    x[c("status", "uri", "parameters")]
-    )
-  }))
 
   azureActiveContext$clustername <- clustername
-  return(dfn)
+  return(rc)
 }
 
+#' @export
+#' @param object azureScriptActionHistory object, created by [azureScriptActionHistory()]
+#' @param ... not used
+#' @rdname azureScriptActionHistory
+summary.azureScriptActionHistory <- function(object, ...) {
+  do.call(rbind, lapply(object, function(x) {
+    data.frame(
+      x[c("name", "scriptExecutionId", "startTime")],
+      if (is.null(x$endTime)) list(endTime = NA) else x["endTime"],
+      x[c("status", "uri", "parameters")]
+    )
+  }))
+}

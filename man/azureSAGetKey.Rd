@@ -10,7 +10,7 @@ azureSAGetKey(azureActiveContext, storageAccount, resourceGroup, subscriptionID,
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
 
-\item{storageAccount}{storageAccount}
+\item{storageAccount}{Name of the azure storage account. Storage account names must be between 3 and 24 characters in length and use numbers and lower-case letters only.}
 
 \item{resourceGroup}{Name of the resource group}
 

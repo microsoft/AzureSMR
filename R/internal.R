@@ -133,9 +133,7 @@ getSig <- function(azureActiveContext, url, verb, key, storageAccount,
 
 
 stopWithAzureError <- function(r) {
-  #if (status_code(r) %in% c(200, 201, 202, 204)) return()
-  #browser()
-  if(status_code(r) < 300) return()
+  if (status_code(r) < 300) return()
   msg <- paste0(as.character(sys.call(1))[1], "()") # Name of calling fucntion
   addToMsg <- function(x) {
     if (!is.null(x)) x <- strwrap(x)
