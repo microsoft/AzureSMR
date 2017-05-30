@@ -2,24 +2,27 @@
 % Please edit documentation in R/AzureHDI.R
 \name{azureCreateHDI}
 \alias{azureCreateHDI}
-\title{Create Specifed HDInsight Cluster.}
+\title{Create HDInsight cluster.}
 \usage{
-azureCreateHDI(azureActiveContext, clustername, location, kind = "spark",
-  storageAccount, storageKey, version = "3.4", componentVersion = "1.6.2",
-  workers = 2, adminUser, adminPassword, sshUser, sshPassword, hiveServer,
-  hiveDB, hiveUser, hivePassword, resourceGroup, vmSize = "Large",
-  subscriptionID, mode = "Sync", verbose = FALSE)
+azureCreateHDI(azureActiveContext, resourceGroup, location, clustername,
+  kind = c("rserver", "spark", "hadoop"), storageAccount, storageKey,
+  version = "3.5", componentVersion = "1.6.2", workers = 2, adminUser,
+  adminPassword, sshUser, sshPassword, hiveServer, hiveDB, hiveUser,
+  hivePassword, vmSize = "Small", subscriptionID, mode = c("Sync", "Async"),
+  verbose = FALSE, debug = FALSE)
 }
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
 
-\item{clustername}{Cluster name, used for HDI and Spark clusters. See \code{\link[=azureCreateHDI]{azureCreateHDI()}}}
+\item{resourceGroup}{Name of the resource group}
 
 \item{location}{Azure region, e.g. 'westeurope' or 'southcentralus'}
 
+\item{clustername}{Cluster name, used for HDI and Spark clusters. See \code{\link[=azureCreateHDI]{azureCreateHDI()}}}
+
 \item{kind}{HDinsight kind: "hadoop","spark" or "rserver"}
 
-\item{storageAccount}{Name of the azure storage account}
+\item{storageAccount}{Name of the azure storage account. Storage account names must be between 3 and 24 characters in length and use numbers and lower-case letters only.}
 
 \item{storageKey}{Storage key associated with storage account}
 
@@ -45,8 +48,6 @@ azureCreateHDI(azureActiveContext, clustername, location, kind = "spark",
 
 \item{hivePassword}{Hive user password}
 
-\item{resourceGroup}{Name of the resource group}
-
 \item{vmSize}{Size of nodes: "Large", "Small", "Standard_D14_V2", etc.}
 
 \item{subscriptionID}{Subscription ID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
@@ -54,12 +55,14 @@ azureCreateHDI(azureActiveContext, clustername, location, kind = "spark",
 \item{mode}{Provisioning mode, "Sync" or "Async". Use "Async" to immediately return to R session after submission of request}
 
 \item{verbose}{Print Tracing information (Default False)}
+
+\item{debug}{Used for debugging purposes. If TRUE, returns json without attempting to connect to Azure}
 }
 \value{
 Success message
 }
 \description{
-Create Specifed HDInsight Cluster.
+Create HDInsight cluster.
 }
 \note{
 See \url{https://docs.microsoft.com/en-us/azure/hdinsight/hdinsight-component-versioning} to learn about HDInsight Versions

@@ -2,24 +2,24 @@
 % Please edit documentation in R/AzureHDI.R
 \name{azureRunScriptAction}
 \alias{azureRunScriptAction}
-\title{Run Script Action on HDI Cluster.}
+\title{Run script action on HDI cluster.}
 \usage{
-azureRunScriptAction(azureActiveContext, scriptname = "script1", scriptURL,
+azureRunScriptAction(azureActiveContext, scriptname, scriptURL,
   headNode = TRUE, workerNode = FALSE, edgeNode = FALSE, clustername,
   resourceGroup, parameters = "", subscriptionID, verbose = FALSE)
 }
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
 
-\item{scriptname}{Identifier for Custom action scrript operation}
+\item{scriptname}{Identifier for Custom action script operation}
 
-\item{scriptURL}{URL to custom action script (Sring)}
+\item{scriptURL}{URL to custom action script}
 
-\item{headNode}{install on head nodes (default FALSE)}
+\item{headNode}{install on head nodes}
 
-\item{workerNode}{install on worker nodes (default FALSE)}
+\item{workerNode}{install on worker nodes}
 
-\item{edgeNode}{install on worker nodes (default FALSE)}
+\item{edgeNode}{install on worker nodes}
 
 \item{clustername}{Cluster name, used for HDI and Spark clusters. See \code{\link[=azureCreateHDI]{azureCreateHDI()}}}
 
@@ -35,7 +35,7 @@ azureRunScriptAction(azureActiveContext, scriptname = "script1", scriptURL,
 Returns Success Message
 }
 \description{
-Run Script Action on HDI Cluster.
+Run script action on HDI cluster.
 }
 \seealso{
 Other HDInsight functions: \code{\link{azureCreateHDI}},

@@ -2,19 +2,20 @@
 % Please edit documentation in R/AzureHDI.R
 \name{azureResizeHDI}
 \alias{azureResizeHDI}
-\title{Resize a HDInsight Cluster role.}
+\title{Resize a HDInsight cluster role.}
 \usage{
-azureResizeHDI(azureActiveContext, clustername, role = "worker", size = 2,
-  mode = "Sync", subscriptionID, resourceGroup, verbose = FALSE)
+azureResizeHDI(azureActiveContext, clustername, role = c("worker", "head",
+  "edge"), size = 2, mode = c("Sync", "Async"), subscriptionID,
+  resourceGroup, verbose = FALSE)
 }
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
 
 \item{clustername}{Cluster name, used for HDI and Spark clusters. See \code{\link[=azureCreateHDI]{azureCreateHDI()}}}
 
-\item{role}{role type: 'worker', 'head' or 'Edge'}
+\item{role}{role type: 'worker', 'head' or 'edge'}
 
-\item{size}{Desired size of role type}
+\item{size}{Numeric: the number of nodes for this type of role}
 
 \item{mode}{Provisioning mode, "Sync" or "Async". Use "Async" to immediately return to R session after submission of request}
 
@@ -25,7 +26,7 @@ azureResizeHDI(azureActiveContext, clustername, role = "worker", size = 2,
 \item{verbose}{Print Tracing information (Default False)}
 }
 \description{
-Resize a HDInsight Cluster role.
+Resize a HDInsight cluster role.
 }
 \seealso{
 Other HDInsight functions: \code{\link{azureCreateHDI}},

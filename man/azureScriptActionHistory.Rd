@@ -2,7 +2,7 @@
 % Please edit documentation in R/AzureHDI.R
 \name{azureScriptActionHistory}
 \alias{azureScriptActionHistory}
-\title{Get all HDInsight Script Action History for a specified cluster name.}
+\title{Get all HDInsight script action history for a specified cluster name.}
 \usage{
 azureScriptActionHistory(azureActiveContext, resourceGroup, clustername = "*",
   subscriptionID, name, type, verbose = FALSE)
@@ -26,7 +26,7 @@ azureScriptActionHistory(azureActiveContext, resourceGroup, clustername = "*",
 Dataframe of HDInsight Clusters
 }
 \description{
-Get all HDInsight Script Action History for a specified cluster name.
+Get all HDInsight script action history for a specified cluster name.
 }
 \seealso{
 Other HDInsight functions: \code{\link{azureCreateHDI}},

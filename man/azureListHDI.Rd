@@ -25,10 +25,13 @@ azureListHDI(azureActiveContext, resourceGroup, clustername = "*",
 \item{verbose}{Print Tracing information (Default False)}
 }
 \value{
-Returns Dataframe of HDInsight Clusters
+data frame with summary information of HDI clusters
 }
 \description{
 Get all HDInsight Clusters in default Subscription or details for a specified cluster name.
+}
+\references{
+https://docs.microsoft.com/en-us/rest/api/hdinsight/hdinsight-cluster#list-by-subscription
 }
 \seealso{
 Other HDInsight functions: \code{\link{azureCreateHDI}},

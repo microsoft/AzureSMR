@@ -22,7 +22,7 @@ azurePutBlob(azureActiveContext, blob, contents = "", file = "", directory,
 
 \item{directory}{Blob store directory to list for content}
 
-\item{storageAccount}{Name of the azure storage account}
+\item{storageAccount}{Name of the azure storage account. Storage account names must be between 3 and 24 characters in length and use numbers and lower-case letters only.}
 
 \item{storageKey}{Storage key associated with storage account}
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/AzureHDI.R
 \name{azureDeleteHDI}
 \alias{azureDeleteHDI}
-\title{Delete Specifed HDInsight Cluster.}
+\title{Delete HDInsight cluster.}
 \usage{
 azureDeleteHDI(azureActiveContext, clustername, subscriptionID, resourceGroup,
   verbose = FALSE)
@@ -22,7 +22,7 @@ azureDeleteHDI(azureActiveContext, clustername, subscriptionID, resourceGroup,
 Returns Dataframe of HDInsight Clusters information
 }
 \description{
-Delete Specifed HDInsight Cluster.
+Delete HDInsight cluster.
 }
 \seealso{
 Other HDInsight functions: \code{\link{azureCreateHDI}},
