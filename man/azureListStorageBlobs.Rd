@@ -5,7 +5,7 @@
 \title{List storage blobs for specified storage account.}
 \usage{
 azureListStorageBlobs(azureActiveContext, storageAccount, storageKey, container,
-  resourceGroup, maxresults, prefix, delimiter, marker, verbose = FALSE)
+  maxresults, prefix, delimiter, marker, verbose = FALSE)
 }
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
@@ -15,8 +15,6 @@ azureListStorageBlobs(azureActiveContext, storageAccount, storageKey, container,
 \item{storageKey}{Storage key associated with storage account}
 
 \item{container}{Storage container name. See \code{\link[=azureListStorageContainers]{azureListStorageContainers()}}}
-
-\item{resourceGroup}{Name of the resource group}
 
 \item{maxresults}{Optional. Specifies the maximum number of blobs to return, including all BlobPrefix elements. If the request does not specify maxresults or specifies a value greater than 5,000, the server will return up to 5,000 items.  Setting \code{maxresults} to a value less than or equal to zero results in error response code 400 (Bad Request).}
 

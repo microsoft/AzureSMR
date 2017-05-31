@@ -2,7 +2,7 @@
 % Please edit documentation in R/AzureBlob.R
 \name{azureBlobLS}
 \alias{azureBlobLS}
-\title{List blob files in a storage account directory.}
+\title{List blob blobs in a storage account directory.}
 \usage{
 azureBlobLS(azureActiveContext, directory, recursive = FALSE, storageAccount,
   storageKey, container, resourceGroup, verbose = FALSE)
@@ -25,7 +25,7 @@ azureBlobLS(azureActiveContext, directory, recursive = FALSE, storageAccount,
 \item{verbose}{Print Tracing information (Default False)}
 }
 \description{
-List blob files in a storage account directory.
+List blob blobs in a storage account directory.
 }
 \seealso{
 Other Blob store functions: \code{\link{azureBlobCD}},
