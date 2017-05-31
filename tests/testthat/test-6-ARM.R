@@ -29,12 +29,8 @@ test_that("Can create resource group", {
   expect_true(resourceGroup_name %in% azureListRG(asc)$resourceGroup)
 })
 
-context("Submit resource template from inline JSON - Create storage acc")
 
-paramJSON1 <- '
-"parameters"          : {
-  "storageAccountType"    : {"value": "Standard_GRS"}
-  }'
+paramJSON1 <- '"parameters": {"storageAccountType": {"value": "Standard_GRS"}}'
   
 templateJSON1 <- '
 {
@@ -45,72 +41,63 @@ templateJSON1 <- '
   "type": "string",
   "defaultValue": "Standard_LRS",
   "allowedValues": [
-  "Standard_LRS",
-  "Standard_GRS",
-  "Standard_ZRS",
-  "Premium_LRS"
+    "Standard_LRS",
+    "Standard_GRS",
+    "Standard_ZRS",
+    "Premium_LRS"
   ],
-  "metadata": {
-  "description": "Storage Account type"
-  }
+  "metadata": {"description": "Storage Account type"}
   }
   },
-  "variables": {
-  "storageAccountName": "[uniquestring(resourceGroup().id)]"
-  },
+  "variables": {"storageAccountName": "[uniquestring(resourceGroup().id)]"},
   "resources": [
-  {
-  "type": "Microsoft.Storage/storageAccounts",
-  "name": "[uniquestring(resourceGroup().id)]",
-  "apiVersion": "2016-01-01",
-  "location": "[resourceGroup().location]",
-  "sku": {
-  "name": "Standard_GRS"
-  },
-  "kind": "Storage", 
-  "properties": {
-  }
-  }
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[uniquestring(resourceGroup().id)]",
+      "apiVersion": "2016-01-01",
+      "location": "[resourceGroup().location]",
+      "sku": {"name": "Standard_GRS"},
+      "kind": "Storage", 
+      "properties": {}
+    }
   ],
-  "outputs": {
-  "storageAccountName": {
-  "type": "string",
-  "value": "[uniquestring(resourceGroup().id)]"
-  }
-  }
+  "outputs": {"storageAccountName": {"type": "string","value": "[uniquestring(resourceGroup().id)]"}}
   }
 '
-res <- azureDeployTemplate(asc,deplname = "Deploy1",templateJSON=templateJSON1 ,paramJSON = paramJSON1,resourceGroup = resourceGroup_name,verbose = FALSE)
-expect_true(res)
-
-context("Submit resource template from URL JSON - Create scaleset with jumpbox")
 
 paramJSON2 <- '
-"parameters"          : {
-"vmssName": {
-      "value": "azuresmrvmss"
-    },
-    "instanceCount": {
-      "value": 2
-    },
-    "adminUsername": {
-      "value": "ubuntu"
-    },
-    "adminPassword": {
-      "value": "Password123"
-}
-  }'
+"parameters" : {
+  "vmssName": {"value": "azuresmrvmss"},
+  "instanceCount": {"value": 2},
+  "adminUsername": {"value": "ubuntu"},
+  "adminPassword": {"value": "Password123"}
+}'
 
-tempURL = "https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/201-vmss-linux-jumpbox/azuredeploy.json"
-res <- azureDeployTemplate(asc,deplname = "Deploy3",templateURL = tempURL ,paramJSON = paramJSON2,resourceGroup = resourceGroup_name,verbose = FALSE)
-expect_true(res)
+context(" - deploy 1")
+test_that("Can create resource from json", {
+  res <- azureDeployTemplate(asc, deplname = "Deploy1",
+    templateJSON = templateJSON1,
+    paramJSON = paramJSON1,
+    resourceGroup = resourceGroup_name,
+    verbose = FALSE)
+  expect_true(res)
+})
 
-context(" - delete resource group")
+
+context(" - deploy 2")
+test_that("Can create resource from URL", {
+  tempURL = "https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/201-vmss-linux-jumpbox/azuredeploy.json"
+  res <- azureDeployTemplate(asc, deplname = "Deploy2",
+     templateURL = tempURL, 
+     paramJSON = paramJSON2, 
+     resourceGroup = resourceGroup_name, 
+     verbose = FALSE)
+  expect_true(res)
+})
+
 test_that("Can delete resource group", {
   skip_if_missing_config(settingsfile)
   
-  expect_message({
-    res <- azureDeleteResourceGroup(asc, resourceGroup = resourceGroup_name)
-  }, "Delete Request Submitted"
-  )
+  azureDeleteResourceGroup(asc, resourceGroup = resourceGroup_name)
+  
 })
