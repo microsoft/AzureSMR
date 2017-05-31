@@ -135,13 +135,23 @@ on_failure(is_valid_storage_account) <- function(call, env) {
 # --- container
 
 is_container <- function(x) {
-  is.character(x) && length(x) >= 1
+  is.character(x) && length(x) == 1 && nchar(x) > 0
 }
 
 on_failure(is_container) <- function(call, env) {
   "Provide a valid container, or set using createAzureContext()"
 }
-7
+
+# --- directory
+
+is_directory <- function(x) {
+  is.character(x) && length(x) == 1
+}
+
+on_failure(is_directory) <- function(call, env) {
+  "Provide a valid directory, or set using createAzureContext()"
+}
+
 # --- storage_key
 
 is_storage_key <- function(x) {

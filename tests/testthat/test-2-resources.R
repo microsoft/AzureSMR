@@ -112,9 +112,9 @@ test_that("Can create container", {
 context(" - blob")
 test_that("Can put, list, get and delete a blob", {
   skip_if_missing_config(settingsfile)
-expect_warning({
-  res <- azureListStorageBlobs(asc, container = "tempcontainer")
-})
+  expect_warning({
+    res <- azureListStorageBlobs(asc, container = "tempcontainer")
+  })
   expect_is(res, "data.frame")
   expect_equal(ncol(res), 5)
   expect_equal(nrow(res), 0)

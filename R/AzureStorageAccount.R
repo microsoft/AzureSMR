@@ -55,8 +55,8 @@ azureSAGetKey <- function(azureActiveContext, storageAccount,
 
   URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
                "/resourceGroups/", resourceGroup, 
-               "/providers/Microsoft.Storage/storageAccounts/",
-               storageAccount, "/listkeys?api-version=2016-01-01")
+               "/providers/Microsoft.Storage/storageAccounts/", storageAccount, 
+               "/listkeys?api-version=2016-01-01")
 
   r <- POST(URL, azureApiHeaders(azToken), verbosity)
   stopWithAzureError(r)
