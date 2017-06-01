@@ -65,12 +65,13 @@ templateJSON1 <- '
   }
 '
 
-paramJSON2 <- '
-"parameters" : {
-  "vmssName": {"value": "azuresmrvmss"},
-  "instanceCount": {"value": 2},
-  "adminUsername": {"value": "ubuntu"},
-  "adminPassword": {"value": "Password123"}
+paramJSON2 <- '"parameters": {
+    "vnetName": {"value": "VNet1"},
+    "vnetAddressPrefix": {"value": "10.0.0.0/16"},
+    "subnet1Name": {"value": "Subnet1"},
+    "subnet1Prefix": {"value": "10.0.0.0/24"},
+    "subnet2Name": {"value": "Subnet2"},
+    "subnet2Prefix": {"value": "10.0.1.0/24"}
 }'
 
 context(" - deploy 1")
@@ -86,8 +87,9 @@ test_that("Can create resource from json", {
 
 context(" - deploy 2")
 test_that("Can create resource from URL", {
-  tempURL = "https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/201-vmss-linux-jumpbox/azuredeploy.json"
-  res <- azureDeployTemplate(asc, deplname = "Deploy2",
+  #tempURL = "https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/201-vmss-linux-jumpbox/azuredeploy.json"
+  tempURL <- "https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/101-vnet-two-subnets/azuredeploy.json"
+    res <- azureDeployTemplate(asc, deplname = "Deploy2",
      templateURL = tempURL, 
      paramJSON = paramJSON2, 
      resourceGroup = resourceGroup_name, 
