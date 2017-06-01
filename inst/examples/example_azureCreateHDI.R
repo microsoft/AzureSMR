@@ -1,11 +1,10 @@
 \dontrun{
 library(AzureSMR)
 
-azureCreateHDI(asc, resourceGroup = resourceGroup_name, clustername = "azuresmr_hdi_test",
-      storageAccount = "azuresmrhditestsa",
-      adminUser = "hdiadmin", adminPassword = "Azuresmr_password1",
-      sshUser = "sssUser_test1", sshPassword = "sshUser_password",
-      kind = "rserver",
-      debug = TRUE
+azureCreateHDI(asc, resourceGroup = resourceGroup_name, clustername = "myazuresmrhdiclust",
+               storageAccount = "azuresmrhdisa123",
+               adminUser = "hdiadmin", adminPassword = "Password123!",
+               sshUser = "sshuser", sshPassword = "Password123!",
+               kind = "rserver", version = "3.5"
 )
 }
