@@ -4,7 +4,7 @@
 \alias{createAzureContext}
 \title{Create an Azure Context.}
 \usage{
-createAzureContext(tenantID, clientID, authKey)
+createAzureContext(tenantID, clientID, authKey, configFile)
 }
 \arguments{
 \item{tenantID}{The Tenant ID provided during creation of the Active Directory application / service principal}
@@ -23,7 +23,9 @@ Create a container (\code{azureActiveContext}) for holding variables used by the
 See the Azure documentation (\url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/}) for information to configure an Active Directory application.
 }
 \seealso{
-\code{\link[=setAzureContext]{setAzureContext()}}, \code{\link[=azureAuthenticate]{azureAuthenticate()}}
+\code{\link[=setAzureContext]{setAzureContext()}}, \code{\link[=azureAuthenticate]{azureAuthenticate()}}, [read.AzureSMR.config)]
+
+[read.AzureSMR.config)]: R:read.AzureSMR.config)
 
 Other azureActiveContext functions: \code{\link{setAzureContext}}
 }

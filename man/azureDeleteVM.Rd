@@ -24,7 +24,8 @@ azureDeleteVM(azureActiveContext, resourceGroup, vmName, subscriptionID,
 Delete a Virtual Machine.
 }
 \seealso{
-Other Virtual machine functions: \code{\link{azureListScaleSetNetwork}},
+Other Virtual machine functions: \code{\link{azureGetAllVMstatus}},
+  \code{\link{azureListScaleSetNetwork}},
   \code{\link{azureListScaleSetVM}},
   \code{\link{azureListScaleSets}},
   \code{\link{azureListVM}}, \code{\link{azureStartVM}},

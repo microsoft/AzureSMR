@@ -457,8 +457,11 @@ azureRunScriptAction <- function(azureActiveContext, scriptname, scriptURL,
   stopWithAzureError(r)
 
   azureActiveContext$clustername <- clustername
+  azureActiveContext$resourceGroup <- resourceGroup
+
+
   message("Accepted")
-  if (wait) pollStatusScriptAction(azureActiveContext, scriptname = scriptname)
+  if (wait) pollStatusScriptAction(azureActiveContext, scriptname = scriptname, resourceGroup = resourceGroup)
   return(TRUE)
 }
 
@@ -497,7 +500,7 @@ azureScriptActionHistory <- function(azureActiveContext, resourceGroup,
   r <- GET(URL, azureApiHeaders(azToken), verbosity)
   stopWithAzureError(r)
 
-  rc <- content(r)$value
+  rc <- content(r, bigint_as_char = TRUE)$value
   if (length(rc) == 0) {
     message("No script action history found")
   }

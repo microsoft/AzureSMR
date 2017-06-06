@@ -25,6 +25,7 @@ List VMs within a scale set
 }
 \seealso{
 Other Virtual machine functions: \code{\link{azureDeleteVM}},
+  \code{\link{azureGetAllVMstatus}},
   \code{\link{azureListScaleSetNetwork}},
   \code{\link{azureListScaleSets}},
   \code{\link{azureListVM}}, \code{\link{azureStartVM}},
