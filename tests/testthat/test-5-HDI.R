@@ -1,19 +1,12 @@
 if (interactive()) library("testthat")
 
 settingsfile <- system.file("tests/testthat/config.json", package = "AzureSMR")
-config <- read.AzureSMR.config(settingsfile)
 
 #  ------------------------------------------------------------------------
 
 context("HDI")
 
-asc <- createAzureContext()
-with(config,
-     setAzureContext(asc, tenantID = tenantID, clientID = clientID, authKey = authKey)
-)
-
-
-azureAuthenticate(asc, verbose = FALSE)
+asc <- createAzureContext(configFile = settingsfile)
 
 timestamp <- format(Sys.time(), format = "%y%m%d%H%M")
 resourceGroup_name <- paste0("_AzureSMtest_", timestamp)
@@ -139,7 +132,8 @@ test_that("can run action scripts", {
       scriptname = "installPackages",
       scriptURL = "http://mrsactionscripts.blob.core.windows.net/rpackages-v01/InstallRPackages.sh",
       workerNode = TRUE, edgeNode = TRUE,
-      parameters = "useCRAN stringr")
+      parameters = "useCRAN stringr"
+    )
   )
 
   # retrieve action script history
