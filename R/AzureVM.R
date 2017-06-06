@@ -64,6 +64,7 @@ azureGetAllVMstatus <- function(azureActiveContext) {
   vms <- res[res$type == "Microsoft.Compute/virtualMachines",]
   n <- nrow(vms)
   pb <- txtProgressBar(min = 0, max = n, style = 3)
+  on.exit(close(pb))
   z <- lapply(seq_len(n), function(i) {
     setTxtProgressBar(pb, i)
     z <- tryCatch(azureVMStatus(azureActiveContext,
@@ -72,7 +73,6 @@ azureGetAllVMstatus <- function(azureActiveContext) {
                   subscriptionID = vms$subscriptionID[i]
                   ), error = function(e) e)
     z <- if (inherits(z, "error")) NA_character_ else z
-    close(pb)
     data.frame(
       name = vms$name[i],
       resourceGroup = vms$resourceGroup[i],
