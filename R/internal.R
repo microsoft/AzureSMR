@@ -161,9 +161,8 @@ extractStorageAccount    <- function(x) gsub(".*?/storageAccounts/(.*?)(/.*)*$",
 
 
 refreshStorageKey <- function(azureActiveContext, storageAccount, resourceGroup){
-  if (length(azureActiveContext$storageAccountK) < 1 ||
-      storageAccount != azureActiveContext$storageAccountK ||
-      length(azureActiveContext$storageKey) <1
+  if (storageAccount != azureActiveContext$storageAccount ||
+      length(azureActiveContext$storageKey) == 0
   ) {
     message("Fetching Storage Key..")
     azureSAGetKey(azureActiveContext, resourceGroup = resourceGroup, storageAccount = storageAccount)
