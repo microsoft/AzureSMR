@@ -7,19 +7,30 @@
 #' @inheritParams setAzureContext
 #' @family azureActiveContext functions
 #'
-#' @seealso [setAzureContext()], [azureAuthenticate()]
+#' @seealso [setAzureContext()], [azureAuthenticate()], [read.AzureSMR.config)]
 #' @return An `azureActiveContext` object
 #' @export
-createAzureContext <- function(tenantID, clientID, authKey){
+createAzureContext <- function(tenantID, clientID, authKey, configFile){
   azEnv <- new.env(parent = emptyenv())
   azEnv <- as.azureActiveContext(azEnv)
 
-  if (!missing(tenantID)) azEnv$tenantID <- tenantID else azEnv$tenantID <- "?"
-  if (!missing(clientID)) azEnv$clientID <- clientID else azEnv$tenantID <- "?"
-  if (!missing(authKey))  azEnv$authKey <- authKey   else azEnv$tenantID <- "?"
+  list2env(
+    list(tenantID = "", clientID = "", authKey = ""),
+    envir = azEnv
+  )
+  if (!missing(configFile)) {
+    config <- read.AzureSMR.config(configFile)
+    list2env(config, envir = azEnv)
+    azureAuthenticate(azEnv)
+  } else {
+    if (!missing(tenantID)) azEnv$tenantID <- tenantID
+    if (!missing(clientID)) azEnv$clientID <- clientID
+    if (!missing(authKey)) azEnv$authKey <- authKey
+    if (!missing(tenantID) && !missing(clientID) && !missing(authKey)) {
+      azureAuthenticate(azEnv)
+    }
+  }
 
-  if (!missing(tenantID) && !missing(clientID) && !missing(authKey) )
-      azureAuthenticate(azEnv,tenantID, clientID, authKey)
   return(azEnv)
 }
 

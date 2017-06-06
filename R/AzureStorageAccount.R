@@ -64,7 +64,6 @@ azureSAGetKey <- function(azureActiveContext, storageAccount,
   rl <- content(r, "text", encoding = "UTF-8")
   df <- fromJSON(rl)
   azureActiveContext$storageAccount  <- storageAccount
-  azureActiveContext$storageAccountK <- storageAccount
   azureActiveContext$resourceGroup   <- resourceGroup
   azureActiveContext$storageKey <- df$keys$value[1]
 
