@@ -23,6 +23,7 @@ List scale sets within a resource group.
 }
 \seealso{
 Other Virtual machine functions: \code{\link{azureDeleteVM}},
+  \code{\link{azureGetAllVMstatus}},
   \code{\link{azureListScaleSetNetwork}},
   \code{\link{azureListScaleSetVM}},
   \code{\link{azureListVM}}, \code{\link{azureStartVM}},

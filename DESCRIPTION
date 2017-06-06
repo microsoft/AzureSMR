@@ -23,7 +23,11 @@ Imports:
     jsonlite,
     XML,
     base64enc,
-    digest
+    digest,
+	shiny (>= 0.13),
+	miniUI (>= 0.1.1),
+	rstudioapi (>= 0.5),
+	DT
 Depends:
     R(>= 3.0.0)
 Suggests:

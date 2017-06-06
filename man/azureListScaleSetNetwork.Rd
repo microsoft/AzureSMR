@@ -26,6 +26,7 @@ https://docs.microsoft.com/en-us/rest/api/network/loadbalancer/list-load-balance
 }
 \seealso{
 Other Virtual machine functions: \code{\link{azureDeleteVM}},
+  \code{\link{azureGetAllVMstatus}},
   \code{\link{azureListScaleSetVM}},
   \code{\link{azureListScaleSets}},
   \code{\link{azureListVM}}, \code{\link{azureStartVM}},
