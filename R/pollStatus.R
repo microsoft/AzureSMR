@@ -126,7 +126,7 @@ pollStatusHDI <- function(azureActiveContext, clustername) {
 }
 
 
-pollStatusScriptAction <- function(azureActiveContext, scriptname) {
+pollStatusScriptAction <- function(azureActiveContext, scriptname, resourceGroup) {
 
   message("Script action request submitted: ", Sys.time())
   message("Key: A - accepted, (.) - in progress, S - succeeded, E - error, F - failed")
@@ -134,7 +134,8 @@ pollStatusScriptAction <- function(azureActiveContext, scriptname) {
   waiting <- TRUE
   while (iteration < 500 && waiting) {
 
-    status <- azureScriptActionHistory(azureActiveContext)
+    status <- azureScriptActionHistory(azureActiveContext, 
+      resourceGroup = resourceGroup)
     idx <- which(sapply(status, "[[", "name") == scriptname)[1]
     summary <- status[[idx]]$status
     rc <- switch(tolower(summary),
