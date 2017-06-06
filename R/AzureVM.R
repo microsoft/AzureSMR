@@ -50,6 +50,41 @@ azureListVM <- function(azureActiveContext, resourceGroup, location, subscriptio
   return(dfn)
 }
 
+#' List the status of every virtual machine in the azure active context.
+#'
+#' First queries the azure active context for all visible resources, then sequentially queries the status of all virtuam machines.
+#'
+#' @inheritParams setAzureContext
+#' @inheritParams azureListAllResources
+#'
+#' @family Virtual machine functions
+#' @export
+azureGetAllVMstatus <- function(azureActiveContext) {
+  res <- azureListAllResources(azureActiveContext)
+  vms <- res[res$type == "Microsoft.Compute/virtualMachines",]
+  n <- nrow(vms)
+  pb <- txtProgressBar(min = 0, max = n, style = 3)
+  z <- lapply(seq_len(n), function(i) {
+    setTxtProgressBar(pb, i)
+    z <- tryCatch(azureVMStatus(azureActiveContext,
+                  resourceGroup = vms$resourceGroup[i],
+                  vmName = vms$name[i],
+                  subscriptionID = vms$subscriptionID[i]
+                  ), error = function(e) e)
+    z <- if (inherits(z, "error")) NA_character_ else z
+    close(pb)
+    data.frame(
+      name = vms$name[i],
+      resourceGroup = vms$resourceGroup[i],
+      subscriptionID = vms$subscriptionID[i],
+      provisioning = gsub("Provisioning (.*?), .*$", "\\1", z),
+      status = gsub(".*?, VM (.*)$", "\\1", z)
+    )
+  })
+  do.call(rbind, z)
+}
+
+
 
 #' Start a Virtual Machine.
 #'
