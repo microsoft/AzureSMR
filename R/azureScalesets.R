@@ -8,22 +8,20 @@
 azureListScaleSets <- function(azureActiveContext, resourceGroup, location, subscriptionID,
                         verbose = FALSE) {
   assert_that(is.azureActiveContext(azureActiveContext))
-  azureCheckToken(azureActiveContext)
-  azToken <- azureActiveContext$Token
   if(missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
   if(missing(resourceGroup)) resourceGroup <- azureActiveContext$resourceGroup
   if(!is.null(resourceGroup)) assert_that(is_resource_group(resourceGroup))
   assert_that(is_subscription_id(subscriptionID))
-  verbosity <- set_verbosity(verbose)
 
   rg <- if(!is.null(resourceGroup)) paste0("/resourceGroups/", resourceGroup,) else ""
 
-  URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
+  uri <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
                rg,
                "/providers/Microsoft.Compute/virtualMachineScaleSets?api-version=2016-03-30"
                )
 
-  r <- GET(URL, azureApiHeaders(azToken), verbosity)
+  r <- call_azure_sm(azureActiveContext, uri = uri,
+    verb = "GET", verbose = verbose)
   stopWithAzureError(r)
 
   rl <- content(r, "text", encoding = "UTF-8")
@@ -61,23 +59,22 @@ azureListScaleSets <- function(azureActiveContext, resourceGroup, location, subs
 azureListScaleSetNetwork <- function(azureActiveContext, resourceGroup, location, subscriptionID,
                                verbose = FALSE) {
   assert_that(is.azureActiveContext(azureActiveContext))
-  azureCheckToken(azureActiveContext)
-  azToken <- azureActiveContext$Token
   if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
   if (missing(resourceGroup)) resourceGroup <- azureActiveContext$resourceGroup
   if (missing(resourceGroup)) assert_that(is_resource_group(resourceGroup))
   assert_that(is_subscription_id(subscriptionID))
-  verbosity <- set_verbosity(verbose)
 
   rg <- if (!is.null(resourceGroup)) paste0("/resourceGroups/", resourceGroup,) else "/"
 
-  URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
+  uri <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
                rg,
                "/providers/Microsoft.Network/loadBalancers", 
                "?api-version=2016-09-01")
 
-  r <- GET(URL, azureApiHeaders(azToken), verbosity)
+  r <- call_azure_sm(azureActiveContext, uri = uri, 
+    verb = "GET", verbose = verbose)
   stopWithAzureError(r)
+
   rl <- content(r, "text", encoding = "UTF-8")
   df <- fromJSON(rl)
   lbs <- df$value$name
@@ -112,11 +109,12 @@ azureListScaleSetNetwork <- function(azureActiveContext, resourceGroup, location
   }
 
 
-  URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
+  uri <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
                rg, 
                "/providers/Microsoft.Network/publicIPAddresses", 
                "?api-version=2016-09-01")
-  r <- GET(URL, azureApiHeaders(azToken), verbosity)
+  r <- call_azure_sm(azureActiveContext, uri = uri,
+    verb = "GET", verbose = verbose)
   stopWithAzureError(r)
 
   rl <- content(r, "text", encoding = "UTF-8")
@@ -175,21 +173,19 @@ azureListScaleSetNetwork <- function(azureActiveContext, resourceGroup, location
 azureListScaleSetVM <- function(azureActiveContext, scaleSet, resourceGroup, location, subscriptionID,
                                 verbose = FALSE) {
   assert_that(is.azureActiveContext(azureActiveContext))
-  azureCheckToken(azureActiveContext)
-  azToken <- azureActiveContext$Token
   if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
   if (missing(resourceGroup)) resourceGroup <- azureActiveContext$resourceGroup
   assert_that(is_resource_group(resourceGroup))
   assert_that(is_subscription_id(subscriptionID))
   assert_that(is_scaleset(scaleSet))
-  verbosity <- set_verbosity(verbose)
 
-  URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
+  uri <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
                "/resourceGroups/", resourceGroup, 
                "/providers/Microsoft.Compute/virtualMachineScaleSets/", scaleSet, 
                "/virtualMachines?api-version=2016-03-30")
 
-  r <- GET(URL, azureApiHeaders(azToken), verbosity)
+  r <- call_azure_sm(azureActiveContext, uri = uri, 
+    verb = "GET", verbose = verbose)
   stopWithAzureError(r)
 
   rl <- content(r, "text", encoding = "UTF-8")

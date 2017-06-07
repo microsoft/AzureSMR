@@ -3,6 +3,8 @@
 #' @inheritParams setAzureContext
 #' @inheritParams azureAuthenticate
 #'
+#' @importFrom httr authenticate
+#'
 #' @family Hive functions
 #' @export
 azureHiveStatus <- function(azureActiveContext, clustername, hdiAdmin,
@@ -17,7 +19,6 @@ azureHiveStatus <- function(azureActiveContext, clustername, hdiAdmin,
   if (missing(hdiPassword)) {
     HP <- azureActiveContext$hdiPassword
   } else (HP = hdiPassword)
-  verbosity <- set_verbosity(verbose)
 
 
   if (!length(CN)) {
@@ -34,8 +35,7 @@ azureHiveStatus <- function(azureActiveContext, clustername, hdiAdmin,
   azureActiveContext$hdiPassword <- HP
   azureActiveContext$clustername <- CN
 
-  URL <- paste("https://", CN, ".azurehdinsight.net/templeton/v1/status",
-               sep = "")
+  uri <- paste0("https://", CN, ".azurehdinsight.net/templeton/v1/status")
 
   r <- GET(URL, add_headers(.headers = c(`Content-type` = "application/json")),
            authenticate(HA, HP), verbosity)

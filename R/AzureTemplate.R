@@ -19,8 +19,6 @@ azureDeployTemplate <- function(azureActiveContext, deplname, templateURL,
                                 resourceGroup, subscriptionID,
                                 verbose = FALSE) {
   assert_that(is.azureActiveContext(azureActiveContext))
-  azureCheckToken(azureActiveContext)
-  azToken <- azureActiveContext$Token
   if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
   if (missing(resourceGroup)) resourceGroup <- azureActiveContext$resourceGroup
 
@@ -34,16 +32,14 @@ azureDeployTemplate <- function(azureActiveContext, deplname, templateURL,
     stop("No templateURL or templateJSON provided")
   }
 
-  verbosity <- set_verbosity(verbose)
-
-  URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
+  uri <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
                "/resourceGroups/", resourceGroup, 
                "/providers/microsoft.resources/deployments/", deplname, 
                "?api-version=2016-06-01")
 
   combination <- paste0(if(!missing(templateURL)) "tu" else "tj" , 
                         if (!missing(paramURL)) "pu" else if (!missing(paramJSON)) "pj" else "")
-  bodyI <- switch(
+  body <- switch(
     combination,
     tu   = paste0('{"properties": ',
                   '{"templateLink": { "uri": "', templateURL, '","contentversion": "1.0.0.0"},',
@@ -64,7 +60,8 @@ azureDeployTemplate <- function(azureActiveContext, deplname, templateURL,
                   '","contentversion": "1.0.0.0"},"debugSetting": {"detailLevel": "requestContent, responseContent"}}}')
   )
 
-  r <- PUT(URL, azureApiHeaders(azToken), body = bodyI, verbosity)
+  r <- call_azure_sm(azureActiveContext, uri = uri, body = body,
+    verb = "PUT", verbose = verbose)
   stopWithAzureError(r)
   
   if (mode == "Sync") {
@@ -88,21 +85,18 @@ azureDeployTemplate <- function(azureActiveContext, deplname, templateURL,
 azureDeployStatus <- function(azureActiveContext, deplname, resourceGroup,
                               subscriptionID, verbose = FALSE) {
   assert_that(is.azureActiveContext(azureActiveContext))
-  azureCheckToken(azureActiveContext)
-  azToken <- azureActiveContext$Token
   if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
   if (missing(resourceGroup)) resourceGroup <- azureActiveContext$resourceGroup
-  verbosity <- set_verbosity(verbose)
- 
 
   assert_that(is_resource_group(resourceGroup))
   assert_that(is_subscription_id(subscriptionID))
   assert_that(is_deployment_name(deplname))
 
-  URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
+  uri<- paste0("https://management.azure.com/subscriptions/", subscriptionID,
                "/resourceGroups/", resourceGroup, "/providers/microsoft.resources/deployments/",
                deplname, "?api-version=2016-06-01")
-  r <- GET(URL, azureApiHeaders(azToken), verbosity)
+  r <- call_azure_sm(azureActiveContext, uri = uri,
+    verb = "GET", verbose = verbose)
   stopWithAzureError(r)
 
   rl <- content(r, "text", encoding = "UTF-8")
@@ -124,23 +118,22 @@ azureDeployStatusSummary <- function(x) x$properties$provisioningState
 azureDeleteDeploy <- function(azureActiveContext, deplname, resourceGroup,
                               subscriptionID, verbose = FALSE) {
   assert_that(is.azureActiveContext(azureActiveContext))
-  azureCheckToken(azureActiveContext)
-  azToken <- azureActiveContext$Token
   if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
   if (missing(resourceGroup)) resourceGroup <- azureActiveContext$resourceGroup
-  verbosity <- set_verbosity(verbose)
  
   assert_that(is_resource_group(resourceGroup))
   assert_that(is_subscription_id(subscriptionID))
   assert_that(is_deployment_name(deplname))
 
-  URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
+  uri <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
                "/resourceGroups/", resourceGroup, "/providers/microsoft.resources/deployments/",
                deplname, "?api-version=2016-06-01")
 
-  r <- DELETE(URL, azureApiHeaders(azToken), verbosity)
-  rl <- content(r, "text", encoding = "UTF-8")
+  r <- call_azure_sm(azureActiveContext, uri = uri, 
+    verb = "DELETE", verbose = verbose)
   stopWithAzureError(r)
+
+  rl <- content(r, "text", encoding = "UTF-8")
   df <- fromJSON(rl)
   #print(df)
   return(TRUE)
@@ -159,21 +152,19 @@ azureCancelDeploy <- function(azureActiveContext, deplname, resourceGroup,
                               subscriptionID, verbose = FALSE) {
 
   assert_that(is.azureActiveContext(azureActiveContext))
-  azureCheckToken(azureActiveContext)
-  azToken <- azureActiveContext$Token
   if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
   if (missing(resourceGroup)) resourceGroup <- azureActiveContext$resourceGroup
-  verbosity <- set_verbosity(verbose)
  
   assert_that(is_resource_group(resourceGroup))
   assert_that(is_subscription_id(subscriptionID))
   assert_that(is_deployment_name(deplname))
 
-  URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
+  uri <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
                "/resourceGroups/", resourceGroup, "/providers/microsoft.resources/deployments/",
                deplname, "/cancel?api-version=2016-06-01")
 
-  r <- POST(URL, azureApiHeaders(azToken), verbosity)
+  r <- call_azure_sm(azureActiveContext, uri = uri, 
+    verb = "POST", verbose = verbose)
   stopWithAzureError(r)
 
   rl <- content(r, "text", encoding = "UTF-8")

@@ -8,20 +8,18 @@
 azureListVM <- function(azureActiveContext, resourceGroup, location, subscriptionID,
                         verbose = FALSE) {
   assert_that(is.azureActiveContext(azureActiveContext))
-  azureCheckToken(azureActiveContext)
-  azToken <- azureActiveContext$Token
   if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID 
   if (missing(resourceGroup)) resourceGroup <- azureActiveContext$resourceGroup 
   assert_that(is_resource_group(resourceGroup))
   assert_that(is_subscription_id(subscriptionID))
-  verbosity <- set_verbosity(verbose)
   
-  URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
+  uri <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
                "/resourceGroups/", resourceGroup, 
                "/providers/Microsoft.Compute/virtualmachines?api-version=2015-05-01-preview"
                )
 
-  r <- GET(URL, azureApiHeaders(azToken), verbosity)
+  r <- call_azure_sm(azureActiveContext, uri = uri,
+    verb = "GET", verbose = verbose)
   stopWithAzureError(r)
 
   rl <- content(r, "text", encoding = "UTF-8")
@@ -97,8 +95,6 @@ azureGetAllVMstatus <- function(azureActiveContext) {
 azureStartVM <- function(azureActiveContext, resourceGroup, vmName, mode = "Sync",
                          subscriptionID, verbose = FALSE) {
   assert_that(is.azureActiveContext(azureActiveContext))
-  azureCheckToken(azureActiveContext)
-  azToken <- azureActiveContext$Token
 
   if(missing(resourceGroup)) resourceGroup <- azureActiveContext$resourceGroup
   if(missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
@@ -107,14 +103,13 @@ azureStartVM <- function(azureActiveContext, resourceGroup, vmName, mode = "Sync
   assert_that(is_resource_group(resourceGroup))
   assert_that(is_subscription_id(subscriptionID))
   assert_that(is_vm_name(vmName))
-
-  verbosity <- set_verbosity(verbose)
   
-    URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
-               "/resourceGroups/", resourceGroup, "/providers/Microsoft.Compute/virtualmachines/",
-               vmName, "/start?api-version=2015-05-01-preview")
+  uri <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
+              "/resourceGroups/", resourceGroup, "/providers/Microsoft.Compute/virtualmachines/",
+              vmName, "/start?api-version=2015-05-01-preview")
 
-  r <- POST(URL, azureApiHeaders(azToken), verbosity)
+  r <- call_azure_sm(azureActiveContext, uri = uri,
+    verb = "POST", verbose = verbose)
   stopWithAzureError(r)
 
   rl <- content(r, "text", encoding = "UTF-8")
@@ -144,8 +139,6 @@ azureStartVM <- function(azureActiveContext, resourceGroup, vmName, mode = "Sync
 azureStopVM <- function(azureActiveContext, resourceGroup, vmName, mode = "Sync",
                         subscriptionID, verbose = FALSE) {
   assert_that(is.azureActiveContext(azureActiveContext))
-  azureCheckToken(azureActiveContext)
-  azToken <- azureActiveContext$Token
 
   if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
   if (missing(resourceGroup)) resourceGroup <- azureActiveContext$resourceGroup
@@ -154,14 +147,14 @@ azureStopVM <- function(azureActiveContext, resourceGroup, vmName, mode = "Sync"
   assert_that(is_resource_group(resourceGroup))
   assert_that(is_subscription_id(subscriptionID))
   assert_that(is_vm_name(vmName))
-
-  verbosity <- set_verbosity(verbose)
      
-  URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
-               "/resourceGroups/", resourceGroup, "/providers/Microsoft.Compute/virtualmachines/",
-               vmName, "/deallocate?api-version=2015-05-01-preview")
+  uri <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
+               "/resourceGroups/", resourceGroup, 
+               "/providers/Microsoft.Compute/virtualmachines/", vmName, 
+               "/deallocate?api-version=2015-05-01-preview")
   
-  r <- POST(URL, azureApiHeaders(azToken), verbosity)
+  r <- call_azure_sm(azureActiveContext, uri = uri, 
+    verb = "POST", verbose = verbose)
   stopWithAzureError(r)
 
   rl <- content(r, "text", encoding = "UTF-8")
@@ -192,23 +185,22 @@ azureStopVM <- function(azureActiveContext, resourceGroup, vmName, mode = "Sync"
 azureVMStatus <- function(azureActiveContext, resourceGroup, vmName, subscriptionID,
                           ignore = "N", verbose = FALSE) {
   assert_that(is.azureActiveContext(azureActiveContext))
-  azureCheckToken(azureActiveContext)
-  azToken <- azureActiveContext$Token
 
   if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
   if (missing(resourceGroup)) resourceGroup <- azureActiveContext$resourceGroup
   if (missing(vmName)) vmName <- azureActiveContext$vmName
-  verbosity <- set_verbosity(verbose)
      
   assert_that(is_resource_group(resourceGroup))
   assert_that(is_subscription_id(subscriptionID))
   assert_that(is_vm_name(vmName))
 
-  URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
-               "/resourceGroups/", resourceGroup, "/providers/Microsoft.Compute/virtualmachines/",
-               vmName, "/InstanceView?api-version=2015-05-01-preview")
+  uri <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
+               "/resourceGroups/", resourceGroup, 
+               "/providers/Microsoft.Compute/virtualmachines/", vmName, 
+               "/InstanceView?api-version=2015-05-01-preview")
 
-  r <- GET(URL, azureApiHeaders(azToken), verbosity)
+  r <- call_azure_sm(azureActiveContext, uri = uri,
+    verb = "GET", verbose = verbose)
   if(status_code(r) == 404 && ignore == "Y") return("NA")
   stopWithAzureError(r)
 
@@ -238,23 +230,22 @@ azureVMStatus <- function(azureActiveContext, resourceGroup, vmName, subscriptio
 azureDeleteVM <- function(azureActiveContext, resourceGroup, vmName, subscriptionID,
                           mode = "Sync", verbose = FALSE) {
   assert_that(is.azureActiveContext(azureActiveContext))
-  azureCheckToken(azureActiveContext)
-  azToken <- azureActiveContext$Token
 
   if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
   if (missing(resourceGroup)) resourceGroup <- azureActiveContext$resourceGroup
   if (missing(vmName)) vmName <- azureActiveContext$vmName
-  verbosity <- set_verbosity(verbose)
      
   assert_that(is_resource_group(resourceGroup))
   assert_that(is_subscription_id(subscriptionID))
   assert_that(is_vm_name(vmName))
 
-  URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
-               "/resourceGroups/", resourceGroup, "/providers/Microsoft.Compute/virtualmachines/",
-               vmName, "?api-version=2015-05-01-preview")
+  uri <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
+               "/resourceGroups/", resourceGroup, 
+               "/providers/Microsoft.Compute/virtualmachines/", vmName, 
+               "?api-version=2015-05-01-preview")
 
-  r <- DELETE(URL, azureApiHeaders(azToken), verbosity)
+  r <- call_azure_sm(azureActiveContext, uri = uri, 
+    verb = "DELETE", verbose = verbose)
   stopWithAzureError(r)
 
   azureActiveContext$subscriptionID <- subscriptionID

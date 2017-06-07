@@ -13,11 +13,8 @@ azureListHDI <- function(azureActiveContext, resourceGroup, clustername = "*",
                          subscriptionID, name, type, location, verbose = FALSE) {
 
   assert_that(is.azureActiveContext(azureActiveContext))
-  azureCheckToken(azureActiveContext)
-  azToken <- azureActiveContext$Token
   if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
   if (missing(resourceGroup)) resourceGroup <- azureActiveContext$resourceGroup
-  verbosity <- set_verbosity(verbose)
 
   assert_that(is_subscription_id(subscriptionID))
   if (clustername != "*") {
@@ -28,11 +25,11 @@ azureListHDI <- function(azureActiveContext, resourceGroup, clustername = "*",
   rg <- if (clustername == "*") "" else paste0("/resourceGroups/", resourceGroup)
   cn <- if (clustername == "*") "" else clustername
 
-  URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID, rg,
+  uri <- paste0("https://management.azure.com/subscriptions/", subscriptionID, rg,
            "/providers/Microsoft.HDInsight/clusters/", cn,
            "?api-version=2015-03-01-preview")
 
-  r <- GET(URL, azureApiHeaders(azToken), verbosity)
+  r <- call_azure_sm(azureActiveContext, uri = uri, verbose = verbose)
   stopWithAzureError(r)
   rc <- content(r)
   extract_one <- function(x) {
@@ -69,25 +66,20 @@ azureListHDI <- function(azureActiveContext, resourceGroup, clustername = "*",
 azureHDIConf <- function(azureActiveContext, clustername, resourceGroup,
                          subscriptionID, name, type, location, verbose = FALSE) {
   assert_that(is.azureActiveContext(azureActiveContext))
-  azureCheckToken(azureActiveContext)
-  azToken <- azureActiveContext$Token
   if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
   if (missing(resourceGroup)) resourceGroup <- azureActiveContext$resourceGroup
   if (missing(clustername)) clustername <- azureActiveContext$clustername
-
-  verbosity <- set_verbosity(verbose)
      
   assert_that(is_subscription_id(subscriptionID))
   assert_that(is_resource_group(resourceGroup))
   assert_that(is_clustername(clustername))
 
-  URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
+  uri <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
                "/resourceGroups/", resourceGroup, 
                "/providers/Microsoft.HDInsight/clusters/", clustername, 
                "?api-version=2015-03-01-preview")
 
-  r <- GET(URL, azureApiHeaders(azToken), verbosity)
-  browser()
+  r <- call_azure_sm(azureActiveContext, uri = uri, verbose = verbose)
   rc <- content(r)
 
   if (length(rc) == 0) {
@@ -160,8 +152,6 @@ azureCreateHDI <- function(azureActiveContext, resourceGroup, location,
                            subscriptionID, mode = c("Sync", "Async"), 
                            verbose = FALSE, debug = FALSE) {
   assert_that(is.azureActiveContext(azureActiveContext))
-  azureCheckToken(azureActiveContext)
-  azToken <- azureActiveContext$Token
 
   kind <- match.arg(kind)
   mode <- match.arg(mode)
@@ -169,7 +159,6 @@ azureCreateHDI <- function(azureActiveContext, resourceGroup, location,
   if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
   if (missing(resourceGroup)) resourceGroup <- azureActiveContext$resourceGroup
   if (missing(storageAccount)) storageAccount <- azureActiveContext$storageAccount
-  verbosity <- set_verbosity(verbose)
 
   assert_that(is_resource_group(resourceGroup))
   if (missing(location)) {
@@ -218,7 +207,7 @@ azureCreateHDI <- function(azureActiveContext, resourceGroup, location,
     hiveUser = hiveUser, hivePassword = hivePassword)
   }
 
-  bodyI <- hdi_json(subscriptionID = subscriptionID, clustername = clustername,
+  body <- hdi_json(subscriptionID = subscriptionID, clustername = clustername,
     location = location, storageAccount = storageAccount, storageKey = storageKey,
     version = version,
     kind = kind, vmSize = vmSize,
@@ -229,16 +218,17 @@ azureCreateHDI <- function(azureActiveContext, resourceGroup, location,
     workers = workers)
 
   if (debug) {
-    z <- fromJSON(bodyI)
+    z <- fromJSON(body)
     return(z)
   }
 
-  URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
+  uri <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
                "/resourceGroups/", resourceGroup,
                "/providers/Microsoft.HDInsight/clusters/", clustername,
                "?api-version=2015-03-01-preview")
 
-  r <- PUT(URL, azureApiHeaders(azToken), body = bodyI, encode = "json", verbosity)
+  r <- call_azure_sm(azureActiveContext, uri = uri, body = body,
+    verb = "PUT", verbose = verbose)
   stopWithAzureError(r)
 
   azureActiveContext$resourceGroup <- resourceGroup
@@ -271,12 +261,9 @@ azureResizeHDI <- function(azureActiveContext, clustername,
                            role = c("worker", "head", "edge"),
                            size = 2, mode = c("Sync", "Async"), subscriptionID,
                            resourceGroup, verbose = FALSE) {
-  azureCheckToken(azureActiveContext)
-  azToken <- azureActiveContext$Token
 
   if (missing(resourceGroup)) resourceGroup <- azureActiveContext$resourceGroup
   if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
-  verbosity <- set_verbosity(verbose)
      
   assert_that(is_resource_group(resourceGroup))
   assert_that(is_clustername(clustername))
@@ -284,18 +271,16 @@ azureResizeHDI <- function(azureActiveContext, clustername,
 
   role <- match.arg(role)
   mode <- match.arg(mode)
-  verbosity <- set_verbosity(verbose)
 
-  URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
+  uri <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
                "/resourceGroups/", resourceGroup, 
                "/providers/Microsoft.HDInsight/clusters/", clustername, 
                "/roles/", role, "/resize?api-version=2015-03-01-preview")
 
-  bodyI <- list(targetInstanceCount = size)
-
-  r <- POST(URL, azureApiHeaders(azToken),
-            body = bodyI,
-            encode = "json", verbosity)
+  body <- list(targetInstanceCount = size)
+  r <- call_azure_sm(azureActiveContext, uri = uri, body = body,
+    verb = "POST", verbose = verbose)
+  stopWithAzureError(r)
 
   rl <- content(r, "text", encoding = "UTF-8")
   if (status_code(r) != 202) {
@@ -364,23 +349,21 @@ azureDeleteHDI <- function(azureActiveContext, clustername, subscriptionID,
                            resourceGroup, verbose = FALSE) {
 
   assert_that(is.azureActiveContext(azureActiveContext))
-  azureCheckToken(azureActiveContext)
-  azToken <- azureActiveContext$Token
 
   assert_that(is_clustername(clustername))
   if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
   if (missing(resourceGroup)) resourceGroup <- azureActiveContext$resourceGroup
-  verbosity <- set_verbosity(verbose)
      
   assert_that(is_resource_group(resourceGroup))
   assert_that(is_clustername(clustername))
 
-  URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
+  uri <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
                "/resourceGroups/", resourceGroup, 
                "/providers/Microsoft.HDInsight/clusters/", clustername, 
                "?api-version=2015-03-01-preview")
 
-  r <- DELETE(URL, azureApiHeaders(azToken), verbosity)
+  r <- call_azure_sm(azureActiveContext, uri = uri,
+    verb = "DELETE", verbose = verbose)
   stopWithAzureError(r)
 
   message("Delete request accepted")
@@ -412,13 +395,10 @@ azureRunScriptAction <- function(azureActiveContext, scriptname, scriptURL,
                                  parameters = "", subscriptionID, 
                                  wait = TRUE, verbose = FALSE) {
   assert_that(is.azureActiveContext(azureActiveContext))
-  azureCheckToken(azureActiveContext)
-  azToken <- azureActiveContext$Token
 
   if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
   if (missing(resourceGroup)) resourceGroup <- azureActiveContext$resourceGroup
   if (missing(clustername)) clustername <- azureActiveContext$clustername
-  verbosity <- set_verbosity(verbose)
      
   assert_that(is_resource_group(resourceGroup))
   assert_that(is_subscription_id(subscriptionID))
@@ -435,7 +415,7 @@ azureRunScriptAction <- function(azureActiveContext, scriptname, scriptURL,
              edgeNode = '"edgenode"')
   RL <- paste(roles[c(headNode, workerNode, edgeNode)], sep = ", ")
     
-  bodyI <- paste0('
+  body <- paste0('
   {
     "scriptActions": [{
       "name":"', scriptname, '",
@@ -446,14 +426,13 @@ azureRunScriptAction <- function(azureActiveContext, scriptname, scriptURL,
     "persistOnSuccess": true
   }')
 
-  URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
+  uri <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
                "/resourceGroups/", resourceGroup, 
                "/providers/Microsoft.HDInsight/clusters/", clustername, 
                "/executeScriptActions?api-version=2015-03-01-preview")
 
-  r <- POST(URL, azureApiHeaders(azToken),
-            body = bodyI,
-            encode = "json", verbosity)
+  r <- call_azure_sm(azureActiveContext, uri = uri, body = body,
+    verb = "POST", verbose = verbose)
   stopWithAzureError(r)
 
   azureActiveContext$clustername <- clustername
@@ -480,24 +459,22 @@ azureScriptActionHistory <- function(azureActiveContext, resourceGroup,
                                      clustername = "*", subscriptionID, 
                                      name, type, verbose = FALSE) {
   assert_that(is.azureActiveContext(azureActiveContext))
-  azureCheckToken(azureActiveContext)
-  azToken <- azureActiveContext$Token
 
   if (missing(resourceGroup)) resourceGroup <- azureActiveContext$resourceGroup
   if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
   if (missing(clustername)) clustername <- azureActiveContext$clustername
-  verbosity <- set_verbosity(verbose)
      
   assert_that(is_resource_group(resourceGroup))
   assert_that(is_subscription_id(subscriptionID))
   assert_that(is_clustername(clustername))
 
-  URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
+  uri <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
                "/resourceGroups/", resourceGroup, 
                "/providers/Microsoft.HDInsight/clusters/", clustername, 
                "/scriptExecutionHistory/?api-version=2015-03-01-preview")
 
-  r <- GET(URL, azureApiHeaders(azToken), verbosity)
+  r <- call_azure_sm(azureActiveContext, uri = uri,
+    verb = "GET", verbose = verbose)
   stopWithAzureError(r)
 
   rc <- content(r, bigint_as_char = TRUE)$value
