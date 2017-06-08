@@ -9,12 +9,10 @@
 #' @export
 azureListSubscriptions <- function(azureActiveContext, verbose = FALSE) {
   assert_that(is.azureActiveContext(azureActiveContext))
-  azureCheckToken(azureActiveContext)
-  azToken <- azureActiveContext$Token
-  verbosity <- set_verbosity(verbose)
 
-  URLGS <- "https://management.azure.com/subscriptions?api-version=2015-01-01"
-  r <- GET(URLGS, azureApiHeaders(azToken), verbosity)
+  uri <- "https://management.azure.com/subscriptions?api-version=2015-01-01"
+  r <- call_azure_sm(azureActiveContext, uri = uri, 
+    verb = "GET", verbose = verbose)
   stopWithAzureError(r)
 
   dfs <- lapply(content(r), data.frame, stringsAsFactors = FALSE)
@@ -34,17 +32,14 @@ azureListSubscriptions <- function(azureActiveContext, verbose = FALSE) {
 #' @export
 azureListRG <- function(azureActiveContext, subscriptionID, verbose = FALSE) {
   assert_that(is.azureActiveContext(azureActiveContext))
-  azureCheckToken(azureActiveContext)
-  azToken <- azureActiveContext$Token
-  verbosity <- set_verbosity(verbose)
 
   if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
   assert_that(is_subscription_id(subscriptionID))
 
-  URLRG <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
+  uri <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
                  "/resourcegroups?api-version=2015-01-01")
-
-  r <- GET(URLRG, azureApiHeaders(azToken), verbosity)
+  r <- call_azure_sm(azureActiveContext, uri = uri,
+    verb = "GET", verbose = verbose)
   stopWithAzureError(r)
 
   rl <- content(r, "text", encoding = "UTF-8")
@@ -77,19 +72,17 @@ getResourceGroupLocation <- function(azureActiveContext, resourceGroup) {
 #' @return Returns Dataframe of Resources
 #' @family Resource group functions
 #' @export
-azureListAllResources <- function(azureActiveContext, resourceGroup, subscriptionID,
+azureListAllResources <- function(azureActiveContext, 
+                                  resourceGroup, subscriptionID,
                                   name, type, location, verbose = FALSE) {
 
   assert_that(is.azureActiveContext(azureActiveContext))
-  azureCheckToken(azureActiveContext)
-  azToken <- azureActiveContext$Token
   if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
-  verbosity <- set_verbosity(verbose)
 
-
-  url <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
+  uri <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
                  "/resources?api-version=2015-01-01")
-  r <- GET(url, azureApiHeaders(azToken), verbosity)
+  r <- call_azure_sm(azureActiveContext, uri = uri, 
+    verb = "GET", verbose = verbose)
   stopWithAzureError(r)
 
   rl <- content(r, "text", encoding = "UTF-8")
@@ -123,8 +116,6 @@ azureListAllResources <- function(azureActiveContext, resourceGroup, subscriptio
 azureCreateResourceGroup <- function(azureActiveContext, resourceGroup,
                                      location, subscriptionID, verbose = FALSE) {
   assert_that(is.azureActiveContext(azureActiveContext))
-  azureCheckToken(azureActiveContext)
-  azToken <- azureActiveContext$Token
   if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
   if (missing(resourceGroup)) resourceGroup <- azureActiveContext$resourceGroup
   verbosity <- set_verbosity(verbose)
@@ -133,13 +124,12 @@ azureCreateResourceGroup <- function(azureActiveContext, resourceGroup,
   assert_that(is_location(location))
   
   azureActiveContext$resourceGroup <- resourceGroup
-  verbosity <- set_verbosity(verbose)
 
-  bodyI <- list(location = location)
-
-  url <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
+  body <- list(location = location)
+  uri <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
                  "/resourcegroups/", resourceGroup, "?api-version=2015-01-01")
-  r <- httr::PUT(url, azureApiHeaders(azToken), body = bodyI, encode = "json", verbosity)
+  r <- call_azure_sm(azureActiveContext, uri = uri, body = body,
+    verb = "PUT", verbose = verbose)
   stopWithAzureError(r)
 
   rl <- content(r, "text", encoding = "UTF-8")
@@ -164,18 +154,16 @@ azureCreateResourceGroup <- function(azureActiveContext, resourceGroup,
 azureDeleteResourceGroup <- function(azureActiveContext, resourceGroup,
                                      subscriptionID, type, verbose = FALSE) {
   assert_that(is.azureActiveContext(azureActiveContext))
-  azureCheckToken(azureActiveContext)
-  azToken <- azureActiveContext$Token
 
   if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
-  verbosity <- set_verbosity(verbose)
 
   assert_that(is_resource_group(resourceGroup))
   assert_that(is_subscription_id(subscriptionID))
 
-  url <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
+  uri <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
                  "/resourcegroups/", resourceGroup, "?api-version=2015-01-01")
-  r <- DELETE(url, azureApiHeaders(azToken), verbosity)
+  r <- call_azure_sm(azureActiveContext, uri = uri,
+    verb = "DELETE", verbose = verbose)
   if (status_code(r) == 404) {
     stop(paste0("Error: Resource Group Not Found(", status_code(r), ")"))
   }

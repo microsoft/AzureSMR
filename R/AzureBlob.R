@@ -116,7 +116,6 @@ azureBlobLS <- function(azureActiveContext, directory, recursive = FALSE,
     if(missing(directory)) directory <- "/"
     if(missing(container)) container <- ""
   }
-  #browser()
 
   if(is.null(directory) || directory == "") directory <- "/"
 
@@ -297,7 +296,6 @@ azurePutBlob <- function(azureActiveContext, blob, contents = "", file = "",
 
   verbosity <- set_verbosity(verbose)
 
-  #browser()
   if (!grepl("^/", directory)) directory <- paste0("/", directory)
   directory <- gsub("//", "/", directory)
 
