@@ -1,3 +1,32 @@
+#' List batch accounts.
+#'
+#' @inheritParams setAzureContext
+#' @inheritParams azureAuthenticate
+#' @inheritParams azureBatchGetKey
+
+#' @family Batch account functions
+#' @export
+azureListBatchAccount <- function(azureActiveContext, resourceGroup, subscriptionID,
+                        verbose = FALSE) {
+  assert_that(is.azureActiveContext(azureActiveContext))
+  azureCheckToken(azureActiveContext)
+  azToken <- azureActiveContext$Token
+  
+  if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
+  assert_that(is_subscription_id(subscriptionID))
+  verbosity <- set_verbosity(verbose) 
+  
+  type_batch <- "Microsoft.Batch/batchAccounts"
+  
+  z <- if(missing(resourceGroup)) {
+    azureListAllResources(azureActiveContext, type = type_batch)
+  } else {
+    azureListAllResources(azureActiveContext, type = type_batch, resourceGroup = resourceGroup, subscriptionID = subscriptionID)
+  }
+  rownames(z) <- NULL
+  z$batchAccount <- extractStorageAccount(z$id)
+  z
+}
 
 #' Create an Azure Batch Account.
 #'
@@ -52,7 +81,7 @@ azureCreateBatchAccount <- function(azureActiveContext, batchAccount,
   
   if (!asynchronous) {
     wait_for_azure(
-      batchAccount %in% azureListSA(azureActiveContext)$batchAccount
+      batchAccount %in% azureListBatchAccount(azureActiveContext, subscriptionID = subscriptionID)$name
     )
   }
   TRUE
@@ -62,7 +91,7 @@ azureCreateBatchAccount <- function(azureActiveContext, batchAccount,
 #'
 #' @inheritParams setAzureContext
 #' @inheritParams azureAuthenticate
-#' @inheritParams azureSAGetKey
+#' @inheritParams azureBatchGetKey
 
 #' @family Batch account functions
 #' @export
@@ -75,7 +104,7 @@ azureDeleteBatchAccount <- function(azureActiveContext, batchAccount,
   if (missing(resourceGroup)) resourceGroup <- azureActiveContext$resourceGroup
   if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
   
-  assert_that(is_storage_account(batchKey))
+  assert_that(is_storage_account(batchAccount))
   assert_that(is_resource_group(resourceGroup))
   assert_that(is_subscription_id(subscriptionID))
   verbosity <- set_verbosity(verbose) 
@@ -113,12 +142,12 @@ azureBatchGetKey <- function(azureActiveContext, batchAccount,
   if (missing(resourceGroup)) resourceGroup <- azureActiveContext$resourceGroup
   if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
   
-  assert_that(is_storage_account(storageAccount))
+  assert_that(is_storage_account(batchAccount))
   assert_that(is_resource_group(resourceGroup))
   assert_that(is_subscription_id(subscriptionID))
   verbosity <- set_verbosity(verbose)
   
-  message("Fetching Storage Key..")
+  message("Fetching Batch Key..")
   
   URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
                 "/resourceGroups/", resourceGroup, 
@@ -132,7 +161,7 @@ azureBatchGetKey <- function(azureActiveContext, batchAccount,
   df <- fromJSON(rl)
   azureActiveContext$batchAccount  <- batchAccount
   azureActiveContext$resourceGroup   <- resourceGroup
-  azureActiveContext$batchKey <- df$keys$value[1]
+  azureActiveContext$batchKey <- df$primary
   
   return(azureActiveContext$batchKey)
 }
