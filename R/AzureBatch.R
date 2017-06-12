@@ -6,7 +6,7 @@
 
 #' @family Batch account functions
 #' @export
-azureListBatchAccount <- function(azureActiveContext, resourceGroup, subscriptionID,
+azureListBatchAccounts <- function(azureActiveContext, resourceGroup, subscriptionID,
                         verbose = FALSE) {
   assert_that(is.azureActiveContext(azureActiveContext))
   azureCheckToken(azureActiveContext)
