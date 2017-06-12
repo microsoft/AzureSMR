@@ -51,18 +51,17 @@ azureCreateBatchAccount <- function(azureActiveContext, batchAccount,
   assert_that(is_subscription_id(subscriptionID))
   assert_that(is_storage_account(batchAccount))
   
-  verbosity <- set_verbosity(verbose)
-  
-  bodyI <- paste0('{
+  body <- paste0('{
                   "location":"', location, '",
                   }'
   )  
   
-  URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
+  uri <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
                 "/resourceGroups/", resourceGroup, "/providers/Microsoft.Batch/batchAccounts/",
                 batchAccount, "?api-version=2017-05-01")
   
-  r <- PUT(URL, azureApiHeaders(azToken), body = bodyI, encode = "json", verbosity)
+  r <- call_azure_sm(azureActiveContext, uri = uri, body = body,
+                     verb = "PUT", verbose = verbose)
   
   if (status_code(r) == 409) {
     message("409: Conflict : Account already exists with the same name")
@@ -81,7 +80,7 @@ azureCreateBatchAccount <- function(azureActiveContext, batchAccount,
   
   if (!asynchronous) {
     wait_for_azure(
-      batchAccount %in% azureListBatchAccount(azureActiveContext, subscriptionID = subscriptionID)$name
+      batchAccount %in% azureListBatchAccounts(azureActiveContext, subscriptionID = subscriptionID)$name
     )
   }
   TRUE
@@ -107,13 +106,13 @@ azureDeleteBatchAccount <- function(azureActiveContext, batchAccount,
   assert_that(is_storage_account(batchAccount))
   assert_that(is_resource_group(resourceGroup))
   assert_that(is_subscription_id(subscriptionID))
-  verbosity <- set_verbosity(verbose) 
   
-  URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
+  uri <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
                 "/resourceGroups/", resourceGroup, "/providers/Microsoft.Batch/batchAccounts/",
                 batchAccount, "?api-version=2017-05-01")
   
-  r <- DELETE(URL, azureApiHeaders(azToken), verbosity)
+  r <- call_azure_sm(azureActiveContext, uri = uri,
+                     verb = "DELETE", verbose = verbose)
   
   if (status_code(r) == 204) {
     warning("Batch Account not found")
@@ -145,16 +144,16 @@ azureBatchGetKey <- function(azureActiveContext, batchAccount,
   assert_that(is_storage_account(batchAccount))
   assert_that(is_resource_group(resourceGroup))
   assert_that(is_subscription_id(subscriptionID))
-  verbosity <- set_verbosity(verbose)
-  
+
   message("Fetching Batch Key..")
   
-  URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
+  uri <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
                 "/resourceGroups/", resourceGroup, 
                 "/providers/Microsoft.Batch/batchAccounts/", batchAccount, 
                 "/listkeys?api-version=2017-05-01")
   
-  r <- POST(URL, azureApiHeaders(azToken), verbosity)
+  r <- call_azure_sm(azureActiveContext, uri = uri,
+                     verb = "POST", verbose = verbose)
   stopWithAzureError(r)
   
   rl <- content(r, "text", encoding = "UTF-8")
