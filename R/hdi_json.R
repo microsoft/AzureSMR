@@ -92,17 +92,17 @@ paste0('
 
 hive_json = function(hiveServer, hiveDB, hiveUser, hivePassword) {
   paste0('
-  ",hive-site": {
-    "javax.jdo.option.ConnectionDrivername": "com.microsoft.sqlserver.jdbc.SQLServerDriver",
+  ,"hive-site": {
+    "javax.jdo.option.ConnectionDriverName": "com.microsoft.sqlserver.jdbc.SQLServerDriver",
     "javax.jdo.option.ConnectionURL":"jdbc:sqlserver://', hiveServer, ';database=', hiveDB, ';encrypt=true;trustServerCertificate=true;create=false;loginTimeout=300",
-  "javax.jdo.option.ConnectionUsername":"', hiveUser, '",
+  "javax.jdo.option.ConnectionUserName":"', hiveUser, '",
   "javax.jdo.option.ConnectionPassword":"', hivePassword, '"
   },
   "hive-env": {
     "hive_database": "Existing MSSQL Server database with SQL authentication",
-    "hive_database_name": "HIVEDB",
+    "hive_database_name": "', hiveDB, '",
     "hive_database_type": "mssql",
-    "hive_existing_mssql_server_database": "HIVEDB",
+    "hive_existing_mssql_server_database": "', hiveDB, '",
     "hive_existing_mssql_server_host":"', hiveServer, '",
     "hive_hostname":"', hiveServer,'"
   }'
