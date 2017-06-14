@@ -2,31 +2,30 @@
 % Please edit documentation in R/AzureBatch.R
 \name{azureCreateBatchAccount}
 \alias{azureCreateBatchAccount}
-\title{Create an Azure Batch Account.}
+\title{Create an azure batch account.}
 \usage{
 azureCreateBatchAccount(azureActiveContext, batchAccount,
   location = "northeurope", resourceGroup, subscriptionID,
   asynchronous = FALSE, verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by `AzureSMR`}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
 
 \item{location}{A string for the location to create batch account}
 
 \item{resourceGroup}{Name of the resource group}
 
-\item{subscriptionID}{Subscription ID.  This is obtained automatically by [azureAuthenticate()] when only a single subscriptionID is available via Active Directory}
+\item{subscriptionID}{Subscription ID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
 
 \item{asynchronous}{If TRUE, submits asynchronous request to Azure. Otherwise waits until batch account is created.}
 
 \item{verbose}{Print Tracing information (Default False)}
 }
 \description{
-Create an Azure Batch Account.
+Create an azure batch account.
 }
 \seealso{
 Other Batch account functions: \code{\link{azureBatchGetKey}},
   \code{\link{azureDeleteBatchAccount}},
   \code{\link{azureListBatchAccounts}}
 }
-

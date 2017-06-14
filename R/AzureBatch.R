@@ -9,12 +9,9 @@
 azureListBatchAccounts <- function(azureActiveContext, resourceGroup, subscriptionID,
                         verbose = FALSE) {
   assert_that(is.azureActiveContext(azureActiveContext))
-  azureCheckToken(azureActiveContext)
-  azToken <- azureActiveContext$Token
   
   if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
   assert_that(is_subscription_id(subscriptionID))
-  verbosity <- set_verbosity(verbose) 
   
   type_batch <- "Microsoft.Batch/batchAccounts"
   
@@ -28,7 +25,8 @@ azureListBatchAccounts <- function(azureActiveContext, resourceGroup, subscripti
   z
 }
 
-#' Create an Azure Batch Account.
+
+#' Create an azure batch account.
 #'
 #' @inheritParams setAzureContext
 #' @inheritParams azureAuthenticate
@@ -42,8 +40,6 @@ azureCreateBatchAccount <- function(azureActiveContext, batchAccount,
                                       resourceGroup, subscriptionID, 
                                       asynchronous = FALSE, verbose = FALSE) {
   assert_that(is.azureActiveContext(azureActiveContext))
-  azureCheckToken(azureActiveContext)
-  azToken <- azureActiveContext$Token
   
   if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
   if (missing(resourceGroup)) resourceGroup <- azureActiveContext$resourceGroup
@@ -86,7 +82,8 @@ azureCreateBatchAccount <- function(azureActiveContext, batchAccount,
   TRUE
 }
 
-#' Delete an Azure Batch Account.
+
+#' Delete an azure batch account.
 #'
 #' @inheritParams setAzureContext
 #' @inheritParams azureAuthenticate
@@ -97,8 +94,6 @@ azureCreateBatchAccount <- function(azureActiveContext, batchAccount,
 azureDeleteBatchAccount <- function(azureActiveContext, batchAccount,
                                       resourceGroup, subscriptionID, verbose = FALSE) {
   assert_that(is.azureActiveContext(azureActiveContext))
-  azureCheckToken(azureActiveContext)
-  azToken <- azureActiveContext$Token
   
   if (missing(resourceGroup)) resourceGroup <- azureActiveContext$resourceGroup
   if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
@@ -125,6 +120,7 @@ azureDeleteBatchAccount <- function(azureActiveContext, batchAccount,
   TRUE
 }
 
+
 #' Get the Batch Keys for Specified Batch Account.
 #'
 #' @inheritParams setAzureContext
@@ -135,8 +131,6 @@ azureDeleteBatchAccount <- function(azureActiveContext, batchAccount,
 azureBatchGetKey <- function(azureActiveContext, batchAccount, 
                           resourceGroup, subscriptionID, verbose = FALSE) {
   assert_that(is.azureActiveContext(azureActiveContext))
-  azureCheckToken(azureActiveContext)
-  azToken <- azureActiveContext$Token
   
   if (missing(resourceGroup)) resourceGroup <- azureActiveContext$resourceGroup
   if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID

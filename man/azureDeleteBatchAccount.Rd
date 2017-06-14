@@ -2,26 +2,25 @@
 % Please edit documentation in R/AzureBatch.R
 \name{azureDeleteBatchAccount}
 \alias{azureDeleteBatchAccount}
-\title{Delete an Azure Batch Account.}
+\title{Delete an azure batch account.}
 \usage{
 azureDeleteBatchAccount(azureActiveContext, batchAccount, resourceGroup,
   subscriptionID, verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by `AzureSMR`}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
 
 \item{resourceGroup}{Name of the resource group}
 
-\item{subscriptionID}{Subscription ID.  This is obtained automatically by [azureAuthenticate()] when only a single subscriptionID is available via Active Directory}
+\item{subscriptionID}{Subscription ID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
 
 \item{verbose}{Print Tracing information (Default False)}
 }
 \description{
-Delete an Azure Batch Account.
+Delete an azure batch account.
 }
 \seealso{
 Other Batch account functions: \code{\link{azureBatchGetKey}},
   \code{\link{azureCreateBatchAccount}},
   \code{\link{azureListBatchAccounts}}
 }
-

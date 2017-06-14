@@ -28,6 +28,11 @@
 #'   - [azureDeleteHDI()]
 #'   - [azureRunScriptAction()]
 #'   - [azureScriptActionHistory()]
+#' * Azure batch:
+#'   - [azureListBatchAccounts()]
+#'   - [azureCreateBatchAccount()]
+#'   - [azureDeleteBatchAccount()]
+#'   - [azureBatchGetKey()]
 #'
 #'
 #' @name AzureSMR
