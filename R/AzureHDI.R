@@ -258,7 +258,7 @@ azureCreateHDI <- function(azureActiveContext, resourceGroup, location,
 #' @family HDInsight functions
 #' @export
 azureResizeHDI <- function(azureActiveContext, clustername, 
-                           role = c("worker", "head", "edge"),
+                           role = c("workernode", "headnode", "edgenode"),
                            size = 2, mode = c("Sync", "Async"), subscriptionID,
                            resourceGroup, verbose = FALSE) {
 
@@ -267,7 +267,7 @@ azureResizeHDI <- function(azureActiveContext, clustername,
      
   assert_that(is_resource_group(resourceGroup))
   assert_that(is_clustername(clustername))
-  assert_that(is.integer(size))
+  assert_that(is.integer(as.integer(size)))
 
   role <- match.arg(role)
   mode <- match.arg(mode)

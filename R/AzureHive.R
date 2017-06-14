@@ -30,14 +30,18 @@ azureHiveStatus <- function(azureActiveContext, clustername, hdiAdmin,
   if (!length(HP)) {
     stop("Error: No Valid hdiPassword  provided")
   }
-
+  verbosity <- set_verbosity(verbose)
+  
   azureActiveContext$hdiAdmin <- HA
   azureActiveContext$hdiPassword <- HP
   azureActiveContext$clustername <- CN
-
+  cat(HA)
+  cat(HP)
+  
   uri <- paste0("https://", CN, ".azurehdinsight.net/templeton/v1/status")
 
-  r <- GET(URL, add_headers(.headers = c(`Content-type` = "application/json")),
+  cat(uri)
+  r <- GET(uri, add_headers(.headers = c(`Content-type` = "application/json")),
            authenticate(HA, HP), verbosity)
   if (status_code(r) != 200 && status_code(r) != 201) {
     stop(paste0("Error: Return code(", status_code(r), ")"))
@@ -130,9 +134,9 @@ azureHiveSQL <- function(azureActiveContext, CMD, clustername, hdiAdmin,
     if (DUR < 5)
       DUR <- DUR + 1
     if (df$status$state == "PREP")
-      message("P")
+      message("P",appendLF = FALSE)
     if (df$status$state == "RUNNING")
-      message("R")
+      message("R",appendLF = FALSE)
     # print(df$status$state)
 
     r <- GET(URL, add_headers(.headers = c(`Content-type` = "application/json")),
@@ -142,9 +146,9 @@ azureHiveSQL <- function(azureActiveContext, CMD, clustername, hdiAdmin,
     df <- fromJSON(rl)
   }
   if (df$status$state == "SUCCEEDED")
-    message("S")
+    message("S",appendLF = FALSE)
   if (df$status$state == "FAILED")
-    message("F")
+    message("F",appendLF = FALSE)
 
   STATE <- df$status$state
   message("Finished Running statement: ", Sys.time())
