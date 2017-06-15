@@ -93,6 +93,8 @@ azureHDIConf <- function(azureActiveContext, clustername, resourceGroup,
       x$hardwareProfile$vmSize)}, FUN.VALUE = character(1)
     ), collapse = ", "
   )
+  return(rc)
+  
 
   dfn <- with(rc, data.frame(
     name = name,
