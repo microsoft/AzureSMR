@@ -80,30 +80,30 @@ azureDataConsumption <- function(azureActiveContext,
   
   # reformat time variables to make them compatible with API call.
   
-  START <- URLencode(paste(as.Date(timeStart), "T",
+  start <- URLencode(paste(as.Date(timeStart), "T",
                            sprintf("%02d", lubridate::hour(timeStart)), ":", sprintf("%02d", lubridate::minute(timeStart)), ":", sprintf("%02d", lubridate::second(timeStart)), "+",
                            "00:00",
                            sep=""),
                      reserved=TRUE)
   
-  END <- URLencode(paste(as.Date(timeEnd), "T",
+  end <- URLencode(paste(as.Date(timeEnd), "T",
                          sprintf("%02d", lubridate::hour(timeEnd)), ":", sprintf("%02d", lubridate::minute(timeEnd)), ":", sprintf("%02d", lubridate::second(timeEnd)), "+",
                          "00:00",
                          sep=""),
                    reserved=TRUE)
   
-  URL <-
+  url <-
     sprintf("https://management.azure.com/subscriptions/%s/providers/Microsoft.Commerce/UsageAggregates?api-version=%s&reportedStartTime=%s&reportedEndTime=%s&aggregationgranularity=%s&showDetails=%s",
             azureActiveContext$subscriptionID,
             "2015-06-01-preview",
-            START,
-            END,
+            start,
+            end,
             granularity,
             "false"
     )
   
   r <- call_azure_sm(azureActiveContext,
-                     uri=URL,
+                     uri=url,
                      verb="GET",
                      verbose=verbose)
   
@@ -175,8 +175,8 @@ azureDataConsumption <- function(azureActiveContext,
     
     # NOTE the maximum number of records returned from API is limited to 1000.
     
-    if (nrow(df_use) == 1000 && max(as.POSIXct(df_use$usageEndTime)) < as.POSIXct(END)) {
-      warning(sprintf("The number of records in the specified time period %s to %s exceeds the limit that can be returned from API call. Consumption information is truncated. Please use a small period instead.", START, END))
+    if (nrow(df_use) == 1000 && max(as.POSIXct(df_use$usageEndTime)) < as.POSIXct(end)) {
+      warning(sprintf("The number of records in the specified time period %s to %s exceeds the limit that can be returned from API call. Consumption information is truncated. Please use a small period instead.", start, end))
     }
     
     df_use %<>%
