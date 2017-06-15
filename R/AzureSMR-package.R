@@ -47,5 +47,6 @@
 #' @importFrom httr add_headers headers content status_code http_status authenticate
 #' @importFrom httr GET PUT DELETE POST
 #' @importFrom XML htmlParse xpathApply xpathSApply xmlValue
+#' @importFrom lubridate hour minute second
 #'
 NULL
