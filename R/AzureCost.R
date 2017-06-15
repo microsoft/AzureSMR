@@ -1,8 +1,8 @@
-#' @title Get data consumption of an Azure subscription for a time period. Aggregation method can be either daily based or hourly based.
+#' Get data consumption of an Azure subscription for a time period. Aggregation method can be either daily based or hourly based.
 #' 
 #' @note Formats of start time point and end time point follow ISO 8601 standard. Say if one would like to calculate data consumption between Feb 21, 2017 to Feb 25, 2017, with an aggregation granularity of "daily based", the inputs should be "2017-02-21 00:00:00" and "2017-02-25 00:00:00", for start time point and end time point, respectively. If the aggregation granularity is hourly based, the inputs can be "2017-02-21 01:00:00" and "2017-02-21 02:00:00", for start and end time point, respectively. NOTE by default the Azure data consumption API does not allow an aggregation granularity that is finer than an hour. In the case of "hourly based" granularity, if the time difference between start and end time point is less than an hour, data consumption will still be calculated hourly based with end time postponed. For example, if the start time point and end time point are "2017-02-21 00:00:00" and "2017-02-21 00:45:00", the actual returned results are are data consumption in the interval of "2017-02-21 00:00:00" and "2017-02-21 01:00:00". However this calculation is merely for retrieving the information of an existing DSVM instance (e.g., meterId) with which the pricing rate is multiplied by to obtain the overall expense. Time zone of all time inputs are synchronized to UTC.
 #' 
-#' @param azureActiveContext AzureSMR context object.
+#' @inheritParams setAzureContext
 #' 
 #' @param instance Instance of Azure DSVM name that one would like to check expense. It is by default empty, which returns data consumption for all instances under subscription.
 #' 
@@ -201,9 +201,9 @@ azureDataConsumption <- function(azureActiveContext,
   }
 }
 
-#' @title Get pricing details of resources under a subscription.
+#' Get pricing details of resources under a subscription.
 #' 
-#' @param azureActiveContext - Azure Context Object.
+#' @inheritParams setAzureContext
 #' 
 #' @param currency Currency in which price rating is measured.
 #' 
@@ -212,6 +212,8 @@ azureDataConsumption <- function(azureActiveContext,
 #' @param offerId Offer ID of the subscription. Detailed information can be found at https://azure.microsoft.com/en-us/support/legal/offer-details/
 #' 
 #' @param region region information about the subscription.
+#' 
+#' @note The pricing rates function wraps API calls to Azure RateCard and current only the API supports only for Pay-As-You-Go offer scheme. 
 #' 
 #' @export
 azurePricingRates <- function(azureActiveContext,
@@ -272,9 +274,9 @@ azurePricingRates <- function(azureActiveContext,
   return(df_meter)
 }
 
-#' @title Calculate cost of using a specific instance of Azure for certain period.
+#' Calculate cost of using a specific instance of Azure for certain period.
 #' 
-#' @param azureActiveContext AzureSMR context.
+#' @inheritParams setAzureContext
 #' 
 #' @param instance Instance of Azure instance that one would like to check expense. No matter whether resource group is given or not, if a instance of instance is given, data consumption of that instance is returned.
 #' 
