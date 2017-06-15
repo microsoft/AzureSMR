@@ -15,6 +15,10 @@
 #'   - [azureCreateStorageAccount()]
 #'   - [azureListStorageContainers()]
 #'   - [azureListStorageBlobs()]
+#'   - [azureGetBlob()]
+#'   - [azurePutBlob()]
+#'   - [azureDeleteBlob()]
+#'   - [azureBlobFind()]
 #' * Virtual Machines
 #'   - List VMs: [azureListVM()]
 #'   - To create a virtual machine, use [azureDeployTemplate()] with a suitable template
@@ -33,7 +37,10 @@
 #'   - [azureCreateBatchAccount()]
 #'   - [azureDeleteBatchAccount()]
 #'   - [azureBatchGetKey()]
-#'
+#' * Cost functions:
+#'   - [azureDataConsumption()]
+#'   - [azurePricingRates()]
+#'   - [azureExpenseCalculator()]
 #'
 #' @name AzureSMR
 #' @aliases AzureSMR-package
