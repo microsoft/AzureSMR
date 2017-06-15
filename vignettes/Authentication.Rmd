@@ -47,7 +47,7 @@ To apply access control azToken Resource Group
 
 16. Identify the resource group you will associate with this application.
 
-17. Choose the Users menu item from the Resource scope.
+17. Choose the Access Control(IAM) menu item from the Resource scope.
 
 18. In the resulting scope click the `+ Add` button.
 
@@ -62,14 +62,13 @@ Alternatively you can access control azToken Subscription Level
 
 16. Identify the Subscription you will associate with this application.
 
-17. Choose the Users(access) menu item.
+17. Choose the Access Control(IAM) menu item.
 
 18. In the resulting scope click the + Add button.
 
 19. Choose the role as Owner and under the user search box enter the name of the App, e.g., AzureSMR.
 
 20. Select the resulting list item for that App then click Select in that scope then OK in the "Add access" scope. The user will be added to the list.
-
 
 
 That is all.  You can test this by trying:

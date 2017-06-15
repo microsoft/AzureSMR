@@ -8,8 +8,8 @@
 
 To get started with this package, see the vignettes:
 
-  * [Tutorial](http://htmlpreview.github.io/?https://github.com/Microsoft/AzureSMR/blob/master/vignettes/tutorial.html)
-  * [Getting Authenticated](http://htmlpreview.github.io/?https://github.com/Microsoft/AzureSMR/blob/master/vignettes/Authentication.html)
+  * [Tutorial](http://htmlpreview.github.io/?https://github.com/Microsoft/AzureSMR/blob/master/inst/doc/tutorial.html)
+  * [Getting Authenticated](http://htmlpreview.github.io/?https://github.com/Microsoft/AzureSMR/blob/master/inst/doc/Authentication.html)
 
 To access the package help, just type `?AzureSMR` into your code editor.
 
