@@ -1,16 +1,38 @@
-#' Get data consumption of an Azure subscription for a time period. Aggregation method can be either daily based or hourly based.
+#' Get data consumption of an Azure subscription for a time period. Aggregation 
+#' method can be either daily based or hourly based.
 #' 
-#' @note Formats of start time point and end time point follow ISO 8601 standard. Say if one would like to calculate data consumption between Feb 21, 2017 to Feb 25, 2017, with an aggregation granularity of "daily based", the inputs should be "2017-02-21 00:00:00" and "2017-02-25 00:00:00", for start time point and end time point, respectively. If the aggregation granularity is hourly based, the inputs can be "2017-02-21 01:00:00" and "2017-02-21 02:00:00", for start and end time point, respectively. NOTE by default the Azure data consumption API does not allow an aggregation granularity that is finer than an hour. In the case of "hourly based" granularity, if the time difference between start and end time point is less than an hour, data consumption will still be calculated hourly based with end time postponed. For example, if the start time point and end time point are "2017-02-21 00:00:00" and "2017-02-21 00:45:00", the actual returned results are are data consumption in the interval of "2017-02-21 00:00:00" and "2017-02-21 01:00:00". However this calculation is merely for retrieving the information of an existing DSVM instance (e.g., meterId) with which the pricing rate is multiplied by to obtain the overall expense. Time zone of all time inputs are synchronized to UTC.
+#' @note Formats of start time point and end time point follow ISO 8601 standard
+#' Say if one would like to calculate data consumption between Feb 21, 2017 to 
+#' Feb 25, 2017, with an aggregation granularity of "daily based", the inputs 
+#' should be "2017-02-21 00:00:00" and "2017-02-25 00:00:00", for start time 
+#' point and end time point, respectively. If the aggregation granularity is 
+#' hourly based, the inputs can be "2017-02-21 01:00:00" and 
+#' "2017-02-21 02:00:00", for start and end time point, respectively. 
+#' NOTE by default the Azure data 
+#'  consumption API does not allow an aggregation granularity that is finer 
+#'  than an hour. In the case of "hourly based" granularity, if the time 
+#'  difference between start and end time point is less than an hour, data
+#'   consumption will still be calculated hourly based with end time postponed. 
+#'   For example, if the start time point and end time point are "2017-02-21 
+#'   00:00:00" and "2017-02-21 00:45:00", the actual returned results are 
+#'   data consumption in the interval of "2017-02-21 00:00:00" and 
+#'   "2017-02-21 01:00:00". However this calculation is merely for retrieving 
+#'   the information of an existing instance instance (e.g., meterId) with 
+#'   which the pricing rate is multiplied by to obtain the overall expense. 
+#'   Time zone of all time inputs are synchronized to UTC.
 #' 
 #' @inheritParams setAzureContext
 #' 
-#' @param instance Instance of Azure DSVM name that one would like to check expense. It is by default empty, which returns data consumption for all instances under subscription.
+#' @param instance Instance name that one would like to check expe
+#' nse. It is by default empty, which returns data consumption for 
+#' all instances under subscription.
 #' 
 #' @param timeStart Start time.
 #' 
 #' @param timeEnd End time.
 #' 
-#' @param granularity Aggregation granularity. Can be either "Daily" or "Hourly".
+#' @param granularity Aggregation granularity. Can be either "Daily" or 
+#' "Hourly".
 #' @export
 azureDataConsumption <- function(azureActiveContext,
                                  instance="",
@@ -64,14 +86,29 @@ azureDataConsumption <- function(azureActiveContext,
     
   }
   
-  # If the computation time is less than a hour, timeEnd will be incremented by an hour to get the total cost within an hour aggregated from timeStart. However, only the consumption on computation is considered in the returned data, and the computation consumption will then be replaced with the actual timeEnd - timeStart.
+  # If the computation time is less than a hour, timeEnd will be incremented by 
+  # an hour to get the total cost within an hour aggregated from timeStart. 
+  # However, only the consumption on computation is considered in the returned 
+  # data, and the computation consumption will then be replaced with the actual 
+  # timeEnd - timeStart.
   
-  # NOTE: estimation of cost in this case is rough though, it captures the major component of total cost, which originates from running an Azure instance. Other than computation cost, there are also cost on activities such as data transfer, software library license, etc. This is not included in the approximation here until a solid method for capturing those consumption data is found. Data ingress does not generate cost, but data egress does. Usually the occurrence of data transfer is not that frequent as computation, and pricing rates for data transfer is also less than computation (e.g., price rate of "data transfer in" is ~ 40% of that of computation on an A3 virtual machine).
+  # NOTE: estimation of cost in this case is rough though, it captures the major
+  # component of total cost, which originates from running an Azure instance. 
+  # Other than computation cost, there are also cost on activities such as data
+  # transfer, software library license, etc. This is not included in the 
+  # approximation here until a solid method for capturing those consumption data
+  # is found. Data ingress does not generate cost, but data egress does. Usually
+  # the occurrence of data transfer is not that frequent as computation, and 
+  # pricing rates for data transfer is also less than computation (e.g., price 
+  # rate of "data transfer in" is ~ 40% of that of computation on an A3 virtual
+  # machine).
   
   # TODO: inlude other types of cost for jobs that take less than an hour.
   
   if (as.numeric(timeEnd - timeStart) == 0) {
-    writeLines("Difference between timeStart and timeEnd is less than the aggregation granularity. Cost is estimated solely on computation running time.")
+    writeLines("Difference between timeStart and timeEnd is less than the 
+               aggregation granularity. Cost is estimated solely on computation
+               running time.")
     
     # increment timeEnd by one hour.
     
@@ -80,20 +117,35 @@ azureDataConsumption <- function(azureActiveContext,
   
   # reformat time variables to make them compatible with API call.
   
-  start <- URLencode(paste(as.Date(timeStart), "T",
-                           sprintf("%02d", lubridate::hour(timeStart)), ":", sprintf("%02d", lubridate::minute(timeStart)), ":", sprintf("%02d", lubridate::second(timeStart)), "+",
+  start <- URLencode(paste(as.Date(timeStart), 
+                           "T",
+                           sprintf("%02d", lubridate::hour(timeStart)), 
+                           ":", 
+                           sprintf("%02d", lubridate::minute(timeStart)), 
+                           ":", 
+                           sprintf("%02d", lubridate::second(timeStart)), 
+                           "+",
                            "00:00",
                            sep=""),
                      reserved=TRUE)
   
-  end <- URLencode(paste(as.Date(timeEnd), "T",
-                         sprintf("%02d", lubridate::hour(timeEnd)), ":", sprintf("%02d", lubridate::minute(timeEnd)), ":", sprintf("%02d", lubridate::second(timeEnd)), "+",
+  end <- URLencode(paste(as.Date(timeEnd), 
+                         "T",
+                         sprintf("%02d", lubridate::hour(timeEnd)), 
+                         ":", 
+                         sprintf("%02d", lubridate::minute(timeEnd)), 
+                         ":", 
+                         sprintf("%02d", lubridate::second(timeEnd)), 
+                         "+",
                          "00:00",
                          sep=""),
                    reserved=TRUE)
   
   url <-
-    sprintf("https://management.azure.com/subscriptions/%s/providers/Microsoft.Commerce/UsageAggregates?api-version=%s&reportedStartTime=%s&reportedEndTime=%s&aggregationgranularity=%s&showDetails=%s",
+    sprintf("https://management.azure.com/subscriptions/%s/providers/
+            Microsoft.Commerce/UsageAggregates?api-version=%s
+            &reportedStartTime=%s&reportedEndTime=%s
+            &aggregationgranularity=%s&showDetails=%s",
             azureActiveContext$subscriptionID,
             "2015-06-01-preview",
             start,
@@ -128,16 +180,19 @@ azureDataConsumption <- function(azureActiveContext,
     
     if(!missing(instance)) {
       if(length(index_instance) == 0)
-        stop("No data consumption records found for the instance during the given period.")
+        stop("No data consumption records found for the instance during the 
+             given period.")
       df_use <- df_use[index_instance, ]
     } else if(missing(instance)) {
       if(length(index_resource) == 0)
-        stop("No data consumption records found for the resource group during the given period.")
+        stop("No data consumption records found for the resource group during 
+             the given period.")
       df_use <- df_use[index_resource, ]
     }
   }
   
-  # if time difference is less than one hour. Only return one row of computation consumption whose value is the time difference.
+  # if time difference is less than one hour. Only return one row of computation
+  # consumption whose value is the time difference.
   
   # timeEnd <- timeEnd - 3600
   
@@ -154,8 +209,12 @@ azureDataConsumption <- function(azureActiveContext,
     
     # NOTE the maximum number of records returned from API is limited to 1000.
     
-    if (nrow(df_use) == 1000 && max(as.POSIXct(df_use$usageEndTime)) < as.POSIXct(end)) {
-      warning(sprintf("The number of records in the specified time period %s to %s exceeds the limit that can be returned from API call. Consumption information is truncated. Please use a small period instead.", start, end))
+    if (nrow(df_use) == 1000 && 
+        max(as.POSIXct(df_use$usageEndTime)) < as.POSIXct(end)) {
+      warning(sprintf("The number of records in the specified time period %s 
+                      to %s exceeds the limit that can be returned from API call.
+                      Consumption information is truncated. Please use a small 
+                      period instead.", timeStart, timeEnd))
     }
   }
   
@@ -188,11 +247,13 @@ azureDataConsumption <- function(azureActiveContext,
 #' 
 #' @param locale Locality information of subscription.
 #' 
-#' @param offerId Offer ID of the subscription. Detailed information can be found at https://azure.microsoft.com/en-us/support/legal/offer-details/
+#' @param offerId Offer ID of the subscription. Detailed information can be 
+#' found at https://azure.microsoft.com/en-us/support/legal/offer-details/
 #' 
 #' @param region region information about the subscription.
 #' 
-#' @note The pricing rates function wraps API calls to Azure RateCard and current only the API supports only for Pay-As-You-Go offer scheme. 
+#' @note The pricing rates function wraps API calls to Azure RateCard and 
+#' current only the API supports only for Pay-As-You-Go offer scheme. 
 #' 
 #' @export
 azurePricingRates <- function(azureActiveContext,
@@ -221,8 +282,10 @@ azurePricingRates <- function(azureActiveContext,
     stop("Error: please provide region information.")
   
   url <- paste(
-    "https://management.azure.com/subscriptions/", azureActiveContext$subscriptionID,
-    "/providers/Microsoft.Commerce/RateCard?api-version=2016-08-31-preview&$filter=",
+    "https://management.azure.com/subscriptions/", 
+    azureActiveContext$subscriptionID,
+    "/providers/Microsoft.Commerce/RateCard?api-version=2016-08-31-preview&
+    $filter=",
     "OfferDurableId eq '", offerId, "'",
     " and Currency eq '", currency, "'",
     " and Locale eq '", locale, "'",
@@ -243,12 +306,16 @@ azurePricingRates <- function(azureActiveContext,
   df_meter <- rl$Meters
   df_meter$MeterRate <- rl$Meters$MeterRates$`0`
   
-  # an irresponsible drop of MeterRates and MeterTags. Will add them back after having a better handle of them.
+  # NOTE: an irresponsible drop of MeterRates and MeterTags. Will add them back 
+  # after having a better handle of them.
   
   df_meter <- subset(df_meter, select=-MeterRates)
   df_meter <- subset(df_meter, select=-MeterTags)
   
-  names(df_meter) <- paste0(tolower(substring(names(df_meter), 1, 1)), substring(names(df_meter), 2))
+  names(df_meter) <- paste0(tolower(substring(names(df_meter), 
+                                              1, 
+                                              1)), 
+                            substring(names(df_meter), 2))
   
   df_meter
 }
@@ -257,25 +324,19 @@ azurePricingRates <- function(azureActiveContext,
 #' 
 #' @inheritParams setAzureContext
 #' 
-#' @param instance Instance of Azure instance that one would like to check expense. No matter whether resource group is given or not, if a instance of instance is given, data consumption of that instance is returned.
+#' @inheritParams azureDataConsumption
 #' 
-#' @param timeStart Start time.
+#' @inheritParams azurePricingRates
 #' 
-#' @param timeEnd End time.
+#' @return Total cost measured in the given currency of the specified Azure 
+#' instance in the period.
 #' 
-#' @param granularity Aggregation granularity. Can be either "Daily" or "Hourly".
-#' 
-#' @param currency Currency in which price rating is measured.
-#' 
-#' @param locale Locality information of subscription.
-#' 
-#' @param offerId Offer ID of the subscription. Detailed information can be found at https://azure.microsoft.com/en-us/support/legal/offer-details/
-#' 
-#' @param region region information about the subscription.
-#' 
-#' @return Total cost measured in the given currency of the specified Azure instance in the period.
-#' 
-#' @note Note if difference between \code{timeStart} and \code{timeEnd} is less than the finest granularity, e.g., "Hourly" (we notice this is a usual case when one needs to be aware of the charges of a job that takes less than an hour), the expense will be estimated based solely on computation hour. That is, the total expense is the multiplication of computation hour and pricing rate of the DSVM instance.
+#' @note Note if difference between \code{timeStart} and \code{timeEnd} is 
+#' less than the finest granularity, e.g., "Hourly" (we notice this is a 
+#' usual case when one needs to be aware of the charges of a job that takes 
+#' less than an hour), the expense will be estimated based solely on computation
+#'  hour. That is, the total expense is the multiplication of computation hour
+#'   and pricing rate of the requested instance.
 #' 
 #' @export
 azureExpenseCalculator <- function(azureActiveContext,
@@ -333,7 +394,10 @@ azureExpenseCalculator <- function(azureActiveContext,
                            "meterRate",
                            "cost")]
   
-  names(df_cost) <- paste0(tolower(substring(names(df_cost), 1, 1)), substring(names(df_cost), 2))
+  names(df_cost) <- paste0(tolower(substring(names(df_cost), 
+                                             1, 
+                                             1)), 
+                           substring(names(df_cost), 2))
   
   df_cost
 }
