@@ -4,13 +4,15 @@
 \alias{azureExpenseCalculator}
 \title{Calculate cost of using a specific instance of Azure for certain period.}
 \usage{
-azureExpenseCalculator(azureActiveContext, instance, timeStart, timeEnd,
-  granularity, currency, locale, offerId, region)
+azureExpenseCalculator(azureActiveContext, instance = "", timeStart, timeEnd,
+  granularity, currency, locale, offerId, region, verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{AzureSMR context.}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
 
-\item{instance}{Instance of Azure instance that one would like to check expense. No matter whether resource group is given or not, if a instance of instance is given, data consumption of that instance is returned.}
+\item{instance}{Instance name that one would like to check expe
+nse. It is by default empty, which returns data consumption for
+all instances under subscription.}
 
 \item{timeStart}{Start time.}
 
@@ -22,14 +24,18 @@ azureExpenseCalculator(azureActiveContext, instance, timeStart, timeEnd,
 
 \item{locale}{Locality information of subscription.}
 
-\item{offerId}{Offer ID of the subscription. Detailed information can be found at https://azure.microsoft.com/en-us/support/legal/offer-details/}
+\item{offerId}{Offer ID of the subscription. For more information see https://azure.microsoft.com/en-us/support/legal/offer-details/}
 
 \item{region}{region information about the subscription.}
 }
 \value{
-Total cost measured in the given currency of the specified Azure instance in the period.
+Total cost measured in the given currency of the specified Azure
+instance in the period.
 }
-\note{
-Note if difference between \code{timeStart} and \code{timeEnd} is less than the finest granularity, e.g., "Hourly" (we notice this is a usual case when one needs to be aware of the charges of a job that takes less than an hour), the expense will be estimated based solely on computation hour. That is, the total expense is the multiplication of computation hour and pricing rate of the DSVM instance.
+\description{
+Note if difference between \code{timeStart} and \code{timeEnd} is less than the finest granularity, e.g., "Hourly" (we notice this is a usual case when one needs to be aware of the charges of a job that takes less than an hour), the expense will be estimated based solely on computation hour. That is, the total expense is the multiplication of computation hour and pricing rate of the requested instance.
 }
-
+\seealso{
+Other Cost functions: \code{\link{azureDataConsumption}},
+  \code{\link{azurePricingRates}}
+}

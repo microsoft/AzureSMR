@@ -53,8 +53,9 @@ sc <- createAzureContext(tenantID = "{TID}", clientID = "{CID}", authKey= "{KEY}
 sc
 ```
 
-
-To get an authorisation token use `azureAuthenticate()`. Note this token will time our after a period and therefore you need to run it again occasionally. TIP: Use AzureAuthenticate before a long running task.
+If you provide autentication paramters to createAzureContext() the function will automatically authenticate.
+To manually get an authorisation token use `azureAuthenticate()`. 
+Note this token will time our after a period and therefore you need to run it again occasionally. TIP: Use AzureAuthenticate before a long running task.
 
 The `azureListSubscriptions()` function lists all the available subscriptions. If you only have one it sets the default Subscription in the `azureActiveContext` to that subscription ID.
 
@@ -76,28 +77,31 @@ azureListAllResources(sc, location = "northeurope")
 
 azureListAllResources(sc, type = "Microsoft.Sql/servers", location = "northeurope")
 
-azureListAllResources(sc, resourceGroup = "Analytics")
 
 azureCreateResourceGroup(sc, resourceGroup = "testme", location = "northeurope")
 
-azureDeleteResourceGroup(sc, resourceGroup = "testme")
+azureCreateStorageAccount(sc,storageAccount="testmystorage1",resourceGroup = "testme")
 
-azureListRG(sc)$name
+azureListAllResources(sc, resourceGroup = "testme")
+
+# When finished, to delete a Resource Group use azureDeleteResourceGroup
+azureDeleteResourceGroup(sc, resourceGroup = "testme")
 
 ```
 
 
 ## Manage Virtual Machines
 
-Use these functions to list, start and stop Virtual Machines (see templates for Creation).
+Use these functions to list, start and stop existing Virtual Machines (see templates for Creation).
 
 To Create VMs please refer to Resource Templates below.
 
 ```{r, eval=FALSE}
-azureListVM(sc, resourceGroup = "AWHDIRG")
+## List VMs in a ResourceGroup
+azureListVM(sc, resourceGroup = "testme")
 
 ##            Name    Location                             Type    OS     State  Admin
-## 1         DSVM1 northeurope Microsoft.Compute/virtualMachines Linux Succeeded alanwe
+## 1         DSVM1 northeurope Microsoft.Compute/virtualMachines Linux Succeeded
 
 azureStartVM(sc, vmName = "DSVM1")
 azureStopVM(sc, vmName = "DSVM1")
@@ -109,60 +113,75 @@ In order to access Storage Blobs you need to have a key. Use `azureSAGetKey()` t
 
 
 ```{r, eval=FALSE}
-sKey <- azureSAGetKey(sc, resourceGroup = "Analytics", storageAccount = "analyticsfiles")
+sKey <- azureSAGetKey(sc, resourceGroup = "testme", storageAccount = "testmystorage1")
 ```
+
+To create containers in a storage account use`azureCreateStorageContainer()`
+
+```{r, eval=FALSE}
+azureCreateStorageContainer(sc,"opendata",storageAccount = "testmystorage1", resourceGroup = "testme")
+```
+
 
 To list containers in a storage account use `azureListContainers()`
 
 ```{r, eval=FALSE}
-azureListContainers(sc, storageAccount = "analyticsfiles", containers = "Test")
-```
-
-
-To list blobs in a container use `azureListStorageBlobs()`
-
-```{r, eval=FALSE}
-azureListStorageBlobs(sc, storageAccount = "analyticsfiles", container = "test")
+azureListStorageContainers(sc, storageAccount = "testmystorage1", resourceGroup = "testme")
 ```
 
 To Write a Blobs use `azurePutBlob()`
 
 ```{r, eval=FALSE}
-azurePutBlob(sc, StorageAccount = "analyticsfiles", container = "test", 
+azurePutBlob(sc, storageAccount = "testmystorage1", container = "opendata", 
              contents = "Hello World",
              blob = "HELLO") 
+```
+
+To list blobs in a container use `azureListStorageBlobs()`
+
+```{r, eval=FALSE}
+azureListStorageBlobs(sc, storageAccount = "testmystorage1", container = "opendata")
 ```
 
 To read a blob in a container use `azureGetBlob()`
 
 ```{r, eval=FALSE}
-azureGetBlob(sc, storageAccount = "analyticsfiles", container = "test",
+azureGetBlob(sc, storageAccount = "testmystorage1", container = "opendata",
              blob="HELLO",
              type="text") 
 ```
 
-
 ## Manage HDInsight Clusters
 
-You can use `AzureSMR` to manage Azure HDInsight clusters. To create clusters use Resource Templates (See below).
+You can use `AzureSMR` to manage Azure HDInsight clusters. To create clusters use azureCreateHDI or for advanced configurations use Resource Templates (See below).
 
 Also see functions for submitting Hive and Spark jobs.
+
+```{r, eval=FALSE}
+azureCreateHDI(sc,
+                 resourceGroup = "testme",
+                 clustername = "smrhdi", # only low case letters, digit, and dash.
+                 storageAccount = "testmystorage1",
+                 adminUser = "hdiadmin",
+                 adminPassword = "AzureSMR_password123",
+                 sshUser = "hdisshuser",
+                 sshPassword = "AzureSMR_password123", 
+                 kind = "rserver")
+```
 
 Use `azureListHDI()` to list available Clusters.
 
 ```{r, eval=FALSE}
-azureListHDI(sc)
-azureListHDI(sc, resourceGroup ="Analytics")
+azureListHDI(sc, resourceGroup ="testme")
 
 ```
 
 Use `azureResizeHDI()` to resize a cluster
 
 ```{r, eval=FALSE}
-azureResizeHDI(sc, resourceGroup = "Analytics", clusterName = "{HDIClusterName}", 
-               Role="workernode",Size=2)
+azureResizeHDI(sc, resourceGroup = "testme", clustername = "smrhdi", role="workernode",size=3)
 
-## AzureResizeHDI: Request Submitted:  2016-06-23 18:50:57
+## azureResizeHDI: Request Submitted:  2016-06-23 18:50:57
 ## Resizing(R), Succeeded(S)
 ## RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
 ## RRRRRRRRRRRRRRRRRRS
@@ -182,7 +201,7 @@ To create a resource using a template in AzureSM use AzureDeployTemplate. The Te
 azureDeployTemplate(sc, resourceGroup = "Analytics", deplName = "Deploy1", 
                     templateURL = "{TEMPLATEURL}", paramURL = "{PARAMURL}")
 
-## AzureDeployTemplate: Request Submitted:  2016-06-23 18:50:57
+## azureDeployTemplate: Request Submitted:  2016-06-23 18:50:57
 ## Resizing(R), Succeeded(S)
 ## RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
 ## RRRRRRRRRRRRRRRRRRS
@@ -196,12 +215,14 @@ ADMIN TIP: If a deployment fails. Go to the Azure Portal and look azToken Actvit
 These functions facilitate the use of hive jobs on a HDInsight Cluster
 
 ```{r, eval=FALSE}
-azureHiveStatus(sc, clusterName = "{hdicluster}", 
-                hdiAdmin = "admin", 
-                hdiPassword = "********")
+azureHiveStatus(sc, clusterName = "smrhdi", 
+                hdiAdmin = "hdiadmin", 
+                hdiPassword = "AzureSMR_password123")
 azureHiveSQL(sc, 
-             CMD = "select * from airports", 
-             Path = "wasb://{container}@{hdicluster}.blob.core.windows.net/")
+             CMD = "select * from hivesampletable", 
+             path = "wasb://opendata@testmystorage1.blob.core.windows.net/")
+
+azureListStorageBlobs(sc, storageAccount = "testmystorage1", container = "opendata")
 
 stdout <- azureGetBlob(sc, Container = "test", Blob = "stdout")
  
@@ -217,19 +238,20 @@ read.delim(text=stdout,  header=TRUE, fill=TRUE)
 To Create a new Spark Session (Via Livy) use `azureSparkNewSession()`
 
 ```{r, eval=FALSE}
-azureSparkNewSession(sc, clusterName = "{hdicluster}", 
-                     hdiAdmin = "admin", 
-                     hdiPassword = "********",
+azureSparkNewSession(sc, clustername = "smrhdi", 
+                     hdiAdmin = "hdiadmin", 
+                     hdiPassword = "AzureSMR_password123",
                      kind = "pyspark")
 ```
 
 To view the status of sessions use AzureSparkListSessions
+Wait for status to be Idle
 
 ```{r, eval=FALSE}
-azureSparkListSessions(sc, clusterName = "{hdicluster}")
+azureSparkListSessions(sc, clustername = "smrhdi")
 ```
 
-To send a command to the Spark Session use `azureSparkCMD()`. In this case it submits a Python routine
+To send a command to the Spark Session use `azureSparkCMD()`. In this case it submits a Python routine. Ensure you preserve indents for Python.
 
 ```{r, eval=FALSE}
 # SAMPLE PYSPARK SCRIPT TO CALCULATE PI
@@ -249,7 +271,7 @@ count = sc.parallelize(range(1, n + 1), partitions).map(f).reduce(add)
 Pi = (4.0 * count / n)
 print("Pi is roughly %f" % Pi)'                   
  
-azureSparkCMD(sc, cmd = pythonCmd, sessionID = "5")
+azureSparkCMD(sc, CMD = pythonCmd, sessionID = "0")
 
 ## [1] "Pi is roughly 3.140285"
 ```
@@ -257,8 +279,20 @@ azureSparkCMD(sc, cmd = pythonCmd, sessionID = "5")
 Check Session variables are retained
 
 ```{r, eval=FALSE}
-azureSparkCMD(sc, clusterName = "{hdicluster}", cmd = "print Pi", sessionID="5")
+azureSparkCMD(sc, clustername = "smrhdi", CMD = "print Pi", sessionID="0")
 
 #[1] "3.1422"
+```
+
+You can also run SparkR sessions
+
+```{r, eval=FALSE}
+azureSparkNewSession(sc, clustername = "smrhdi", 
+                     hdiAdmin = "hdiadmin", 
+                     hdiPassword = "AzureSMR_password123",
+                     kind = "sparkr")
+azureSparkCMD(sc, clustername = "smrhdi", CMD = "HW<-'hello R'", sessionID="2")
+azureSparkCMD(sc, clustername = "smrhdi", CMD = "cat(HW)", sessionID="2")
+
 ```
 

@@ -276,13 +276,17 @@ azureSparkCMD <- function(azureActiveContext, CMD, clustername, hdiAdmin,
                sep = "")
   # print(URL)
   message(paste("CMD Running: ", Sys.time()))
-  message("Running(R), Completed(C)")
+  message("Running(R) Waiting(W) Completed(C)")
 
-  while (df$state == "running") {
+  while (df$state == "running" || df$state == "waiting") {
     Sys.sleep(DUR)
     if (DUR < 5)
       DUR <- DUR + 1
-    message("R")
+    if (df$state == "running")
+      message("R",appendLF = FALSE)
+    if (df$state == "waiting")
+      message("W",appendLF = FALSE)
+    
     r <- GET(URL, add_headers(.headers = c(`Content-type` = "application/json")),
              authenticate(HA, HP))
     rl <- content(r, "text", encoding = "UTF-8")
@@ -290,7 +294,7 @@ azureSparkCMD <- function(azureActiveContext, CMD, clustername, hdiAdmin,
     df <- fromJSON(rl)
 
   }
-  message("C")
+  message("C",appendLF = FALSE)
   message("Finished Running statement: ", Sys.time())
   RET <- df$output$data[1]
   # rownames(RET) <- 'Return Value'

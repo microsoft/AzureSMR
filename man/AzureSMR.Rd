@@ -28,6 +28,10 @@ This enables you to use and change many Azure resources. The following is an inc
 \item \code{\link[=azureCreateStorageAccount]{azureCreateStorageAccount()}}
 \item \code{\link[=azureListStorageContainers]{azureListStorageContainers()}}
 \item \code{\link[=azureListStorageBlobs]{azureListStorageBlobs()}}
+\item \code{\link[=azureGetBlob]{azureGetBlob()}}
+\item \code{\link[=azurePutBlob]{azurePutBlob()}}
+\item \code{\link[=azureDeleteBlob]{azureDeleteBlob()}}
+\item \code{\link[=azureBlobFind]{azureBlobFind()}}
 }
 \item Virtual Machines
 \itemize{
@@ -45,6 +49,19 @@ This enables you to use and change many Azure resources. The following is an inc
 \item \code{\link[=azureDeleteHDI]{azureDeleteHDI()}}
 \item \code{\link[=azureRunScriptAction]{azureRunScriptAction()}}
 \item \code{\link[=azureScriptActionHistory]{azureScriptActionHistory()}}
+}
+\item Azure batch:
+\itemize{
+\item \code{\link[=azureListBatchAccounts]{azureListBatchAccounts()}}
+\item \code{\link[=azureCreateBatchAccount]{azureCreateBatchAccount()}}
+\item \code{\link[=azureDeleteBatchAccount]{azureDeleteBatchAccount()}}
+\item \code{\link[=azureBatchGetKey]{azureBatchGetKey()}}
+}
+\item Cost functions:
+\itemize{
+\item \code{\link[=azureDataConsumption]{azureDataConsumption()}}
+\item \code{\link[=azurePricingRates]{azurePricingRates()}}
+\item \code{\link[=azureExpenseCalculator]{azureExpenseCalculator()}}
 }
 }
 }
