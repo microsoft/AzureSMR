@@ -14,8 +14,7 @@ azurePricingRates(azureActiveContext, currency, locale, offerId, region,
 
 \item{locale}{Locality information of subscription.}
 
-\item{offerId}{Offer ID of the subscription. Detailed information can be
-found at https://azure.microsoft.com/en-us/support/legal/offer-details/}
+\item{offerId}{Offer ID of the subscription. For more information see https://azure.microsoft.com/en-us/support/legal/offer-details/}
 
 \item{region}{region information about the subscription.}
 }
@@ -23,6 +22,9 @@ found at https://azure.microsoft.com/en-us/support/legal/offer-details/}
 Get pricing details of resources under a subscription.
 }
 \note{
-The pricing rates function wraps API calls to Azure RateCard and
-current only the API supports only for Pay-As-You-Go offer scheme.
+The pricing rates function wraps API calls to Azure RateCard and currently the API supports only the Pay-As-You-Go offer scheme.
+}
+\seealso{
+Other Cost functions: \code{\link{azureDataConsumption}},
+  \code{\link{azureExpenseCalculator}}
 }
