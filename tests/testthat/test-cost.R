@@ -25,9 +25,9 @@ sa_name <- paste0("azuresmr", timestamp)
 
 # run test.
 
-# get cost by day.
+# get data consumption by day.
 
-test_that("Get cost by day", {
+test_that("Get data consumption by day", {
   skip_if_missing_config(settingsfile)
   
   time_end   <- paste0(as.Date(Sys.Date()), "00:00:00")
@@ -38,7 +38,7 @@ test_that("Get cost by day", {
                               timeEnd=time_end,
                               granularity="Daily")
   
-  expect_type(res, type="list")
+  expect_is(res, class="data.frame")
   expect_identical(object=names(res), expected=c("usageStartTime", 
                                                  "usageEndTime",
                                                  "meterName", 
@@ -61,17 +61,17 @@ test_that("Get pricing rates", {
                            offerId=config$OFFER,
                            region=config$REGION)
   
-  expect_type(res, type="list")
-  expect_identical(object=names(res), expected=c("EffectiveDate", 
-                                                 "IncludedQuantity",
-                                                 "MeterCategory",
-                                                 "MeterId",
-                                                 "MeterName",
-                                                 "MeterRegion",
-                                                 "MeterStatus",
-                                                 "MeterSubCategory",
-                                                 "Unit",
-                                                 "MeterRate"))
+  expect_is(res, class="data.frame")
+  expect_identical(object=names(res), expected=c("effectiveDate", 
+                                                 "includedQuantity",
+                                                 "meterCategory",
+                                                 "meterId",
+                                                 "meterName",
+                                                 "meterRegion",
+                                                 "meterStatus",
+                                                 "meterSubCategory",
+                                                 "unit",
+                                                 "meterRate"))
 })
 
 
@@ -92,12 +92,12 @@ test_that("Get cost by day", {
                                 offerId=config$OFFER,
                                 region=config$REGION)
   
-  expect_type(res, type="list")
-  expect_identical(object=names(res), expected=c("MeterName",
-                                                 "MeterCategory",
-                                                 "MeterSubCategory",
-                                                 "totalQuantity",
-                                                 "Unit",
-                                                 "MeterRate",
-                                                 "Cost"))
+  expect_is(res, class="data.frame")
+  expect_identical(object=names(res), expected=c("meterName",
+                                                 "meterCategory",
+                                                 "meterSubCategory",
+                                                 "quantity",
+                                                 "unit",
+                                                 "meterRate",
+                                                 "cost"))
 })
