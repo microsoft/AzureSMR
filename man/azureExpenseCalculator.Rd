@@ -18,15 +18,13 @@ all instances under subscription.}
 
 \item{timeEnd}{End time.}
 
-\item{granularity}{Aggregation granularity. Can be either "Daily" or
-"Hourly".}
+\item{granularity}{Aggregation granularity. Can be either "Daily" or "Hourly".}
 
 \item{currency}{Currency in which price rating is measured.}
 
 \item{locale}{Locality information of subscription.}
 
-\item{offerId}{Offer ID of the subscription. Detailed information can be
-found at https://azure.microsoft.com/en-us/support/legal/offer-details/}
+\item{offerId}{Offer ID of the subscription. For more information see https://azure.microsoft.com/en-us/support/legal/offer-details/}
 
 \item{region}{region information about the subscription.}
 }
@@ -35,13 +33,9 @@ Total cost measured in the given currency of the specified Azure
 instance in the period.
 }
 \description{
-Calculate cost of using a specific instance of Azure for certain period.
+Note if difference between \code{timeStart} and \code{timeEnd} is less than the finest granularity, e.g., "Hourly" (we notice this is a usual case when one needs to be aware of the charges of a job that takes less than an hour), the expense will be estimated based solely on computation hour. That is, the total expense is the multiplication of computation hour and pricing rate of the requested instance.
 }
-\note{
-Note if difference between \code{timeStart} and \code{timeEnd} is
-less than the finest granularity, e.g., "Hourly" (we notice this is a
-usual case when one needs to be aware of the charges of a job that takes
-less than an hour), the expense will be estimated based solely on computation
-hour. That is, the total expense is the multiplication of computation hour
-and pricing rate of the requested instance.
+\seealso{
+Other Cost functions: \code{\link{azureDataConsumption}},
+  \code{\link{azurePricingRates}}
 }
