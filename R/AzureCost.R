@@ -335,7 +335,5 @@ azureExpenseCalculator <- function(azureActiveContext,
   
   names(df_cost) <- paste0(tolower(substring(names(df_cost), 1, 1)), substring(names(df_cost), 2))
   
-  df_cost <- df_cost[, c(3, 2, 4, 1, 5, 6, 7)]
-  
   df_cost
 }
