@@ -113,13 +113,9 @@ azureDataConsumption <- function(azureActiveContext,
   
   df <- fromJSON(rl)
   
-  df_use <-
-    df$value$properties %>%
-    select(-infoFields)
+  df_use <- df$value$properties
   
-  inst_data <-
-    df$value$properties$instanceData %>%
-    lapply(., fromJSON)
+  inst_data <- lapply(df$value$properties$instanceData, fromJSON)
   
   # retrieve results that match instance name.
   
@@ -149,27 +145,10 @@ azureDataConsumption <- function(azureActiveContext,
     
     time_diff <- as.numeric(de - ds) / 3600
     
-    df_use %<>%
-      select(usageStartTime,
-             usageEndTime,
-             meterName,
-             meterCategory,
-             meterSubCategory,
-             unit,
-             meterId,
-             quantity,
-             meterRegion) %>%
-      filter(meterName == "Compute Hours") %>%
-      filter(row_number() == 1) %>%
-      mutate(quantity = time_diff) %>%
-      mutate(usageStartTime = as.POSIXct(usageStartTime)) %>%
-      mutate(usageEndTime = as.POSIXct(usageEndTime)) 
+    df_use <- df_use[which(df_use$meterName == "Compute Hours"), ]
+    df_use <- df_use[1, ]
     
-    writeLines(sprintf("The data consumption for %s between %s and %s is",
-                       instance,
-                       as.character(timeStart),
-                       as.character(timeEnd)))
-    return(df_use)
+    df_use$quantity <- df_use$time_diff
     
   } else {
     
@@ -178,27 +157,27 @@ azureDataConsumption <- function(azureActiveContext,
     if (nrow(df_use) == 1000 && max(as.POSIXct(df_use$usageEndTime)) < as.POSIXct(end)) {
       warning(sprintf("The number of records in the specified time period %s to %s exceeds the limit that can be returned from API call. Consumption information is truncated. Please use a small period instead.", start, end))
     }
-    
-    df_use %<>%
-      select(usageStartTime,
-             usageEndTime,
-             meterName,
-             meterCategory,
-             meterSubCategory,
-             unit,
-             meterId,
-             quantity,
-             meterRegion) %>%
-      mutate(usageStartTime = as.POSIXct(usageStartTime)) %>%
-      mutate(usageEndTime = as.POSIXct(usageEndTime)) 
-    
-    writeLines(sprintf("The data consumption for %s between %s and %s is",
-                       instance,
-                       as.character(timeStart),
-                       as.character(timeEnd)))
-    
-    df_use
   }
+  
+  df_use <- df_use[, c("usageStartTime",
+                       "usageEndTime",
+                       "meterName",
+                       "meterCategory",
+                       "meterSubCategory",
+                       "unit",
+                       "meterId",
+                       "quantity",
+                       "meterRegion")]
+  
+  df_use$usageStartTime <- as.POSIXct(df_use$usageStartTime)
+  df_use$usageEndTime   <- as.POSIXct(df_use$usageEndTime)
+  
+  writeLines(sprintf("The data consumption for %s between %s and %s is",
+                     instance,
+                     as.character(timeStart),
+                     as.character(timeEnd)))
+  
+  return(df_use)
 }
 
 #' Get pricing details of resources under a subscription.
@@ -259,8 +238,6 @@ azurePricingRates <- function(azureActiveContext,
   
   stopWithAzureError(r)
   
-  # r <- GET(url, add_headers(.headers=c(Authorization=azureActiveContext$Token, "Content-Type"="application/json")))
-  
   rl <- fromJSON(content(r, "text", encoding="UTF-8"), simplifyDataFrame=TRUE)
   
   df_meter <- rl$Meters
@@ -271,7 +248,9 @@ azurePricingRates <- function(azureActiveContext,
   df_meter <- subset(df_meter, select=-MeterRates)
   df_meter <- subset(df_meter, select=-MeterTags)
   
-  return(df_meter)
+  names(df_meter) <- paste0(tolower(substring(names(df_meter), 1, 1)), substring(names(df_meter), 2))
+  
+  df_meter
 }
 
 #' Calculate cost of using a specific instance of Azure for certain period.
@@ -309,26 +288,18 @@ azureExpenseCalculator <- function(azureActiveContext,
                                    offerId,
                                    region,
                                    verbose=FALSE) {
-  df_use <-
-    azureDataConsumption(azureActiveContext,
-                         instance=instance,
-                         timeStart=timeStart,
-                         timeEnd=timeEnd,
-                         granularity=granularity,
-                         verbose=verbose) %>%
-    select(meterId,
-           meterSubCategory,
-           usageStartTime,
-           usageEndTime,
-           quantity)
+  df_use <- azureDataConsumption(azureActiveContext,
+                                 instance=instance,
+                                 timeStart=timeStart,
+                                 timeEnd=timeEnd,
+                                 granularity=granularity,
+                                 verbose=verbose) 
   
-  df_used_data <-
-    group_by(df_use, meterId) %>%
-    arrange(usageStartTime, usageEndTime) %>%
-    summarise(usageStartDate=as.Date(min(usageStartTime), tz=Sys.timezone()),
-              usageEndDate=as.Date(max(usageEndTime), tz=Sys.timezone()),
-              totalQuantity=sum(quantity)) %>%
-    ungroup()
+  df_used_data <- df_use[, c("meterId",
+                             "meterSubCategory",
+                             "usageStartTime",
+                             "usageEndTime",
+                             "quantity")]
   
   # use meterId to find pricing rates and then calculate total cost.
   
@@ -339,19 +310,30 @@ azureExpenseCalculator <- function(azureActiveContext,
                                 offerId=offerId,
                                 verbose=verbose)
   
-  meter_list <- df_used_data$meterId
+  meter_list <- unique(df_used_data$meterId)
   
-  df_used_rates <-
-    filter(df_rates, MeterId %in% meter_list) %>%
-    rename(meterId=MeterId)
+  df_used_rates <- df_rates[which(df_rates$meterId %in% meter_list), ]
+  df_used_rates$meterId <- df_used_rates$meterId
   
-  df_cost <-
-    left_join(df_used_data, df_used_rates, by="meterId") %>%
-    mutate(Cost=totalQuantity * MeterRate) %>%
-    select(-IncludedQuantity, -EffectiveDate, -MeterStatus, -usageStartDate, -usageEndDate, -meterId, -MeterRegion) %>%
-    na.omit()
+  # join data consumption and meter pricing rate.
   
-  # reorder columns.
+  df_merged <- merge(x=df_used_data,
+                     y=df_used_rates,
+                     by="meterId",
+                     all.x=TRUE)
+  
+  df_merged$meterSubCategory <- df_merged$meterSubCategory.y
+  df_merged$cost <- df_merged$quantity * df_merged$meterRate
+  
+  df_cost <- df_merged[, c("meterName",
+                           "meterCategory",
+                           "meterSubCategory",
+                           "quantity",
+                           "unit",
+                           "meterRate",
+                           "cost")]
+  
+  names(df_cost) <- paste0(tolower(substring(names(df_cost), 1, 1)), substring(names(df_cost), 2))
   
   df_cost <- df_cost[, c(3, 2, 4, 1, 5, 6, 7)]
   
