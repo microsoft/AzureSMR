@@ -1,0 +1,82 @@
+---
+title: "Getting Authorised for the AzureSMR Package"
+author: "Alan Weaver and Andrie de Vries"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{AzureSMR tutorial}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\usepackage[utf8]{inputenc}
+---
+
+## Configuration instructions
+
+Follow these instructions to create an active directory. You will need to collect the tenant ID (`tenantID`), client ID (`clientID`) and authentication key (`authKey`) in order to authenticate with the `createAzureContect()` function.
+
+### Create an Active Directory App.
+
+1. Login to the Classic (i.e., the old) Portal https://manage.windowsazure.com/.
+
+2. On the left hand menu you should see amongst all the items one called ACTIVE DIRECTORY. Click the item and an active directory DIRECTORY will be listed.
+
+3. Click on an entry under the Name column (if there is only one entry the choice is easy!) to take you to a page of options to get started with some text like I WANT TO.
+
+4. Along the top menu click APPLICATIONS.
+
+5. You probably want to create a new application so type a name for it in the Search box (I called mine AzureSMR). The search result will come back with no results and a button that says `ADD AN APPLICATION` -> which you should click.
+
+6. Give the application a name and choose `WEB APPLICATION AND/OR WEB API`. Then go to the next page `->`.
+
+7. Provide some dummy URLs. They are not used but they must be valid URLs. Click on the tick to continue to create the application.
+
+8. Under the Configure menu button take note of the client ID.9. Under the Keys section choose a 1 year duration (or 2) and click the Save button azToken the bottom of the screen. A key is generated which you should copy now and save it somewhere.
+
+10. We also need the *tenant ID*. Click the `VIEW ENDPOINTS` button on the bottom of the screen and find a list of endpoints all including the tenant ID as a sequence of hexadecimals.
+
+11. Now we need to set up the applications permissions. Click the `Add application` button. In  the resulting window scroll to `Windows Azure Service Management API` and select it. Then click the Tick icon.
+
+12. Under the resulting "permissions to other applications" section, for the Windows Azure Service Management API entry, from the "Delegated Permissions:0" drop down tick the Access Azure Service Management as organization.
+
+13. Click on the Save icon azToken the bottom of the window again.
+
+14. Now we need to assign the application a role and to do so we go to the (new) Azure portal. https://portal.azure.com/
+
+To apply access control azToken Resource Group
+
+15. Click on Resource Groups menu item on the left in the portal.
+
+16. Identify the resource group you will associate with this application.
+
+17. Choose the Access Control(IAM) menu item from the Resource scope.
+
+18. In the resulting scope click the `+ Add` button.
+
+19. Choose the role as Owner and under the user search box enter the name of the App, e.g., AzureSMR.
+
+20. Select the resulting list item for that App then click Select in that scope then OK in the "Add access" scope. The user will be added to the list.
+
+
+Alternatively you can access control azToken Subscription Level
+
+15. Click on Subscriptions on the left menu item in the portal.
+
+16. Identify the Subscription you will associate with this application.
+
+17. Choose the Access Control(IAM) menu item.
+
+18. In the resulting scope click the + Add button.
+
+19. Choose the role as Owner and under the user search box enter the name of the App, e.g., AzureSMR.
+
+20. Select the resulting list item for that App then click Select in that scope then OK in the "Add access" scope. The user will be added to the list.
+
+
+That is all.  You can test this by trying:
+
+```{r, eval = FALSE}
+sc <- createAzureContext(tenantID = "{TID}", clientID = "{CID}", authKey= "{KEY}")
+rgs <- azureListRG(sc)
+rgs
+```
+
+For more information see the tutorial [Use portal to create Active Directory application and service principal that can access resources](https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/)
