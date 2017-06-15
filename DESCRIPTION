@@ -2,8 +2,8 @@ Package: AzureSMR
 Title: Manage and Interact with Azure Resources
 Description: Helps users to manage Azure Services and objects from within an
     R Session. This includes Azure Storage (e.g. containers and blobs), Virtual
-    Machines and HDInsight (Spark, Hive). To use the package, you must configure 
-	an Azure Active Directory application and service principal in the Azure portal.
+    Machines and HDInsight (Spark, Hive). To use the package, you must configure an
+    Azure Active Directory application and service principal in the Azure portal.
 Type: Package
 Version: 0.2.5
 Date: 2017-06-06
@@ -18,16 +18,17 @@ URL: https://github.com/Microsoft/AzureSMR
 BugReports: https://github.com/Microsoft/AzureSMR/issues
 NeedsCompilation: no
 Imports:
-	assertthat,
+    assertthat,
     httr,
     jsonlite,
     XML,
     base64enc,
     digest,
-	shiny (>= 0.13),
-	miniUI (>= 0.1.1),
-	rstudioapi (>= 0.5),
-	DT
+    shiny (>= 0.13),
+    miniUI (>= 0.1.1),
+    rstudioapi (>= 0.5),
+    DT,
+    lubridate,
 Depends:
     R(>= 3.0.0)
 Suggests:

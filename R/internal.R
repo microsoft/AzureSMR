@@ -87,15 +87,6 @@ createAzureStorageSignature <- function(url, verb,
                    )
 }
 
-
-#x_ms_date <- function() {
-  #english <- "English_United Kingdom.1252"
-  #old_locale <- Sys.getlocale(category = "LC_TIME")
-  #on.exit(Sys.setlocale(locale = old_locale))
-  #Sys.setlocale(category = "LC_TIME", locale = english)
-  #strftime(Sys.time(), "%a, %d %b %Y %H:%M:%S %Z", tz = "GMT")
-#}
-
 x_ms_date <- function() httr::http_date(Sys.time())
 
 azure_storage_header <- function(shared_key, date = x_ms_date(), content_length = 0) {
@@ -174,7 +165,7 @@ refreshStorageKey <- function(azureActiveContext, storageAccount, resourceGroup)
 
 updateAzureActiveContext <- function(x, storageAccount, storageKey, resourceGroup, container, blob, directory) {
   # updates the active azure context in place
-  if (!is.azureActiveContext(x)) return(FALSE)
+  assert_that(is.azureActiveContext(azureActiveContext))
   if (!missing(storageAccount)) x$storageAccount <- storageAccount
   if (!missing(resourceGroup))  x$resourceGroup  <- resourceGroup
   if (!missing(storageKey))     x$storageKey     <- storageKey
@@ -184,24 +175,3 @@ updateAzureActiveContext <- function(x, storageAccount, storageKey, resourceGrou
   TRUE
 }
 
-validateStorageArguments <- function(resourceGroup, storageAccount, container, storageKey) {
-  msg <- character(0)
-  pasten <- function(x, ...) paste(x, ..., collapse = "", sep = "\n")
-  if (!missing(resourceGroup) && (is.null(resourceGroup) || length(resourceGroup) == 0)) {
-    msg <- pasten(msg, "- No resourceGroup provided. Use resourceGroup argument or set in AzureContext")
-  }
-  if (!missing(storageAccount) && (is.null(storageAccount) || length(storageAccount) == 0)) {
-    msg <- pasten(msg, "- No storageAccount provided. Use storageAccount argument or set in AzureContext")
-  }
-  if (!missing(container) && (is.null(container) || length(container) == 0)) {
-    msg <- pasten(msg, "- No container provided. Use container argument or set in AzureContext")
-  }
-  if (!missing(storageKey) && (is.null(storageKey) || length(storageKey) == 0)) {
-    msg <- pasten(msg, "- No storageKey provided. Use storageKey argument or set in AzureContext")
-  }
-
-  if (length(msg) > 0) {
-    stop(msg, call. = FALSE)
-  }
-  msg
-}

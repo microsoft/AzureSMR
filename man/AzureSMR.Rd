@@ -46,6 +46,13 @@ This enables you to use and change many Azure resources. The following is an inc
 \item \code{\link[=azureRunScriptAction]{azureRunScriptAction()}}
 \item \code{\link[=azureScriptActionHistory]{azureScriptActionHistory()}}
 }
+\item Azure batch:
+\itemize{
+\item \code{\link[=azureListBatchAccounts]{azureListBatchAccounts()}}
+\item \code{\link[=azureCreateBatchAccount]{azureCreateBatchAccount()}}
+\item \code{\link[=azureDeleteBatchAccount]{azureDeleteBatchAccount()}}
+\item \code{\link[=azureBatchGetKey]{azureBatchGetKey()}}
+}
 }
 }
 \keyword{package}
