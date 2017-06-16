@@ -123,7 +123,8 @@ azureCreateStorageAccount <- function(azureActiveContext, storageAccount,
   rl <- content(r, "text", encoding = "UTF-8")
   azureActiveContext$storageAccount <- storageAccount
   azureActiveContext$resourceGroup  <- resourceGroup
-  message("Create request Accepted. It can take a few moments to provision the storage account")
+  message("Create request accepted")
+  message("It can take a few moments to provision the storage account")
 
   if (!asynchronous) {
     wait_for_azure(
