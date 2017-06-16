@@ -4,7 +4,7 @@
 
 <head>
 
-<meta charset="utf-8">
+<meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 
@@ -12,9 +12,9 @@
 
 <meta name="author" content="Alan Weaver and Andrie de Vries" />
 
-<meta name="date" content="2017-06-15" />
+<meta name="date" content="2017-06-16" />
 
-<title>Getting Authorised for the AzureSMR Package</title>
+<title>Authenticating AzureSMR to call the Azure API</title>
 
 
 
@@ -68,56 +68,74 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 
-<h1 class="title toc-ignore">Getting Authorised for the AzureSMR Package</h1>
+<h1 class="title toc-ignore">Authenticating AzureSMR to call the Azure API</h1>
 <h4 class="author"><em>Alan Weaver and Andrie de Vries</em></h4>
-<h4 class="date"><em>2017-06-15</em></h4>
+<h4 class="date"><em>2017-06-16</em></h4>
 
 
 
 <div id="configuration-instructions" class="section level2">
 <h2>Configuration instructions</h2>
-<p>Follow these instructions to create an active directory. You will need to collect the tenant ID (<code>tenantID</code>), client ID (<code>clientID</code>) and authentication key (<code>authKey</code>) in order to authenticate with the <code>createAzureContect()</code> function.</p>
-<div id="create-an-active-directory-app." class="section level3">
-<h3>Create an Active Directory App.</h3>
+<p>To use the <code>AzureSMR</code> package, you must create an Azure Active Directory application with permisssions. This vignette contains instructions to do this.</p>
+<p>You must collect three pieces of information to authenticate with the <code>createAzureContect()</code> function:</p>
+<ul>
+<li>tenant ID (<code>tenantID</code>)</li>
+<li>client ID (<code>clientID</code>)</li>
+<li>authentication key (<code>authKey</code>)</li>
+</ul>
+</div>
+<div id="create-an-active-directory-application." class="section level2">
+<h2>Create an Active Directory application.</h2>
 <ol style="list-style-type: decimal">
-<li><p>Login to the Classic (i.e., the old) Portal <a href="https://manage.windowsazure.com/" class="uri">https://manage.windowsazure.com/</a>.</p></li>
-<li><p>On the left hand menu you should see amongst all the items one called ACTIVE DIRECTORY. Click the item and an active directory DIRECTORY will be listed.</p></li>
+<li><p>Login to the Classic (the old) Portal <a href="https://manage.windowsazure.com/" class="uri">https://manage.windowsazure.com/</a>.</p></li>
+<li><p>On the left hand menu you should see amongst all the items one called <code>ACTIVE DIRECTORY</code>. Click the item and an active directory DIRECTORY will be listed.</p></li>
 <li><p>Click on an entry under the Name column (if there is only one entry the choice is easy!) to take you to a page of options to get started with some text like I WANT TO.</p></li>
-<li><p>Along the top menu click APPLICATIONS.</p></li>
-<li><p>You probably want to create a new application so type a name for it in the Search box (I called mine AzureSMR). The search result will come back with no results and a button that says <code>ADD AN APPLICATION</code> -&gt; which you should click.</p></li>
+<li><p>Along the top menu click <code>APPLICATIONS</code>.</p></li>
+<li><p>You probably want to create a new application so type a name for it in the Search box (I called mine <code>AzureSMR</code>). The search result will come back with no results and a button that says <code>ADD AN APPLICATION</code> -&gt; which you should click.</p></li>
 <li><p>Give the application a name and choose <code>WEB APPLICATION AND/OR WEB API</code>. Then go to the next page <code>-&gt;</code>.</p></li>
 <li><p>Provide some dummy URLs. They are not used but they must be valid URLs. Click on the tick to continue to create the application.</p></li>
-<li><p>Under the Configure menu button take note of the client ID.9. Under the Keys section choose a 1 year duration (or 2) and click the Save button azToken the bottom of the screen. A key is generated which you should copy now and save it somewhere.</p></li>
-<li><p>We also need the <em>tenant ID</em>. Click the <code>VIEW ENDPOINTS</code> button on the bottom of the screen and find a list of endpoints all including the tenant ID as a sequence of hexadecimals.</p></li>
-<li><p>Now we need to set up the applications permissions. Click the <code>Add application</code> button. In the resulting window scroll to <code>Windows Azure Service Management API</code> and select it. Then click the Tick icon.</p></li>
-<li><p>Under the resulting “permissions to other applications” section, for the Windows Azure Service Management API entry, from the “Delegated Permissions:0” drop down tick the Access Azure Service Management as organization.</p></li>
-<li><p>Click on the Save icon azToken the bottom of the window again.</p></li>
-<li><p>Now we need to assign the application a role and to do so we go to the (new) Azure portal. <a href="https://portal.azure.com/" class="uri">https://portal.azure.com/</a></p></li>
+<li><p>Under the Configure menu button take note of the <strong>client ID</strong>.</p></li>
+<li><p>Under the <code>Keys</code> section choose a 1 year duration (or 2) and click the Save button at the bottom of the screen. An <strong>authenticatio key</strong> is generated which you should copy now and save it somewhere.</p></li>
+<li><p>You also need the <strong>tenant ID</strong>. Click the <code>VIEW ENDPOINTS</code> button on the bottom of the screen and find a list of endpoints all including the tenant ID as a sequence of hexadecimals.</p></li>
+<li><p>Now set up the applications permissions. Click the <code>Add application</code> button. In the resulting window scroll to <code>Windows Azure Service Management API</code> and select it. Then click the Tick icon.</p></li>
+<li><p>Under the resulting “permissions to other applications” section, for the Windows Azure Service Management API entry, from the <code>Delegated Permissions</code> drop down tick the Access Azure Service Management as organization.</p></li>
+<li><p>Click on the Save icon at the bottom of the window again.</p></li>
+<li><p>Now assign the application a role and to do so you go to the (new) Azure portal. <a href="https://portal.azure.com/" class="uri">https://portal.azure.com/</a></p></li>
 </ol>
-<p>To apply access control azToken Resource Group</p>
+</div>
+<div id="access-control" class="section level2">
+<h2>Access control</h2>
+<p>You can apply access control at either the resource group level or the subscription level</p>
+<div id="to-apply-access-control-at-resource-group" class="section level3">
+<h3>To apply access control at Resource Group</h3>
 <ol start="15" style="list-style-type: decimal">
 <li><p>Click on Resource Groups menu item on the left in the portal.</p></li>
 <li><p>Identify the resource group you will associate with this application.</p></li>
-<li><p>Choose the Access Control(IAM) menu item from the Resource scope.</p></li>
+<li><p>Choose the <code>Access Control (IAM)</code> menu item from the Resource scope.</p></li>
 <li><p>In the resulting scope click the <code>+ Add</code> button.</p></li>
-<li><p>Choose the role as Owner and under the user search box enter the name of the App, e.g., AzureSMR.</p></li>
-<li><p>Select the resulting list item for that App then click Select in that scope then OK in the “Add access” scope. The user will be added to the list.</p></li>
+<li><p>Choose the role as Owner and under the user search box enter the name of the App, e.g. <code>AzureSMR</code>.</p></li>
+<li><p>Select the resulting list item for that App then click Select in that scope then OK in the <code>Add access</code> scope. The user will be added to the list.</p></li>
 </ol>
-<p>Alternatively you can access control azToken Subscription Level</p>
+</div>
+<div id="alternatively-you-can-access-control-at-subscription-level" class="section level3">
+<h3>Alternatively you can access control at Subscription Level</h3>
 <ol start="15" style="list-style-type: decimal">
 <li><p>Click on Subscriptions on the left menu item in the portal.</p></li>
 <li><p>Identify the Subscription you will associate with this application.</p></li>
-<li><p>Choose the Access Control(IAM) menu item.</p></li>
-<li><p>In the resulting scope click the + Add button.</p></li>
-<li><p>Choose the role as Owner and under the user search box enter the name of the App, e.g., AzureSMR.</p></li>
+<li><p>Choose the <code>Access Control (IAM)</code> menu item.</p></li>
+<li><p>In the resulting scope click the <code>+ Add</code> button.</p></li>
+<li><p>Choose the role as Owner and under the user search box enter the name of the App, e.g. <code>AzureSMR</code>.</p></li>
 <li><p>Select the resulting list item for that App then click Select in that scope then OK in the “Add access” scope. The user will be added to the list.</p></li>
 </ol>
+</div>
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
 <p>That is all. You can test this by trying:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sc &lt;-<span class="st"> </span><span class="kw">createAzureContext</span>(<span class="dt">tenantID =</span> <span class="st">&quot;{TID}&quot;</span>, <span class="dt">clientID =</span> <span class="st">&quot;{CID}&quot;</span>, <span class="dt">authKey=</span> <span class="st">&quot;{KEY}&quot;</span>)
 rgs &lt;-<span class="st"> </span><span class="kw">azureListRG</span>(sc)
 rgs</code></pre></div>
 <p>For more information see the tutorial <a href="https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/">Use portal to create Active Directory application and service principal that can access resources</a></p>
-</div>
 </div>
 
 
@@ -127,7 +145,7 @@ rgs</code></pre></div>
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>
