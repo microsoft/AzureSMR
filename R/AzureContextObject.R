@@ -38,10 +38,10 @@ createAzureContext <- function(tenantID, clientID, authKey, configFile){
 #'
 #' Updates the value of an `azureActiveContext` object, created by [createAzureContext()]
 #'
-#' @param azureActiveContext A container used for caching variables used by `AzureSMR`
-#' @param tenantID The Tenant ID provided during creation of the Active Directory application / service principal
-#' @param clientID The Client ID provided during creation of the Active Directory application / service principal
-#' @param authKey The Authentication Key provided during creation of the Active Directory application / service principal
+#' @param azureActiveContext A container used for caching variables used by `AzureSMR`, created by [createAzureContext()]
+#' @param tenantID The tenant ID provided during creation of the Active Directory application / service principal
+#' @param clientID The client ID provided during creation of the Active Directory application / service principal
+#' @param authKey The authentication key provided during creation of the Active Directory application / service principal
 #' @param subscriptionID Subscription ID.  This is obtained automatically by [azureAuthenticate()] when only a single subscriptionID is available via Active Directory
 #' @param resourceGroup Name of the resource group
 #' @param vmName Name of the virtual machine

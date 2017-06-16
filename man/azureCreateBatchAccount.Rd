@@ -9,7 +9,7 @@ azureCreateBatchAccount(azureActiveContext, batchAccount,
   asynchronous = FALSE, verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
 
 \item{location}{A string for the location to create batch account}
 
@@ -23,6 +23,9 @@ azureCreateBatchAccount(azureActiveContext, batchAccount,
 }
 \description{
 Create an azure batch account.
+}
+\references{
+https://docs.microsoft.com/en-us/rest/api/batchmanagement/batchaccount
 }
 \seealso{
 Other Batch account functions: \code{\link{azureBatchGetKey}},

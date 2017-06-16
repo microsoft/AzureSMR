@@ -5,12 +5,14 @@
 #  library(AzureSMR)
 
 ## ---- eval=FALSE---------------------------------------------------------
+#  library(AzureSMR)
+
+## ---- eval=FALSE---------------------------------------------------------
 #  sc <- createAzureContext(tenantID = "{TID}", clientID = "{CID}", authKey= "{KEY}")
 #  sc
 
 ## ---- eval=FALSE---------------------------------------------------------
 #  azureListSubscriptions(sc)
-#  
 
 ## ---- eval=FALSE---------------------------------------------------------
 #  # list resource groups
@@ -23,16 +25,14 @@
 #  
 #  azureListAllResources(sc, type = "Microsoft.Sql/servers", location = "northeurope")
 #  
-#  
 #  azureCreateResourceGroup(sc, resourceGroup = "testme", location = "northeurope")
 #  
 #  azureCreateStorageAccount(sc,storageAccount="testmystorage1",resourceGroup = "testme")
 #  
 #  azureListAllResources(sc, resourceGroup = "testme")
 #  
-#  # When finished, to delete a Resource Group use azureDeleteResourceGroup
+#  # When finished, to delete a Resource Group use azureDeleteResourceGroup()
 #  azureDeleteResourceGroup(sc, resourceGroup = "testme")
-#  
 
 ## ---- eval=FALSE---------------------------------------------------------
 #  ## List VMs in a ResourceGroup
@@ -45,10 +45,10 @@
 #  azureStopVM(sc, vmName = "DSVM1")
 
 ## ---- eval=FALSE---------------------------------------------------------
-#  sKey <- azureSAGetKey(sc, resourceGroup = "testme", storageAccount = "testmystorage1")
+#  azureSAGetKey(sc, resourceGroup = "testme", storageAccount = "testmystorage1")
 
 ## ---- eval=FALSE---------------------------------------------------------
-#  azureCreateStorageContainer(sc,"opendata",storageAccount = "testmystorage1", resourceGroup = "testme")
+#  azureCreateStorageContainer(sc, "opendata", storageAccount = "testmystorage1", resourceGroup = "testme")
 
 ## ---- eval=FALSE---------------------------------------------------------
 #  azureListStorageContainers(sc, storageAccount = "testmystorage1", resourceGroup = "testme")
@@ -67,6 +67,9 @@
 #               type="text")
 
 ## ---- eval=FALSE---------------------------------------------------------
+#  azureListStorageBlobs(NULL, storageAccount = "testmystorage1", container = "opendata")
+
+## ---- eval=FALSE---------------------------------------------------------
 #  azureCreateHDI(sc,
 #                   resourceGroup = "testme",
 #                   clustername = "smrhdi", # only low case letters, digit, and dash.
@@ -79,7 +82,6 @@
 
 ## ---- eval=FALSE---------------------------------------------------------
 #  azureListHDI(sc, resourceGroup ="testme")
-#  
 
 ## ---- eval=FALSE---------------------------------------------------------
 #  azureResizeHDI(sc, resourceGroup = "testme", clustername = "smrhdi", role="workernode",size=3)
@@ -108,16 +110,10 @@
 #  azureHiveStatus(sc, clusterName = "smrhdi",
 #                  hdiAdmin = "hdiadmin",
 #                  hdiPassword = "AzureSMR_password123")
+#  
 #  azureHiveSQL(sc,
 #               CMD = "select * from hivesampletable",
 #               path = "wasb://opendata@testmystorage1.blob.core.windows.net/")
-#  
-#  azureListStorageBlobs(sc, storageAccount = "testmystorage1", container = "opendata")
-#  
-#  stdout <- azureGetBlob(sc, Container = "test", Blob = "stdout")
-#  
-#  read.delim(text=stdout,  header=TRUE, fill=TRUE)
-#  
 
 ## ---- eval=FALSE---------------------------------------------------------
 #  azureSparkNewSession(sc, clustername = "smrhdi",
@@ -151,7 +147,7 @@
 #  ## [1] "Pi is roughly 3.140285"
 
 ## ---- eval=FALSE---------------------------------------------------------
-#  azureSparkCMD(sc, clustername = "smrhdi", CMD = "print Pi", sessionID="0")
+#  azureSparkCMD(sc, clustername = "smrhdi", CMD = "print Pi", sessionID = "0")
 #  
 #  #[1] "3.1422"
 
@@ -160,7 +156,6 @@
 #                       hdiAdmin = "hdiadmin",
 #                       hdiPassword = "AzureSMR_password123",
 #                       kind = "sparkr")
-#  azureSparkCMD(sc, clustername = "smrhdi", CMD = "HW<-'hello R'", sessionID="2")
-#  azureSparkCMD(sc, clustername = "smrhdi", CMD = "cat(HW)", sessionID="2")
-#  
+#  azureSparkCMD(sc, clustername = "smrhdi", CMD = "HW<-'hello R'", sessionID = "2")
+#  azureSparkCMD(sc, clustername = "smrhdi", CMD = "cat(HW)", sessionID = "2")
 

@@ -9,7 +9,7 @@ vignette: >
   %\usepackage[utf8]{inputenc}
 ---
 
-Use this package to manage Azure Resources from within an R Session. This is not a full SDK just a collection of functions that should prove useful for a Data Scientist who needs to access and manage Azure Resources.
+Use this package to manage Azure Resources from within an R Session. This package does not expose the complete Azure API, but is meant as a collection of functions that a typical data scientist may use to access and manage Azure Resources.
 
 ## Installation instructions
 
@@ -25,7 +25,7 @@ library(AzureSMR)
 
 ## Overview
 
-AzureSMR provides an interface to manage resources on Microsoft Azure. The main functions address the following Azure Services:
+`AzureSMR` provides an interface to manage resources on Microsoft Azure. The main functions address the following Azure Services:
 
 - Azure Blob: List, Read and Write to Blob Services
 - Azure Resources: List, Create and Delete Azure Resource
@@ -35,35 +35,42 @@ AzureSMR provides an interface to manage resources on Microsoft Azure. The main 
 - Azure Spark: List and create Spark jobs/Sessions against a HDInsight Cluster(Livy) - EXPERIMENTAL
 
 
-For a detailed list of AzureSM functions and their syntax please refer to the Help pages.
+For a detailed list of `AzureSMR` functions and their syntax please refer to the Help pages.
 
-## Getting Authorisation configured
+## Configuring authorisation in Azure Active Directory
 
-To get started, please refer to the Authorisation tutorial. https://github.com/Microsoft/AzureSMR/blob/master/vignettes/Authentication.Rmd
+To get started, please refer to the [authorisation tutorial](http://htmlpreview.github.io/?https://github.com/Microsoft/AzureSMR/blob/master/inst/doc/Authentication.html)
 
 
-## Authenticating against the service
+## Load the package
 
-The AzureAPIs require lots of parameters to be managed. Rather than supplying all the paramters for each function call AzureSMR implements an AzureContext Variable which caches the last time a paramters is used so that it doesnt need to be repeatedly supplied.
+```{r, eval=FALSE}
+library(AzureSMR)
+```
 
-To create an AzureContext object and attempt to authenticate against the Azure service, use:
+## Authenticating against the Azure service
+
+The Azure APIs require many parameters to be managed. Rather than supplying all the arguments to every function call, `AzureSMR` uses an `azureActiveContext` object that caches arguments so you don't have to supply .
+
+To create an `azureActiveContext` object and attempt to authenticate against the Azure service, use:
 
 ```{r, eval=FALSE}
 sc <- createAzureContext(tenantID = "{TID}", clientID = "{CID}", authKey= "{KEY}")
 sc
 ```
 
-If you provide autentication paramters to createAzureContext() the function will automatically authenticate.
-To manually get an authorisation token use `azureAuthenticate()`. 
-Note this token will time our after a period and therefore you need to run it again occasionally. TIP: Use AzureAuthenticate before a long running task.
+If you provide autentication paramters to `createAzureContext()` the function will automatically authenticate.  To manually get an authorisation token use `azureAuthenticate()`.  Note this token will time out after a period and therefore you need to run it again occasionally. TIP: Use `azureAuthenticate()` before a long running task.
+
+
+## Subscriptions
 
 The `azureListSubscriptions()` function lists all the available subscriptions. If you only have one it sets the default Subscription in the `azureActiveContext` to that subscription ID.
 
-
 ```{r, eval=FALSE}
 azureListSubscriptions(sc)
-
 ```
+
+
 ## Manage resource Groups
 
 ```{r, eval=FALSE}
@@ -77,24 +84,22 @@ azureListAllResources(sc, location = "northeurope")
 
 azureListAllResources(sc, type = "Microsoft.Sql/servers", location = "northeurope")
 
-
 azureCreateResourceGroup(sc, resourceGroup = "testme", location = "northeurope")
 
 azureCreateStorageAccount(sc,storageAccount="testmystorage1",resourceGroup = "testme")
 
 azureListAllResources(sc, resourceGroup = "testme")
 
-# When finished, to delete a Resource Group use azureDeleteResourceGroup
+# When finished, to delete a Resource Group use azureDeleteResourceGroup()
 azureDeleteResourceGroup(sc, resourceGroup = "testme")
-
 ```
 
 
 ## Manage Virtual Machines
 
-Use these functions to list, start and stop existing Virtual Machines (see templates for Creation).
+Use these functions to list, start and stop existing Virtual Machines (see templates for creation).
 
-To Create VMs please refer to Resource Templates below.
+To create VMs please refer to Resource Templates below.
 
 ```{r, eval=FALSE}
 ## List VMs in a ResourceGroup
@@ -107,19 +112,19 @@ azureStartVM(sc, vmName = "DSVM1")
 azureStopVM(sc, vmName = "DSVM1")
 ```
 
-## Access Storage Blobs
+## Accessing storage blobs using the `azureActiveContext`
 
-In order to access Storage Blobs you need to have a key. Use `azureSAGetKey()` to get a Key or alternatively supply your own key. When you provide your own key you no longer need to use `azureAuthenticate()` since the API uses a diferent authentication approach.
+To access storage blobs you need to have a key. You can use `azureSAGetKey()` to automatically retrieve your key.
 
 
 ```{r, eval=FALSE}
-sKey <- azureSAGetKey(sc, resourceGroup = "testme", storageAccount = "testmystorage1")
+azureSAGetKey(sc, resourceGroup = "testme", storageAccount = "testmystorage1")
 ```
 
 To create containers in a storage account use`azureCreateStorageContainer()`
 
 ```{r, eval=FALSE}
-azureCreateStorageContainer(sc,"opendata",storageAccount = "testmystorage1", resourceGroup = "testme")
+azureCreateStorageContainer(sc, "opendata", storageAccount = "testmystorage1", resourceGroup = "testme")
 ```
 
 
@@ -129,7 +134,7 @@ To list containers in a storage account use `azureListContainers()`
 azureListStorageContainers(sc, storageAccount = "testmystorage1", resourceGroup = "testme")
 ```
 
-To Write a Blobs use `azurePutBlob()`
+To write a blob use `azurePutBlob()`
 
 ```{r, eval=FALSE}
 azurePutBlob(sc, storageAccount = "testmystorage1", container = "opendata", 
@@ -151,11 +156,25 @@ azureGetBlob(sc, storageAccount = "testmystorage1", container = "opendata",
              type="text") 
 ```
 
-## Manage HDInsight Clusters
 
-You can use `AzureSMR` to manage Azure HDInsight clusters. To create clusters use azureCreateHDI or for advanced configurations use Resource Templates (See below).
+## Accessing storage blobs without an `azureActiveContext`
 
-Also see functions for submitting Hive and Spark jobs.
+It is also possible to access the blob functionswithout having an Azure Active Directory application.
+
+In this case, you should use the argument `azureActiveContect = NULL` to the storage functions.
+
+For example:
+
+```{r, eval=FALSE}
+azureListStorageBlobs(NULL, storageAccount = "testmystorage1", container = "opendata")
+```
+
+
+## Manage HDInsight clusters
+
+You can use `AzureSMR` to manage [HDInsight](https://azure.microsoft.com/en-gb/services/hdinsight/) clusters. To create a cluster use `azureCreateHDI()`.
+
+For advanced configurations use Resource Templates (See below).
 
 ```{r, eval=FALSE}
 azureCreateHDI(sc,
@@ -169,11 +188,10 @@ azureCreateHDI(sc,
                  kind = "rserver")
 ```
 
-Use `azureListHDI()` to list available Clusters.
+Use `azureListHDI()` to list available clusters.
 
 ```{r, eval=FALSE}
 azureListHDI(sc, resourceGroup ="testme")
-
 ```
 
 Use `azureResizeHDI()` to resize a cluster
@@ -191,11 +209,12 @@ azureResizeHDI(sc, resourceGroup = "testme", clustername = "smrhdi", role="worke
 ## " headnode ( 2 * Standard_D3_v2 ) workernode ( 5 * Standard_D3_v2 ) zookeepernode ( 3 * Medium ) edgenode0 ( 1 * Standard_D4_v2 )" 
 ```
 
-## Resource Templates - Create Azure Resources
 
-The easiest way to create resources on Azure is to use Azure Templates. To create Azure Resources such as HDInsight clusters there can a large quantity of parameters. Resource templates can be built be creating a resource in the Azure Portal and then going into Settings > Automation scripts. Example templates can be found azToken this URL https://github.com/Azure/AzureStack-QuickStart-Templates.
+## Resource templates - create Azure resources
 
-To create a resource using a template in AzureSM use AzureDeployTemplate. The Template and Paramters must be available in a public URL (Azure Blob). It may be worth getting the Azure Administrator to build a working template.
+The easiest way to create resources on Azure is to use Azure Resource Manager (ARM) templates. To create Azure resources such as HDInsight clusters there can a large quantity of parameters. Resource templates can be built be creating a resource in the Azure Portal and then going into `Settings > Automation scripts`. You can find many example templates at https://github.com/Azure/AzureStack-QuickStart-Templates.
+
+To create a resource using a template in `AzureSMR` use `azureDeployTemplate()`. The template and paramaters must be available in a public URL (for example in Azure blob store), or you can supply these as JSON strings.
 
 ```{r, eval=FALSE}
 azureDeployTemplate(sc, resourceGroup = "Analytics", deplName = "Deploy1", 
@@ -209,33 +228,29 @@ azureDeployTemplate(sc, resourceGroup = "Analytics", deplName = "Deploy1",
 ## Finished:  2016-06-23 19:04:43
 ```
 
-ADMIN TIP: If a deployment fails. Go to the Azure Portal and look azToken Actvity logs and look for failed deployments which should explain why the deployment failed.
+ADMIN TIP: If a deployment fails, go to the Azure Portal and look at `Activity logs` and look for failed deployments - this should explain why the deployment failed.
+
 
 ## Hive Functions
-These functions facilitate the use of hive jobs on a HDInsight Cluster
+
+You can use these functions to run and manage hive jobs on an HDInsight Cluster.
 
 ```{r, eval=FALSE}
 azureHiveStatus(sc, clusterName = "smrhdi", 
                 hdiAdmin = "hdiadmin", 
                 hdiPassword = "AzureSMR_password123")
+
 azureHiveSQL(sc, 
              CMD = "select * from hivesampletable", 
              path = "wasb://opendata@testmystorage1.blob.core.windows.net/")
-
-azureListStorageBlobs(sc, storageAccount = "testmystorage1", container = "opendata")
-
-stdout <- azureGetBlob(sc, Container = "test", Blob = "stdout")
- 
-read.delim(text=stdout,  header=TRUE, fill=TRUE)
-
 ```
 
 
 ## Spark functions (experimental)
 
-`AzureSMR` provides some functions that allow HDInsight Spark Sessions and jobs to be managed within an R Session
+`AzureSMR` provides some functions that allow HDInsight Spark aessions and jobs to be managed within an R Session.
 
-To Create a new Spark Session (Via Livy) use `azureSparkNewSession()`
+To create a new Spark session (via [Livy](https://github.com/cloudera/hue/tree/master/apps/spark/java#welcome-to-livy-the-rest-spark-server)) use `azureSparkNewSession()`
 
 ```{r, eval=FALSE}
 azureSparkNewSession(sc, clustername = "smrhdi", 
@@ -244,8 +259,7 @@ azureSparkNewSession(sc, clustername = "smrhdi",
                      kind = "pyspark")
 ```
 
-To view the status of sessions use AzureSparkListSessions
-Wait for status to be Idle
+To view the status of sessions use `azureSparkListSessions()`. Wait for status to be idle.
 
 ```{r, eval=FALSE}
 azureSparkListSessions(sc, clustername = "smrhdi")
@@ -279,7 +293,7 @@ azureSparkCMD(sc, CMD = pythonCmd, sessionID = "0")
 Check Session variables are retained
 
 ```{r, eval=FALSE}
-azureSparkCMD(sc, clustername = "smrhdi", CMD = "print Pi", sessionID="0")
+azureSparkCMD(sc, clustername = "smrhdi", CMD = "print Pi", sessionID = "0")
 
 #[1] "3.1422"
 ```
@@ -291,8 +305,7 @@ azureSparkNewSession(sc, clustername = "smrhdi",
                      hdiAdmin = "hdiadmin", 
                      hdiPassword = "AzureSMR_password123",
                      kind = "sparkr")
-azureSparkCMD(sc, clustername = "smrhdi", CMD = "HW<-'hello R'", sessionID="2")
-azureSparkCMD(sc, clustername = "smrhdi", CMD = "cat(HW)", sessionID="2")
-
+azureSparkCMD(sc, clustername = "smrhdi", CMD = "HW<-'hello R'", sessionID = "2")
+azureSparkCMD(sc, clustername = "smrhdi", CMD = "cat(HW)", sessionID = "2")
 ```
 

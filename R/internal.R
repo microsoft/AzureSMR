@@ -165,7 +165,7 @@ refreshStorageKey <- function(azureActiveContext, storageAccount, resourceGroup)
 
 updateAzureActiveContext <- function(x, storageAccount, storageKey, resourceGroup, container, blob, directory) {
   # updates the active azure context in place
-  assert_that(is.azureActiveContext(azureActiveContext))
+  assert_that(is.azureActiveContext(x))
   if (!missing(storageAccount)) x$storageAccount <- storageAccount
   if (!missing(resourceGroup))  x$resourceGroup  <- resourceGroup
   if (!missing(storageKey))     x$storageKey     <- storageKey
@@ -174,4 +174,3 @@ updateAzureActiveContext <- function(x, storageAccount, storageKey, resourceGrou
   if (!missing(directory)) x$directory <- directory
   TRUE
 }
-

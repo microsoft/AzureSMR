@@ -31,8 +31,11 @@ azureListBatchAccounts <- function(azureActiveContext, resourceGroup, subscripti
 #' @inheritParams setAzureContext
 #' @inheritParams azureAuthenticate
 #' @inheritParams azureBatchGetKey
+#' 
 #' @param location A string for the location to create batch account
 #' @param asynchronous If TRUE, submits asynchronous request to Azure. Otherwise waits until batch account is created.
+#'
+#' @references https://docs.microsoft.com/en-us/rest/api/batchmanagement/batchaccount
 #' @family Batch account functions
 #' @export
 azureCreateBatchAccount <- function(azureActiveContext, batchAccount,
@@ -47,9 +50,7 @@ azureCreateBatchAccount <- function(azureActiveContext, batchAccount,
   assert_that(is_subscription_id(subscriptionID))
   assert_that(is_storage_account(batchAccount))
   
-  body <- paste0('{
-                  "location":"', location, '",
-                  }'
+  body <- paste0('{"location":"', location, '"}'
   )  
   
   uri <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
@@ -59,24 +60,16 @@ azureCreateBatchAccount <- function(azureActiveContext, batchAccount,
   r <- call_azure_sm(azureActiveContext, uri = uri, body = body,
                      verb = "PUT", verbose = verbose)
   
-  if (status_code(r) == 409) {
-    message("409: Conflict : Account already exists with the same name")
-    return(TRUE)
-  }
-  
-  if (status_code(r) == 200) {
-    message("Account already exists with the same properties")
-  }
   stopWithAzureError(r)
   
-  rl <- content(r, "text", encoding = "UTF-8")
   azureActiveContext$batchAccount <- batchAccount
   azureActiveContext$resourceGroup  <- resourceGroup
-  message("Create request Accepted. It can take a few moments to provision the batch account")
+  message("Create request accepted")
+  message("It can take a few moments to provision the batch account")
   
   if (!asynchronous) {
     wait_for_azure(
-      batchAccount %in% azureListBatchAccounts(azureActiveContext, subscriptionID = subscriptionID)$name
+      batchAccount %in% azureListBatchAccounts(azureActiveContext)$name
     )
   }
   TRUE
@@ -88,7 +81,8 @@ azureCreateBatchAccount <- function(azureActiveContext, batchAccount,
 #' @inheritParams setAzureContext
 #' @inheritParams azureAuthenticate
 #' @inheritParams azureBatchGetKey
-
+#'
+#' @references https://docs.microsoft.com/en-us/rest/api/batchmanagement/batchaccount#BatchAccount_Delete
 #' @family Batch account functions
 #' @export
 azureDeleteBatchAccount <- function(azureActiveContext, batchAccount,

@@ -8,7 +8,7 @@ azurePricingRates(azureActiveContext, currency, locale, offerId, region,
   verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
 
 \item{currency}{Currency in which price rating is measured.}
 
@@ -19,9 +19,6 @@ azurePricingRates(azureActiveContext, currency, locale, offerId, region,
 \item{region}{region information about the subscription.}
 }
 \description{
-Get pricing details of resources under a subscription.
-}
-\note{
 The pricing rates function wraps API calls to Azure RateCard and currently the API supports only the Pay-As-You-Go offer scheme.
 }
 \seealso{

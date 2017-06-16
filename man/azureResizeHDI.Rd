@@ -4,12 +4,12 @@
 \alias{azureResizeHDI}
 \title{Resize a HDInsight cluster role.}
 \usage{
-azureResizeHDI(azureActiveContext, clustername, role = c("worker", "head",
-  "edge"), size = 2, mode = c("Sync", "Async"), subscriptionID,
-  resourceGroup, verbose = FALSE)
+azureResizeHDI(azureActiveContext, clustername, role = c("workernode",
+  "headnode", "edgenode"), size = 2, mode = c("Sync", "Async"),
+  subscriptionID, resourceGroup, verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
 
 \item{clustername}{Cluster name, used for HDI and Spark clusters. See \code{\link[=azureCreateHDI]{azureCreateHDI()}}}
 

@@ -8,7 +8,7 @@ azureListStorageBlobs(azureActiveContext, storageAccount, storageKey, container,
   maxresults, prefix, delimiter, marker, verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
+\item{azureActiveContext}{Either an \code{azureActiveContext} object or \code{NULL}. The blob store functions support two modes of connecting to the Azure API: authenticate using Active Directory or providing your own storage key. If this value is \code{NULL}, you must provide the \code{storageKey}.}
 
 \item{storageAccount}{Name of the azure storage account. Storage account names must be between 3 and 24 characters in length and use numbers and lower-case letters only.}
 
@@ -31,6 +31,14 @@ Returns a data frame. This data frame has an attribute called \code{marker} that
 }
 \description{
 List storage blobs for specified storage account.
+}
+\section{Using blob store functions without authentication}{
+
+The blob store functions support two modes of connecting to the Azure API:authenticate using Active Directory or providing your own storage key. If this value is `NULL`, you must provide the `storageKey` .
+}
+
+\references{
+https://docs.microsoft.com/en-us/rest/api/storageservices/list-blobs
 }
 \seealso{
 Other Blob store functions: \code{\link{azureBlobCD}},

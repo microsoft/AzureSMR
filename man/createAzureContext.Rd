@@ -7,11 +7,11 @@
 createAzureContext(tenantID, clientID, authKey, configFile)
 }
 \arguments{
-\item{tenantID}{The Tenant ID provided during creation of the Active Directory application / service principal}
+\item{tenantID}{The tenant ID provided during creation of the Active Directory application / service principal}
 
-\item{clientID}{The Client ID provided during creation of the Active Directory application / service principal}
+\item{clientID}{The client ID provided during creation of the Active Directory application / service principal}
 
-\item{authKey}{The Authentication Key provided during creation of the Active Directory application / service principal}
+\item{authKey}{The authentication key provided during creation of the Active Directory application / service principal}
 }
 \value{
 An \code{azureActiveContext} object

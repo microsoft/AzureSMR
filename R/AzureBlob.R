@@ -4,6 +4,7 @@
 #' @inheritParams setAzureContext
 #' @inheritParams azureAuthenticate
 #' @inheritParams azureSAGetKey
+#' @param azureActiveContext Either an `azureActiveContext` object or `NULL`. The blob store functions support two modes of connecting to the Azure API: authenticate using Active Directory or providing your own storage key. If this value is `NULL`, you must provide the `storageKey`.
 #'
 #' @param maxresults Optional. Specifies the maximum number of blobs to return, including all BlobPrefix elements. If the request does not specify maxresults or specifies a value greater than 5,000, the server will return up to 5,000 items.  Setting `maxresults` to a value less than or equal to zero results in error response code 400 (Bad Request).
 #' @param prefix Optional. Filters the results to return only blobs whose names begin with the specified prefix.
@@ -11,6 +12,9 @@
 #' @param marker Optional. A string value that identifies the portion of the list to be returned with the next list operation. The operation returns a marker value within the response body if the list returned was not complete. The marker value may then be used in a subsequent call to request the next set of list items.  The marker value is opaque to the client.
 #'
 #' @return Returns a data frame. This data frame has an attribute called `marker` that can be used with the `marker` argument to return the next set of values.
+#'
+#' @template blob_no_authentication
+#' @references https://docs.microsoft.com/en-us/rest/api/storageservices/list-blobs
 #' @family Blob store functions
 #' @export
 azureListStorageBlobs <- function(azureActiveContext, storageAccount, storageKey,
@@ -92,13 +96,15 @@ azureListStorageBlobs <- function(azureActiveContext, storageAccount, storageKey
 
 #' List blob blobs in a storage account directory.
 #'
+#' @inheritParams azureListStorageBlobs
 #' @inheritParams setAzureContext
 #' @inheritParams azureAuthenticate
 #' @inheritParams azureSAGetKey
-
+#'
 #' @param directory Blob store directory to list for content
 #' @param recursive If TRUE, list blob store directories recursively
 #'
+#' @template blob_no_authentication
 #' @family Blob store functions
 #' @export
 azureBlobLS <- function(azureActiveContext, directory, recursive = FALSE,
@@ -181,13 +187,15 @@ azureBlobLS <- function(azureActiveContext, directory, recursive = FALSE,
 
 #' Get contents from a specifed storage blob.
 #'
+#' @inheritParams azureListStorageBlobs
 #' @inheritParams setAzureContext
 #' @inheritParams azureAuthenticate
 #' @inheritParams azureSAGetKey
 #' @inheritParams azureBlobLS
-
+#'
 #' @param type String, either "text" or "raw". Passed to [httr::content()]
 #'
+#' @template blob_no_authentication
 #' @family Blob store functions
 #' @export
 
@@ -257,6 +265,7 @@ azureGetBlob <- function(azureActiveContext, blob, directory, type = "text",
 
 #' Write contents to a specifed storage blob.
 #'
+#' @inheritParams azureListStorageBlobs
 #' @inheritParams setAzureContext
 #' @inheritParams azureAuthenticate
 #' @inheritParams azureSAGetKey
@@ -265,6 +274,7 @@ azureGetBlob <- function(azureActiveContext, blob, directory, type = "text",
 #' @param contents - Object or value to store
 #' @param file - Local filename to store in Azure blob
 #'
+#' @template blob_no_authentication
 #' @family Blob store functions
 #' @export
 azurePutBlob <- function(azureActiveContext, blob, contents = "", file = "",
@@ -337,11 +347,13 @@ azurePutBlob <- function(azureActiveContext, blob, contents = "", file = "",
 
 #' Find file in a storage account directory.
 #'
+#' @inheritParams azureListStorageBlobs
 #' @inheritParams setAzureContext
 #' @inheritParams azureAuthenticate
 #' @inheritParams azureSAGetKey
 #' @inheritParams azurePutBlob
 #'
+#' @template blob_no_authentication
 #' @family Blob store functions
 #' @export
 azureBlobFind <- function(azureActiveContext, file, storageAccount, storageKey,
@@ -383,12 +395,14 @@ azureBlobFind <- function(azureActiveContext, file, storageAccount, storageKey,
 
 #' Azure blob change current directory.
 #'
+#' @inheritParams azureListStorageBlobs
 #' @inheritParams setAzureContext
 #' @inheritParams azureAuthenticate
 #' @inheritParams azureSAGetKey
 #' @inheritParams azureBlobLS
 #' @inheritParams azurePutBlob
 #'
+#' @template blob_no_authentication
 #' @family Blob store functions
 #' @export
 azureBlobCD <- function(azureActiveContext, directory, container, file,
@@ -430,7 +444,7 @@ azureBlobCD <- function(azureActiveContext, directory, container, file,
   assert_that(is_storage_key(storageKey))
 
   if (directory == "../" || directory == "..") {
-    # Basic attempt azToken relative paths
+    # Basic attempt at relative paths
     directory <- gsub("/[a-zA-Z0-9]*$", "", azureActiveContext$directory)
   }
 
@@ -458,11 +472,13 @@ azureBlobCD <- function(azureActiveContext, directory, container, file,
 
 #' Delete a specifed storage blob.
 #'
+#' @inheritParams azureListStorageBlobs
 #' @inheritParams setAzureContext
 #' @inheritParams azureAuthenticate
 #' @inheritParams azureSAGetKey
 #' @inheritParams azureBlobLS
 #'
+#' @template blob_no_authentication
 #' @family Blob store functions
 #' @export
 

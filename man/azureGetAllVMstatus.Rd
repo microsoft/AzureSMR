@@ -7,7 +7,7 @@
 azureGetAllVMstatus(azureActiveContext)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
 }
 \description{
 First queries the azure active context for all visible resources, then sequentially queries the status of all virtuam machines.

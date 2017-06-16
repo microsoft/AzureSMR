@@ -8,7 +8,7 @@ azureGetBlob(azureActiveContext, blob, directory, type = "text",
   storageAccount, storageKey, container, resourceGroup, verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
+\item{azureActiveContext}{Either an \code{azureActiveContext} object or \code{NULL}. The blob store functions support two modes of connecting to the Azure API: authenticate using Active Directory or providing your own storage key. If this value is \code{NULL}, you must provide the \code{storageKey}.}
 
 \item{blob}{Blob name}
 
@@ -29,6 +29,11 @@ azureGetBlob(azureActiveContext, blob, directory, type = "text",
 \description{
 Get contents from a specifed storage blob.
 }
+\section{Using blob store functions without authentication}{
+
+The blob store functions support two modes of connecting to the Azure API:authenticate using Active Directory or providing your own storage key. If this value is `NULL`, you must provide the `storageKey` .
+}
+
 \seealso{
 Other Blob store functions: \code{\link{azureBlobCD}},
   \code{\link{azureBlobFind}}, \code{\link{azureBlobLS}},

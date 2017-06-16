@@ -8,7 +8,7 @@ azureDeleteBatchAccount(azureActiveContext, batchAccount, resourceGroup,
   subscriptionID, verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
 
 \item{resourceGroup}{Name of the resource group}
 
@@ -18,6 +18,9 @@ azureDeleteBatchAccount(azureActiveContext, batchAccount, resourceGroup,
 }
 \description{
 Delete an azure batch account.
+}
+\references{
+https://docs.microsoft.com/en-us/rest/api/batchmanagement/batchaccount#BatchAccount_Delete
 }
 \seealso{
 Other Batch account functions: \code{\link{azureBatchGetKey}},
