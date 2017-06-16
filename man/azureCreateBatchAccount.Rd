@@ -24,6 +24,9 @@ azureCreateBatchAccount(azureActiveContext, batchAccount,
 \description{
 Create an azure batch account.
 }
+\references{
+https://docs.microsoft.com/en-us/rest/api/batchmanagement/batchaccount
+}
 \seealso{
 Other Batch account functions: \code{\link{azureBatchGetKey}},
   \code{\link{azureDeleteBatchAccount}},

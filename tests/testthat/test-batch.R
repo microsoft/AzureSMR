@@ -17,12 +17,12 @@ azureAuthenticate(asc)
 timestamp <- format(Sys.time(), format = "%y%m%d%H%M")
 resourceGroup_name <- paste0("AzureSMtest_", timestamp)
 batch_account <- paste0("azuresmr", timestamp)
-batch_location = "westeurope"
+batch_location = "centralus"
 
 test_that("Can create resource group", {
   skip_if_missing_config(settingsfile)
 
-  res <- azureCreateResourceGroup(asc, location = "westeurope", resourceGroup = resourceGroup_name)
+  res <- azureCreateResourceGroup(asc, location = "centralus", resourceGroup = resourceGroup_name)
   expect_equal(res, TRUE)
 
   wait_for_azure(

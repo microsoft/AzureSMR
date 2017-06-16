@@ -19,6 +19,9 @@ azureDeleteBatchAccount(azureActiveContext, batchAccount, resourceGroup,
 \description{
 Delete an azure batch account.
 }
+\references{
+https://docs.microsoft.com/en-us/rest/api/batchmanagement/batchaccount#BatchAccount_Delete
+}
 \seealso{
 Other Batch account functions: \code{\link{azureBatchGetKey}},
   \code{\link{azureCreateBatchAccount}},
