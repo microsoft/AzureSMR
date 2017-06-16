@@ -9,13 +9,13 @@ setAzureContext(azureActiveContext, tenantID, clientID, authKey, subscriptionID,
   hdiPassword, clustername, kind, sessionID)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
 
-\item{tenantID}{The Tenant ID provided during creation of the Active Directory application / service principal}
+\item{tenantID}{The tenant ID provided during creation of the Active Directory application / service principal}
 
-\item{clientID}{The Client ID provided during creation of the Active Directory application / service principal}
+\item{clientID}{The client ID provided during creation of the Active Directory application / service principal}
 
-\item{authKey}{The Authentication Key provided during creation of the Active Directory application / service principal}
+\item{authKey}{The authentication key provided during creation of the Active Directory application / service principal}
 
 \item{subscriptionID}{Subscription ID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
 

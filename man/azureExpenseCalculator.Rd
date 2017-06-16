@@ -8,11 +8,9 @@ azureExpenseCalculator(azureActiveContext, instance = "", timeStart, timeEnd,
   granularity, currency, locale, offerId, region, verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
 
-\item{instance}{Instance name that one would like to check expe
-nse. It is by default empty, which returns data consumption for
-all instances under subscription.}
+\item{instance}{Instance name that one would like to check expense. It is by default empty, which returns data consumption for all instances under subscription.}
 
 \item{timeStart}{Start time.}
 
@@ -29,8 +27,7 @@ all instances under subscription.}
 \item{region}{region information about the subscription.}
 }
 \value{
-Total cost measured in the given currency of the specified Azure
-instance in the period.
+Total cost measured in the given currency of the specified Azure instance in the period.
 }
 \description{
 Note if difference between \code{timeStart} and \code{timeEnd} is less than the finest granularity, e.g., "Hourly" (we notice this is a usual case when one needs to be aware of the charges of a job that takes less than an hour), the expense will be estimated based solely on computation hour. That is, the total expense is the multiplication of computation hour and pricing rate of the requested instance.

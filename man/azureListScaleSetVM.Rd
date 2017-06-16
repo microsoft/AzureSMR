@@ -8,7 +8,7 @@ azureListScaleSetVM(azureActiveContext, scaleSet, resourceGroup, location,
   subscriptionID, verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
 
 \item{scaleSet}{Character vector with name of the scaleset (see also \code{\link[=azureListScaleSets]{azureListScaleSets()}})}
 

@@ -10,9 +10,7 @@
 #' 
 #' @inheritParams setAzureContext
 #' 
-#' @param instance Instance name that one would like to check expe
-#' nse. It is by default empty, which returns data consumption for 
-#' all instances under subscription.
+#' @param instance Instance name that one would like to check expense. It is by default empty, which returns data consumption for all instances under subscription.
 #' 
 #' @param timeStart Start time.
 #' @param timeEnd End time.
@@ -228,6 +226,8 @@ azureDataConsumption <- function(azureActiveContext,
 
 #' Get pricing details of resources under a subscription.
 #' 
+#' The pricing rates function wraps API calls to Azure RateCard and currently the API supports only the Pay-As-You-Go offer scheme. 
+#'
 #' @inheritParams setAzureContext
 #' 
 #' @param currency Currency in which price rating is measured.
@@ -235,8 +235,6 @@ azureDataConsumption <- function(azureActiveContext,
 #' @param offerId Offer ID of the subscription. For more information see https://azure.microsoft.com/en-us/support/legal/offer-details/
 #' 
 #' @param region region information about the subscription.
-#' 
-#' @note The pricing rates function wraps API calls to Azure RateCard and currently the API supports only the Pay-As-You-Go offer scheme. 
 #' 
 #' @family Cost functions
 #' @export
@@ -313,8 +311,7 @@ azurePricingRates <- function(azureActiveContext,
 #' @inheritParams azureDataConsumption
 #' @inheritParams azurePricingRates
 #' 
-#' @return Total cost measured in the given currency of the specified Azure 
-#' instance in the period.
+#' @return Total cost measured in the given currency of the specified Azure instance in the period.
 #' 
 #' @family Cost functions
 #' @export

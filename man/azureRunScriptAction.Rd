@@ -10,7 +10,7 @@ azureRunScriptAction(azureActiveContext, scriptname, scriptURL,
   verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
 
 \item{scriptname}{Identifier for Custom action script operation}
 
