@@ -48,7 +48,7 @@
 #  azureSAGetKey(sc, resourceGroup = "testme", storageAccount = "testmystorage1")
 
 ## ---- eval=FALSE---------------------------------------------------------
-#  azureCreateStorageContainer(sc, "opendata",storageAccount = "testmystorage1", resourceGroup = "testme")
+#  azureCreateStorageContainer(sc, "opendata", storageAccount = "testmystorage1", resourceGroup = "testme")
 
 ## ---- eval=FALSE---------------------------------------------------------
 #  azureListStorageContainers(sc, storageAccount = "testmystorage1", resourceGroup = "testme")
@@ -114,12 +114,6 @@
 #  azureHiveSQL(sc,
 #               CMD = "select * from hivesampletable",
 #               path = "wasb://opendata@testmystorage1.blob.core.windows.net/")
-#  
-#  azureListStorageBlobs(sc, storageAccount = "testmystorage1", container = "opendata")
-#  
-#  stdout <- azureGetBlob(sc, Container = "test", Blob = "stdout")
-#  
-#  read.delim(text = stdout,  header = TRUE, fill = TRUE)
 
 ## ---- eval=FALSE---------------------------------------------------------
 #  azureSparkNewSession(sc, clustername = "smrhdi",
@@ -153,7 +147,7 @@
 #  ## [1] "Pi is roughly 3.140285"
 
 ## ---- eval=FALSE---------------------------------------------------------
-#  azureSparkCMD(sc, clustername = "smrhdi", CMD = "print Pi", sessionID="0")
+#  azureSparkCMD(sc, clustername = "smrhdi", CMD = "print Pi", sessionID = "0")
 #  
 #  #[1] "3.1422"
 
@@ -162,6 +156,6 @@
 #                       hdiAdmin = "hdiadmin",
 #                       hdiPassword = "AzureSMR_password123",
 #                       kind = "sparkr")
-#  azureSparkCMD(sc, clustername = "smrhdi", CMD = "HW<-'hello R'", sessionID="2")
-#  azureSparkCMD(sc, clustername = "smrhdi", CMD = "cat(HW)", sessionID="2")
+#  azureSparkCMD(sc, clustername = "smrhdi", CMD = "HW<-'hello R'", sessionID = "2")
+#  azureSparkCMD(sc, clustername = "smrhdi", CMD = "cat(HW)", sessionID = "2")
 

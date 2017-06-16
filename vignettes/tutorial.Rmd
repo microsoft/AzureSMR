@@ -114,7 +114,7 @@ azureStopVM(sc, vmName = "DSVM1")
 
 ## Accessing storage blobs using the `azureActiveContext`
 
-To access storage blobs you need to have a key. Use `azureSAGetKey()` to automatically retrieve your key or alternatively supply your own key.
+To access storage blobs you need to have a key. You can use `azureSAGetKey()` to automatically retrieve your key.
 
 
 ```{r, eval=FALSE}
@@ -124,7 +124,7 @@ azureSAGetKey(sc, resourceGroup = "testme", storageAccount = "testmystorage1")
 To create containers in a storage account use`azureCreateStorageContainer()`
 
 ```{r, eval=FALSE}
-azureCreateStorageContainer(sc, "opendata",storageAccount = "testmystorage1", resourceGroup = "testme")
+azureCreateStorageContainer(sc, "opendata", storageAccount = "testmystorage1", resourceGroup = "testme")
 ```
 
 
@@ -159,7 +159,7 @@ azureGetBlob(sc, storageAccount = "testmystorage1", container = "opendata",
 
 ## Accessing storage blobs without an `azureActiveContext`
 
-It is also possible to access the storage API without having an Azure Active Directory application.
+It is also possible to access the blob functionswithout having an Azure Active Directory application.
 
 In this case, you should use the argument `azureActiveContect = NULL` to the storage functions.
 
@@ -170,9 +170,9 @@ azureListStorageBlobs(NULL, storageAccount = "testmystorage1", container = "open
 ```
 
 
-## Manage HDInsight Clusters
+## Manage HDInsight clusters
 
-You can use `AzureSMR` to manage HDInsight clusters. To create a cluster use `azureCreateHDI()`.
+You can use `AzureSMR` to manage [HDInsight](https://azure.microsoft.com/en-gb/services/hdinsight/) clusters. To create a cluster use `azureCreateHDI()`.
 
 For advanced configurations use Resource Templates (See below).
 
@@ -210,11 +210,11 @@ azureResizeHDI(sc, resourceGroup = "testme", clustername = "smrhdi", role="worke
 ```
 
 
-## Resource Templates - Create Azure Resources
+## Resource templates - create Azure resources
 
-The easiest way to create resources on Azure is to use Azure Templates. To create Azure resources such as HDInsight clusters there can a large quantity of parameters. Resource templates can be built be creating a resource in the Azure Portal and then going into `Settings > Automation scripts`. You can find many example templates at https://github.com/Azure/AzureStack-QuickStart-Templates.
+The easiest way to create resources on Azure is to use Azure Resource Manager (ARM) templates. To create Azure resources such as HDInsight clusters there can a large quantity of parameters. Resource templates can be built be creating a resource in the Azure Portal and then going into `Settings > Automation scripts`. You can find many example templates at https://github.com/Azure/AzureStack-QuickStart-Templates.
 
-To create a resource using a template in `AzureSMR` use `azureDeployTemplate()`. The template and paramaters must be available in a public URL (for example Azure blob).
+To create a resource using a template in `AzureSMR` use `azureDeployTemplate()`. The template and paramaters must be available in a public URL (for example in Azure blob store), or you can supply these as JSON strings.
 
 ```{r, eval=FALSE}
 azureDeployTemplate(sc, resourceGroup = "Analytics", deplName = "Deploy1", 
@@ -233,7 +233,7 @@ ADMIN TIP: If a deployment fails, go to the Azure Portal and look at `Activity l
 
 ## Hive Functions
 
-These functions facilitate the use of hive jobs on an HDInsight Cluster
+You can use these functions to run and manage hive jobs on an HDInsight Cluster.
 
 ```{r, eval=FALSE}
 azureHiveStatus(sc, clusterName = "smrhdi", 
@@ -243,12 +243,6 @@ azureHiveStatus(sc, clusterName = "smrhdi",
 azureHiveSQL(sc, 
              CMD = "select * from hivesampletable", 
              path = "wasb://opendata@testmystorage1.blob.core.windows.net/")
-
-azureListStorageBlobs(sc, storageAccount = "testmystorage1", container = "opendata")
-
-stdout <- azureGetBlob(sc, Container = "test", Blob = "stdout")
- 
-read.delim(text = stdout,  header = TRUE, fill = TRUE)
 ```
 
 
@@ -256,7 +250,7 @@ read.delim(text = stdout,  header = TRUE, fill = TRUE)
 
 `AzureSMR` provides some functions that allow HDInsight Spark aessions and jobs to be managed within an R Session.
 
-To create a new Spark session (via Livy) use `azureSparkNewSession()`
+To create a new Spark session (via [Livy](https://github.com/cloudera/hue/tree/master/apps/spark/java#welcome-to-livy-the-rest-spark-server)) use `azureSparkNewSession()`
 
 ```{r, eval=FALSE}
 azureSparkNewSession(sc, clustername = "smrhdi", 
@@ -299,7 +293,7 @@ azureSparkCMD(sc, CMD = pythonCmd, sessionID = "0")
 Check Session variables are retained
 
 ```{r, eval=FALSE}
-azureSparkCMD(sc, clustername = "smrhdi", CMD = "print Pi", sessionID="0")
+azureSparkCMD(sc, clustername = "smrhdi", CMD = "print Pi", sessionID = "0")
 
 #[1] "3.1422"
 ```
@@ -311,7 +305,7 @@ azureSparkNewSession(sc, clustername = "smrhdi",
                      hdiAdmin = "hdiadmin", 
                      hdiPassword = "AzureSMR_password123",
                      kind = "sparkr")
-azureSparkCMD(sc, clustername = "smrhdi", CMD = "HW<-'hello R'", sessionID="2")
-azureSparkCMD(sc, clustername = "smrhdi", CMD = "cat(HW)", sessionID="2")
+azureSparkCMD(sc, clustername = "smrhdi", CMD = "HW<-'hello R'", sessionID = "2")
+azureSparkCMD(sc, clustername = "smrhdi", CMD = "cat(HW)", sessionID = "2")
 ```
 

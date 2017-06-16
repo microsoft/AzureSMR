@@ -153,10 +153,10 @@ sc</code></pre></div>
 </div>
 <div id="accessing-storage-blobs-using-the-azureactivecontext" class="section level2">
 <h2>Accessing storage blobs using the <code>azureActiveContext</code></h2>
-<p>To access storage blobs you need to have a key. Use <code>azureSAGetKey()</code> to automatically retrieve your key or alternatively supply your own key.</p>
+<p>To access storage blobs you need to have a key. You can use <code>azureSAGetKey()</code> to automatically retrieve your key.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">azureSAGetKey</span>(sc, <span class="dt">resourceGroup =</span> <span class="st">&quot;testme&quot;</span>, <span class="dt">storageAccount =</span> <span class="st">&quot;testmystorage1&quot;</span>)</code></pre></div>
 <p>To create containers in a storage account use<code>azureCreateStorageContainer()</code></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">azureCreateStorageContainer</span>(sc, <span class="st">&quot;opendata&quot;</span>,<span class="dt">storageAccount =</span> <span class="st">&quot;testmystorage1&quot;</span>, <span class="dt">resourceGroup =</span> <span class="st">&quot;testme&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">azureCreateStorageContainer</span>(sc, <span class="st">&quot;opendata&quot;</span>, <span class="dt">storageAccount =</span> <span class="st">&quot;testmystorage1&quot;</span>, <span class="dt">resourceGroup =</span> <span class="st">&quot;testme&quot;</span>)</code></pre></div>
 <p>To list containers in a storage account use <code>azureListContainers()</code></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">azureListStorageContainers</span>(sc, <span class="dt">storageAccount =</span> <span class="st">&quot;testmystorage1&quot;</span>, <span class="dt">resourceGroup =</span> <span class="st">&quot;testme&quot;</span>)</code></pre></div>
 <p>To write a blob use <code>azurePutBlob()</code></p>
@@ -172,14 +172,14 @@ sc</code></pre></div>
 </div>
 <div id="accessing-storage-blobs-without-an-azureactivecontext" class="section level2">
 <h2>Accessing storage blobs without an <code>azureActiveContext</code></h2>
-<p>It is also possible to access the storage API without having an Azure Active Directory application.</p>
+<p>It is also possible to access the blob functionswithout having an Azure Active Directory application.</p>
 <p>In this case, you should use the argument <code>azureActiveContect = NULL</code> to the storage functions.</p>
 <p>For example:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">azureListStorageBlobs</span>(<span class="ot">NULL</span>, <span class="dt">storageAccount =</span> <span class="st">&quot;testmystorage1&quot;</span>, <span class="dt">container =</span> <span class="st">&quot;opendata&quot;</span>)</code></pre></div>
 </div>
 <div id="manage-hdinsight-clusters" class="section level2">
-<h2>Manage HDInsight Clusters</h2>
-<p>You can use <code>AzureSMR</code> to manage HDInsight clusters. To create a cluster use <code>azureCreateHDI()</code>.</p>
+<h2>Manage HDInsight clusters</h2>
+<p>You can use <code>AzureSMR</code> to manage <a href="https://azure.microsoft.com/en-gb/services/hdinsight/">HDInsight</a> clusters. To create a cluster use <code>azureCreateHDI()</code>.</p>
 <p>For advanced configurations use Resource Templates (See below).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">azureCreateHDI</span>(sc,
                  <span class="dt">resourceGroup =</span> <span class="st">&quot;testme&quot;</span>,
@@ -205,9 +205,9 @@ sc</code></pre></div>
 ## &quot; headnode ( 2 * Standard_D3_v2 ) workernode ( 5 * Standard_D3_v2 ) zookeepernode ( 3 * Medium ) edgenode0 ( 1 * Standard_D4_v2 )&quot; </code></pre></div>
 </div>
 <div id="resource-templates---create-azure-resources" class="section level2">
-<h2>Resource Templates - Create Azure Resources</h2>
-<p>The easiest way to create resources on Azure is to use Azure Templates. To create Azure resources such as HDInsight clusters there can a large quantity of parameters. Resource templates can be built be creating a resource in the Azure Portal and then going into <code>Settings &gt; Automation scripts</code>. You can find many example templates at <a href="https://github.com/Azure/AzureStack-QuickStart-Templates" class="uri">https://github.com/Azure/AzureStack-QuickStart-Templates</a>.</p>
-<p>To create a resource using a template in <code>AzureSMR</code> use <code>azureDeployTemplate()</code>. The template and paramaters must be available in a public URL (for example Azure blob).</p>
+<h2>Resource templates - create Azure resources</h2>
+<p>The easiest way to create resources on Azure is to use Azure Resource Manager (ARM) templates. To create Azure resources such as HDInsight clusters there can a large quantity of parameters. Resource templates can be built be creating a resource in the Azure Portal and then going into <code>Settings &gt; Automation scripts</code>. You can find many example templates at <a href="https://github.com/Azure/AzureStack-QuickStart-Templates" class="uri">https://github.com/Azure/AzureStack-QuickStart-Templates</a>.</p>
+<p>To create a resource using a template in <code>AzureSMR</code> use <code>azureDeployTemplate()</code>. The template and paramaters must be available in a public URL (for example in Azure blob store), or you can supply these as JSON strings.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">azureDeployTemplate</span>(sc, <span class="dt">resourceGroup =</span> <span class="st">&quot;Analytics&quot;</span>, <span class="dt">deplName =</span> <span class="st">&quot;Deploy1&quot;</span>, 
                     <span class="dt">templateURL =</span> <span class="st">&quot;{TEMPLATEURL}&quot;</span>, <span class="dt">paramURL =</span> <span class="st">&quot;{PARAMURL}&quot;</span>)
 
@@ -221,25 +221,19 @@ sc</code></pre></div>
 </div>
 <div id="hive-functions" class="section level2">
 <h2>Hive Functions</h2>
-<p>These functions facilitate the use of hive jobs on an HDInsight Cluster</p>
+<p>You can use these functions to run and manage hive jobs on an HDInsight Cluster.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">azureHiveStatus</span>(sc, <span class="dt">clusterName =</span> <span class="st">&quot;smrhdi&quot;</span>, 
                 <span class="dt">hdiAdmin =</span> <span class="st">&quot;hdiadmin&quot;</span>, 
                 <span class="dt">hdiPassword =</span> <span class="st">&quot;AzureSMR_password123&quot;</span>)
 
 <span class="kw">azureHiveSQL</span>(sc, 
              <span class="dt">CMD =</span> <span class="st">&quot;select * from hivesampletable&quot;</span>, 
-             <span class="dt">path =</span> <span class="st">&quot;wasb://opendata@testmystorage1.blob.core.windows.net/&quot;</span>)
-
-<span class="kw">azureListStorageBlobs</span>(sc, <span class="dt">storageAccount =</span> <span class="st">&quot;testmystorage1&quot;</span>, <span class="dt">container =</span> <span class="st">&quot;opendata&quot;</span>)
-
-stdout &lt;-<span class="st"> </span><span class="kw">azureGetBlob</span>(sc, <span class="dt">Container =</span> <span class="st">&quot;test&quot;</span>, <span class="dt">Blob =</span> <span class="st">&quot;stdout&quot;</span>)
- 
-<span class="kw">read.delim</span>(<span class="dt">text =</span> stdout,  <span class="dt">header =</span> <span class="ot">TRUE</span>, <span class="dt">fill =</span> <span class="ot">TRUE</span>)</code></pre></div>
+             <span class="dt">path =</span> <span class="st">&quot;wasb://opendata@testmystorage1.blob.core.windows.net/&quot;</span>)</code></pre></div>
 </div>
 <div id="spark-functions-experimental" class="section level2">
 <h2>Spark functions (experimental)</h2>
 <p><code>AzureSMR</code> provides some functions that allow HDInsight Spark aessions and jobs to be managed within an R Session.</p>
-<p>To create a new Spark session (via Livy) use <code>azureSparkNewSession()</code></p>
+<p>To create a new Spark session (via <a href="https://github.com/cloudera/hue/tree/master/apps/spark/java#welcome-to-livy-the-rest-spark-server">Livy</a>) use <code>azureSparkNewSession()</code></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">azureSparkNewSession</span>(sc, <span class="dt">clustername =</span> <span class="st">&quot;smrhdi&quot;</span>, 
                      <span class="dt">hdiAdmin =</span> <span class="st">&quot;hdiadmin&quot;</span>, 
                      <span class="dt">hdiPassword =</span> <span class="st">&quot;AzureSMR_password123&quot;</span>,
@@ -268,7 +262,7 @@ pythonCmd &lt;-<span class="st"> '</span>
 
 ## [1] &quot;Pi is roughly 3.140285&quot;</code></pre></div>
 <p>Check Session variables are retained</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">azureSparkCMD</span>(sc, <span class="dt">clustername =</span> <span class="st">&quot;smrhdi&quot;</span>, <span class="dt">CMD =</span> <span class="st">&quot;print Pi&quot;</span>, <span class="dt">sessionID=</span><span class="st">&quot;0&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">azureSparkCMD</span>(sc, <span class="dt">clustername =</span> <span class="st">&quot;smrhdi&quot;</span>, <span class="dt">CMD =</span> <span class="st">&quot;print Pi&quot;</span>, <span class="dt">sessionID =</span> <span class="st">&quot;0&quot;</span>)
 
 <span class="co">#[1] &quot;3.1422&quot;</span></code></pre></div>
 <p>You can also run SparkR sessions</p>
@@ -276,8 +270,8 @@ pythonCmd &lt;-<span class="st"> '</span>
                      <span class="dt">hdiAdmin =</span> <span class="st">&quot;hdiadmin&quot;</span>, 
                      <span class="dt">hdiPassword =</span> <span class="st">&quot;AzureSMR_password123&quot;</span>,
                      <span class="dt">kind =</span> <span class="st">&quot;sparkr&quot;</span>)
-<span class="kw">azureSparkCMD</span>(sc, <span class="dt">clustername =</span> <span class="st">&quot;smrhdi&quot;</span>, <span class="dt">CMD =</span> <span class="st">&quot;HW&lt;-'hello R'&quot;</span>, <span class="dt">sessionID=</span><span class="st">&quot;2&quot;</span>)
-<span class="kw">azureSparkCMD</span>(sc, <span class="dt">clustername =</span> <span class="st">&quot;smrhdi&quot;</span>, <span class="dt">CMD =</span> <span class="st">&quot;cat(HW)&quot;</span>, <span class="dt">sessionID=</span><span class="st">&quot;2&quot;</span>)</code></pre></div>
+<span class="kw">azureSparkCMD</span>(sc, <span class="dt">clustername =</span> <span class="st">&quot;smrhdi&quot;</span>, <span class="dt">CMD =</span> <span class="st">&quot;HW&lt;-'hello R'&quot;</span>, <span class="dt">sessionID =</span> <span class="st">&quot;2&quot;</span>)
+<span class="kw">azureSparkCMD</span>(sc, <span class="dt">clustername =</span> <span class="st">&quot;smrhdi&quot;</span>, <span class="dt">CMD =</span> <span class="st">&quot;cat(HW)&quot;</span>, <span class="dt">sessionID =</span> <span class="st">&quot;2&quot;</span>)</code></pre></div>
 </div>
 
 
