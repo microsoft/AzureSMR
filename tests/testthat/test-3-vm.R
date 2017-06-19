@@ -61,7 +61,7 @@ test_that("Can stop a virtual machine", {
   expect_equal(ncol(res), 7)
 
   res <- azureVMStatus(asc, vmName = "MyUbuntuVM")
-  expect_equal(res, "Provisioning succeeded, VM running")
+  expect_equal(res$status, "Provisioning succeeded, VM running")
 
   res <- azureStopVM(asc, vmName = "MyUbuntuVM")
   expect_true(res)
@@ -71,7 +71,7 @@ test_that("Can stop a virtual machine", {
 context(" - delete VM")
 test_that("Can delete virtual machine", {
   res <- azureVMStatus(asc, vmName = "MyUbuntuVM", ignore = "Y")
-  expect_equal(res, "Provisioning succeeded, VM deallocated")
+  expect_equal(res$status, "Provisioning succeeded, VM deallocated")
 
 
   res <- azureDeleteVM(asc, vmName = "MyUbuntuVM")
