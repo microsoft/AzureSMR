@@ -269,8 +269,8 @@ azurePricingRates <- function(azureActiveContext,
   url <- paste(
     "https://management.azure.com/subscriptions/", 
     azureActiveContext$subscriptionID,
-    "/providers/Microsoft.Commerce/RateCard?api-version=2016-08-31-preview&
-    $filter=",
+    "/providers/Microsoft.Commerce/RateCard?api-version=2016-08-31-preview&",
+    "$filter=",
     "OfferDurableId eq '", offerId, "'",
     " and Currency eq '", currency, "'",
     " and Locale eq '", locale, "'",
