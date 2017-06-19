@@ -59,7 +59,8 @@ pollStatusVM <- function(azureActiveContext) {
   iteration <- 0
   waiting <- TRUE
   while (iteration < 500 && waiting) {
-    status <- azureVMStatus(azureActiveContext, ignore = "Y")
+    info <- azureVMStatus(azureActiveContext, ignore = "Y")
+    status <- info$status
     summary <- gsub(".*?(deallocated|deallocating|running|updating|starting|stopped|NA).*?", "\\1", status)
     rc <- switch(tolower(summary),
       running = "R",
