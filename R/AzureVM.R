@@ -197,8 +197,8 @@ azureVMStatus <- function(azureActiveContext, resourceGroup, vmName, subscriptio
   uri <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
                "/resourceGroups/", resourceGroup, 
                "/providers/Microsoft.Compute/virtualmachines/", vmName, 
-               "/InstanceView?api-version=2015-05-01-preview")
-
+               "?$expand=instanceView&api-version=2015-05-01-preview")
+  
   r <- call_azure_sm(azureActiveContext, uri = uri,
     verb = "GET", verbose = verbose)
   if(status_code(r) == 404 && ignore == "Y") return("NA")
@@ -207,8 +207,8 @@ azureVMStatus <- function(azureActiveContext, resourceGroup, vmName, subscriptio
   rl <- content(r, "text", encoding = "UTF-8")
   df <- fromJSON(rl)
 
-  dfn <- as.data.frame(df$statuses)
-
+  dfn <- df$properties$instanceView$statuses
+  
   clust <- nrow(dfn)
   if (clust < 1) {
     if (ignore == "Y") {
@@ -217,9 +217,15 @@ azureVMStatus <- function(azureActiveContext, resourceGroup, vmName, subscriptio
       stop("No Virtual Machines found")
     }
   }
-  return(paste(df$statuses$displayStatus, collapse = ", "))
+  
+  return(list(vmName = df$properties$osProfile$computerName,
+              vmId = df$id,
+              userName = df$properties$osProfile$computerName,
+              os = df$properties$storageProfile$osDisk$osType,
+              size = df$properties$hardwareProfile$vmSize,
+              location = df$location,
+              status = paste(dfn$displayStatus, collapse = ", ")))
 }
-
 
 #' Delete a Virtual Machine.
 #'
@@ -259,4 +265,3 @@ azureDeleteVM <- function(azureActiveContext, resourceGroup, vmName, subscriptio
   message(paste("Finished: ", Sys.time()))
   return(TRUE)
 }
-
