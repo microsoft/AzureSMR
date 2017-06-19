@@ -126,16 +126,19 @@ azureDataConsumption <- function(azureActiveContext,
                    reserved=TRUE)
   
   url <-
-    sprintf("https://management.azure.com/subscriptions/%s/providers/
-            Microsoft.Commerce/UsageAggregates?api-version=%s
-            &reportedStartTime=%s&reportedEndTime=%s
-            &aggregationgranularity=%s&showDetails=%s",
-            azureActiveContext$subscriptionID,
-            "2015-06-01-preview",
-            start,
-            end,
-            granularity,
-            "false"
+    paste0("https://management.azure.com/subscriptions/",
+           azureActiveContext$subscriptionID,
+           "/providers/",
+           "Microsoft.Commerce/UsageAggregates?api-version=",
+           "2015-06-01-preview",
+           "&reportedStartTime=",
+           start,
+           "&reportedEndTime=",
+           end,
+           "&aggregationgranularity=",
+           granularity,
+           "&showDetails=",
+           "false"
     )
   
   r <- call_azure_sm(azureActiveContext,
