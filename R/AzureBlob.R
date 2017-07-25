@@ -211,7 +211,7 @@ azureGetBlob <- function(azureActiveContext, blob, directory, type = "text",
     if (missing(blob)) blob <- azureActiveContext$blob
     if (missing(directory)) directory <- azureActiveContext$directory
     } else {
-      if (missing(directory)) directory <- "/"
+      if (missing(directory)) directory <- ""
       if (missing(container)) container <- ""
     }
 
