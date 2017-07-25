@@ -34,7 +34,7 @@ azureListStorageBlobs <- function(azureActiveContext, storageAccount, storageKey
 
   verbosity <- set_verbosity(verbose)
 
-  URL <- paste0("http://", storageAccount, ".blob.core.windows.net/", container, "?restype=container&comp=list")
+  URL <- paste0("https://", storageAccount, ".blob.core.windows.net/", container, "?restype=container&comp=list")
   if (!missing(maxresults)  && !is.null(maxresults)) URL <- paste0(URL, "&maxresults=", maxresults)
   if (!missing(prefix)      && !is.null(prefix))     URL <- paste0(URL, "&prefix=", prefix)
   if (!missing(delimiter)   && !is.null(delimiter))  URL <- paste0(URL, "&delimiter=", delimiter)
@@ -237,7 +237,7 @@ azureGetBlob <- function(azureActiveContext, blob, directory, type = "text",
   blob <- gsub("^/", "", blob)
   blob <- gsub("^\\./", "", blob)
 
-  URL <- paste0("http://", storageAccount, ".blob.core.windows.net/", container, "/", blob)
+  URL <- paste0("https://", storageAccount, ".blob.core.windows.net/", container, "/", blob)
   r <- callAzureStorageApi(URL, 
     storageKey = storageKey, storageAccount = storageAccount, container = container,
     CMD = paste0("/", blob)
@@ -319,7 +319,7 @@ azurePutBlob <- function(azureActiveContext, blob, contents = "", file = "",
     storageKey <- refreshStorageKey(azureActiveContext, storageAccount, resourceGroup)
   }
 
-  URL <- paste0("http://", storageAccount, ".blob.core.windows.net/", container, "/", blob)
+  URL <- paste0("https://", storageAccount, ".blob.core.windows.net/", container, "/", blob)
 
   r <- callAzureStorageApi(URL, verb = "PUT",
     headers = "x-ms-blob-type:Blockblob",
@@ -515,7 +515,7 @@ azureDeleteBlob <- function(azureActiveContext, blob, directory,
   blob <- gsub("^/", "", blob)
   blob <- gsub("^\\./", "", blob)
 
-  URL <- paste0("http://", storageAccount, ".blob.core.windows.net/", container, "/", blob)
+  URL <- paste0("https://", storageAccount, ".blob.core.windows.net/", container, "/", blob)
 
   xdate <- x_ms_date()
   SIG <- getSig(azureActiveContext, url = URL, verb = "DELETE", key = storageKey,
