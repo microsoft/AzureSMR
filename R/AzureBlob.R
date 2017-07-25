@@ -116,7 +116,6 @@ azureBlobLS <- function(azureActiveContext, directory, recursive = FALSE,
     if (missing(storageAccount)) storageAccount <- azureActiveContext$storageAccount
     if (missing(storageKey)) storageKey <- azureActiveContext$storageKey
     if (missing(container)) container <- azureActiveContext$container
-    if (missing(resourceGroup)) resourceGroup <- azureActiveContext$resourceGroup
     if (missing(directory)) directory <- azureActiveContext$directory
   } else {
     if(missing(directory)) directory <- "/"
@@ -125,7 +124,6 @@ azureBlobLS <- function(azureActiveContext, directory, recursive = FALSE,
 
   if(is.null(directory) || directory == "") directory <- "/"
 
-  assert_that(is_resource_group(resourceGroup))
   assert_that(is_storage_account(storageAccount))
   assert_that(is_container(container))
   assert_that(is_directory(directory))
@@ -137,6 +135,7 @@ azureBlobLS <- function(azureActiveContext, directory, recursive = FALSE,
   directory <- gsub("//", "/", directory)
 
   if (!missing(azureActiveContext) && !is.null(azureActiveContext) && missing(storageKey)) {
+    assert_that(is_resource_group(resourceGroup))
     storageKey <- refreshStorageKey(azureActiveContext, storageAccount, resourceGroup)
   }
 
@@ -215,7 +214,6 @@ azureGetBlob <- function(azureActiveContext, blob, directory, type = "text",
       if (missing(container)) container <- ""
     }
 
-  assert_that(is_resource_group(resourceGroup))
   assert_that(is_storage_account(storageAccount))
   assert_that(is_container(container))
   assert_that(is_storage_key(storageKey))
@@ -298,7 +296,6 @@ azurePutBlob <- function(azureActiveContext, blob, contents = "", file = "",
   if (is.null(directory)) directory <- "/"
   if (is.null(container)) container <- ""
 
-  assert_that(is_resource_group(resourceGroup))
   assert_that(is_storage_account(storageAccount))
   assert_that(is_container(container))
   assert_that(is_storage_key(storageKey))
@@ -318,6 +315,7 @@ azurePutBlob <- function(azureActiveContext, blob, contents = "", file = "",
   if (!missing(contents) && !missing(file))stop("Provided either Content OR file Argument")
 
   if (missing(storageKey) && !missing(azureActiveContext) && !is.null(azureActiveContext)) {
+    assert_that(is_resource_group(resourceGroup))
     storageKey <- refreshStorageKey(azureActiveContext, storageAccount, resourceGroup)
   }
 
@@ -366,12 +364,12 @@ azureBlobFind <- function(azureActiveContext, file, storageAccount, storageKey,
       if (missing(storageKey)) storageKey <- azureActiveContext$storageKey
       if (missing(container)) container <- azureActiveContext$container
       if (missing(resourceGroup)) resourceGroup <- azureActiveContext$resourceGroup
+      assert_that(is_resource_group(resourceGroup))
       storageKey <- refreshStorageKey(azureActiveContext, storageAccount, resourceGroup)
   } else {
     if (missing(container)) container <- ""
   }
 
-  assert_that(is_resource_group(resourceGroup))
   assert_that(is_storage_account(storageAccount))
   assert_that(is_container(container))
   assert_that(is_storage_key(storageKey))
@@ -414,6 +412,7 @@ azureBlobCD <- function(azureActiveContext, directory, container, file,
     if (missing(storageKey)) storageKey <- azureActiveContext$storageKey
     if (missing(container)) container <- azureActiveContext$container
     if (missing(resourceGroup)) resourceGroup <- azureActiveContext$resourceGroup
+    assert_that(is_resource_group(resourceGroup))
     storageKey <- refreshStorageKey(azureActiveContext, storageAccount, resourceGroup)
   } else {
     if (missing(directory)) directory <- "/"
@@ -422,7 +421,6 @@ azureBlobCD <- function(azureActiveContext, directory, container, file,
 
   verbosity <- set_verbosity(verbose)
 
-  assert_that(is_resource_group(resourceGroup))
   assert_that(is_storage_account(storageAccount))
   assert_that(is_container(container))
   assert_that(is_storage_key(storageKey))
@@ -494,12 +492,12 @@ azureDeleteBlob <- function(azureActiveContext, blob, directory,
     if (missing(blob)) blob <- azureActiveContext$blob  
     if (missing(directory)) directory <- azureActiveContext$directory
     if (missing(container)) container <- azureActiveContext$container
+    assert_that(is_resource_group(resourceGroup))
     storageKey <- refreshStorageKey(azureActiveContext, storageAccount, resourceGroup)
   } else {
     if (missing(directory)) directory <- "/"
     if (missing(container)) container <- ""
   }
-  assert_that(is_resource_group(resourceGroup))
   assert_that(is_storage_account(storageAccount))
   assert_that(is_container(container))
   assert_that(is_storage_key(storageKey))
