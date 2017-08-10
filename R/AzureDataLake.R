@@ -13,23 +13,22 @@
 #' @references
 #' @family Azure Data Lake Store functions
 #' @export
-azureDataLakeListStatus <- function(azureActiveContext, azureDataLakeStoreAccount, relativeFilePath = "", verbose = FALSE) {
+azureDataLakeListStatus <- function(azureActiveContext, storageAccount, relativePath = "", verbose = FALSE) {
 
   if (!missing(azureActiveContext) && !is.null(azureActiveContext)) {
     assert_that(is.azureActiveContext(azureActiveContext))
     azureCheckToken(azureActiveContext)
-    if(missing(azureDataLakeStoreAccount)) azureDataLakeStoreAccount <- azureActiveContext$storageAccount
+    if(missing(storageAccount)) storageAccount <- azureActiveContext$storageAccount
   }
 
   #assert_that(is_storage_account(storageAccount))
 
   verbosity <- set_verbosity(verbose)
 
-  URL <- paste0("https://", azureDataLakeStoreAccount, ".azuredatalakestore.net/webhdfs/v1/", relativeFilePath, "?op=LISTSTATUS&api-version=2016-11-01")
+  URL <- paste0("https://", storageAccount, ".azuredatalakestore.net/webhdfs/v1/", relativePath, "?op=LISTSTATUS&api-version=2016-11-01")
 
   r <- callAzureDataLakeApi(URL,
     azureActiveContext = azureActiveContext,
-    storageAccount = storageAccount,
     verbose = verbose)
 
   if (status_code(r) == 404) {

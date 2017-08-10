@@ -100,7 +100,7 @@ azure_storage_header <- function(shared_key, date = x_ms_date(), content_length 
   add_headers(.headers = headers)
 }
 
-callAzureDataLakeApi <- function(url, verb = "GET", azureActiveContext, storageAccount,
+callAzureDataLakeApi <- function(url, verb = "GET", azureActiveContext,
                                 headers = NULL, CMD, size = nchar(content), contenttype = NULL,
                                 content = NULL, verbose = FALSE) {
   dateStamp <- httr::http_date(Sys.time())
