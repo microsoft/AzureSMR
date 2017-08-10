@@ -9,13 +9,13 @@ azureCreateBatchAccount(azureActiveContext, batchAccount,
   asynchronous = FALSE, verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
+\item{azureActiveContext}{A container used for caching variables used by `AzureSMR`, created by [createAzureContext()]}
 
 \item{location}{A string for the location to create batch account}
 
 \item{resourceGroup}{Name of the resource group}
 
-\item{subscriptionID}{Subscription ID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
+\item{subscriptionID}{Subscription ID.  This is obtained automatically by [azureAuthenticate()] when only a single subscriptionID is available via Active Directory}
 
 \item{asynchronous}{If TRUE, submits asynchronous request to Azure. Otherwise waits until batch account is created.}
 
@@ -32,3 +32,4 @@ Other Batch account functions: \code{\link{azureBatchGetKey}},
   \code{\link{azureDeleteBatchAccount}},
   \code{\link{azureListBatchAccounts}}
 }
+

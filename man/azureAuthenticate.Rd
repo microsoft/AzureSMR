@@ -8,7 +8,7 @@ azureAuthenticate(azureActiveContext, tenantID, clientID, authKey,
   verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
+\item{azureActiveContext}{A container used for caching variables used by `AzureSMR`, created by [createAzureContext()]}
 
 \item{tenantID}{The tenant ID provided during creation of the Active Directory application / service principal}
 
@@ -33,3 +33,4 @@ See \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group
 \seealso{
 Other Azure resource functions: \code{\link{azureCheckToken}}
 }
+

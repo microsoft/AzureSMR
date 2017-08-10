@@ -4,7 +4,7 @@
  
 ---
  
- `AzureSMR` is an R Package for managing a selection of Azure resources, using the Azure Service Manager API. The package exposes function to manage resources, resource groups, storage (blobs and containers), ARM templates, virtual machines and HDInsight (nodes, Hive and Spark).  To use the package, you must configure an Azure Active Directory application and service principal in the Azure portal.
+ `AzureSMR` is an R Package for managing a selection of Azure resources, using the Azure Service Manager API. The package exposes function to manage resources, resource groups, storage (blobs and containers), ARM templates, virtual machines and HDInsight (nodes, Hive and Spark). To use the package, you must configure an Azure Active Directory application and service principal in the Azure portal.
 
 To get started with this package, see the vignettes:
 
@@ -14,7 +14,6 @@ To get started with this package, see the vignettes:
 To access the package help, just type `?AzureSMR` into your code editor.
 
 Technical note: The package connects to Azure using standard CRAN packages (for example `httr` and `jsonlite`). This means you can use open source R to connect to Azure - you don't need Microsoft R Server.
-
 
 ## Code of conduct
 

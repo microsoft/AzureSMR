@@ -12,3 +12,4 @@ read.AzureSMR.config(configFile = getOption("AzureSMR.config"))
 \description{
 Reads settings from configuration file in JSON format.
 }
+

@@ -10,9 +10,9 @@ azureListAllResources(azureActiveContext, resourceGroup, subscriptionID, name,
 \arguments{
 \item{azureActiveContext}{Azure Context Object}
 
-\item{resourceGroup}{resourceGroup Object (or use \code{azureActiveContext})}
+\item{resourceGroup}{resourceGroup Object (or use `azureActiveContext`)}
 
-\item{subscriptionID}{subscriptionID Object (or use \code{azureActiveContext})}
+\item{subscriptionID}{subscriptionID Object (or use `azureActiveContext`)}
 
 \item{name}{filter by resource name}
 
@@ -34,3 +34,4 @@ Other Resource group functions: \code{\link{azureCreateResourceGroup}},
   \code{\link{azureListRG}},
   \code{\link{azureListSubscriptions}}
 }
+

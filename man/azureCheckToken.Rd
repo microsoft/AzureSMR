@@ -7,7 +7,7 @@
 azureCheckToken(azureActiveContext)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
+\item{azureActiveContext}{A container used for caching variables used by `AzureSMR`, created by [createAzureContext()]}
 }
 \description{
 Check the timestamp of a token and renew if needed.
@@ -15,3 +15,4 @@ Check the timestamp of a token and renew if needed.
 \seealso{
 Other Azure resource functions: \code{\link{azureAuthenticate}}
 }
+

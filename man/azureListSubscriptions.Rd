@@ -7,7 +7,7 @@
 azureListSubscriptions(azureActiveContext, verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
+\item{azureActiveContext}{A container used for caching variables used by `AzureSMR`, created by [createAzureContext()]}
 
 \item{verbose}{Print Tracing information (Default False)}
 }
@@ -23,3 +23,4 @@ Other Resource group functions: \code{\link{azureCreateResourceGroup}},
   \code{\link{azureListAllResources}},
   \code{\link{azureListRG}}
 }
+
