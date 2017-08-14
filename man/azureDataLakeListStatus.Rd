@@ -2,21 +2,23 @@
 % Please edit documentation in R/AzureDataLake.R
 \name{azureDataLakeListStatus}
 \alias{azureDataLakeListStatus}
-\title{Azure Data Lake LISTSTATUS for specified storage account.}
+\title{Azure Data Lake LISTSTATUS for specified relativePath of an azure data lake account.}
 \usage{
-azureDataLakeListStatus(azureActiveContext, storageAccount, relativePath = "",
-  verbose = FALSE)
+azureDataLakeListStatus(azureActiveContext, azureDataLakeAccount,
+  relativePath = "", verbose = FALSE)
 }
 \arguments{
 \item{azureActiveContext}{Provide an \code{azureActiveContext} object used for authentication.}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{azureDataLakeAccount}{Provide the name of the Azure Data Lake account.}
 
-\item{azureDataLakeStoreAccount}{Provide the name of the Azure Data Lake Store account.}
+\item{relativePath}{Provide a relative path of the directory.}
+
+\item{verbose}{Print tracing information (default FALSE).}
 }
 \value{
-Returns a data frame. This data frame has an attribute called \code{marker} that can be used with the \code{marker} argument to return the next set of values.
+Returns a data frame.
 }
 \description{
-Azure Data Lake LISTSTATUS for specified storage account.
+Azure Data Lake LISTSTATUS for specified relativePath of an azure data lake account.
 }
