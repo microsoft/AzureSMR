@@ -25,7 +25,7 @@ azureDataLakeListStatus <- function(azureActiveContext, azureDataLakeAccount, re
   # ToDo: Need to check if ADLS requires a different one
   assert_that(is_storage_account(azureDataLakeAccount))
   # ToDo: Need to check URL encoding of relative file path
-  # assert_that(is_url_encoding(relativePath))
+  #assert_that(is_url_encoding(relativePath))
 
   verbosity <- set_verbosity(verbose)
 
@@ -40,20 +40,31 @@ azureDataLakeListStatus <- function(azureActiveContext, azureDataLakeAccount, re
     azureActiveContext = azureActiveContext,
     verbose = verbose)
 
-  if (status_code(resHttp) == 404) {
-    warning("Azure data lake response: resource not found")
-    return(NULL)
-  }
   stopWithAzureError(resHttp)
 
   resJsonStr <- content(resHttp, "text", encoding = "UTF-8")
-  if (length(resJsonStr) == 0) {
+  resJsonObj <- jsonlite::fromJSON(resJsonStr)
+  if (length(resJsonObj$FileStatuses$FileStatus) == 0) {
+    #return empty data frame in case of an empty json object
     return(
-      as.data.frame()
+      data.frame(
+        FileStatuses.FileStatus.length = character(0),
+        FileStatuses.FileStatus.pathSuffix = character(0),
+        FileStatuses.FileStatus.type = character(0),
+        FileStatuses.FileStatus.blockSize = character(0),
+        FileStatuses.FileStatus.accessTime = character(0),
+        FileStatuses.FileStatus.modificationTime = character(0),
+        FileStatuses.FileStatus.replication = character(0),
+        FileStatuses.FileStatus.permission = character(0),
+        FileStatuses.FileStatus.owner = character(0),
+        FileStatuses.FileStatus.group = character(0),
+        # ToDo: to be or not to be?
+        #FileStatuses.FileStatus.msExpirationTime = character(0),
+        FileStatuses.FileStatus.aclBit = character(0)
+      )
     )
   }
-  resJson <- jsonlite::fromJSON(resJsonStr)
-  resDf <- as.data.frame(resJson)
+  resDf <- as.data.frame(resJsonObj)
   resDf
 }
 
@@ -84,7 +95,7 @@ azureDataLakeGetFileStatus <- function(azureActiveContext, azureDataLakeAccount,
   # ToDo: Need to check if ADLS requires a different one
   assert_that(is_storage_account(azureDataLakeAccount))
   # ToDo: Need to check URL encoding of relative file path
-  # assert_that(is_url_encoding(relativePath))
+  #assert_that(is_url_encoding(relativePath))
   
   verbosity <- set_verbosity(verbose)
   
@@ -106,13 +117,28 @@ azureDataLakeGetFileStatus <- function(azureActiveContext, azureDataLakeAccount,
   stopWithAzureError(resHttp)
   
   resJsonStr <- content(resHttp, "text", encoding = "UTF-8")
-  if (length(resJsonStr) == 0) {
+  resJsonObj <- jsonlite::fromJSON(resJsonStr)
+  if (length(resJsonObj$FileStatus) == 0) {
+    #return empty data frame in case of an empty json object
     return(
-      as.data.frame()
+      data.frame(
+        FileStatuses.FileStatus.length = character(0),
+        FileStatuses.FileStatus.pathSuffix = character(0),
+        FileStatuses.FileStatus.type = character(0),
+        FileStatuses.FileStatus.blockSize = character(0),
+        FileStatuses.FileStatus.accessTime = character(0),
+        FileStatuses.FileStatus.modificationTime = character(0),
+        FileStatuses.FileStatus.replication = character(0),
+        FileStatuses.FileStatus.permission = character(0),
+        FileStatuses.FileStatus.owner = character(0),
+        FileStatuses.FileStatus.group = character(0),
+        # ToDo: to be or not to be?
+        #FileStatuses.FileStatus.msExpirationTime = character(0),
+        FileStatuses.FileStatus.aclBit = character(0)
+      )
     )
   }
-  resJson <- jsonlite::fromJSON(resJsonStr)
-  resDf <- as.data.frame(resJson)
+  resDf <- as.data.frame(resJsonObj)
   resDf
 }
 
@@ -143,10 +169,10 @@ azureDataLakeMkdirs <- function(azureActiveContext, azureDataLakeAccount, relati
 
   # ToDo: Need to check if ADLS requires a different one
   assert_that(is_storage_account(azureDataLakeAccount))
-  # ToDo: Need a check for permission
-  # assert_that(is_permission(permission))
   # ToDo: Need to check URL encoding of relative file path
-  # assert_that(is_url_encoding(relativePath))
+  #assert_that(is_url_encoding(relativePath))
+  # ToDo: Need a check for permission
+  #assert_that(is_permission(permission))
 
   verbosity <- set_verbosity(verbose)
 
@@ -168,14 +194,9 @@ azureDataLakeMkdirs <- function(azureActiveContext, azureDataLakeAccount, relati
   stopWithAzureError(resHttp)
 
   resJsonStr <- content(resHttp, "text", encoding = "UTF-8")
-  if (length(resJsonStr) == 0) {
-    return(
-      as.data.frame()
-    )
-  }
-  resJson <- jsonlite::fromJSON(resJsonStr)
-  resDf <- as.data.frame(resJson)
-  resDf
+  resJsonObj <- jsonlite::fromJSON(resJsonStr)
+  resDf <- as.data.frame(resJsonObj)
+  resDf$boolean
 }
 
 #' Azure Data Lake CREATE for specified relativePath of an azure data lake account.
@@ -207,9 +228,11 @@ azureDataLakeCreate <- function(azureActiveContext, azureDataLakeAccount, relati
   # ToDo: Need to check if ADLS requires a different one
   assert_that(is_storage_account(azureDataLakeAccount))
   # ToDo: Need to check URL encoding of relative file path
-  # assert_that(is_url_encoding(relativePath))
+  #assert_that(is_url_encoding(relativePath))
   # ToDo: Need a check for permission
-  # assert_that(is_permission(permission))
+  #assert_that(is_permission(permission))
+  # ToDo: Need a check for contents ?
+  #assert_that(is_content(contents))
   
   verbosity <- set_verbosity(verbose)
   
@@ -227,6 +250,7 @@ azureDataLakeCreate <- function(azureActiveContext, azureDataLakeAccount, relati
                                   content = contents, contenttype = "text/plain; charset=UTF-8",
                                   verbose = verbose)
   stopWithAzureError(resHttp)
+  # ToDo: Check why this returns NULL
 }
 
 #' Azure Data Lake APPEND for specified relativePath of an azure data lake account.
@@ -257,8 +281,8 @@ azureDataLakeAppend <- function(azureActiveContext, azureDataLakeAccount, relati
   assert_that(is_storage_account(azureDataLakeAccount))
   # ToDo: Need to check URL encoding of relative file path
   #assert_that(is_url_encoding(relativePath))
-  # ToDo: Need to check contents (?)
-  #assert_that(is_contents(contents))
+  # ToDo: Need a check for contents ?
+  #assert_that(is_content(contents))
   
   verbosity <- set_verbosity(verbose)
   
@@ -273,14 +297,9 @@ azureDataLakeAppend <- function(azureActiveContext, azureDataLakeAccount, relati
                                   azureActiveContext = azureActiveContext,
                                   content = contents, contenttype = "text/plain; charset=UTF-8",
                                   verbose = verbose)
-  if (status_code(resHttp) == 404) {
-    warning("Azure data lake response: resource not found")
-    return(NULL)
-  }
   stopWithAzureError(resHttp)
-  
   # ToDo: Check why this returns NULL
-
+}
 
 #' Azure Data Lake OPEN for specified relativePath of an azure data lake account.
 #'
@@ -310,9 +329,7 @@ azureDataLakeOpen <- function(azureActiveContext, azureDataLakeAccount, relative
   # ToDo: Need to check if ADLS requires a different one
   assert_that(is_storage_account(azureDataLakeAccount))
   # ToDo: Need to check URL encoding of relative file path
-  # assert_that(is_url_encoding(relativePath))
-  # ToDo: Need a check for permission
-  # assert_that(is_permission(permission))
+  #assert_that(is_url_encoding(relativePath))
 
   verbosity <- set_verbosity(verbose)
 
@@ -328,10 +345,6 @@ azureDataLakeOpen <- function(azureActiveContext, azureDataLakeAccount, relative
   resHttp <- callAzureDataLakeApi(URL,
                                   azureActiveContext = azureActiveContext,
                                   verbose = verbose)
-  if (status_code(resHttp) == 404) {
-    warning("Azure data lake response: resource not found")
-    return(NULL)
-  }
   stopWithAzureError(resHttp)
   
   resStr <- content(resHttp, "text", encoding = "UTF-8")
@@ -366,7 +379,7 @@ azureDataLakeDelete <- function(azureActiveContext, azureDataLakeAccount, relati
   # ToDo: Need to check if ADLS requires a different one
   assert_that(is_storage_account(azureDataLakeAccount))
   # ToDo: Need to check URL encoding of relative file path
-  # assert_that(is_url_encoding(relativePath))
+  #assert_that(is_url_encoding(relativePath))
   
   verbosity <- set_verbosity(verbose)
   

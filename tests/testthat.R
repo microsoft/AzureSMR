@@ -7,6 +7,7 @@ if (identical(Sys.getenv("NOT_CRAN"), "true")) {
   test_check("AzureSMR")
   # test_check("AzureSMR", filter = "1-authentication")
   # test_check("AzureSMR", filter = "2-resources")
+  #test_check("AzureSMR", filter = "7-datalake")
 
 } else {
   # CRAN
@@ -14,4 +15,5 @@ if (identical(Sys.getenv("NOT_CRAN"), "true")) {
   test_check("AzureSMR")
   # test_check("AzureSMR", filter = "1-authentication")
   # test_check("AzureSMR", filter = "2-resources")
+  #test_check("AzureSMR", filter = "7-datalake")
 }
