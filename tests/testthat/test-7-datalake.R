@@ -67,6 +67,7 @@ test_that("Can create, list, get, update and delete items in an azure data lake 
 
   # DELETE
   res <- azureDataLakeDelete(asc, azureDataLakeAccount, "tempfolder", TRUE)
+  expect_true(res)
   # DELETE - check
   res <- azureDataLakeListStatus(asc, azureDataLakeAccount, "")
   expect_is(res, "data.frame")

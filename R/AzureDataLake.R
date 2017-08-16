@@ -401,14 +401,9 @@ azureDataLakeDelete <- function(azureActiveContext, azureDataLakeAccount, relati
   stopWithAzureError(resHttp)
   
   resJsonStr <- content(resHttp, "text", encoding = "UTF-8")
-  if (length(resJsonStr) == 0) {
-    return(
-      as.data.frame()
-    )
-  }
-  resJson <- jsonlite::fromJSON(resJsonStr)
-  resDf <- as.data.frame(resJson)
-  resDf
+  resJsonObj <- jsonlite::fromJSON(resJsonStr)
+  resDf <- as.data.frame(resJsonObj)
+  resDf$boolean
 }
 
 
