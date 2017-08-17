@@ -50,7 +50,7 @@ test_that("Can create, list, get, update and delete items in an azure data lake 
   # MKDIRS - check 1 - LISTSTATUS
   res <- azureDataLakeListStatus(asc, azureDataLakeAccount, "")
   expect_is(res, "data.frame")
-  # ToDo: should we check number of columns as well?
+  # TODO: should we check number of columns as well?
   expect_equal(nrow(res), 1)
   # MKDIRS - check 2 - GETFILESTATUS
   res <- azureDataLakeGetFileStatus(asc, azureDataLakeAccount, "")
