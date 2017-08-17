@@ -1,3 +1,19 @@
+
+#' ------------------------------------------------------------------------
+#' Sample config.json file for ADLS tests to run:
+#' Create and place the file in the below specified location
+#' ------------------------------------------------------------------------
+#' 
+#' {
+#' "tenantID": "72f988bf-blah-41af-blah-2d7cd011blah",
+#' "clientID": "1d604733-blah-4b37-blah-98fca981blah",
+#' "authKey": "zTw5blah+IN+yIblahrKv2K8dM2/BLah4FogBLAH/ME=",
+#' "azureDataLakeAccount": "azuresmrtestadls"
+#' }
+#' 
+#' ------------------------------------------------------------------------
+
+
 if(interactive()) library("testthat")
 
 settingsfile <- system.file("tests/testthat/config.json", package = "AzureSMR")
