@@ -27,7 +27,7 @@ azureListStorageContainers <- function(azureActiveContext, storageAccount, stora
 
   verbosity <- set_verbosity(verbose)
 
-  URL <- paste0("http://", storageAccount, ".blob.core.windows.net/?comp=list")
+  URL <- paste0("https://", storageAccount, ".blob.core.windows.net/?comp=list")
   xdate <- x_ms_date()
   SIG <- getSig(azureActiveContext, url = URL, verb = "GET", key = storageKey, storageAccount = storageAccount,
                 CMD = "\ncomp:list", date = xdate)
@@ -110,7 +110,7 @@ azureCreateStorageContainer <- function(azureActiveContext, container, storageAc
   azureActiveContext$storageAccount <- storageAccount
   azureActiveContext$resourceGroup <- resourceGroup
 
-  URL <- paste0("http://", storageAccount, ".blob.core.windows.net/", container, "?restype=container")
+  URL <- paste0("https://", storageAccount, ".blob.core.windows.net/", container, "?restype=container")
   xdate <- x_ms_date()
   SIG <- getSig(azureActiveContext, url = URL, verb = "PUT", key = storageKey,
                 storageAccount = storageAccount, container = container,
@@ -172,7 +172,7 @@ azureDeleteStorageContainer <- function(azureActiveContext, container, storageAc
   }
 
 
-  URL <- paste0("http://", storageAccount, ".blob.core.windows.net/", container, "?restype=container")
+  URL <- paste0("https://", storageAccount, ".blob.core.windows.net/", container, "?restype=container")
   xdate <- x_ms_date()
   SIG <- getSig(azureActiveContext, url = URL, verb = "DELETE", key = storageKey,
                 storageAccount = storageAccount,
