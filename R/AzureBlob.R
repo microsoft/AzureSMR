@@ -336,7 +336,7 @@ azurePutBlob <- function(azureActiveContext, blob, contents = "", file = "",
   stopWithAzureError(r)
 
   updateAzureActiveContext(azureActiveContext, blob = blob)
-  message("blob ", blob, " saved: ", nchar(contents), " bytes written")
+  message("blob ", blob, " saved: ", getContentSize(contents), " bytes written")
   TRUE
 }
 

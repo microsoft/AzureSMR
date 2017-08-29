@@ -26,7 +26,7 @@ extractUrlArguments <- function(x) {
 }
 
 callAzureStorageApi <- function(url, verb = "GET", storageKey, storageAccount,
-                   headers = NULL, container = NULL, CMD, size = nchar(content), contenttype = NULL,
+                   headers = NULL, container = NULL, CMD, size = getContentSize(content), contenttype = NULL,
                    content = NULL,
                    verbose = FALSE) {
   dateStamp <- httr::http_date(Sys.time())
@@ -50,16 +50,22 @@ callAzureStorageApi <- function(url, verb = "GET", storageKey, storageAccount,
                                     ),
     verbosity),
   "PUT" = PUT(url, add_headers(.headers = c(Authorization = azToken,
-                                         `Content-Length` = nchar(content),
+                                         `Content-Length` = size,
                                          `x-ms-version` = "2015-04-05",
                                          `x-ms-date` = dateStamp,
                                          `x-ms-blob-type` = "Blockblob",
-                                         `Content-type` = "text/plain; charset=UTF-8")),
+                                         `Content-type` = contenttype)),
            body = content,
     verbosity)
   )
 }
 
+getContentSize<- function(obj) {
+    switch(class(obj),
+         "raw" = length(obj),
+         "character" = nchar(obj),
+         nchar(obj))
+}
 
 createAzureStorageSignature <- function(url, verb, 
   key, storageAccount, container = NULL,
