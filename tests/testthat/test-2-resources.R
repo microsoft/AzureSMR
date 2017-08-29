@@ -123,6 +123,9 @@ test_that("Can put, list, get and delete a blob", {
   expect_true(res)
   res <- azurePutBlob(asc, blob = "foo", contents = "foo", container = "tempcontainer")
   expect_true(res)
+  #test raw vectors as well
+  res <- azurePutBlob(asc, blob = "raw", contents = serialize("bar",connection = NULL), container = "tempcontainer")
+  expect_true(res)
 
   res <- azureListStorageBlobs(asc, container = "tempcontainer")
   expect_is(res, "data.frame")
