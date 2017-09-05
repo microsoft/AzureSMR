@@ -1,9 +1,9 @@
-﻿Name: Azure-resources
+Name: Azure - Resources
 Description: List all Azure resources.
 Binding: addinListAllResources
 Interactive: true
 
-Name: Azure-VM status
+Name: Azure - VM Status
 Description: List the status of all virtual machines.
 Binding: addinGetAllVMstatus
 Interactive: true

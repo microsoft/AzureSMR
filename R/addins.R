@@ -1,12 +1,12 @@
-# this is a template to view a DT object
-# @param data.frame
-# @param title Text to display in pane title
+#' This is a template to view a DT object
+#' 
+#' @param data.frame
+#' @param title Text to display in pane title
 
 #' @importFrom miniUI miniPage gadgetTitleBar miniContentPanel
 #' @importFrom DT dataTableOutput renderDataTable
 #' @importFrom shiny observeEvent paneViewer runGadget
 dataTableViewer <- function(x, title = "") {
-
   ui <- miniPage(
     gadgetTitleBar(title),
     miniContentPanel(
@@ -16,13 +16,11 @@ dataTableViewer <- function(x, title = "") {
 
   server <- function(input, output, session) {
     output$dt <- DT::renderDataTable(x)
-
     observeEvent(input$done, stopApp())
   }
 
   viewer <- paneViewer()
   runGadget(ui, server, viewer = viewer)
-
 }
 
 
