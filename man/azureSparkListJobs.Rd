@@ -8,13 +8,13 @@ azureSparkListJobs(azureActiveContext, clustername, hdiAdmin, hdiPassword,
   verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
+\item{azureActiveContext}{A container used for caching variables used by `AzureSMR`, created by [createAzureContext()]}
 
-\item{clustername}{Cluster name, used for HDI and Spark clusters. See \code{\link[=azureCreateHDI]{azureCreateHDI()}}}
+\item{clustername}{Cluster name, used for HDI and Spark clusters. See [azureCreateHDI()]}
 
-\item{hdiAdmin}{HDInsight admin username. See \code{\link[=azureCreateHDI]{azureCreateHDI()}}}
+\item{hdiAdmin}{HDInsight admin username. See [azureCreateHDI()]}
 
-\item{hdiPassword}{HDInsight admin password. See \code{\link[=azureCreateHDI]{azureCreateHDI()}}}
+\item{hdiPassword}{HDInsight admin password. See [azureCreateHDI()]}
 
 \item{verbose}{Print Tracing information (Default False)}
 }
@@ -32,3 +32,4 @@ Other Spark functions: \code{\link{azureSparkCMD}},
   \code{\link{azureSparkShowURL}},
   \code{\link{azureSparkStopSession}}
 }
+

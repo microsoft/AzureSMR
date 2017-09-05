@@ -7,7 +7,7 @@
 azureGetAllVMstatus(azureActiveContext)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
+\item{azureActiveContext}{A container used for caching variables used by `AzureSMR`, created by [createAzureContext()]}
 }
 \description{
 First queries the azure active context for all visible resources, then sequentially queries the status of all virtuam machines.
@@ -18,5 +18,7 @@ Other Virtual machine functions: \code{\link{azureDeleteVM}},
   \code{\link{azureListScaleSetVM}},
   \code{\link{azureListScaleSets}},
   \code{\link{azureListVM}}, \code{\link{azureStartVM}},
-  \code{\link{azureStopVM}}, \code{\link{azureVMStatus}}
+  \code{\link{azureStopVM}}, \code{\link{azureVMInfo}},
+  \code{\link{azureVMStatus}}
 }
+

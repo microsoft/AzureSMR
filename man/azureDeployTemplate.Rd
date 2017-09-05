@@ -9,15 +9,15 @@ azureDeployTemplate(azureActiveContext, deplname, templateURL, paramURL,
   subscriptionID, verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
+\item{azureActiveContext}{A container used for caching variables used by `AzureSMR`, created by [createAzureContext()]}
 
 \item{deplname}{Deployment name}
 
-\item{templateURL}{URL that contains the ARM template to deploy. You must specify either \code{templateURL} OR \code{templateJSON}}
+\item{templateURL}{URL that contains the ARM template to deploy. You must specify either `templateURL` OR `templateJSON`}
 
-\item{paramURL}{URL that contains the template parameters. You must specify either \code{paramULR} OR \code{paramJSON}}
+\item{paramURL}{URL that contains the template parameters. You must specify either `paramULR` OR `paramJSON`}
 
-\item{templateJSON}{character vector that contains the ARM template to deploy. You must specify either \code{templateJSON} OR \code{templateURL}}
+\item{templateJSON}{character vector that contains the ARM template to deploy. You must specify either `templateJSON` OR `templateURL`}
 
 \item{paramJSON}{paramJSON}
 
@@ -25,7 +25,7 @@ azureDeployTemplate(azureActiveContext, deplname, templateURL, paramURL,
 
 \item{resourceGroup}{Name of the resource group}
 
-\item{subscriptionID}{Subscription ID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
+\item{subscriptionID}{Subscription ID.  This is obtained automatically by [azureAuthenticate()] when only a single subscriptionID is available via Active Directory}
 
 \item{verbose}{Print Tracing information (Default False)}
 }
@@ -37,3 +37,4 @@ Other Template functions: \code{\link{azureCancelDeploy}},
   \code{\link{azureDeleteDeploy}},
   \code{\link{azureDeployStatus}}
 }
+

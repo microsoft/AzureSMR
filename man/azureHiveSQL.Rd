@@ -8,15 +8,15 @@ azureHiveSQL(azureActiveContext, CMD, clustername, hdiAdmin, hdiPassword,
   path = "wasb:///tmp/", verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
+\item{azureActiveContext}{A container used for caching variables used by `AzureSMR`, created by [createAzureContext()]}
 
 \item{CMD}{SQl COmmand String}
 
-\item{clustername}{Cluster name, used for HDI and Spark clusters. See \code{\link[=azureCreateHDI]{azureCreateHDI()}}}
+\item{clustername}{Cluster name, used for HDI and Spark clusters. See [azureCreateHDI()]}
 
-\item{hdiAdmin}{HDInsight admin username. See \code{\link[=azureCreateHDI]{azureCreateHDI()}}}
+\item{hdiAdmin}{HDInsight admin username. See [azureCreateHDI()]}
 
-\item{hdiPassword}{HDInsight admin password. See \code{\link[=azureCreateHDI]{azureCreateHDI()}}}
+\item{hdiPassword}{HDInsight admin password. See [azureCreateHDI()]}
 
 \item{path}{path}
 
@@ -28,3 +28,4 @@ Submit SQL command to Hive Service.
 \seealso{
 Other Hive functions: \code{\link{azureHiveStatus}}
 }
+

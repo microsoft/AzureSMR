@@ -8,17 +8,15 @@ azureBlobFind(azureActiveContext, file, storageAccount, storageKey, container,
   resourceGroup, verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{Either an \code{azureActiveContext} object or \code{NULL}. The blob store functions support two modes of connecting to the Azure API: authenticate using Active Directory or providing your own storage key. If this value is \code{NULL}, you must provide the \code{storageKey}.}
+\item{azureActiveContext}{Either an `azureActiveContext` object or `NULL`. The blob store functions support two modes of connecting to the Azure API: authenticate using Active Directory or providing your own storage key. If this value is `NULL`, you must provide the `storageKey`.}
 
-\item{file}{\itemize{
-\item Local filename to store in Azure blob
-}}
+\item{file}{- Local filename to store in Azure blob}
 
 \item{storageAccount}{Name of the azure storage account. Storage account names must be between 3 and 24 characters in length and use numbers and lower-case letters only.}
 
 \item{storageKey}{Storage key associated with storage account}
 
-\item{container}{Storage container name. See \code{\link[=azureListStorageContainers]{azureListStorageContainers()}}}
+\item{container}{Storage container name. See [azureListStorageContainers()]}
 
 \item{resourceGroup}{Name of the resource group}
 
@@ -31,7 +29,6 @@ Find file in a storage account directory.
 
 The blob store functions support two modes of connecting to the Azure API:authenticate using Active Directory or providing your own storage key. If this value is `NULL`, you must provide the `storageKey` .
 }
-
 \seealso{
 Other Blob store functions: \code{\link{azureBlobCD}},
   \code{\link{azureBlobLS}}, \code{\link{azureDeleteBlob}},
@@ -39,3 +36,4 @@ Other Blob store functions: \code{\link{azureBlobCD}},
   \code{\link{azureListStorageBlobs}},
   \code{\link{azurePutBlob}}
 }
+

@@ -8,7 +8,7 @@ azurePricingRates(azureActiveContext, currency, locale, offerId, region,
   verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
+\item{azureActiveContext}{A container used for caching variables used by `AzureSMR`, created by [createAzureContext()]}
 
 \item{currency}{Currency in which price rating is measured.}
 
@@ -25,3 +25,4 @@ The pricing rates function wraps API calls to Azure RateCard and currently the A
 Other Cost functions: \code{\link{azureDataConsumption}},
   \code{\link{azureExpenseCalculator}}
 }
+

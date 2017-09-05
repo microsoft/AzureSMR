@@ -23,15 +23,15 @@ timestamp <- format(Sys.time(), format="%y%m%d%H%M")
 resourceGroup_name <- paste0("AzureSMtest_", timestamp)
 sa_name <- paste0("azuresmr", timestamp)
 
+time_end   <- paste(as.Date(Sys.Date()), "00:00:00", sep = " ")
+time_start <- paste(as.Date(Sys.Date() - 365), "00:00:00", sep = " ")
+  
 # run test.
 
 # get data consumption by day.
 
 test_that("Get data consumption by day", {
   skip_if_missing_config(settingsfile)
-  
-  time_end   <- paste0(as.Date(Sys.Date()), "00:00:00")
-  time_start <- paste0(as.Date(Sys.Date() - 365), "00:00:00")
   
   res <- azureDataConsumption(azureActiveContext=asc,
                               timeStart=time_start,
@@ -79,9 +79,6 @@ test_that("Get pricing rates", {
 
 test_that("Get cost by day", {
   skip_if_missing_config(settingsfile)
-  
-  time_end   <- paste0(as.Date(Sys.Date()), "00:00:00")
-  time_start <- paste0(as.Date(Sys.Date() - 365), "00:00:00")
   
   res <- azureExpenseCalculator(azureActiveContext=asc,
                                 timeStart=time_start,

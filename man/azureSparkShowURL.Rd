@@ -7,7 +7,7 @@
 azureSparkShowURL(azureActiveContext, URL)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
+\item{azureActiveContext}{A container used for caching variables used by `AzureSMR`, created by [createAzureContext()]}
 
 \item{URL}{URL}
 }
@@ -22,3 +22,4 @@ Other Spark functions: \code{\link{azureSparkCMD}},
   \code{\link{azureSparkNewSession}},
   \code{\link{azureSparkStopSession}}
 }
+

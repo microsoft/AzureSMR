@@ -53,6 +53,24 @@ test_that("Can create virtual machine from template", {
   expect_true(res)
 })
 
+context(" - VM info") 
+test_that("Can check information of a virtual machine", {
+  res <- azureListVM(asc)
+  expect_is(res, "data.frame")
+  expect_equal(ncol(res), 7)
+  
+  res <- azureVMInfo(asc, vmName = "MyUbuntuVM")
+  
+  expect_equal(length(res), 7)
+  expect_equal(names(res), c("vmName", 
+                             "vmId",
+                             "userName",
+                             "os",
+                             "size",
+                             "location",
+                             "status"))
+})
+
 
 context(" - stop VM")
 test_that("Can stop a virtual machine", {

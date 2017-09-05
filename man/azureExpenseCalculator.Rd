@@ -8,7 +8,7 @@ azureExpenseCalculator(azureActiveContext, instance = "", timeStart, timeEnd,
   granularity, currency, locale, offerId, region, verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
+\item{azureActiveContext}{A container used for caching variables used by `AzureSMR`, created by [createAzureContext()]}
 
 \item{instance}{Instance name that one would like to check expense. It is by default empty, which returns data consumption for all instances under subscription.}
 
@@ -36,3 +36,4 @@ Note if difference between \code{timeStart} and \code{timeEnd} is less than the 
 Other Cost functions: \code{\link{azureDataConsumption}},
   \code{\link{azurePricingRates}}
 }
+

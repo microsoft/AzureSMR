@@ -8,13 +8,13 @@ azureListScaleSets(azureActiveContext, resourceGroup, location, subscriptionID,
   verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
+\item{azureActiveContext}{A container used for caching variables used by `AzureSMR`, created by [createAzureContext()]}
 
 \item{resourceGroup}{Name of the resource group}
 
 \item{location}{Azure region, e.g. 'westeurope' or 'southcentralus'}
 
-\item{subscriptionID}{Subscription ID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
+\item{subscriptionID}{Subscription ID.  This is obtained automatically by [azureAuthenticate()] when only a single subscriptionID is available via Active Directory}
 
 \item{verbose}{Print Tracing information (Default False)}
 }
@@ -27,5 +27,7 @@ Other Virtual machine functions: \code{\link{azureDeleteVM}},
   \code{\link{azureListScaleSetNetwork}},
   \code{\link{azureListScaleSetVM}},
   \code{\link{azureListVM}}, \code{\link{azureStartVM}},
-  \code{\link{azureStopVM}}, \code{\link{azureVMStatus}}
+  \code{\link{azureStopVM}}, \code{\link{azureVMInfo}},
+  \code{\link{azureVMStatus}}
 }
+
