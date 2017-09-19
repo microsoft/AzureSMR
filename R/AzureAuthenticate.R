@@ -10,7 +10,7 @@
 #' @family Azure resource functions
 #' 
 #' @export
-azureAuthenticate <- function(azureActiveContext, tenantID, clientID, authKey, verbose = FALSE) {
+azureAuthenticate <- function(azureActiveContext, tenantID, clientID, authKey, verbose = FALSE, resource = "https%3A%2F%2Fmanagement.azure.com%2F") {
   assert_that(is.azureActiveContext(azureActiveContext))
 
   if (missing(tenantID)) tenantID <- azureActiveContext$tenantID
@@ -27,7 +27,7 @@ azureAuthenticate <- function(azureActiveContext, tenantID, clientID, authKey, v
 
   authKeyEncoded <- URLencode(authKey, reserved = TRUE)
 
-  bodyGT <- paste0("grant_type=client_credentials&resource=https%3A%2F%2Fmanagement.azure.com%2F&client_id=",
+  bodyGT <- paste0("grant_type=client_credentials&resource=", resource, "&client_id=",
                    clientID, "&client_secret=", authKeyEncoded)
 
   r <- httr::POST(URLGT,

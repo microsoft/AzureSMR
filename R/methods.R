@@ -265,3 +265,23 @@ is_ssh_password <- function(x) {
 on_failure(is_ssh_password) <- function(call, env) {
   "Provide an sshPassword"
 }
+
+# --- permission
+
+is_permission <- function(x) {
+  is.character(x) && length(x) == 1 && assert_that(is_valid_permission(x))
+}
+
+on_failure(is_permission) <- function(call, env) {
+  "Provide a valid octal permission string"
+}
+
+is_valid_permission <- function(x) {
+  nchar(x) == 3 && grepl("^[0-7]*$", x)
+}
+
+on_failure(is_valid_permission) <- function(call, env) {
+  paste("Permission string must be 3 in length",
+        "and use numbers between 0 to 7 only.",
+        sep = "\n")
+}

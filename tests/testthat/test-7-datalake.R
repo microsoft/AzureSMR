@@ -15,7 +15,6 @@
 
 
 if(interactive()) library("testthat")
-
 settingsfile <- system.file("tests/testthat/config.json", package = "AzureSMR")
 config <- read.AzureSMR.config(settingsfile)
 
@@ -41,7 +40,7 @@ test_that("Can create, list, get, update and delete items in an azure data lake 
 
   # now start the tests
 
-  # LISTSTATUS on empty root directory
+  # LISTSTATUS on empty test directory
   expect_error(azureDataLakeListStatus(asc, azureDataLakeAccount, "tempfolder"))
 
   # MKDIRS
@@ -50,7 +49,6 @@ test_that("Can create, list, get, update and delete items in an azure data lake 
   # MKDIRS - check 1 - LISTSTATUS
   res <- azureDataLakeListStatus(asc, azureDataLakeAccount, "")
   expect_is(res, "data.frame")
-  # TODO: should we check number of columns as well?
   expect_equal(nrow(res), 1)
   # MKDIRS - check 2 - GETFILESTATUS
   res <- azureDataLakeGetFileStatus(asc, azureDataLakeAccount, "")

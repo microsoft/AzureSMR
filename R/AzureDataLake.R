@@ -21,12 +21,7 @@ azureDataLakeListStatus <- function(azureActiveContext, azureDataLakeAccount, re
     assert_that(is.azureActiveContext(azureActiveContext))
     azureCheckToken(azureActiveContext)
   }
-
-  # TODO: Need to check if ADLS requires a different one
   assert_that(is_storage_account(azureDataLakeAccount))
-  # TODO: Need to check URL encoding of relative file path
-  #assert_that(is_url_encoding(relativePath))
-
   verbosity <- set_verbosity(verbose)
 
   URL <- paste0(
@@ -58,8 +53,6 @@ azureDataLakeListStatus <- function(azureActiveContext, azureDataLakeAccount, re
         FileStatuses.FileStatus.permission = character(0),
         FileStatuses.FileStatus.owner = character(0),
         FileStatuses.FileStatus.group = character(0),
-        # TODO: to be or not to be?
-        #FileStatuses.FileStatus.msExpirationTime = character(0),
         FileStatuses.FileStatus.aclBit = character(0)
       )
     )
@@ -91,12 +84,7 @@ azureDataLakeGetFileStatus <- function(azureActiveContext, azureDataLakeAccount,
     assert_that(is.azureActiveContext(azureActiveContext))
     azureCheckToken(azureActiveContext)
   }
-  
-  # TODO: Need to check if ADLS requires a different one
   assert_that(is_storage_account(azureDataLakeAccount))
-  # TODO: Need to check URL encoding of relative file path
-  #assert_that(is_url_encoding(relativePath))
-  
   verbosity <- set_verbosity(verbose)
   
   URL <- paste0(
@@ -132,8 +120,6 @@ azureDataLakeGetFileStatus <- function(azureActiveContext, azureDataLakeAccount,
         FileStatuses.FileStatus.permission = character(0),
         FileStatuses.FileStatus.owner = character(0),
         FileStatuses.FileStatus.group = character(0),
-        # TODO: to be or not to be?
-        #FileStatuses.FileStatus.msExpirationTime = character(0),
         FileStatuses.FileStatus.aclBit = character(0)
       )
     )
@@ -166,14 +152,8 @@ azureDataLakeMkdirs <- function(azureActiveContext, azureDataLakeAccount, relati
     assert_that(is.azureActiveContext(azureActiveContext))
     azureCheckToken(azureActiveContext)
   }
-
-  # TODO: Need to check if ADLS requires a different one
   assert_that(is_storage_account(azureDataLakeAccount))
-  # TODO: Need to check URL encoding of relative file path
-  #assert_that(is_url_encoding(relativePath))
-  # TODO: Need a check for permission
-  #assert_that(is_permission(permission))
-
+  if (!missing(permission) && !is.null(permission)) assert_that(is_permission(permission))
   verbosity <- set_verbosity(verbose)
 
   URL <- paste0(
@@ -182,7 +162,7 @@ azureDataLakeMkdirs <- function(azureActiveContext, azureDataLakeAccount, relati
     "?op=MKDIRS",
     "&api-version=2016-11-01"
   )
-  if (!missing(permission)  && !is.null(permission)) URL <- paste0(URL, "&permission=", permission)
+  if (!missing(permission) && !is.null(permission)) URL <- paste0(URL, "&permission=", permission)
 
   resHttp <- callAzureDataLakeApi(URL, verb = "PUT",
                                   azureActiveContext = azureActiveContext,
@@ -224,16 +204,10 @@ azureDataLakeCreate <- function(azureActiveContext, azureDataLakeAccount, relati
     assert_that(is.azureActiveContext(azureActiveContext))
     azureCheckToken(azureActiveContext)
   }
-  
-  # TODO: Need to check if ADLS requires a different one
   assert_that(is_storage_account(azureDataLakeAccount))
-  # TODO: Need to check URL encoding of relative file path
-  #assert_that(is_url_encoding(relativePath))
-  # TODO: Need a check for permission
-  #assert_that(is_permission(permission))
+  if (!missing(permission) && !is.null(permission)) assert_that(is_permission(permission))
   # TODO: Need a check for contents ?
   #assert_that(is_content(contents))
-  
   verbosity <- set_verbosity(verbose)
   
   URL <- paste0(
@@ -276,14 +250,9 @@ azureDataLakeAppend <- function(azureActiveContext, azureDataLakeAccount, relati
     assert_that(is.azureActiveContext(azureActiveContext))
     azureCheckToken(azureActiveContext)
   }
-  
-  # TODO: Need to check if ADLS requires a different one
   assert_that(is_storage_account(azureDataLakeAccount))
-  # TODO: Need to check URL encoding of relative file path
-  #assert_that(is_url_encoding(relativePath))
   # TODO: Need a check for contents ?
   #assert_that(is_content(contents))
-  
   verbosity <- set_verbosity(verbose)
   
   URL <- paste0(
@@ -325,12 +294,7 @@ azureDataLakeOpen <- function(azureActiveContext, azureDataLakeAccount, relative
     assert_that(is.azureActiveContext(azureActiveContext))
     azureCheckToken(azureActiveContext)
   }
-
-  # TODO: Need to check if ADLS requires a different one
   assert_that(is_storage_account(azureDataLakeAccount))
-  # TODO: Need to check URL encoding of relative file path
-  #assert_that(is_url_encoding(relativePath))
-
   verbosity <- set_verbosity(verbose)
 
   URL <- paste0(
@@ -375,12 +339,7 @@ azureDataLakeDelete <- function(azureActiveContext, azureDataLakeAccount, relati
     assert_that(is.azureActiveContext(azureActiveContext))
     azureCheckToken(azureActiveContext)
   }
-  
-  # TODO: Need to check if ADLS requires a different one
   assert_that(is_storage_account(azureDataLakeAccount))
-  # TODO: Need to check URL encoding of relative file path
-  #assert_that(is_url_encoding(relativePath))
-  
   verbosity <- set_verbosity(verbose)
   
   URL <- paste0(
