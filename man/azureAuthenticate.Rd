@@ -5,7 +5,7 @@
 \title{Authenticates against Azure Active directory application.}
 \usage{
 azureAuthenticate(azureActiveContext, tenantID, clientID, authKey,
-  verbose = FALSE)
+  verbose = FALSE, resource = "https\%3A\%2F\%2Fmanagement.azure.com\%2F")
 }
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by `AzureSMR`, created by [createAzureContext()]}

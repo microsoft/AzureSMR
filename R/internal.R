@@ -106,6 +106,54 @@ azure_storage_header <- function(shared_key, date = x_ms_date(), content_length 
   add_headers(.headers = headers)
 }
 
+callAzureDataLakeApi <- function(url, verb = "GET", azureActiveContext,
+                                headers = NULL, CMD, 
+                                content = NULL, contenttype = "text/plain; charset=UTF-8",
+                                verbose = FALSE) {
+  dateStamp <- httr::http_date(Sys.time())
+
+  verbosity <- set_verbosity(verbose)
+
+  if (missing(CMD) || is.null(CMD)) CMD <- extractUrlArguments(url)
+
+  switch(verb,
+         "GET" = GET(url,
+                     add_headers(.headers = c(Authorization = azureActiveContext$Token,
+                                              `Content-Length` = "0"
+                                              )
+                                 ),
+                     verbosity
+                     ),
+         "PUT" = PUT(url,
+                     add_headers(.headers = c(Authorization = azureActiveContext$Token,
+                                              `Transfer-Encoding` = "chunked",
+                                              `Content-Length` = nchar(content),
+                                              `Content-type` = contenttype
+                                              )
+                                 ),
+                     body = content,
+                     verbosity
+                     ),
+         "POST" = POST(url,
+                     add_headers(.headers = c(Authorization = azureActiveContext$Token,
+                                              `Transfer-Encoding` = "chunked",
+                                              `Content-Length` = nchar(content),
+                                              `Content-type` = contenttype
+                                              )
+                                 ),
+                     body = content,
+                     verbosity
+                     ),
+         "DELETE" = DELETE(url,
+                     add_headers(.headers = c(Authorization = azureActiveContext$Token,
+                                              `Content-Length` = "0"
+                                              )
+                                 ),
+                     verbosity
+                     )
+         )
+}
+
 getSig <- function(azureActiveContext, url, verb, key, storageAccount,
                    headers = NULL, container = NULL, CMD = NULL, size = NULL, contenttype = NULL,
                    date = x_ms_date(), verbose = FALSE) {
