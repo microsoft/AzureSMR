@@ -45,13 +45,13 @@ callAzureStorageApi <- function(url, verb = "GET", storageKey, storageAccount,
   switch(verb, 
   "GET" = GET(url, add_headers(.headers = c(Authorization = azToken,
                                     `Content-Length` = "0",
-                                    `x-ms-version` = "2015-04-05",
+                                    `x-ms-version` = "2017-04-17",
                                     `x-ms-date` = dateStamp)
                                     ),
     verbosity),
   "PUT" = PUT(url, add_headers(.headers = c(Authorization = azToken,
                                          `Content-Length` = size,
-                                         `x-ms-version` = "2015-04-05",
+                                         `x-ms-version` = "2017-04-17",
                                          `x-ms-date` = dateStamp,
                                          `x-ms-blob-type` = "Blockblob",
                                          `Content-type` = contenttype)),
@@ -76,9 +76,9 @@ createAzureStorageSignature <- function(url, verb,
   }
 
   arg1 <- if (length(headers)) {
-    paste0(headers, "\nx-ms-date:", dateStamp, "\nx-ms-version:2015-04-05")
+    paste0(headers, "\nx-ms-date:", dateStamp, "\nx-ms-version:2017-04-17")
   } else {
-    paste0("x-ms-date:", dateStamp, "\nx-ms-version:2015-04-05")
+    paste0("x-ms-date:", dateStamp, "\nx-ms-version:2017-04-17")
   }
 
   arg2 <- paste0("/", storageAccount, "/", container, CMD)
@@ -100,7 +100,7 @@ azure_storage_header <- function(shared_key, date = x_ms_date(), content_length 
   headers <- c(
       Authorization = shared_key,
       `Content-Length` = as.character(content_length),
-      `x-ms-version` = "2015-04-05",
+      `x-ms-version` = "2017-04-17",
       `x-ms-date` = date
   )
   add_headers(.headers = headers)
@@ -159,9 +159,9 @@ getSig <- function(azureActiveContext, url, verb, key, storageAccount,
                    date = x_ms_date(), verbose = FALSE) {
 
   arg1 <- if (length(headers)) {
-    paste0(headers, "\nx-ms-date:", date, "\nx-ms-version:2015-04-05")
+    paste0(headers, "\nx-ms-date:", date, "\nx-ms-version:2017-04-17")
   } else {
-    paste0("x-ms-date:", date, "\nx-ms-version:2015-04-05")
+    paste0("x-ms-date:", date, "\nx-ms-version:2017-04-17")
   }
 
   arg2 <- paste0("/", storageAccount, "/", container, CMD)
