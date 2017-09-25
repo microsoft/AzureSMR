@@ -27,5 +27,6 @@ Other Azure resource functions: \code{\link{azureAuthenticate}},
   \code{\link{azureCheckToken}},
   \code{\link{azureGetTokenClientCredential}},
   \code{\link{azureGetTokenDeviceCodeFetch}},
-  \code{\link{azureGetTokenDeviceCode}}
+  \code{\link{azureGetTokenDeviceCode}},
+  \code{\link{azureGetTokenRefreshToken}}
 }

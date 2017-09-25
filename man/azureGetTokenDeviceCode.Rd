@@ -2,7 +2,7 @@
 % Please edit documentation in R/AzureAuthenticate.R
 \name{azureGetTokenDeviceCode}
 \alias{azureGetTokenDeviceCode}
-\title{Authenticates against Azure Active directory application using DeviceCode flow.}
+\title{Get Azure token using DeviceCode.}
 \usage{
 azureGetTokenDeviceCode(azureActiveContext, tenantID, clientID, resource,
   verbose = FALSE)
@@ -22,7 +22,7 @@ azureGetTokenDeviceCode(azureActiveContext, tenantID, clientID, resource,
 If successful, returns TRUE
 }
 \description{
-Authenticates against Azure Active directory application using DeviceCode flow.
+Get Azure token using DeviceCode.
 }
 \note{
 See \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/} for instructions to set up an Active Directory application
@@ -35,5 +35,6 @@ Other Azure resource functions: \code{\link{azureAuthenticateOnAuthType}},
   \code{\link{azureAuthenticate}},
   \code{\link{azureCheckToken}},
   \code{\link{azureGetTokenClientCredential}},
-  \code{\link{azureGetTokenDeviceCodeFetch}}
+  \code{\link{azureGetTokenDeviceCodeFetch}},
+  \code{\link{azureGetTokenRefreshToken}}
 }

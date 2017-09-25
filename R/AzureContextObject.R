@@ -42,6 +42,8 @@ createAzureContext <- function(tenantID, clientID, authKey, configFile, authType
 #' @param azureActiveContext A container used for caching variables used by `AzureSMR`, created by [createAzureContext()]
 #' @param tenantID The tenant ID provided during creation of the Active Directory application / service principal
 #' @param clientID The client ID provided during creation of the Active Directory application / service principal
+#' @param authType Auth type for getting token: "ClientCredential", "DeviceCode"
+#' @param resource Resource to use for getting token
 #' @param authKey The authentication key provided during creation of the Active Directory application / service principal
 #' @param subscriptionID Subscription ID.  This is obtained automatically by [azureAuthenticate()] when only a single subscriptionID is available via Active Directory
 #' @param resourceGroup Name of the resource group
@@ -55,8 +57,6 @@ createAzureContext <- function(tenantID, clientID, authKey, configFile, authType
 #' @param hdiPassword  HDInsight admin password. See [azureCreateHDI()]
 #' @param container Storage container name. See [azureListStorageContainers()]
 #' @param kind HDinsight kind: "hadoop","spark" or "rserver". See [azureCreateHDI()]
-#' @param authType Auth type for getting token: "ClientCredential", "DeviceCode"
-#' @param resource Resource to use for getting token
 #'
 #' @family azureActiveContext functions
 #' @export

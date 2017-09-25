@@ -2,7 +2,7 @@
 % Please edit documentation in R/AzureAuthenticate.R
 \name{azureGetTokenClientCredential}
 \alias{azureGetTokenClientCredential}
-\title{Get Azure token}
+\title{Get Azure token using client credentials}
 \usage{
 azureGetTokenClientCredential(azureActiveContext, tenantID, clientID, authKey,
   resource, verbose = FALSE)
@@ -24,7 +24,7 @@ azureGetTokenClientCredential(azureActiveContext, tenantID, clientID, authKey,
 If successful, returns TRUE
 }
 \description{
-Get Azure token
+Get Azure token using client credentials
 }
 \note{
 See \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/} for instructions to set up an Active Directory application
@@ -37,5 +37,6 @@ Other Azure resource functions: \code{\link{azureAuthenticateOnAuthType}},
   \code{\link{azureAuthenticate}},
   \code{\link{azureCheckToken}},
   \code{\link{azureGetTokenDeviceCodeFetch}},
-  \code{\link{azureGetTokenDeviceCode}}
+  \code{\link{azureGetTokenDeviceCode}},
+  \code{\link{azureGetTokenRefreshToken}}
 }

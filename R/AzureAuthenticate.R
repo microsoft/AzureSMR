@@ -40,8 +40,15 @@ azureAuthenticateOnAuthType <- function(azureActiveContext, authType, resource, 
   if (is.null(resource) || nchar(resource) == 0)
     stop("Unspecified Resource. Please specify a valid resource.")
 
+  # before using the preferred auth type, check if access token can be fetched with a valid refresh token
+  refreshToken <- azureActiveContext$RefreshToken
+  if (!is.null(refreshToken) && nchar(refreshToken) > 0) {
+    authType <- "RefreshToken"
+  }
+
   result <- switch(
     authType,
+    RefreshToken = azureGetTokenRefreshToken(azureActiveContext),
     ClientCredential = azureGetTokenClientCredential(azureActiveContext, resource = resource, verbose = verbose),
     DeviceCode = azureGetTokenDeviceCode(azureActiveContext, resource = resource, verbose = verbose),
     FALSE
@@ -55,7 +62,7 @@ azureAuthenticateOnAuthType <- function(azureActiveContext, authType, resource, 
   return(result)
 }
 
-#' Get Azure token
+#' Get Azure token using client credentials
 #'
 #' @inheritParams setAzureContext
 #' @param resource Specify the resource with which the toke is obtained
@@ -79,14 +86,16 @@ azureGetTokenClientCredential <- function(azureActiveContext, tenantID, clientID
   assert_that(is_tenant_id(tenantID))
   assert_that(is_client_id(clientID))
   assert_that(is_authKey(authKey))
+  # TODO: check resource?
+
   verbosity <- set_verbosity(verbose)
 
   URLGT <- paste0("https://login.microsoftonline.com/", tenantID, "/oauth2/token?api-version=1.0")
 
   authKeyEncoded <- URLencode(authKey, reserved = TRUE)
   resourceEncoded <- URLencode(resource, reserved = TRUE)
-  bodyGT <- paste0("grant_type=client_credentials&resource=", resourceEncoded, "&client_id=",
-                   clientID, "&client_secret=", authKeyEncoded)
+  bodyGT <- paste0("grant_type=client_credentials", "&client_id=", clientID, "&client_secret=", authKeyEncoded,
+                   "&resource=", resourceEncoded)
 
   r <- httr::POST(URLGT,
                   add_headers(
@@ -109,7 +118,7 @@ azureGetTokenClientCredential <- function(azureActiveContext, tenantID, clientID
   return(TRUE)
 }
 
-#' Authenticates against Azure Active directory application using DeviceCode flow.
+#' Get Azure token using DeviceCode.
 #'
 #' @inheritParams setAzureContext
 #' @param verbose Print Tracing information (Default False)
@@ -152,16 +161,26 @@ azureGetTokenDeviceCode <- function(azureActiveContext, tenantID, clientID, reso
   stopWithAzureError(r)
 
   j1 <- content(r, "parsed", encoding = "UTF-8")
-  print(class(j1))
 
   # display the message to user so that he can take appropriate action
   showDeviceCodeMessageToUser(j1)
 
+  userCode <- j1$user_code
   deviceCode <- j1$device_code
+  verificationURL <- j1$verification_url
+  messageToUser <- j1$message
+  expiresIn <- j1$expires_in
+  pollingInterval <- j1$interval
 
-#  wait_for_azure(
-#    sa_name %in% azureListSA(asc)$storageAccount
-#  )
+  iteration <- 0
+  waiting <- TRUE
+  while (iteration < 50 && waiting) {
+    Sys.sleep(pollingInterval)
+    if(azureGetTokenDeviceCodeFetch(azureActiveContext, tenantID, clientID, deviceCode, resource, verbose)) {
+      waiting <- FALSE
+    }
+    iteration <- iteration + 1
+  }
 
   return(TRUE)
 }
@@ -188,20 +207,20 @@ azureGetTokenDeviceCodeFetch <- function(azureActiveContext, tenantID, clientID,
 
   if (missing(tenantID)) tenantID <- azureActiveContext$tenantID
   if (missing(clientID)) clientID <- azureActiveContext$clientID 
-  if (missing(deviceCode)) deviceCode <- azureActiveContext$authKey
+  if (missing(deviceCode)) deviceCode <- azureActiveContext$deviceCode
   if (missing(resource)) resource <- azureActiveContext$resource
 
   assert_that(is_tenant_id(tenantID))
   assert_that(is_client_id(clientID))
+  # TODO: check device code?
 
   verbosity <- set_verbosity(verbose)
 
   URLGT <- paste0("https://login.microsoftonline.com/", tenantID, "/oauth2/token?api-version=1.0")
-
-  authKeyEncoded <- URLencode(authKey, reserved = TRUE)
+  deviceCodeEncoded <- URLencode(deviceCode, reserved = TRUE)
   resourceEncoded <- URLencode(resource, reserved = TRUE)
-  bodyGT <- paste0("grant_type=client_credentials&resource=", resourceEncoded, "&client_id=",
-                   clientID, "&client_secret=", authKeyEncoded)
+  bodyGT <- paste0("grant_type=device_code&code=", deviceCodeEncoded,
+                   "&client_id=", clientID, "&resource=", resourceEncoded)
 
   r <- httr::POST(URLGT,
                   add_headers(
@@ -209,18 +228,77 @@ azureGetTokenDeviceCodeFetch <- function(azureActiveContext, tenantID, clientID,
                                  `Content-type` = "application/x-www-form-urlencoded")),
                   body = bodyGT,
                   verbosity)
+  # handle special error case
+  if(status_code(r) == 400) {
+    rr <- content(r)
+    if (rr$error == "authorization_pending") {
+      print("polled AAD for token, got authorization_pending (still waiting for user to complete login)")
+      return(FALSE)
+    }
+  }
   stopWithAzureError(r)
 
   j1 <- content(r, "parsed", encoding = "UTF-8")
 
   azToken <- paste("Bearer", j1$access_token)
+  azRefreshToken <- j1$refresh_token
 
   azureActiveContext$Token  <- azToken
   azureActiveContext$tenantID    <- tenantID
   azureActiveContext$clientID    <- clientID
-  azureActiveContext$authKey    <- authKey
   azureActiveContext$EXPIRY <- Sys.time() + 3598
   azureActiveContext$resource <- resource
+  azureActiveContext$RefreshToken <- azRefreshToken
+  return(TRUE)
+}
+
+#' Get Azure token using RefreshToken
+#'
+#' @inheritParams setAzureContext
+#' @param resource Specify the resource with which the token is obtained
+#' @param verbose Print Tracing information (Default False)
+#'
+#' @note See \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/} for instructions to set up an Active Directory application
+#' @references \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/}
+#'
+#' @return If successful, returns TRUE
+#' @family Azure resource functions
+#'
+#' @export
+azureGetTokenRefreshToken <- function(azureActiveContext, tenantID, refreshToken, verbose = FALSE) {
+  assert_that(is.azureActiveContext(azureActiveContext))
+
+  if (missing(tenantID)) tenantID <- azureActiveContext$tenantID
+  if (missing(refreshToken)) refreshToken <- azureActiveContext$RefreshToken
+
+  assert_that(is_tenant_id(tenantID))
+  assert_that(is_client_id(clientID))
+  # TODO: need another validate function
+  #assert_that(is_authKey(refreshToken))
+
+  verbosity <- set_verbosity(verbose)
+
+  URLGT <- paste0("https://login.microsoftonline.com/", tenantID, "/oauth2/token?api-version=1.0")
+  refreshTokenEncoded <- URLencode(refreshToken, reserved = TRUE)
+  bodyGT <- paste0("grant_type=refresh_token&refresh_token=", refreshTokenEncoded)
+
+  r <- httr::POST(URLGT,
+                  add_headers(
+                    .headers = c(`Content-type` = "application/x-www-form-urlencoded")),
+                  body = bodyGT,
+                  verbosity)
+  stopWithAzureError(r)
+
+  j1 <- content(r, "parsed", encoding = "UTF-8")
+
+  azToken <- paste("Bearer", j1$access_token)
+  azRefreshToken <- j1$refresh_token
+
+  azureActiveContext$Token  <- azToken
+  azureActiveContext$tenantID    <- tenantID
+  azureActiveContext$clientID    <- clientID
+  azureActiveContext$EXPIRY <- Sys.time() + 3598
+  azureActiveContext$RefreshToken <- azRefreshToken
   return(TRUE)
 }
 
