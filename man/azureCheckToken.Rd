@@ -13,5 +13,9 @@ azureCheckToken(azureActiveContext)
 Check the timestamp of a token and renew if needed.
 }
 \seealso{
-Other Azure resource functions: \code{\link{azureAuthenticate}}
+Other Azure resource functions: \code{\link{azureAuthenticateOnAuthType}},
+  \code{\link{azureAuthenticate}},
+  \code{\link{azureGetTokenClientCredential}},
+  \code{\link{azureGetTokenDeviceCodeFetch}},
+  \code{\link{azureGetTokenDeviceCode}}
 }

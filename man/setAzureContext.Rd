@@ -6,7 +6,7 @@
 \usage{
 setAzureContext(azureActiveContext, tenantID, clientID, authKey, subscriptionID,
   resourceGroup, storageKey, storageAccount, container, blob, vmName, hdiAdmin,
-  hdiPassword, clustername, kind, sessionID)
+  hdiPassword, clustername, kind, sessionID, authType, resource)
 }
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
@@ -40,6 +40,10 @@ setAzureContext(azureActiveContext, tenantID, clientID, authKey, subscriptionID,
 \item{kind}{HDinsight kind: "hadoop","spark" or "rserver". See \code{\link[=azureCreateHDI]{azureCreateHDI()}}}
 
 \item{sessionID}{Spark sessionID. See \code{\link[=azureSparkCMD]{azureSparkCMD()}}}
+
+\item{authType}{Auth type for getting token: "ClientCredential", "DeviceCode"}
+
+\item{resource}{Resource to use for getting token}
 }
 \description{
 Updates the value of an \code{azureActiveContext} object, created by \code{\link[=createAzureContext]{createAzureContext()}}
