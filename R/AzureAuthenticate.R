@@ -33,19 +33,19 @@ azureAuthenticateOnAuthType <- function(azureActiveContext, authType, resource, 
   assert_that(is.azureActiveContext(azureActiveContext))
 
   if (missing(authType)) authType <- azureActiveContext$authType
-  if (is.null(authType) || nchar(authType) == 0)
-    stop("Unspecified Auth Type. Please specify a valid authType.")
-
   if (missing(resource)) resource <- azureActiveContext$resource
-  if (is.null(resource) || nchar(resource) == 0)
-    stop("Unspecified Resource. Please specify a valid resource.")
-
-  # before using the preferred auth type, check if access token can be fetched with a valid refresh token
   refreshToken <- azureActiveContext$RefreshToken
-  if (!is.null(refreshToken) && nchar(refreshToken) > 0) {
+
+  assert_that(is_authType(authType))
+  assert_that(is_resource(resource))
+
+  # Before using the preferred auth type, check if access token 
+  # can be fetched with a valid refresh token
+  if (is_refreshToken(refreshToken)) {
     authType <- "RefreshToken"
   }
 
+  print(paste("Fetch azure active directory access token using authType = ", authType))
   result <- switch(
     authType,
     RefreshToken = azureGetTokenRefreshToken(azureActiveContext),
@@ -55,7 +55,7 @@ azureAuthenticateOnAuthType <- function(azureActiveContext, authType, resource, 
   )
 
   # persist valid auth type in the context
-  if (result) {
+  if (result && is.null(azureActiveContext$authType)) {
     azureActiveContext$authType <- authType
   }
 
@@ -86,7 +86,7 @@ azureGetTokenClientCredential <- function(azureActiveContext, tenantID, clientID
   assert_that(is_tenant_id(tenantID))
   assert_that(is_client_id(clientID))
   assert_that(is_authKey(authKey))
-  # TODO: check resource?
+  assert_that(is_resource(resource))
 
   verbosity <- set_verbosity(verbose)
 
@@ -124,7 +124,7 @@ azureGetTokenClientCredential <- function(azureActiveContext, tenantID, clientID
 #' @param verbose Print Tracing information (Default False)
 #'
 #' @note See \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/} for instructions to set up an Active Directory application
-#' @references \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/}
+#' @references \url{https://azure.microsoft.com/en-us/resources/samples/active-directory-dotnet-deviceprofile/}
 #'
 #' @return If successful, returns TRUE
 #' @family Azure resource functions
@@ -139,6 +139,7 @@ azureGetTokenDeviceCode <- function(azureActiveContext, tenantID, clientID, reso
 
   assert_that(is_tenant_id(tenantID))
   assert_that(is_client_id(clientID))
+  assert_that(is_resource(resource))
 
   verbosity <- set_verbosity(verbose)
 
@@ -172,6 +173,7 @@ azureGetTokenDeviceCode <- function(azureActiveContext, tenantID, clientID, reso
   expiresIn <- j1$expires_in
   pollingInterval <- j1$interval
 
+  # Wait till user manually approves the user_code in the device code portal
   iteration <- 0
   waiting <- TRUE
   while (iteration < 50 && waiting) {
@@ -185,8 +187,17 @@ azureGetTokenDeviceCode <- function(azureActiveContext, tenantID, clientID, reso
   return(TRUE)
 }
 
+#' Display device code flow message to user.
+#'
+#' @param jsonResponseObject JSON object that contains the message to be displayed.
+#'
+#' @return If successful, returns TRUE
+#' @family Azure resource functions
+#'
+#' @export
 showDeviceCodeMessageToUser <- function(jsonResponseObject) {
   print(jsonResponseObject$message)
+  return(TRUE)
 }
 
 #' Get Azure token using device_code
@@ -196,7 +207,7 @@ showDeviceCodeMessageToUser <- function(jsonResponseObject) {
 #' @param verbose Print Tracing information (Default False)
 #'
 #' @note See \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/} for instructions to set up an Active Directory application
-#' @references \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/}
+#' @references \url{https://azure.microsoft.com/en-us/resources/samples/active-directory-dotnet-deviceprofile/}
 #'
 #' @return If successful, returns TRUE
 #' @family Azure resource functions
@@ -212,7 +223,7 @@ azureGetTokenDeviceCodeFetch <- function(azureActiveContext, tenantID, clientID,
 
   assert_that(is_tenant_id(tenantID))
   assert_that(is_client_id(clientID))
-  # TODO: check device code?
+  assert_that(is_deviceCode(deviceCode))
 
   verbosity <- set_verbosity(verbose)
 
@@ -228,7 +239,7 @@ azureGetTokenDeviceCodeFetch <- function(azureActiveContext, tenantID, clientID,
                                  `Content-type` = "application/x-www-form-urlencoded")),
                   body = bodyGT,
                   verbosity)
-  # handle special error case
+  # handle special error - HTTP400 - authorization_pending
   if(status_code(r) == 400) {
     rr <- content(r)
     if (rr$error == "authorization_pending") {
@@ -273,18 +284,19 @@ azureGetTokenRefreshToken <- function(azureActiveContext, tenantID, refreshToken
 
   assert_that(is_tenant_id(tenantID))
   assert_that(is_client_id(clientID))
-  # TODO: need another validate function
-  #assert_that(is_authKey(refreshToken))
+  assert_that(is_refreshToken(refreshToken))
 
   verbosity <- set_verbosity(verbose)
 
   URLGT <- paste0("https://login.microsoftonline.com/", tenantID, "/oauth2/token?api-version=1.0")
   refreshTokenEncoded <- URLencode(refreshToken, reserved = TRUE)
+  # NOTE: Providing the optional client ID fails the request!
   bodyGT <- paste0("grant_type=refresh_token&refresh_token=", refreshTokenEncoded)
 
   r <- httr::POST(URLGT,
                   add_headers(
-                    .headers = c(`Content-type` = "application/x-www-form-urlencoded")),
+                    .headers = c(`Cache-Control` = "no-cache",
+                                 `Content-type` = "application/x-www-form-urlencoded")),
                   body = bodyGT,
                   verbosity)
   stopWithAzureError(r)

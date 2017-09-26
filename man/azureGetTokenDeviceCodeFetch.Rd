@@ -28,7 +28,7 @@ Get Azure token using device_code
 See \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/} for instructions to set up an Active Directory application
 }
 \references{
-\url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/}
+\url{https://azure.microsoft.com/en-us/resources/samples/active-directory-dotnet-deviceprofile/}
 }
 \seealso{
 Other Azure resource functions: \code{\link{azureAuthenticateOnAuthType}},
@@ -36,5 +36,6 @@ Other Azure resource functions: \code{\link{azureAuthenticateOnAuthType}},
   \code{\link{azureCheckToken}},
   \code{\link{azureGetTokenClientCredential}},
   \code{\link{azureGetTokenDeviceCode}},
-  \code{\link{azureGetTokenRefreshToken}}
+  \code{\link{azureGetTokenRefreshToken}},
+  \code{\link{showDeviceCodeMessageToUser}}
 }

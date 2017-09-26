@@ -199,17 +199,17 @@ azureDataLakeMkdirs <- function(azureActiveContext, azureDataLakeAccount, relati
 #' @family Azure Data Lake Store functions
 #' @export
 azureDataLakeCreate <- function(azureActiveContext, azureDataLakeAccount, relativePath, overwrite = FALSE, permission = NULL, contents = "", verbose = FALSE) {
-  
+
   if (!missing(azureActiveContext) && !is.null(azureActiveContext)) {
     assert_that(is.azureActiveContext(azureActiveContext))
     azureCheckToken(azureActiveContext)
   }
   assert_that(is_storage_account(azureDataLakeAccount))
   if (!missing(permission) && !is.null(permission)) assert_that(is_permission(permission))
-  # TODO: Need a check for contents ?
-  #assert_that(is_content(contents))
+  assert_that(is_content(contents))
+
   verbosity <- set_verbosity(verbose)
-  
+
   URL <- paste0(
     "https://", azureDataLakeAccount, ".azuredatalakestore.net/webhdfs/v1/",
     relativePath,
@@ -218,7 +218,7 @@ azureDataLakeCreate <- function(azureActiveContext, azureDataLakeAccount, relati
   )
   if (!missing(overwrite)  && !is.null(overwrite)) URL <- paste0(URL, "&overwrite=", overwrite)
   if (!missing(permission)  && !is.null(permission)) URL <- paste0(URL, "&permission=", permission)
-  
+
   resHttp <- callAzureDataLakeApi(URL, verb = "PUT",
                                   azureActiveContext = azureActiveContext,
                                   content = contents, contenttype = "text/plain; charset=UTF-8",
@@ -251,8 +251,12 @@ azureDataLakeAppend <- function(azureActiveContext, azureDataLakeAccount, relati
     azureCheckToken(azureActiveContext)
   }
   assert_that(is_storage_account(azureDataLakeAccount))
-  # TODO: Need a check for contents ?
-  #assert_that(is_content(contents))
+  assert_that(is_content(contents))
+
+  if (nchar(contents) == 0) {
+    return()
+  }
+
   verbosity <- set_verbosity(verbose)
   
   URL <- paste0(

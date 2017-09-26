@@ -5,6 +5,8 @@
 #' ------------------------------------------------------------------------
 #' 
 #' {
+#' "authType": "ClientCredential",
+#' "resource": "https://datalake.azure.net/",
 #' "tenantID": "72f988bf-blah-41af-blah-2d7cd011blah",
 #' "clientID": "1d604733-blah-4b37-blah-98fca981blah",
 #' "authKey": "zTw5blah+IN+yIblahrKv2K8dM2/BLah4FogBLAH/ME=",
@@ -24,9 +26,9 @@ context("Data Lake Store")
 
 asc <- createAzureContext()
 with(config,
-     setAzureContext(asc, tenantID = tenantID, clientID = clientID, authKey = authKey)
+     setAzureContext(asc, tenantID = tenantID, clientID = clientID, authKey = authKey, authType = authType, resource = resource)
 )
-azureAuthenticate(asc)
+azureAuthenticateOnAuthType(asc)
 
 # NOTE: make sure to provide the azureDataLakeAccount name in the config file.
 azureDataLakeAccount <- config$azureDataLakeAccount
