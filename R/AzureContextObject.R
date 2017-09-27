@@ -5,6 +5,7 @@
 #' See the Azure documentation (\url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/}) for information to configure an Active Directory application.
 #'
 #' @inheritParams setAzureContext
+#' @inheritParams read.AzureSMR.config
 #' @family azureActiveContext functions
 #'
 #' @seealso [setAzureContext()], [azureAuthenticate()], [read.AzureSMR.config)]

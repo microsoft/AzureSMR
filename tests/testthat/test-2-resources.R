@@ -1,7 +1,7 @@
 if(interactive()) library("testthat")
 
 
-settingsfile <- system.file("tests/testthat/config.json", package = "AzureSMR")
+settingsfile <- find_config_json()
 config <- read.AzureSMR.config(settingsfile)
 
 #  ------------------------------------------------------------------------
@@ -130,12 +130,13 @@ test_that("Can put, list, get and delete a blob", {
   res <- azureListStorageBlobs(asc, container = "tempcontainer")
   expect_is(res, "data.frame")
   expect_equal(ncol(res), 5)
-  expect_equal(nrow(res), 2)
-  expect_equal(res$name, c("foo", "iris"))
+  expect_equal(nrow(res), 3)
+  expect_equal(res$name, c("foo", "iris", "raw"))
 
   res <- azureDeleteBlob(asc, blob = "foo", container = "tempcontainer")
   res <- azureDeleteBlob(asc, blob = "iris", container = "tempcontainer")
-
+  res <- azureDeleteBlob(asc, blob = "raw", container = "tempcontainer")
+  
   expect_warning({
     res <- azureListStorageBlobs(asc, container = "tempcontainer")
   }, "container is empty")

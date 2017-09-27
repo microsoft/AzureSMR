@@ -1,5 +1,5 @@
 
-#' Azure Data Lake LISTSTATUS for specified relativePath of an azure data lake account.
+#' List status for specified relative path of an azure data lake account.
 #'
 #' @inheritParams createAzureContext
 #' @inheritParams azureAuthenticate
@@ -11,8 +11,6 @@
 #'
 #' @return Returns a data frame.
 #'
-#' @template
-#' @references
 #' @family Azure Data Lake Store functions
 #' @export
 azureDataLakeListStatus <- function(azureActiveContext, azureDataLakeAccount, relativePath = "", verbose = FALSE) {
@@ -74,8 +72,6 @@ azureDataLakeListStatus <- function(azureActiveContext, azureDataLakeAccount, re
 #'
 #' @return Returns a data frame.
 #'
-#' @template
-#' @references
 #' @family Azure Data Lake Store functions
 #' @export
 azureDataLakeGetFileStatus <- function(azureActiveContext, azureDataLakeAccount, relativePath = "", verbose = FALSE) {
@@ -142,8 +138,6 @@ azureDataLakeGetFileStatus <- function(azureActiveContext, azureDataLakeAccount,
 #'
 #' @return Returns a boolean.
 #'
-#' @template
-#' @references
 #' @family Azure Data Lake Store functions
 #' @export
 azureDataLakeMkdirs <- function(azureActiveContext, azureDataLakeAccount, relativePath, permission = NULL, verbose = FALSE) {
@@ -194,8 +188,6 @@ azureDataLakeMkdirs <- function(azureActiveContext, azureDataLakeAccount, relati
 #'
 #' @return NULL
 #'
-#' @template
-#' @references
 #' @family Azure Data Lake Store functions
 #' @export
 azureDataLakeCreate <- function(azureActiveContext, azureDataLakeAccount, relativePath, overwrite = FALSE, permission = NULL, contents = "", verbose = FALSE) {
@@ -240,8 +232,6 @@ azureDataLakeCreate <- function(azureActiveContext, azureDataLakeAccount, relati
 #'
 #' @return NULL
 #'
-#' @template
-#' @references
 #' @family Azure Data Lake Store functions
 #' @export
 azureDataLakeAppend <- function(azureActiveContext, azureDataLakeAccount, relativePath, contents = "", verbose = FALSE) {
@@ -284,8 +274,6 @@ azureDataLakeAppend <- function(azureActiveContext, azureDataLakeAccount, relati
 #'
 #' @return Returns a data frame.
 #'
-#' @template
-#' @references
 #' @family Azure Data Lake Store functions
 #' @export
 azureDataLakeOpen <- function(azureActiveContext, azureDataLakeAccount, relativePath, offset, length, verbose = FALSE) {
@@ -329,8 +317,6 @@ azureDataLakeOpen <- function(azureActiveContext, azureDataLakeAccount, relative
 #'
 #' @return Returns a boolean.
 #'
-#' @template
-#' @references
 #' @family Azure Data Lake Store functions
 #' @export
 azureDataLakeDelete <- function(azureActiveContext, azureDataLakeAccount, relativePath, recursive = FALSE, verbose = FALSE) {

@@ -5,10 +5,10 @@
 \title{Authenticates against Azure Active directory application.}
 \usage{
 azureAuthenticate(azureActiveContext, tenantID, clientID, authKey,
-  verbose = FALSE, resource = "https\%3A\%2F\%2Fmanagement.azure.com\%2F")
+  verbose = FALSE, resource = "https://management.azure.com/")
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by `AzureSMR`, created by [createAzureContext()]}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
 
 \item{tenantID}{The tenant ID provided during creation of the Active Directory application / service principal}
 
@@ -16,7 +16,9 @@ azureAuthenticate(azureActiveContext, tenantID, clientID, authKey,
 
 \item{authKey}{The authentication key provided during creation of the Active Directory application / service principal}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
+
+\item{resource}{URL of azure management portal}
 }
 \value{
 If successful, returns TRUE
@@ -33,4 +35,3 @@ See \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group
 \seealso{
 Other Azure resource functions: \code{\link{azureCheckToken}}
 }
-

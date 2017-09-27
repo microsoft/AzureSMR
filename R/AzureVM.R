@@ -55,6 +55,8 @@ azureListVM <- function(azureActiveContext, resourceGroup, location, subscriptio
 #' @inheritParams setAzureContext
 #' @inheritParams azureListAllResources
 #'
+#' @importFrom utils setTxtProgressBar txtProgressBar
+#'
 #' @family Virtual machine functions
 #' @export
 azureGetAllVMstatus <- function(azureActiveContext) {

@@ -7,9 +7,9 @@
 azureListSubscriptions(azureActiveContext, verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by `AzureSMR`, created by [createAzureContext()]}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 }
 \value{
 data frame with subscriptionID; Sets AzureContext subscriptionID
@@ -23,4 +23,3 @@ Other Resource group functions: \code{\link{azureCreateResourceGroup}},
   \code{\link{azureListAllResources}},
   \code{\link{azureListRG}}
 }
-

@@ -10,9 +10,9 @@ azureListAllResources(azureActiveContext, resourceGroup, subscriptionID, name,
 \arguments{
 \item{azureActiveContext}{Azure Context Object}
 
-\item{resourceGroup}{resourceGroup Object (or use `azureActiveContext`)}
+\item{resourceGroup}{resourceGroup Object (or use \code{azureActiveContext})}
 
-\item{subscriptionID}{subscriptionID Object (or use `azureActiveContext`)}
+\item{subscriptionID}{subscriptionID Object (or use \code{azureActiveContext})}
 
 \item{name}{filter by resource name}
 
@@ -20,7 +20,7 @@ azureListAllResources(azureActiveContext, resourceGroup, subscriptionID, name,
 
 \item{location}{Azure region, e.g. 'westeurope' or 'southcentralus'}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 }
 \value{
 Returns Dataframe of Resources
@@ -34,4 +34,3 @@ Other Resource group functions: \code{\link{azureCreateResourceGroup}},
   \code{\link{azureListRG}},
   \code{\link{azureListSubscriptions}}
 }
-

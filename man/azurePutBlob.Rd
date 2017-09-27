@@ -8,13 +8,17 @@ azurePutBlob(azureActiveContext, blob, contents = "", file = "", directory,
   storageAccount, storageKey, container, resourceGroup, verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{Either an `azureActiveContext` object or `NULL`. The blob store functions support two modes of connecting to the Azure API: authenticate using Active Directory or providing your own storage key. If this value is `NULL`, you must provide the `storageKey`.}
+\item{azureActiveContext}{Either an \code{azureActiveContext} object or \code{NULL}. The blob store functions support two modes of connecting to the Azure API: authenticate using Active Directory or providing your own storage key. If this value is \code{NULL}, you must provide the \code{storageKey}.}
 
 \item{blob}{Blob name}
 
-\item{contents}{- Object or value to store}
+\item{contents}{\itemize{
+\item Object or value to store
+}}
 
-\item{file}{- Local filename to store in Azure blob}
+\item{file}{\itemize{
+\item Local filename to store in Azure blob
+}}
 
 \item{directory}{Blob store directory to list for content}
 
@@ -22,11 +26,11 @@ azurePutBlob(azureActiveContext, blob, contents = "", file = "", directory,
 
 \item{storageKey}{Storage key associated with storage account}
 
-\item{container}{Storage container name. See [azureListStorageContainers()]}
+\item{container}{Storage container name. See \code{\link[=azureListStorageContainers]{azureListStorageContainers()}}}
 
 \item{resourceGroup}{Name of the resource group}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 }
 \description{
 Write contents to a specifed storage blob.
@@ -35,6 +39,7 @@ Write contents to a specifed storage blob.
 
 The blob store functions support two modes of connecting to the Azure API:authenticate using Active Directory or providing your own storage key. If this value is `NULL`, you must provide the `storageKey` .
 }
+
 \seealso{
 Other Blob store functions: \code{\link{azureBlobCD}},
   \code{\link{azureBlobFind}}, \code{\link{azureBlobLS}},
@@ -42,4 +47,3 @@ Other Blob store functions: \code{\link{azureBlobCD}},
   \code{\link{azureGetBlob}},
   \code{\link{azureListStorageBlobs}}
 }
-

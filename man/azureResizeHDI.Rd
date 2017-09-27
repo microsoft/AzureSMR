@@ -9,9 +9,9 @@ azureResizeHDI(azureActiveContext, clustername, role = c("workernode",
   subscriptionID, resourceGroup, verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by `AzureSMR`, created by [createAzureContext()]}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
 
-\item{clustername}{Cluster name, used for HDI and Spark clusters. See [azureCreateHDI()]}
+\item{clustername}{Cluster name, used for HDI and Spark clusters. See \code{\link[=azureCreateHDI]{azureCreateHDI()}}}
 
 \item{role}{role type: 'worker', 'head' or 'edge'}
 
@@ -19,11 +19,11 @@ azureResizeHDI(azureActiveContext, clustername, role = c("workernode",
 
 \item{mode}{Provisioning mode, "Sync" or "Async". Use "Async" to immediately return to R session after submission of request}
 
-\item{subscriptionID}{Subscription ID.  This is obtained automatically by [azureAuthenticate()] when only a single subscriptionID is available via Active Directory}
+\item{subscriptionID}{Subscription ID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
 
 \item{resourceGroup}{Name of the resource group}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 }
 \description{
 Resize a HDInsight cluster role.
@@ -35,4 +35,3 @@ Other HDInsight functions: \code{\link{azureCreateHDI}},
   \code{\link{azureRunScriptAction}},
   \code{\link{azureScriptActionHistory}}
 }
-

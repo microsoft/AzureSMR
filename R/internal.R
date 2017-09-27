@@ -194,6 +194,11 @@ stopWithAzureError <- function(r) {
     msg <- addToMsg(rr$code)
     msg <- addToMsg(rr$message)
     msg <- addToMsg(rr$error$message)
+    
+    msg <- addToMsg(rr$Code)
+    msg <- addToMsg(rr$Message)
+    msg <- addToMsg(rr$Error$Message)
+    
   }
   msg <- addToMsg(paste0("Return code: ", status_code(r)))
   msg <- paste(msg, collapse = "\n")

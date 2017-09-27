@@ -12,13 +12,13 @@ azureCreateHDI(azureActiveContext, resourceGroup, location, clustername,
   verbose = FALSE, debug = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by `AzureSMR`, created by [createAzureContext()]}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
 
 \item{resourceGroup}{Name of the resource group}
 
 \item{location}{Azure region, e.g. 'westeurope' or 'southcentralus'}
 
-\item{clustername}{Cluster name, used for HDI and Spark clusters. See [azureCreateHDI()]}
+\item{clustername}{Cluster name, used for HDI and Spark clusters. See \code{\link[=azureCreateHDI]{azureCreateHDI()}}}
 
 \item{kind}{HDinsight kind: "hadoop","spark" or "rserver"}
 
@@ -50,11 +50,11 @@ azureCreateHDI(azureActiveContext, resourceGroup, location, clustername,
 
 \item{vmSize}{Size of nodes: "Large", "Small", "Standard_D14_V2", etc.}
 
-\item{subscriptionID}{Subscription ID.  This is obtained automatically by [azureAuthenticate()] when only a single subscriptionID is available via Active Directory}
+\item{subscriptionID}{Subscription ID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
 
 \item{mode}{Provisioning mode, "Sync" or "Async". Use "Async" to immediately return to R session after submission of request}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 
 \item{debug}{Used for debugging purposes. If TRUE, returns json without attempting to connect to Azure}
 }
@@ -77,4 +77,3 @@ Other HDInsight functions: \code{\link{azureDeleteHDI}},
   \code{\link{azureRunScriptAction}},
   \code{\link{azureScriptActionHistory}}
 }
-

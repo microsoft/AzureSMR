@@ -7,11 +7,11 @@
 azureListRG(azureActiveContext, subscriptionID, verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by `AzureSMR`, created by [createAzureContext()]}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
 
-\item{subscriptionID}{Subscription ID.  This is obtained automatically by [azureAuthenticate()] when only a single subscriptionID is available via Active Directory}
+\item{subscriptionID}{Subscription ID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 }
 \value{
 Dataframe of resourceGroups
@@ -25,4 +25,3 @@ Other Resource group functions: \code{\link{azureCreateResourceGroup}},
   \code{\link{azureListAllResources}},
   \code{\link{azureListSubscriptions}}
 }
-

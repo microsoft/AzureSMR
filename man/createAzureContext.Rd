@@ -12,19 +12,22 @@ createAzureContext(tenantID, clientID, authKey, configFile)
 \item{clientID}{The client ID provided during creation of the Active Directory application / service principal}
 
 \item{authKey}{The authentication key provided during creation of the Active Directory application / service principal}
+
+\item{configFile}{location of file that contains configuration in JSON format. By default, this location is at \code{getOption("AzureSMR.config")}}
 }
 \value{
-An `azureActiveContext` object
+An \code{azureActiveContext} object
 }
 \description{
-Create a container (`azureActiveContext`) for holding variables used by the `AzureSMR` package.  If `tenantID`, `clientID` and `authKey` are provided, attempts to authenticate the session against Azure.
+Create a container (\code{azureActiveContext}) for holding variables used by the \code{AzureSMR} package.  If \code{tenantID}, \code{clientID} and \code{authKey} are provided, attempts to authenticate the session against Azure.
 }
 \details{
 See the Azure documentation (\url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/}) for information to configure an Active Directory application.
 }
 \seealso{
-[setAzureContext()], [azureAuthenticate()], [read.AzureSMR.config)]
+\code{\link[=setAzureContext]{setAzureContext()}}, \code{\link[=azureAuthenticate]{azureAuthenticate()}}, [read.AzureSMR.config)]
+
+[read.AzureSMR.config)]: R:read.AzureSMR.config)
 
 Other azureActiveContext functions: \code{\link{setAzureContext}}
 }
-

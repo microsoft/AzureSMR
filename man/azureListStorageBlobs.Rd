@@ -8,15 +8,15 @@ azureListStorageBlobs(azureActiveContext, storageAccount, storageKey, container,
   maxresults, prefix, delimiter, marker, verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{Either an `azureActiveContext` object or `NULL`. The blob store functions support two modes of connecting to the Azure API: authenticate using Active Directory or providing your own storage key. If this value is `NULL`, you must provide the `storageKey`.}
+\item{azureActiveContext}{Either an \code{azureActiveContext} object or \code{NULL}. The blob store functions support two modes of connecting to the Azure API: authenticate using Active Directory or providing your own storage key. If this value is \code{NULL}, you must provide the \code{storageKey}.}
 
 \item{storageAccount}{Name of the azure storage account. Storage account names must be between 3 and 24 characters in length and use numbers and lower-case letters only.}
 
 \item{storageKey}{Storage key associated with storage account}
 
-\item{container}{Storage container name. See [azureListStorageContainers()]}
+\item{container}{Storage container name. See \code{\link[=azureListStorageContainers]{azureListStorageContainers()}}}
 
-\item{maxresults}{Optional. Specifies the maximum number of blobs to return, including all BlobPrefix elements. If the request does not specify maxresults or specifies a value greater than 5,000, the server will return up to 5,000 items.  Setting `maxresults` to a value less than or equal to zero results in error response code 400 (Bad Request).}
+\item{maxresults}{Optional. Specifies the maximum number of blobs to return, including all BlobPrefix elements. If the request does not specify maxresults or specifies a value greater than 5,000, the server will return up to 5,000 items.  Setting \code{maxresults} to a value less than or equal to zero results in error response code 400 (Bad Request).}
 
 \item{prefix}{Optional. Filters the results to return only blobs whose names begin with the specified prefix.}
 
@@ -24,10 +24,10 @@ azureListStorageBlobs(azureActiveContext, storageAccount, storageKey, container,
 
 \item{marker}{Optional. A string value that identifies the portion of the list to be returned with the next list operation. The operation returns a marker value within the response body if the list returned was not complete. The marker value may then be used in a subsequent call to request the next set of list items.  The marker value is opaque to the client.}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 }
 \value{
-Returns a data frame. This data frame has an attribute called `marker` that can be used with the `marker` argument to return the next set of values.
+Returns a data frame. This data frame has an attribute called \code{marker} that can be used with the \code{marker} argument to return the next set of values.
 }
 \description{
 List storage blobs for specified storage account.
@@ -36,6 +36,7 @@ List storage blobs for specified storage account.
 
 The blob store functions support two modes of connecting to the Azure API:authenticate using Active Directory or providing your own storage key. If this value is `NULL`, you must provide the `storageKey` .
 }
+
 \references{
 https://docs.microsoft.com/en-us/rest/api/storageservices/list-blobs
 }
@@ -45,4 +46,3 @@ Other Blob store functions: \code{\link{azureBlobCD}},
   \code{\link{azureDeleteBlob}},
   \code{\link{azureGetBlob}}, \code{\link{azurePutBlob}}
 }
-

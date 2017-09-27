@@ -9,7 +9,7 @@ azureCreateStorageAccount(azureActiveContext, storageAccount,
   asynchronous = FALSE, verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by `AzureSMR`, created by [createAzureContext()]}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
 
 \item{storageAccount}{Name of the azure storage account. Storage account names must be between 3 and 24 characters in length and use numbers and lower-case letters only.}
 
@@ -17,11 +17,11 @@ azureCreateStorageAccount(azureActiveContext, storageAccount,
 
 \item{resourceGroup}{Name of the resource group}
 
-\item{subscriptionID}{Subscription ID.  This is obtained automatically by [azureAuthenticate()] when only a single subscriptionID is available via Active Directory}
+\item{subscriptionID}{Subscription ID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
 
 \item{asynchronous}{If TRUE, submits asynchronous request to Azure. Otherwise waits until storage account is created.}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 }
 \description{
 Create an Azure Storage Account.
@@ -30,4 +30,3 @@ Create an Azure Storage Account.
 Other Storage account functions: \code{\link{azureDeletestorageAccount}},
   \code{\link{azureListSA}}, \code{\link{azureSAGetKey}}
 }
-

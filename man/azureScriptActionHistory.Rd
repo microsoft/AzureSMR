@@ -11,21 +11,21 @@ azureScriptActionHistory(azureActiveContext, resourceGroup, clustername = "*",
 \method{summary}{azureScriptActionHistory}(object, ...)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by `AzureSMR`, created by [createAzureContext()]}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
 
 \item{resourceGroup}{Name of the resource group}
 
-\item{clustername}{Cluster name, used for HDI and Spark clusters. See [azureCreateHDI()]}
+\item{clustername}{Cluster name, used for HDI and Spark clusters. See \code{\link[=azureCreateHDI]{azureCreateHDI()}}}
 
-\item{subscriptionID}{Subscription ID.  This is obtained automatically by [azureAuthenticate()] when only a single subscriptionID is available via Active Directory}
+\item{subscriptionID}{Subscription ID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
 
 \item{name}{filter by resource name}
 
 \item{type}{filter by resource type}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 
-\item{object}{azureScriptActionHistory object, created by [azureScriptActionHistory()]}
+\item{object}{azureScriptActionHistory object, created by \code{\link[=azureScriptActionHistory]{azureScriptActionHistory()}}}
 
 \item{...}{not used}
 }
@@ -44,4 +44,3 @@ Other HDInsight functions: \code{\link{azureCreateHDI}},
   \code{\link{azureListHDI}}, \code{\link{azureResizeHDI}},
   \code{\link{azureRunScriptAction}}
 }
-

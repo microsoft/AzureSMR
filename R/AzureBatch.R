@@ -119,6 +119,8 @@ azureDeleteBatchAccount <- function(azureActiveContext, batchAccount,
 #'
 #' @inheritParams setAzureContext
 #' @inheritParams azureAuthenticate
+#' 
+#' @param batchAccount storage account used by Azure Batch
 #'
 #' @family Batch account functions
 #' @export

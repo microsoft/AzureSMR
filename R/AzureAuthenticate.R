@@ -1,7 +1,8 @@
 #' Authenticates against Azure Active directory application.
 #'
 #' @inheritParams setAzureContext
-#' @param verbose Print Tracing information (Default False)
+#' @param verbose If TRUE, prints verbose messages
+#' @param resource URL of azure management portal
 #'
 #' @note See \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/} for instructions to set up an Active Directory application
 #' @references \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/}
@@ -10,12 +11,16 @@
 #' @family Azure resource functions
 #' 
 #' @export
-azureAuthenticate <- function(azureActiveContext, tenantID, clientID, authKey, verbose = FALSE, resource = "https%3A%2F%2Fmanagement.azure.com%2F") {
+azureAuthenticate <- function(azureActiveContext, tenantID, clientID, authKey, 
+                              verbose = FALSE, 
+                              resource = "https://management.azure.com/") {
   assert_that(is.azureActiveContext(azureActiveContext))
 
   if (missing(tenantID)) tenantID <- azureActiveContext$tenantID
   if (missing(clientID)) clientID <- azureActiveContext$clientID 
   if (missing(authKey)) authKey <- azureActiveContext$authKey
+  
+  resource <- URLencode(resource, reserved = TRUE, repeated = TRUE)
 
   assert_that(is_tenant_id(tenantID))
   assert_that(is_client_id(clientID))

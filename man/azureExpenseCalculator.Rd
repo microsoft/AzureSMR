@@ -5,10 +5,11 @@
 \title{Calculate cost of using a specific instance of Azure for certain period.}
 \usage{
 azureExpenseCalculator(azureActiveContext, instance = "", timeStart, timeEnd,
-  granularity, currency, locale, offerId, region, verbose = FALSE)
+  granularity, currency, locale, offerId, region, verbose = FALSE,
+  warn = TRUE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by `AzureSMR`, created by [createAzureContext()]}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
 
 \item{instance}{Instance name that one would like to check expense. It is by default empty, which returns data consumption for all instances under subscription.}
 
@@ -25,6 +26,10 @@ azureExpenseCalculator(azureActiveContext, instance = "", timeStart, timeEnd,
 \item{offerId}{Offer ID of the subscription. For more information see https://azure.microsoft.com/en-us/support/legal/offer-details/}
 
 \item{region}{region information about the subscription.}
+
+\item{verbose}{If TRUE, prints verbose messages}
+
+\item{warn}{If FALSE, suppresses warnings about truncated data}
 }
 \value{
 Total cost measured in the given currency of the specified Azure instance in the period.
@@ -36,4 +41,3 @@ Note if difference between \code{timeStart} and \code{timeEnd} is less than the 
 Other Cost functions: \code{\link{azureDataConsumption}},
   \code{\link{azurePricingRates}}
 }
-

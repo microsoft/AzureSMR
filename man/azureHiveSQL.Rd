@@ -8,19 +8,19 @@ azureHiveSQL(azureActiveContext, CMD, clustername, hdiAdmin, hdiPassword,
   path = "wasb:///tmp/", verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by `AzureSMR`, created by [createAzureContext()]}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
 
 \item{CMD}{SQl COmmand String}
 
-\item{clustername}{Cluster name, used for HDI and Spark clusters. See [azureCreateHDI()]}
+\item{clustername}{Cluster name, used for HDI and Spark clusters. See \code{\link[=azureCreateHDI]{azureCreateHDI()}}}
 
-\item{hdiAdmin}{HDInsight admin username. See [azureCreateHDI()]}
+\item{hdiAdmin}{HDInsight admin username. See \code{\link[=azureCreateHDI]{azureCreateHDI()}}}
 
-\item{hdiPassword}{HDInsight admin password. See [azureCreateHDI()]}
+\item{hdiPassword}{HDInsight admin password. See \code{\link[=azureCreateHDI]{azureCreateHDI()}}}
 
 \item{path}{path}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 }
 \description{
 Submit SQL command to Hive Service.
@@ -28,4 +28,3 @@ Submit SQL command to Hive Service.
 \seealso{
 Other Hive functions: \code{\link{azureHiveStatus}}
 }
-

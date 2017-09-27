@@ -1,6 +1,6 @@
 #' Reads settings from configuration file in JSON format.
 #'
-#' @param config location of file that contains configuration in JSON format
+#' @param configFile location of file that contains configuration in JSON format. By default, this location is at `getOption("AzureSMR.config")`
 #' @export
 #
 read.AzureSMR.config <- function(configFile = getOption("AzureSMR.config")) {

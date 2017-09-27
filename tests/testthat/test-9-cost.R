@@ -6,8 +6,8 @@
 
 if (interactive()) library("testthat")
 
-settingsfile <- getOption("AzureSMR.config")
-config <- read.AzureSMR.config()
+settingsfile <- find_config_json()
+config <- read.AzureSMR.config(settingsfile)
 
 # setup.
 
@@ -15,16 +15,21 @@ context("Data consumption and cost")
 
 asc <- createAzureContext()
 with(config,
-     setAzureContext(asc, tenantID=tenantID, clientID=clientID, authKey=authKey)
+     setAzureContext(asc, tenantID = tenantID, clientID = clientID, authKey = authKey)
 )
 azureAuthenticate(asc)
 
-timestamp <- format(Sys.time(), format="%y%m%d%H%M")
+timestamp <- format(Sys.time(), format = "%y%m%d%H%M")
 resourceGroup_name <- paste0("AzureSMtest_", timestamp)
 sa_name <- paste0("azuresmr", timestamp)
 
-time_end   <- paste(as.Date(Sys.Date()), "00:00:00", sep = " ")
-time_start <- paste(as.Date(Sys.Date() - 365), "00:00:00", sep = " ")
+time_end   <- sprintf("%s 00:00:00", Sys.Date())
+time_start <- sprintf("%s 00:00:00", Sys.Date() - 60)
+
+default <- function(x, def) {
+  if(missing(x) || is.null(x) || x == "") def else x
+}
+
   
 # run test.
 
@@ -33,13 +38,14 @@ time_start <- paste(as.Date(Sys.Date() - 365), "00:00:00", sep = " ")
 test_that("Get data consumption by day", {
   skip_if_missing_config(settingsfile)
   
-  res <- azureDataConsumption(azureActiveContext=asc,
-                              timeStart=time_start,
-                              timeEnd=time_end,
-                              granularity="Daily")
+  res <- azureDataConsumption(azureActiveContext = asc,
+                              timeStart = time_start,
+                              timeEnd = time_end,
+                              granularity = "Daily",
+                              warn = FALSE)
   
-  expect_is(res, class="data.frame")
-  expect_identical(object=names(res), expected=c("usageStartTime", 
+  expect_is(res, class = "data.frame")
+  expect_identical(object = names(res), expected = c("usageStartTime", 
                                                  "usageEndTime",
                                                  "meterName", 
                                                  "meterCategory",
@@ -55,14 +61,15 @@ test_that("Get data consumption by day", {
 test_that("Get pricing rates", {
   skip_if_missing_config(settingsfile)
   
-  res <- azurePricingRates(azureActiveContext=asc,
-                           currency=config$CURRENCY,
-                           locale=config$LOCALE,
-                           offerId=config$OFFER,
-                           region=config$REGION)
+  res <- azurePricingRates(azureActiveContext = asc,
+                           currency = default(config$CURRENCY, "USD"),
+                           locale = default(config$LOCALE, "en-US"),
+                           offerId = default(config$OFFER, "MS-AZR-0003p"),
+                           region = default(config$REGION, "US")
+  )
   
-  expect_is(res, class="data.frame")
-  expect_identical(object=names(res), expected=c("effectiveDate", 
+  expect_is(res, class = "data.frame")
+  expect_identical(object = names(res), expected = c("effectiveDate", 
                                                  "includedQuantity",
                                                  "meterCategory",
                                                  "meterId",
@@ -80,17 +87,19 @@ test_that("Get pricing rates", {
 test_that("Get cost by day", {
   skip_if_missing_config(settingsfile)
   
-  res <- azureExpenseCalculator(azureActiveContext=asc,
-                                timeStart=time_start,
-                                timeEnd=time_end,
-                                granularity="Daily",
-                                currency=config$CURRENCY,
-                                locale=config$LOCALE,
-                                offerId=config$OFFER,
-                                region=config$REGION)
+  res <- azureExpenseCalculator(azureActiveContext = asc,
+                                timeStart = time_start,
+                                timeEnd = time_end,
+                                granularity = "Daily",
+                                currency = default(config$CURRENCY, "USD"),
+                                locale = default(config$LOCALE, "en-US"),
+                                offerId = default(config$OFFER, "MS-AZR-0003p"),
+                                region = default(config$REGION, "US"),
+                                warn = FALSE)
   
-  expect_is(res, class="data.frame")
-  expect_identical(object=names(res), expected=c("meterName",
+
+  expect_is(res, class = "data.frame")
+  expect_identical(object = names(res), expected = c("meterName",
                                                  "meterCategory",
                                                  "meterSubCategory",
                                                  "quantity",

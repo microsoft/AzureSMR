@@ -1,29 +1,42 @@
+lowercase_first_letter <- function(x){
+  paste0(tolower(substring(x, 1, 1)), 
+         substring(x, 2))
+}
+
+
 #' Get data consumption of an Azure subscription for a time period.
 
 #' Aggregation method can be either daily based or hourly based.
 #' 
 #' Formats of start time point and end time point follow ISO 8601 standard. For example, if you want to calculate data consumption between Feb 21, 2017 to Feb 25, 2017, with an aggregation granularity of "daily based", the inputs should be "2017-02-21 00:00:00" and "2017-02-25 00:00:00", for start time point and end time point, respectively.
+#' 
 #' If the aggregation granularity is hourly based, the inputs can be "2017-02-21 01:00:00" and "2017-02-21 02:00:00", for start and end time point, respectively. 
+#' 
 #' NOTE by default the Azure data consumption API does not allow an aggregation granularity that is finer than an hour. In the case of "hourly based" granularity, if the time difference between start and end time point is less than an hour, data consumption will still be calculated hourly based with end time postponed.
+#' 
 #' For example, if the start time point and end time point are "2017-02-21 00:00:00" and "2017-02-21 00:45:00", the actual returned results are data consumption in the interval of "2017-02-21 00:00:00" and "2017-02-21 01:00:00". However this calculation is merely for retrieving the information of an existing instance instance (e.g. `meterId`) with which the pricing rate is multiplied by to obtain the overall expense. 
+#' 
 #' Time zone of all time inputs are synchronized to UTC.
 #' 
 #' @inheritParams setAzureContext
+#' @inheritParams azureAuthenticate
 #' 
 #' @param instance Instance name that one would like to check expense. It is by default empty, which returns data consumption for all instances under subscription.
 #' 
 #' @param timeStart Start time.
 #' @param timeEnd End time.
 #' @param granularity Aggregation granularity. Can be either "Daily" or "Hourly".
+#' @param warn If FALSE, suppresses warnings about truncated data
 #'
 #' @family Cost functions
 #' @export
 azureDataConsumption <- function(azureActiveContext,
-                                 instance="",
+                                 instance = "",
                                  timeStart,
                                  timeEnd,
-                                 granularity="Hourly",
-                                 verbose=FALSE) {
+                                 granularity = "Hourly",
+                                 verbose = FALSE, 
+                                 warn = TRUE) {
   
   # check the validity of credentials.
   
@@ -41,19 +54,16 @@ azureDataConsumption <- function(azureActiveContext,
   if(missing(timeEnd))
     stop("Please specify an ending time point in YYYY-MM-DD HH:MM:SS format.")
   
-  ds <- try(as.POSIXlt(timeStart, format= "%Y-%m-%d %H:%M:%S", tz="UTC"))
-  de <- try(as.POSIXlt(timeEnd, format= "%Y-%m-%d %H:%M:%S", tz="UTC"))
+  ds <- try(as.POSIXlt(timeStart, format =  "%Y-%m-%d %H:%M:%S", tz = "UTC"))
+  de <- try(as.POSIXlt(timeEnd, format =  "%Y-%m-%d %H:%M:%S", tz = "UTC"))
   
-  if (class(ds) == "try-error" ||
-      is.na(ds) ||
-      class(de) == "try-error" ||
-      is.na(de))
+  if (inherits(ds, "error") || is.na(ds) || inherits(de, "error") || is.na(de))
     stop("Input date format should be YYYY-MM-DD HH:MM:SS.")
   
   timeStart <- ds
   timeEnd <- de
   
-  if (timeStart >= timeEnd)
+  if (timeStart >=  timeEnd)
     stop("End time is no later than start time!")
   
   lubridate::minute(timeStart) <- 0
@@ -110,8 +120,8 @@ azureDataConsumption <- function(azureActiveContext,
                            sprintf("%02d", lubridate::second(timeStart)), 
                            "+",
                            "00:00",
-                           sep=""),
-                     reserved=TRUE)
+                           sep = ""),
+                     reserved = TRUE)
   
   end <- URLencode(paste(as.Date(timeEnd), 
                          "T",
@@ -122,8 +132,8 @@ azureDataConsumption <- function(azureActiveContext,
                          sprintf("%02d", lubridate::second(timeEnd)), 
                          "+",
                          "00:00",
-                         sep=""),
-                   reserved=TRUE)
+                         sep = ""),
+                   reserved = TRUE)
   
   url <-
     paste0("https://management.azure.com/subscriptions/",
@@ -142,23 +152,26 @@ azureDataConsumption <- function(azureActiveContext,
     )
   
   r <- call_azure_sm(azureActiveContext,
-                     uri=url,
-                     verb="GET",
-                     verbose=verbose)
+                     uri = url,
+                     verb = "GET",
+                     verbose = verbose)
   
   stopWithAzureError(r)
   
-  rl <- content(r, "text", encoding="UTF-8")
+  rl <- content(r, "text", encoding = "UTF-8")
   
   df <- fromJSON(rl)
   
   df_use <- df$value$properties
   
-  inst_data <- lapply(df$value$properties$instanceData, fromJSON)
+  inst_data <- lapply(
+    df$value$properties$instanceData, 
+    function(x)if(is.na(x)) NA else fromJSON(x)
+  )
   
   # retrieve results that match instance name.
   
-  if (instance != "") {
+  if (instance !=  "") {
     instance_detect <- function(inst_data) {
       return(basename(inst_data$Microsoft.Resources$resourceUri) == instance)
     }
@@ -167,13 +180,11 @@ azureDataConsumption <- function(azureActiveContext,
     
     if(!missing(instance)) {
       if(length(index_instance) == 0)
-        stop("No data consumption records found for the instance during the 
-             given period.")
+        stop("No data consumption records found for the instance during the given period.")
       df_use <- df_use[index_instance, ]
     } else if(missing(instance)) {
       if(length(index_resource) == 0)
-        stop("No data consumption records found for the resource group during 
-             the given period.")
+        stop("No data consumption records found for the resource group during the given period.")
       df_use <- df_use[index_resource, ]
     }
   }
@@ -198,10 +209,13 @@ azureDataConsumption <- function(azureActiveContext,
     
     if (nrow(df_use) == 1000 && 
         max(as.POSIXct(df_use$usageEndTime)) < as.POSIXct(end)) {
-      warning(sprintf("The number of records in the specified time period %s 
-                      to %s exceeds the limit that can be returned from API call.
-                      Consumption information is truncated. Please use a small 
-                      period instead.", timeStart, timeEnd))
+      msg <- sprintf(paste0("The number of records in the specified time period %s ",
+                      "to %s exceeds the limit that can be returned from API call. \n",
+                      "Consumption information is truncated. Please use a small ",
+                      "period instead."), 
+                     timeStart, timeEnd)
+      msg <- paste(strwrap(msg), collapse = "\n")
+      if(warn) warning(msg, call. = FALSE)
     }
   }
   
@@ -218,11 +232,6 @@ azureDataConsumption <- function(azureActiveContext,
   df_use$usageStartTime <- as.POSIXct(df_use$usageStartTime)
   df_use$usageEndTime   <- as.POSIXct(df_use$usageEndTime)
   
-  writeLines(sprintf("The data consumption for %s between %s and %s is",
-                     instance,
-                     as.character(timeStart),
-                     as.character(timeEnd)))
-  
   return(df_use)
 }
 
@@ -232,6 +241,7 @@ azureDataConsumption <- function(azureActiveContext,
 #' The pricing rates function wraps API calls to Azure RateCard and currently the API supports only the Pay-As-You-Go offer scheme. 
 #'
 #' @inheritParams setAzureContext
+#' @inheritParams azureAuthenticate
 #' 
 #' @param currency Currency in which price rating is measured.
 #' @param locale Locality information of subscription.
@@ -239,14 +249,16 @@ azureDataConsumption <- function(azureActiveContext,
 #' 
 #' @param region region information about the subscription.
 #' 
+#' @references https://msdn.microsoft.com/en-us/library/azure/mt219004.aspx
+#' 
 #' @family Cost functions
 #' @export
 azurePricingRates <- function(azureActiveContext,
-                              currency,
-                              locale,
-                              offerId,
-                              region,
-                              verbose=FALSE
+                              currency = "USD",
+                              locale = "en-US",
+                              offerId = "",
+                              region = "US",
+                              verbose = FALSE
 ) {
   # renew token if it expires.
   
@@ -266,7 +278,7 @@ azurePricingRates <- function(azureActiveContext,
   if(missing(region))
     stop("Error: please provide region information.")
   
-  url <- paste(
+  url <- paste0(
     "https://management.azure.com/subscriptions/", 
     azureActiveContext$subscriptionID,
     "/providers/Microsoft.Commerce/RateCard?api-version=2016-08-31-preview&",
@@ -274,19 +286,19 @@ azurePricingRates <- function(azureActiveContext,
     "OfferDurableId eq '", offerId, "'",
     " and Currency eq '", currency, "'",
     " and Locale eq '", locale, "'",
-    " and RegionInfo eq '", region, "'",
-    sep="")
+    " and RegionInfo eq '", region, "'"
+    )
   
   url <- URLencode(url)
   
   r <- call_azure_sm(azureActiveContext,
-                     uri=url,
-                     verb="GET",
-                     verbose=verbose)
+                     uri = url,
+                     verb = "GET",
+                     verbose = verbose)
   
   stopWithAzureError(r)
   
-  rl <- fromJSON(content(r, "text", encoding="UTF-8"), simplifyDataFrame=TRUE)
+  rl <- fromJSON(content(r, "text", encoding = "UTF-8"), simplifyDataFrame = TRUE)
   
   df_meter <- rl$Meters
   df_meter$MeterRate <- rl$Meters$MeterRates$`0`
@@ -294,14 +306,11 @@ azurePricingRates <- function(azureActiveContext,
   # NOTE: an irresponsible drop of MeterRates and MeterTags. Will add them back 
   # after having a better handle of them.
   
-  df_meter <- subset(df_meter, select=-MeterRates)
-  df_meter <- subset(df_meter, select=-MeterTags)
+  df_meter[["MeterRates"]] <- NULL
+  df_meter[["MeterTags"]] <- NULL
   
-  names(df_meter) <- paste0(tolower(substring(names(df_meter), 
-                                              1, 
-                                              1)), 
-                            substring(names(df_meter), 2))
   
+  names(df_meter) <- lowercase_first_letter(names(df_meter))
   df_meter
 }
 
@@ -311,6 +320,7 @@ azurePricingRates <- function(azureActiveContext,
 #'Note if difference between \code{timeStart} and \code{timeEnd} is less than the finest granularity, e.g., "Hourly" (we notice this is a usual case when one needs to be aware of the charges of a job that takes less than an hour), the expense will be estimated based solely on computation hour. That is, the total expense is the multiplication of computation hour and pricing rate of the requested instance.
 #'
 #' @inheritParams setAzureContext
+#' @inheritParams azureAuthenticate
 #' @inheritParams azureDataConsumption
 #' @inheritParams azurePricingRates
 #' 
@@ -319,7 +329,7 @@ azurePricingRates <- function(azureActiveContext,
 #' @family Cost functions
 #' @export
 azureExpenseCalculator <- function(azureActiveContext,
-                                   instance="",
+                                   instance = "",
                                    timeStart,
                                    timeEnd,
                                    granularity,
@@ -327,13 +337,15 @@ azureExpenseCalculator <- function(azureActiveContext,
                                    locale,
                                    offerId,
                                    region,
-                                   verbose=FALSE) {
+                                   verbose = FALSE,
+                                   warn = TRUE) {
   df_use <- azureDataConsumption(azureActiveContext,
-                                 instance=instance,
-                                 timeStart=timeStart,
-                                 timeEnd=timeEnd,
-                                 granularity=granularity,
-                                 verbose=verbose) 
+                                 instance = instance,
+                                 timeStart = timeStart,
+                                 timeEnd = timeEnd,
+                                 granularity = granularity,
+                                 verbose = verbose, 
+                                 warn = warn) 
   
   df_used_data <- df_use[, c("meterId",
                              "meterSubCategory",
@@ -344,11 +356,11 @@ azureExpenseCalculator <- function(azureActiveContext,
   # use meterId to find pricing rates and then calculate total cost.
   
   df_rates <- azurePricingRates(azureActiveContext,
-                                currency=currency,
-                                locale=locale,
-                                region=region,
-                                offerId=offerId,
-                                verbose=verbose)
+                                currency = currency,
+                                locale = locale,
+                                region = region,
+                                offerId = offerId,
+                                verbose = verbose)
   
   meter_list <- unique(df_used_data$meterId)
   
@@ -357,10 +369,10 @@ azureExpenseCalculator <- function(azureActiveContext,
   
   # join data consumption and meter pricing rate.
   
-  df_merged <- merge(x=df_used_data,
-                     y=df_used_rates,
-                     by="meterId",
-                     all.x=TRUE)
+  df_merged <- merge(x = df_used_data,
+                     y = df_used_rates,
+                     by = "meterId",
+                     all.x = TRUE)
   
   df_merged$meterSubCategory <- df_merged$meterSubCategory.y
   df_merged$cost <- df_merged$quantity * df_merged$meterRate
@@ -373,10 +385,7 @@ azureExpenseCalculator <- function(azureActiveContext,
                            "meterRate",
                            "cost")]
   
-  names(df_cost) <- paste0(tolower(substring(names(df_cost), 
-                                             1, 
-                                             1)), 
-                           substring(names(df_cost), 2))
+  names(df_cost) <- lowercase_first_letter(names(df_cost))
   
   df_cost
 }

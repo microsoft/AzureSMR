@@ -18,6 +18,5 @@ is.azureActiveContext(x)
 Functions for creating and displaying information about azureActiveContext objects.
 }
 \seealso{
-[createAzureContext()]
+\code{\link[=createAzureContext]{createAzureContext()}}
 }
-

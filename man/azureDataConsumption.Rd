@@ -6,10 +6,10 @@
 Aggregation method can be either daily based or hourly based.}
 \usage{
 azureDataConsumption(azureActiveContext, instance = "", timeStart, timeEnd,
-  granularity = "Hourly", verbose = FALSE)
+  granularity = "Hourly", verbose = FALSE, warn = TRUE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by `AzureSMR`, created by [createAzureContext()]}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
 
 \item{instance}{Instance name that one would like to check expense. It is by default empty, which returns data consumption for all instances under subscription.}
 
@@ -18,16 +18,24 @@ azureDataConsumption(azureActiveContext, instance = "", timeStart, timeEnd,
 \item{timeEnd}{End time.}
 
 \item{granularity}{Aggregation granularity. Can be either "Daily" or "Hourly".}
+
+\item{verbose}{If TRUE, prints verbose messages}
+
+\item{warn}{If FALSE, suppresses warnings about truncated data}
 }
 \description{
 Formats of start time point and end time point follow ISO 8601 standard. For example, if you want to calculate data consumption between Feb 21, 2017 to Feb 25, 2017, with an aggregation granularity of "daily based", the inputs should be "2017-02-21 00:00:00" and "2017-02-25 00:00:00", for start time point and end time point, respectively.
-If the aggregation granularity is hourly based, the inputs can be "2017-02-21 01:00:00" and "2017-02-21 02:00:00", for start and end time point, respectively. 
+}
+\details{
+If the aggregation granularity is hourly based, the inputs can be "2017-02-21 01:00:00" and "2017-02-21 02:00:00", for start and end time point, respectively.
+
 NOTE by default the Azure data consumption API does not allow an aggregation granularity that is finer than an hour. In the case of "hourly based" granularity, if the time difference between start and end time point is less than an hour, data consumption will still be calculated hourly based with end time postponed.
-For example, if the start time point and end time point are "2017-02-21 00:00:00" and "2017-02-21 00:45:00", the actual returned results are data consumption in the interval of "2017-02-21 00:00:00" and "2017-02-21 01:00:00". However this calculation is merely for retrieving the information of an existing instance instance (e.g. `meterId`) with which the pricing rate is multiplied by to obtain the overall expense. 
+
+For example, if the start time point and end time point are "2017-02-21 00:00:00" and "2017-02-21 00:45:00", the actual returned results are data consumption in the interval of "2017-02-21 00:00:00" and "2017-02-21 01:00:00". However this calculation is merely for retrieving the information of an existing instance instance (e.g. \code{meterId}) with which the pricing rate is multiplied by to obtain the overall expense.
+
 Time zone of all time inputs are synchronized to UTC.
 }
 \seealso{
 Other Cost functions: \code{\link{azureExpenseCalculator}},
   \code{\link{azurePricingRates}}
 }
-

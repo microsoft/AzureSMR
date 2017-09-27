@@ -8,7 +8,7 @@ azureStartVM(azureActiveContext, resourceGroup, vmName, mode = "Sync",
   subscriptionID, verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by `AzureSMR`, created by [createAzureContext()]}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
 
 \item{resourceGroup}{Name of the resource group}
 
@@ -16,9 +16,9 @@ azureStartVM(azureActiveContext, resourceGroup, vmName, mode = "Sync",
 
 \item{mode}{Wait for operation to complete 'Sync' (Default)}
 
-\item{subscriptionID}{Subscription ID.  This is obtained automatically by [azureAuthenticate()] when only a single subscriptionID is available via Active Directory}
+\item{subscriptionID}{Subscription ID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 }
 \description{
 Start a Virtual Machine.
@@ -32,4 +32,3 @@ Other Virtual machine functions: \code{\link{azureDeleteVM}},
   \code{\link{azureListVM}}, \code{\link{azureStopVM}},
   \code{\link{azureVMInfo}}, \code{\link{azureVMStatus}}
 }
-

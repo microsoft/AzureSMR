@@ -1,6 +1,6 @@
 if (interactive()) library("testthat")
 
-settingsfile <- system.file("tests/testthat/config.json", package = "AzureSMR")
+settingsfile <- find_config_json()
 
 #  ------------------------------------------------------------------------
 
@@ -59,7 +59,7 @@ test_that("Can create HDI cluster", {
       sshUser = "sssUser_test1", sshPassword = "sssUser_test1",
       debug = FALSE
     ),
-    "should not contain 3 consecutive letters from the username"
+    "should.not.contain.3.consecutive.letters.from.the.username"
   )
 
   # debug - default

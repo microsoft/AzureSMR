@@ -8,19 +8,19 @@ azureSparkJob(azureActiveContext, FILE, clustername, hdiAdmin, hdiPassword,
   log = "URL", verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by `AzureSMR`, created by [createAzureContext()]}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
 
 \item{FILE}{file}
 
-\item{clustername}{Cluster name, used for HDI and Spark clusters. See [azureCreateHDI()]}
+\item{clustername}{Cluster name, used for HDI and Spark clusters. See \code{\link[=azureCreateHDI]{azureCreateHDI()}}}
 
-\item{hdiAdmin}{HDInsight admin username. See [azureCreateHDI()]}
+\item{hdiAdmin}{HDInsight admin username. See \code{\link[=azureCreateHDI]{azureCreateHDI()}}}
 
-\item{hdiPassword}{HDInsight admin password. See [azureCreateHDI()]}
+\item{hdiPassword}{HDInsight admin password. See \code{\link[=azureCreateHDI]{azureCreateHDI()}}}
 
 \item{log}{log}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 }
 \description{
 Submit Spark Job (Batch mode).
@@ -33,4 +33,3 @@ Other Spark functions: \code{\link{azureSparkCMD}},
   \code{\link{azureSparkShowURL}},
   \code{\link{azureSparkStopSession}}
 }
-

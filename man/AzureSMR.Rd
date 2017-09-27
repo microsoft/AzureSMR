@@ -4,50 +4,65 @@
 \name{AzureSMR}
 \alias{AzureSMR}
 \alias{AzureSMR-package}
+\alias{AzureSMR-package}
 \title{AzureSMR}
 \description{
 The AzureSMR package connects R to the Azure Service Manager API.
 }
 \details{
 This enables you to use and change many Azure resources. The following is an incomplete list of available functions:
-
-* Create an Azure context:
-  - [createAzureContext()]
-* Resources and resource groups:
-  - [azureListAllResources()]
-  - [azureCreateResourceGroup()]
-  - [azureListRG()]
-* Storage accounts and blobs:
-  - [azureListSA()]
-  - [azureCreateStorageAccount()]
-  - [azureListStorageContainers()]
-  - [azureListStorageBlobs()]
-  - [azureGetBlob()]
-  - [azurePutBlob()]
-  - [azureDeleteBlob()]
-  - [azureBlobFind()]
-* Virtual Machines
-  - List VMs: [azureListVM()]
-  - To create a virtual machine, use [azureDeployTemplate()] with a suitable template
-  - Start a VM: [azureStartVM()]
-  - Stop a VM: [azureStopVM()]
-  - Get status: [azureVMStatus()]
-* HDInsight clusters:
-  - [azureListHDI()]
-  - [azureCreateHDI()]
-  - [azureResizeHDI()]
-  - [azureDeleteHDI()]
-  - [azureRunScriptAction()]
-  - [azureScriptActionHistory()]
-* Azure batch:
-  - [azureListBatchAccounts()]
-  - [azureCreateBatchAccount()]
-  - [azureDeleteBatchAccount()]
-  - [azureBatchGetKey()]
-* Cost functions:
-  - [azureDataConsumption()]
-  - [azurePricingRates()]
-  - [azureExpenseCalculator()]
+\itemize{
+\item Create an Azure context:
+\itemize{
+\item \code{\link[=createAzureContext]{createAzureContext()}}
+}
+\item Resources and resource groups:
+\itemize{
+\item \code{\link[=azureListAllResources]{azureListAllResources()}}
+\item \code{\link[=azureCreateResourceGroup]{azureCreateResourceGroup()}}
+\item \code{\link[=azureListRG]{azureListRG()}}
+}
+\item Storage accounts and blobs:
+\itemize{
+\item \code{\link[=azureListSA]{azureListSA()}}
+\item \code{\link[=azureCreateStorageAccount]{azureCreateStorageAccount()}}
+\item \code{\link[=azureListStorageContainers]{azureListStorageContainers()}}
+\item \code{\link[=azureListStorageBlobs]{azureListStorageBlobs()}}
+\item \code{\link[=azureGetBlob]{azureGetBlob()}}
+\item \code{\link[=azurePutBlob]{azurePutBlob()}}
+\item \code{\link[=azureDeleteBlob]{azureDeleteBlob()}}
+\item \code{\link[=azureBlobFind]{azureBlobFind()}}
+}
+\item Virtual Machines
+\itemize{
+\item List VMs: \code{\link[=azureListVM]{azureListVM()}}
+\item To create a virtual machine, use \code{\link[=azureDeployTemplate]{azureDeployTemplate()}} with a suitable template
+\item Start a VM: \code{\link[=azureStartVM]{azureStartVM()}}
+\item Stop a VM: \code{\link[=azureStopVM]{azureStopVM()}}
+\item Get status: \code{\link[=azureVMStatus]{azureVMStatus()}}
+}
+\item HDInsight clusters:
+\itemize{
+\item \code{\link[=azureListHDI]{azureListHDI()}}
+\item \code{\link[=azureCreateHDI]{azureCreateHDI()}}
+\item \code{\link[=azureResizeHDI]{azureResizeHDI()}}
+\item \code{\link[=azureDeleteHDI]{azureDeleteHDI()}}
+\item \code{\link[=azureRunScriptAction]{azureRunScriptAction()}}
+\item \code{\link[=azureScriptActionHistory]{azureScriptActionHistory()}}
+}
+\item Azure batch:
+\itemize{
+\item \code{\link[=azureListBatchAccounts]{azureListBatchAccounts()}}
+\item \code{\link[=azureCreateBatchAccount]{azureCreateBatchAccount()}}
+\item \code{\link[=azureDeleteBatchAccount]{azureDeleteBatchAccount()}}
+\item \code{\link[=azureBatchGetKey]{azureBatchGetKey()}}
+}
+\item Cost functions:
+\itemize{
+\item \code{\link[=azureDataConsumption]{azureDataConsumption()}}
+\item \code{\link[=azurePricingRates]{azurePricingRates()}}
+\item \code{\link[=azureExpenseCalculator]{azureExpenseCalculator()}}
+}
+}
 }
 \keyword{package}
-

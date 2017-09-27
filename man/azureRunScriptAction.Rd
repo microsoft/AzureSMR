@@ -10,7 +10,7 @@ azureRunScriptAction(azureActiveContext, scriptname, scriptURL,
   verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{A container used for caching variables used by `AzureSMR`, created by [createAzureContext()]}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
 
 \item{scriptname}{Identifier for Custom action script operation}
 
@@ -22,17 +22,17 @@ azureRunScriptAction(azureActiveContext, scriptname, scriptURL,
 
 \item{edgeNode}{install on worker nodes}
 
-\item{clustername}{Cluster name, used for HDI and Spark clusters. See [azureCreateHDI()]}
+\item{clustername}{Cluster name, used for HDI and Spark clusters. See \code{\link[=azureCreateHDI]{azureCreateHDI()}}}
 
 \item{resourceGroup}{Name of the resource group}
 
 \item{parameters}{parameters}
 
-\item{subscriptionID}{Subscription ID.  This is obtained automatically by [azureAuthenticate()] when only a single subscriptionID is available via Active Directory}
+\item{subscriptionID}{Subscription ID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
 
 \item{wait}{If TRUE, runs script action synchronously, i.e. waits for successfull completion. If FALSE, submits the action asynchronously}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 }
 \value{
 Returns Success Message
@@ -49,4 +49,3 @@ Other HDInsight functions: \code{\link{azureCreateHDI}},
   \code{\link{azureListHDI}}, \code{\link{azureResizeHDI}},
   \code{\link{azureScriptActionHistory}}
 }
-
