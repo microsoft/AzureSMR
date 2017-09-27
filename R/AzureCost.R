@@ -3,7 +3,6 @@ lowercase_first_letter <- function(x){
          substring(x, 2))
 }
 
-
 #' Get data consumption of an Azure subscription for a time period.
 
 #' Aggregation method can be either daily based or hourly based.
@@ -164,29 +163,31 @@ azureDataConsumption <- function(azureActiveContext,
   
   df_use <- df$value$properties
   
+  # If no records found, pop up an error.
+  
+  if (nrow(df_use) == 0) 
+    stop("No data consumption records found for the subscription during the
+           specified period.")
+  
+  # If instance is specified, retrieve results that match instance name.
+  
   inst_data <- lapply(
     df$value$properties$instanceData, 
     function(x)if(is.na(x)) NA else fromJSON(x)
   )
   
-  # retrieve results that match instance name.
-  
-  if (instance !=  "") {
+  if (!missing(instance) && instance != "") {
     instance_detect <- function(inst_data) {
       return(basename(inst_data$Microsoft.Resources$resourceUri) == instance)
     }
     
     index_instance <- which(unlist(lapply(inst_data, instance_detect)))
     
-    if(!missing(instance)) {
-      if(length(index_instance) == 0)
-        stop("No data consumption records found for the instance during the given period.")
-      df_use <- df_use[index_instance, ]
-    } else if(missing(instance)) {
-      if(length(index_resource) == 0)
-        stop("No data consumption records found for the resource group during the given period.")
-      df_use <- df_use[index_resource, ]
-    }
+    if(length(index_instance) == 0)
+      stop("No data consumption records found for the instance during the given 
+           period.")
+    
+    df_use <- df_use[index_instance, ]
   }
   
   # if time difference is less than one hour. Only return one row of computation
@@ -309,11 +310,13 @@ azurePricingRates <- function(azureActiveContext,
   df_meter[["MeterRates"]] <- NULL
   df_meter[["MeterTags"]] <- NULL
   
+  # Lower case the first letter of the column names - to make them uniform for 
+  # both dataframes of cost and pricing, for the convenience of joining data 
+  # frames.
   
   names(df_meter) <- lowercase_first_letter(names(df_meter))
   df_meter
 }
-
 
 #' Calculate cost of using a specific instance of Azure for certain period.
 #' 
