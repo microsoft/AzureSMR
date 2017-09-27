@@ -6,8 +6,11 @@
 
 if (interactive()) library("testthat")
 
-settingsfile <- find_config_json()
-config <- read.AzureSMR.config(settingsfile)
+# settingsfile <- find_config_json()
+# config <- read.AzureSMR.config(settingsfile)
+
+settingsfile <- getOption("AzureSMR.config")
+config <- read.AzureSMR.config()
 
 # setup.
 
