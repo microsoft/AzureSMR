@@ -12,7 +12,7 @@
 
 <meta name="author" content="Alan Weaver and Andrie de Vries" />
 
-<meta name="date" content="2017-06-16" />
+<meta name="date" content="2017-09-27" />
 
 <title>Authenticating AzureSMR to call the Azure API</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Authenticating AzureSMR to call the Azure API</h1>
 <h4 class="author"><em>Alan Weaver and Andrie de Vries</em></h4>
-<h4 class="date"><em>2017-06-16</em></h4>
+<h4 class="date"><em>2017-09-27</em></h4>
 
 
 
@@ -80,27 +80,30 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>You must collect three pieces of information to authenticate with the <code>createAzureContect()</code> function:</p>
 <ul>
 <li>tenant ID (<code>tenantID</code>)</li>
-<li>client ID (<code>clientID</code>)</li>
+<li>application ID, previously known as client ID (<code>clientID</code>)</li>
 <li>authentication key (<code>authKey</code>)</li>
 </ul>
 </div>
 <div id="create-an-active-directory-application." class="section level2">
 <h2>Create an Active Directory application.</h2>
 <ol style="list-style-type: decimal">
-<li><p>Login to the Classic (the old) Portal <a href="https://manage.windowsazure.com/" class="uri">https://manage.windowsazure.com/</a>.</p></li>
-<li><p>On the left hand menu you should see amongst all the items one called <code>ACTIVE DIRECTORY</code>. Click the item and an active directory DIRECTORY will be listed.</p></li>
-<li><p>Click on an entry under the Name column (if there is only one entry the choice is easy!) to take you to a page of options to get started with some text like I WANT TO.</p></li>
-<li><p>Along the top menu click <code>APPLICATIONS</code>.</p></li>
-<li><p>You probably want to create a new application so type a name for it in the Search box (I called mine <code>AzureSMR</code>). The search result will come back with no results and a button that says <code>ADD AN APPLICATION</code> -&gt; which you should click.</p></li>
-<li><p>Give the application a name and choose <code>WEB APPLICATION AND/OR WEB API</code>. Then go to the next page <code>-&gt;</code>.</p></li>
-<li><p>Provide some dummy URLs. They are not used but they must be valid URLs. Click on the tick to continue to create the application.</p></li>
-<li><p>Under the Configure menu button take note of the <strong>client ID</strong>.</p></li>
-<li><p>Under the <code>Keys</code> section choose a 1 year duration (or 2) and click the Save button at the bottom of the screen. An <strong>authenticatio key</strong> is generated which you should copy now and save it somewhere.</p></li>
-<li><p>You also need the <strong>tenant ID</strong>. Click the <code>VIEW ENDPOINTS</code> button on the bottom of the screen and find a list of endpoints all including the tenant ID as a sequence of hexadecimals.</p></li>
-<li><p>Now set up the applications permissions. Click the <code>Add application</code> button. In the resulting window scroll to <code>Windows Azure Service Management API</code> and select it. Then click the Tick icon.</p></li>
-<li><p>Under the resulting “permissions to other applications” section, for the Windows Azure Service Management API entry, from the <code>Delegated Permissions</code> drop down tick the Access Azure Service Management as organization.</p></li>
-<li><p>Click on the Save icon at the bottom of the window again.</p></li>
-<li><p>Now assign the application a role and to do so you go to the (new) Azure portal. <a href="https://portal.azure.com/" class="uri">https://portal.azure.com/</a></p></li>
+<li><p>Login to the <a href="https://portal.azure.com">Azure Portal</a>.</p></li>
+<li><p>On the left side of the screen, there should be a list of the different things you can create in Azure. Click on “Azure Active Directory”.</p></li>
+<li><p>The AAD blade should appear. Under “Manage”, click on “App registrations”.</p></li>
+<li><p>Along the top menu, click “New application registration”.</p></li>
+<li><p>In the Create blade, enter the details for your new application. The name should be unique, and the “application type must be Web app/API”. It doesn’t matter what sign-on URL you provide (it won’t be used), but it must be a valid URL.</p></li>
+<li><p>Click on “Create”. After a few seconds, a new blade will appear containing a list of all registered AAD applications.</p></li>
+<li><p>First, get your tenant ID from this screen. Click on “Endpoints” at the top of the blade. This will popup a new blade giving several URLs for accessing the client.</p></li>
+<li><p>Choose one of these (it doesn’t matter which one) and click the button on the side to copy the URL to the clipboard.</p></li>
+<li><p>Paste the URL into Notepad or another text editor. It will contain a sequence of hex digits in the middle, which is your <strong>tenant ID</strong>.</p></li>
+<li><p>Return to the list of apps by closing the Endpoints blade. Find your app by entering the name you chose into the search box.</p></li>
+<li><p>When your app appears in the list, click on it. In the details, note the <strong>application ID</strong>.</p></li>
+<li><p>The Settings blade for your app should also be on the screen. Click on the “Keys” entry.</p></li>
+<li><p>You will need to create a new <strong>authentication key</strong>. Enter a name for it, choose a 1 year duration (or 2) and click “Save” at the top of the blade. When the key is generated, copy it and save it somewhere. <em>You won’t be able to see it again, so make sure you copy it now.</em></p></li>
+<li><p>Return to your app settings by closing the Keys blade. Click the “Required permissions” entry.</p></li>
+<li><p>In the permissions blade, click “Add”. Click on “Select an API” and choose “Windows Azure Service Management API”. Then click Select at the bottom of the blade.</p></li>
+<li><p>This should bring up the Enable Access blade. Check the tick box next to “Delegated permissions” and click Select at the bottom of the blade.</p></li>
+<li><p>Click Done at the bottom of the permissions blade.</p></li>
 </ol>
 </div>
 <div id="access-control" class="section level2">
@@ -108,7 +111,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>You can apply access control at either the resource group level or the subscription level</p>
 <div id="to-apply-access-control-at-resource-group" class="section level3">
 <h3>To apply access control at Resource Group</h3>
-<ol start="15" style="list-style-type: decimal">
+<ol style="list-style-type: decimal">
 <li><p>Click on Resource Groups menu item on the left in the portal.</p></li>
 <li><p>Identify the resource group you will associate with this application.</p></li>
 <li><p>Choose the <code>Access Control (IAM)</code> menu item from the Resource scope.</p></li>
@@ -119,7 +122,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 <div id="alternatively-you-can-access-control-at-subscription-level" class="section level3">
 <h3>Alternatively you can access control at Subscription Level</h3>
-<ol start="15" style="list-style-type: decimal">
+<ol style="list-style-type: decimal">
 <li><p>Click on Subscriptions on the left menu item in the portal.</p></li>
 <li><p>Identify the Subscription you will associate with this application.</p></li>
 <li><p>Choose the <code>Access Control (IAM)</code> menu item.</p></li>
