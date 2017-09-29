@@ -37,6 +37,8 @@ test_that("Can connect to workspace with config file using device code", {
   )
   expect_is(asc, "azureActiveContext")
   
+  expect_is(asc$authType, "DeviceCode")
+  
   res <- azureAuthenticateOnAuthType(asc)
   expect_true(res)
   
