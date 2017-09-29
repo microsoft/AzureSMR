@@ -11,6 +11,8 @@ azureCreateBatchAccount(azureActiveContext, batchAccount,
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
 
+\item{batchAccount}{storage account used by Azure Batch}
+
 \item{location}{A string for the location to create batch account}
 
 \item{resourceGroup}{Name of the resource group}
@@ -19,7 +21,7 @@ azureCreateBatchAccount(azureActiveContext, batchAccount,
 
 \item{asynchronous}{If TRUE, submits asynchronous request to Azure. Otherwise waits until batch account is created.}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 }
 \description{
 Create an azure batch account.

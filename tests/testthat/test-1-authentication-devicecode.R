@@ -21,7 +21,7 @@
 
 if(interactive()) library("testthat")
 
-settingsfile <- "E:/Projects/R/config_devicecode.json" #system.file("tests/testthat/config_devicecode.json", package = "AzureSMR")
+settingsfile <- find_config_json()
 
 #  ------------------------------------------------------------------------
 

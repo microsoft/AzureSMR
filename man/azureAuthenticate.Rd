@@ -19,9 +19,9 @@ azureAuthenticate(azureActiveContext, tenantID, clientID, authKey,
 
 \item{authType}{Auth type for getting token: "ClientCredential", "DeviceCode"}
 
-\item{resource}{Resource to use for getting token}
+\item{resource}{URL of azure management portal}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 }
 \value{
 If successful, returns TRUE

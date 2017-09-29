@@ -27,6 +27,7 @@ call_azure_sm <- function(azureActiveContext,
   assert_that(is.azureActiveContext(azureActiveContext))
   azToken <- azureActiveContext$Token
   verbosity <- set_verbosity(verbose)
+  headers <- azureApiHeaders(azToken)
 
   # define httr verb
   verb = match.arg(verb)
@@ -37,6 +38,7 @@ call_azure_sm <- function(azureActiveContext,
     POST = httr::POST
     )
 
-  r <- verb(uri, azureApiHeaders(azToken), body = body, verbosity, encode = "json")
+  r <- verb(uri, headers, body = body, verbosity, encode = "json")
+  r
   
 }

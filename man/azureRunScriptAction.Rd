@@ -32,7 +32,7 @@ azureRunScriptAction(azureActiveContext, scriptname, scriptURL,
 
 \item{wait}{If TRUE, runs script action synchronously, i.e. waits for successfull completion. If FALSE, submits the action asynchronously}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 }
 \value{
 Returns Success Message

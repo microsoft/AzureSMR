@@ -16,7 +16,7 @@ azureDeleteResourceGroup(azureActiveContext, resourceGroup, subscriptionID,
 
 \item{type}{filter by resource type}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 }
 \value{
 Returns Dataframe of Resources

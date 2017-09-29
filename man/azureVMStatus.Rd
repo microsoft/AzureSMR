@@ -18,7 +18,7 @@ azureVMStatus(azureActiveContext, resourceGroup, vmName, subscriptionID,
 
 \item{ignore}{ignore}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 }
 \description{
 Get Status of a Virtual Machine.
@@ -30,5 +30,5 @@ Other Virtual machine functions: \code{\link{azureDeleteVM}},
   \code{\link{azureListScaleSetVM}},
   \code{\link{azureListScaleSets}},
   \code{\link{azureListVM}}, \code{\link{azureStartVM}},
-  \code{\link{azureStopVM}}
+  \code{\link{azureStopVM}}, \code{\link{azureVMInfo}}
 }

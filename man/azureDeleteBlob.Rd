@@ -22,7 +22,7 @@ azureDeleteBlob(azureActiveContext, blob, directory, storageAccount, storageKey,
 
 \item{resourceGroup}{Name of the resource group}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 }
 \description{
 Delete a specifed storage blob.

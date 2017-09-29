@@ -20,7 +20,7 @@ azureHiveSQL(azureActiveContext, CMD, clustername, hdiAdmin, hdiPassword,
 
 \item{path}{path}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 }
 \description{
 Submit SQL command to Hive Service.

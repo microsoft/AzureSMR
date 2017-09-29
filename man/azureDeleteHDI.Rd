@@ -16,7 +16,7 @@ azureDeleteHDI(azureActiveContext, clustername, subscriptionID, resourceGroup,
 
 \item{resourceGroup}{Name of the resource group}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 }
 \value{
 Data frame with HDInsight clusters information

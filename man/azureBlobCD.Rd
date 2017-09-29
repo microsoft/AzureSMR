@@ -24,7 +24,7 @@ azureBlobCD(azureActiveContext, directory, container, file, storageAccount,
 
 \item{resourceGroup}{Name of the resource group}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 }
 \description{
 Azure blob change current directory.

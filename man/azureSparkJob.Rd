@@ -20,7 +20,7 @@ azureSparkJob(azureActiveContext, FILE, clustername, hdiAdmin, hdiPassword,
 
 \item{log}{log}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 }
 \description{
 Submit Spark Job (Batch mode).

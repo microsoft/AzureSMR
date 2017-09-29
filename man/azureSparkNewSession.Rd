@@ -18,7 +18,7 @@ azureSparkNewSession(azureActiveContext, clustername, hdiAdmin, hdiPassword,
 
 \item{kind}{HDinsight kind: "hadoop","spark" or "rserver". See \code{\link[=azureCreateHDI]{azureCreateHDI()}}}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 }
 \description{
 Create new Spark Session.

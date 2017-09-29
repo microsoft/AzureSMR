@@ -18,7 +18,7 @@ azureListScaleSetVM(azureActiveContext, scaleSet, resourceGroup, location,
 
 \item{subscriptionID}{Subscription ID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 }
 \description{
 List VMs within a scale set
@@ -29,5 +29,6 @@ Other Virtual machine functions: \code{\link{azureDeleteVM}},
   \code{\link{azureListScaleSetNetwork}},
   \code{\link{azureListScaleSets}},
   \code{\link{azureListVM}}, \code{\link{azureStartVM}},
-  \code{\link{azureStopVM}}, \code{\link{azureVMStatus}}
+  \code{\link{azureStopVM}}, \code{\link{azureVMInfo}},
+  \code{\link{azureVMStatus}}
 }

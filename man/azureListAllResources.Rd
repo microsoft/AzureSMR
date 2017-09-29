@@ -20,7 +20,7 @@ azureListAllResources(azureActiveContext, resourceGroup, subscriptionID, name,
 
 \item{location}{Azure region, e.g. 'westeurope' or 'southcentralus'}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 }
 \value{
 Returns Dataframe of Resources

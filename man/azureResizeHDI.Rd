@@ -23,7 +23,7 @@ azureResizeHDI(azureActiveContext, clustername, role = c("workernode",
 
 \item{resourceGroup}{Name of the resource group}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 }
 \description{
 Resize a HDInsight cluster role.

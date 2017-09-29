@@ -16,7 +16,7 @@ azureSAGetKey(azureActiveContext, storageAccount, resourceGroup, subscriptionID,
 
 \item{subscriptionID}{Subscription ID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 }
 \description{
 Get the Storage Keys for Specified Storage Account.

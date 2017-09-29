@@ -18,7 +18,7 @@ azureStartVM(azureActiveContext, resourceGroup, vmName, mode = "Sync",
 
 \item{subscriptionID}{Subscription ID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 }
 \description{
 Start a Virtual Machine.
@@ -30,5 +30,5 @@ Other Virtual machine functions: \code{\link{azureDeleteVM}},
   \code{\link{azureListScaleSetVM}},
   \code{\link{azureListScaleSets}},
   \code{\link{azureListVM}}, \code{\link{azureStopVM}},
-  \code{\link{azureVMStatus}}
+  \code{\link{azureVMInfo}}, \code{\link{azureVMStatus}}
 }

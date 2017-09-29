@@ -21,7 +21,7 @@ azureCreateStorageAccount(azureActiveContext, storageAccount,
 
 \item{asynchronous}{If TRUE, submits asynchronous request to Azure. Otherwise waits until storage account is created.}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 }
 \description{
 Create an Azure Storage Account.

@@ -23,7 +23,7 @@ azureScriptActionHistory(azureActiveContext, resourceGroup, clustername = "*",
 
 \item{type}{filter by resource type}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 
 \item{object}{azureScriptActionHistory object, created by \code{\link[=azureScriptActionHistory]{azureScriptActionHistory()}}}
 

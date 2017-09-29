@@ -10,11 +10,13 @@ azureBatchGetKey(azureActiveContext, batchAccount, resourceGroup,
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
 
+\item{batchAccount}{storage account used by Azure Batch}
+
 \item{resourceGroup}{Name of the resource group}
 
 \item{subscriptionID}{Subscription ID.  This is obtained automatically by \code{\link[=azureAuthenticate]{azureAuthenticate()}} when only a single subscriptionID is available via Active Directory}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 }
 \description{
 Get the Batch Keys for Specified Batch Account.

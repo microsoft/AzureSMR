@@ -22,7 +22,7 @@ azureBlobFind(azureActiveContext, file, storageAccount, storageKey, container,
 
 \item{resourceGroup}{Name of the resource group}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 }
 \description{
 Find file in a storage account directory.

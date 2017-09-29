@@ -16,7 +16,7 @@ azureHiveStatus(azureActiveContext, clustername, hdiAdmin, hdiPassword,
 
 \item{hdiPassword}{HDInsight admin password. See \code{\link[=azureCreateHDI]{azureCreateHDI()}}}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 }
 \description{
 Get Status of a HDI Hive Service / version.

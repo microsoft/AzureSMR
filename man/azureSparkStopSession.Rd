@@ -18,7 +18,7 @@ azureSparkStopSession(azureActiveContext, clustername, hdiAdmin, hdiPassword,
 
 \item{sessionID}{Spark sessionID. See \code{\link[=azureSparkCMD]{azureSparkCMD()}}}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 }
 \description{
 Stop a Spark Sessions.

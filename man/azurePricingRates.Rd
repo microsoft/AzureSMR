@@ -4,8 +4,8 @@
 \alias{azurePricingRates}
 \title{Get pricing details of resources under a subscription.}
 \usage{
-azurePricingRates(azureActiveContext, currency, locale, offerId, region,
-  verbose = FALSE)
+azurePricingRates(azureActiveContext, currency = "USD", locale = "en-US",
+  offerId = "", region = "US", verbose = FALSE)
 }
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
@@ -17,9 +17,14 @@ azurePricingRates(azureActiveContext, currency, locale, offerId, region,
 \item{offerId}{Offer ID of the subscription. For more information see https://azure.microsoft.com/en-us/support/legal/offer-details/}
 
 \item{region}{region information about the subscription.}
+
+\item{verbose}{If TRUE, prints verbose messages}
 }
 \description{
 The pricing rates function wraps API calls to Azure RateCard and currently the API supports only the Pay-As-You-Go offer scheme.
+}
+\references{
+https://msdn.microsoft.com/en-us/library/azure/mt219004.aspx
 }
 \seealso{
 Other Cost functions: \code{\link{azureDataConsumption}},

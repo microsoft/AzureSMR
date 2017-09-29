@@ -20,7 +20,8 @@
 
 
 if(interactive()) library("testthat")
-settingsfile <- system.file("tests/testthat/config.json", package = "AzureSMR")
+
+settingsfile <- find_config_json()
 config <- read.AzureSMR.config(settingsfile)
 
 #  ------------------------------------------------------------------------
@@ -41,7 +42,9 @@ test_that("Can create, list, get, update and delete items in an azure data lake 
   skip_if_missing_config(settingsfile)
 
   # cleanup the account before starting tests!
-  res <- azureDataLakeDelete(asc, azureDataLakeAccount, "tempfolder", TRUE)
+  try(
+    azureDataLakeDelete(asc, azureDataLakeAccount, "tempfolder", TRUE)
+  )
 
   # now start the tests
 

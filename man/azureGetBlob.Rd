@@ -24,7 +24,7 @@ azureGetBlob(azureActiveContext, blob, directory, type = "text",
 
 \item{resourceGroup}{Name of the resource group}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 }
 \description{
 Get contents from a specifed storage blob.

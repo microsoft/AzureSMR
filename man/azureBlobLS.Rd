@@ -22,7 +22,7 @@ azureBlobLS(azureActiveContext, directory, recursive = FALSE, storageAccount,
 
 \item{resourceGroup}{Name of the resource group}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 }
 \description{
 List blob blobs in a storage account directory.

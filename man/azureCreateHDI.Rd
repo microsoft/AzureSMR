@@ -54,7 +54,7 @@ azureCreateHDI(azureActiveContext, resourceGroup, location, clustername,
 
 \item{mode}{Provisioning mode, "Sync" or "Async". Use "Async" to immediately return to R session after submission of request}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 
 \item{debug}{Used for debugging purposes. If TRUE, returns json without attempting to connect to Azure}
 }

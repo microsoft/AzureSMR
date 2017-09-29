@@ -55,6 +55,8 @@ azureListVM <- function(azureActiveContext, resourceGroup, location, subscriptio
 #' @inheritParams setAzureContext
 #' @inheritParams azureListAllResources
 #'
+#' @importFrom utils setTxtProgressBar txtProgressBar
+#'
 #' @family Virtual machine functions
 #' @export
 azureGetAllVMstatus <- function(azureActiveContext) {
@@ -198,7 +200,7 @@ azureVMStatus <- function(azureActiveContext, resourceGroup, vmName, subscriptio
                "/resourceGroups/", resourceGroup, 
                "/providers/Microsoft.Compute/virtualmachines/", vmName, 
                "/InstanceView?api-version=2015-05-01-preview")
-
+  
   r <- call_azure_sm(azureActiveContext, uri = uri,
     verb = "GET", verbose = verbose)
   if(status_code(r) == 404 && ignore == "Y") return("NA")
@@ -208,7 +210,7 @@ azureVMStatus <- function(azureActiveContext, resourceGroup, vmName, subscriptio
   df <- fromJSON(rl)
 
   dfn <- as.data.frame(df$statuses)
-
+  
   clust <- nrow(dfn)
   if (clust < 1) {
     if (ignore == "Y") {
@@ -217,9 +219,9 @@ azureVMStatus <- function(azureActiveContext, resourceGroup, vmName, subscriptio
       stop("No Virtual Machines found")
     }
   }
-  return(paste(df$statuses$displayStatus, collapse = ", "))
+  
+  return(paste(df$statuses$displayStatus, collapse=", "))
 }
-
 
 #' Delete a Virtual Machine.
 #'
@@ -260,3 +262,56 @@ azureDeleteVM <- function(azureActiveContext, resourceGroup, vmName, subscriptio
   return(TRUE)
 }
 
+#' Get detailed information (e.g., name, OS, size, etc.) of a Virtual Machine.
+#'
+#' @inheritParams setAzureContext
+#' @inheritParams azureListVM
+#' @inheritParams azureStartVM
+#' @param ignore ignore
+#'
+#' @family Virtual machine functions
+#' @export
+azureVMInfo <- function(azureActiveContext, resourceGroup, vmName, subscriptionID,
+                        ignore = "N", verbose = FALSE) {
+  assert_that(is.azureActiveContext(azureActiveContext))
+
+  if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
+  if (missing(resourceGroup)) resourceGroup <- azureActiveContext$resourceGroup
+  if (missing(vmName)) vmName <- azureActiveContext$vmName
+     
+  assert_that(is_resource_group(resourceGroup))
+  assert_that(is_subscription_id(subscriptionID))
+  assert_that(is_vm_name(vmName))
+
+  uri <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
+               "/resourceGroups/", resourceGroup, 
+               "/providers/Microsoft.Compute/virtualmachines/", vmName, 
+               "?$expand=instanceView&api-version=2015-05-01-preview")
+  
+  r <- call_azure_sm(azureActiveContext, uri = uri,
+    verb = "GET", verbose = verbose)
+  if(status_code(r) == 404 && ignore == "Y") return("NA")
+  stopWithAzureError(r)
+
+  rl <- content(r, "text", encoding = "UTF-8")
+  df <- fromJSON(rl)
+
+  dfn <- df$properties$instanceView$statuses
+  
+  clust <- nrow(dfn)
+  if (clust < 1) {
+    if (ignore == "Y") {
+      return("NA")
+    } else {
+      stop("No Virtual Machines found")
+    }
+  }
+  
+  return(list(vmName = df$properties$osProfile$computerName,
+              vmId = df$id,
+              userName = df$properties$osProfile$computerName,
+              os = df$properties$storageProfile$osDisk$osType,
+              size = df$properties$hardwareProfile$vmSize,
+              location = df$location,
+              status = paste(dfn$displayStatus, collapse = ", ")))
+}

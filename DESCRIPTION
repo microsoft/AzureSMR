@@ -5,8 +5,8 @@ Description: Helps users to manage Azure Services and objects from within an
     Machines and HDInsight (Spark, Hive). To use the package, you must configure an
     Azure Active Directory application and service principal in the Azure portal.
 Type: Package
-Version: 0.2.6
-Date: 2017-06-16
+Version: 0.2.7
+Date: 2017-09-26
 Authors@R: c(
       person(family="Microsoft Corporation", role="cph"),
       person("Alan", "Weaver", role=c("aut"), email="alanwe@microsoft.com"),

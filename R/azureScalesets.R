@@ -5,20 +5,23 @@
 #'
 #' @family Virtual machine functions
 #' @export
-azureListScaleSets <- function(azureActiveContext, resourceGroup, location, subscriptionID,
-                        verbose = FALSE) {
+azureListScaleSets <- function(azureActiveContext, resourceGroup, 
+                               location, subscriptionID,
+                               verbose = FALSE) {
+  
   assert_that(is.azureActiveContext(azureActiveContext))
   if(missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
   if(missing(resourceGroup)) resourceGroup <- azureActiveContext$resourceGroup
   if(!is.null(resourceGroup)) assert_that(is_resource_group(resourceGroup))
   assert_that(is_subscription_id(subscriptionID))
 
-  rg <- if(!is.null(resourceGroup)) paste0("/resourceGroups/", resourceGroup,) else ""
+  rg <- if(!is.null(resourceGroup)) paste0("/resourceGroups/", resourceGroup) else ""
 
-  uri <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
-               rg,
-               "/providers/Microsoft.Compute/virtualMachineScaleSets?api-version=2016-03-30"
-               )
+  uri <- paste0(
+    "https://management.azure.com/subscriptions/", subscriptionID,
+    rg,
+    "/providers/Microsoft.Compute/virtualMachineScaleSets?api-version=2016-03-30"
+  )
 
   r <- call_azure_sm(azureActiveContext, uri = uri,
     verb = "GET", verbose = verbose)
@@ -56,20 +59,23 @@ azureListScaleSets <- function(azureActiveContext, resourceGroup, location, subs
 #' @family Virtual machine functions
 #' @references https://docs.microsoft.com/en-us/rest/api/network/loadbalancer/list-load-balancers-within-a-resource-group
 #' @export
-azureListScaleSetNetwork <- function(azureActiveContext, resourceGroup, location, subscriptionID,
-                               verbose = FALSE) {
+azureListScaleSetNetwork <- function(azureActiveContext, resourceGroup, 
+                                     location, subscriptionID,
+                                     verbose = FALSE) {
+  
   assert_that(is.azureActiveContext(azureActiveContext))
   if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
   if (missing(resourceGroup)) resourceGroup <- azureActiveContext$resourceGroup
   if (missing(resourceGroup)) assert_that(is_resource_group(resourceGroup))
   assert_that(is_subscription_id(subscriptionID))
 
-  rg <- if (!is.null(resourceGroup)) paste0("/resourceGroups/", resourceGroup,) else "/"
+  rg <- if (!is.null(resourceGroup)) paste0("/resourceGroups/", resourceGroup) else "/"
 
-  uri <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
-               rg,
-               "/providers/Microsoft.Network/loadBalancers", 
-               "?api-version=2016-09-01")
+  uri <- paste0(
+    "https://management.azure.com/subscriptions/", subscriptionID,
+    rg,
+    "/providers/Microsoft.Network/loadBalancers", 
+    "?api-version=2016-09-01")
 
   r <- call_azure_sm(azureActiveContext, uri = uri, 
     verb = "GET", verbose = verbose)
@@ -84,11 +90,13 @@ azureListScaleSetNetwork <- function(azureActiveContext, resourceGroup, location
     for (i in seq_along(lbs)) {
       lb <- lbs[i]
       resgroup <- extractResourceGroupname(df$value$id[i])
-      URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
+      uri <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
                     "/resourceGroups/", resgroup,
                     "/providers/Microsoft.Network/loadBalancers/", lb, 
                     "?api-version=2016-09-01")
-      r <- GET(URL, azureApiHeaders(azToken), verbosity)
+      
+      r <- call_azure_sm(azureActiveContext, uri = uri,
+                         verb = "GET", verbose = verbose)
       stopWithAzureError(r)
       rl <- content(r, "text", encoding = "UTF-8")
       df2 <- fromJSON(rl)
@@ -126,12 +134,14 @@ azureListScaleSetNetwork <- function(azureActiveContext, resourceGroup, location
     pips <- lapply(seq_along(pips), function(i) {
       pip <- pips[i]
       resgroup <- extractResourceGroupname(df$value$id[i])
-      URL <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
-                   "/resourceGroups/", resgroup, 
-                   "/providers/Microsoft.Network/publicIPAddresses/", pip, 
-                   "?api-version=2016-09-01"
-                   )
-      r <- GET(URL, azureApiHeaders(azToken), verbosity)
+      uri <- paste0(
+        "https://management.azure.com/subscriptions/", subscriptionID,
+        "/resourceGroups/", resgroup, 
+        "/providers/Microsoft.Network/publicIPAddresses/", pip, 
+        "?api-version=2016-09-01"
+      )
+      r <- call_azure_sm(azureActiveContext, uri = uri,
+                         verb = "GET", verbose = verbose)
       stopWithAzureError(r)
 
       rl <- content(r, "text", encoding = "UTF-8")
@@ -140,7 +150,8 @@ azureListScaleSetNetwork <- function(azureActiveContext, resourceGroup, location
       clust2 <- length(df2$properties$ipAddress)
       if (clust2 > 0) {
         data.frame(
-          fqdn = if (is.null(df2$properties$dnsSettings$fqdn)) "" else df2$properties$dnsSettings$fqdn,
+          fqdn <-  if (is.null(df2$properties$dnsSettings$fqdn)) "" else 
+            df2$properties$dnsSettings$fqdn,
           ipAddress = df2$properties$ipAddress,
           stringsAsFactors = FALSE
         )
@@ -150,8 +161,7 @@ azureListScaleSetNetwork <- function(azureActiveContext, resourceGroup, location
           ipAddress = character(0)
         )
       }
-    }
-    )
+    })
     pips <- do.call(rbind, pips)
   }
 

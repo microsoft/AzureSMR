@@ -18,7 +18,7 @@ azureDeleteVM(azureActiveContext, resourceGroup, vmName, subscriptionID,
 
 \item{mode}{Wait for operation to complete 'Sync' (Default)}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 }
 \description{
 Delete a Virtual Machine.
@@ -29,5 +29,6 @@ Other Virtual machine functions: \code{\link{azureGetAllVMstatus}},
   \code{\link{azureListScaleSetVM}},
   \code{\link{azureListScaleSets}},
   \code{\link{azureListVM}}, \code{\link{azureStartVM}},
-  \code{\link{azureStopVM}}, \code{\link{azureVMStatus}}
+  \code{\link{azureStopVM}}, \code{\link{azureVMInfo}},
+  \code{\link{azureVMStatus}}
 }

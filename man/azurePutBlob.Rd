@@ -30,7 +30,7 @@ azurePutBlob(azureActiveContext, blob, contents = "", file = "", directory,
 
 \item{resourceGroup}{Name of the resource group}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 }
 \description{
 Write contents to a specifed storage blob.

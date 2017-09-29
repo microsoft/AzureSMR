@@ -2,7 +2,7 @@
 % Please edit documentation in R/AzureDataLake.R
 \name{azureDataLakeListStatus}
 \alias{azureDataLakeListStatus}
-\title{Azure Data Lake LISTSTATUS for specified relativePath of an azure data lake account.}
+\title{List status for specified relative path of an azure data lake account.}
 \usage{
 azureDataLakeListStatus(azureActiveContext, azureDataLakeAccount,
   relativePath = "", verbose = FALSE)
@@ -20,7 +20,7 @@ azureDataLakeListStatus(azureActiveContext, azureDataLakeAccount,
 Returns a data frame.
 }
 \description{
-Azure Data Lake LISTSTATUS for specified relativePath of an azure data lake account.
+List status for specified relative path of an azure data lake account.
 }
 \seealso{
 Other Azure Data Lake Store functions: \code{\link{azureDataLakeAppend}},

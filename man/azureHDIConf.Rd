@@ -22,7 +22,7 @@ azureHDIConf(azureActiveContext, clustername, resourceGroup, subscriptionID,
 
 \item{location}{Azure region, e.g. 'westeurope' or 'southcentralus'}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 }
 \value{
 Returns Dataframe of HDInsight Clusters information

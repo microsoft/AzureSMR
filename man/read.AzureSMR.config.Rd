@@ -7,7 +7,7 @@
 read.AzureSMR.config(configFile = getOption("AzureSMR.config"))
 }
 \arguments{
-\item{config}{location of file that contains configuration in JSON format}
+\item{configFile}{location of file that contains configuration in JSON format. By default, this location is at \code{getOption("AzureSMR.config")}}
 }
 \description{
 Reads settings from configuration file in JSON format.

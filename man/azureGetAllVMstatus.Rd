@@ -18,5 +18,6 @@ Other Virtual machine functions: \code{\link{azureDeleteVM}},
   \code{\link{azureListScaleSetVM}},
   \code{\link{azureListScaleSets}},
   \code{\link{azureListVM}}, \code{\link{azureStartVM}},
-  \code{\link{azureStopVM}}, \code{\link{azureVMStatus}}
+  \code{\link{azureStopVM}}, \code{\link{azureVMInfo}},
+  \code{\link{azureVMStatus}}
 }

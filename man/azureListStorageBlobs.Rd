@@ -24,7 +24,7 @@ azureListStorageBlobs(azureActiveContext, storageAccount, storageKey, container,
 
 \item{marker}{Optional. A string value that identifies the portion of the list to be returned with the next list operation. The operation returns a marker value within the response body if the list returned was not complete. The marker value may then be used in a subsequent call to request the next set of list items.  The marker value is opaque to the client.}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{verbose}{If TRUE, prints verbose messages}
 }
 \value{
 Returns a data frame. This data frame has an attribute called \code{marker} that can be used with the \code{marker} argument to return the next set of values.
