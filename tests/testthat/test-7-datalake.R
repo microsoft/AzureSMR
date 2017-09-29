@@ -1,4 +1,3 @@
-
 #' ------------------------------------------------------------------------
 #' Sample config.json file for ADLS tests to run:
 #' Create and place the file in the below specified location
@@ -13,6 +12,10 @@
 #' "azureDataLakeAccount": "azuresmrtestadls"
 #' }
 #' 
+#' ------------------------------------------------------------------------
+#' NOTE:
+#' ** authType can be one of "ClientCredential" (default), "DeviceCode" or "RefreshToken" (currently used internally by "DeviceCode" flow to refresh expired access tokens using available refresh token).
+#' ** authType = "DeviceCode" cannot be used in automated tests, since its a manual process.
 #' ------------------------------------------------------------------------
 
 

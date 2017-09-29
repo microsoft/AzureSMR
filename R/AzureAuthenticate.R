@@ -34,18 +34,11 @@ azureAuthenticateOnAuthType <- function(azureActiveContext, authType, resource, 
 
   if (missing(authType)) authType <- azureActiveContext$authType
   if (missing(resource)) resource <- azureActiveContext$resource
-  refreshToken <- azureActiveContext$RefreshToken
 
   assert_that(is_authType(authType))
   assert_that(is_resource(resource))
 
-  # Before using the preferred auth type, check if access token 
-  # can be fetched with a valid refresh token
-  if (is_refreshToken(refreshToken)) {
-    authType <- "RefreshToken"
-  }
-
-  print(paste("Fetch azure active directory access token using authType = ", authType))
+  print(paste0("Fetch azure active directory access token using authType = ", authType))
   result <- switch(
     authType,
     RefreshToken = azureGetTokenRefreshToken(azureActiveContext),
@@ -55,7 +48,7 @@ azureAuthenticateOnAuthType <- function(azureActiveContext, authType, resource, 
   )
 
   # persist valid auth type in the context
-  if (result && is.null(azureActiveContext$authType)) {
+  if (result) {
     azureActiveContext$authType <- authType
   }
 
@@ -143,10 +136,28 @@ azureGetTokenDeviceCode <- function(azureActiveContext, tenantID, clientID, reso
 
   verbosity <- set_verbosity(verbose)
 
+  # Before using the preferred auth type, check if access token can be fetched with a valid refresh token. 
+  # Any error during this flow should not stop the process. Instead continue with the DeviceCode flow, which 
+  # would expect the user to manually authenticate the new device code before generating new 
+  # refresh and access token pair.
+  refreshToken <- azureActiveContext$RefreshToken
+  if (is_refreshToken(refreshToken)) {
+    print("Fetch azure active directory access token using RefreshToken")
+    result = tryCatch({
+      azureGetTokenRefreshToken(azureActiveContext)
+    }, error = function(e) {
+      print(paste0("Error when fetching azure active directory access token using RefreshToken: ", e))
+      azureActiveContext$RefreshToken <- NULL
+      return(FALSE)
+    })
+    if(result) {
+      return(TRUE)
+    }
+  }
+
   resourceEncoded <- URLencode(resource, reserved = TRUE)
   URLGT <- paste0(
-    "https://login.microsoftonline.com/", tenantID,
-    "/oauth2/devicecode?resource=", resourceEncoded,
+    "https://login.microsoftonline.com/", tenantID, "/oauth2/devicecode?resource=", resourceEncoded,
     "&client_id=", clientID
   )
 
@@ -176,7 +187,7 @@ azureGetTokenDeviceCode <- function(azureActiveContext, tenantID, clientID, reso
   # Wait till user manually approves the user_code in the device code portal
   iteration <- 0
   waiting <- TRUE
-  while (iteration < 50 && waiting) {
+  while (iteration < 180 && waiting) {
     Sys.sleep(pollingInterval)
     if(azureGetTokenDeviceCodeFetch(azureActiveContext, tenantID, clientID, deviceCode, resource, verbose)) {
       waiting <- FALSE
