@@ -102,6 +102,26 @@ on_failure(is_authKey) <- function(call, env) {
   "Provide a valid autkKeyID argument, or set using createAzureContext()"
 }
 
+# --- refreshToken
+
+is_refreshToken <- function(x) {
+  is.character(x) && length(x) == 1 && nchar(x) > 0
+}
+
+on_failure(is_refreshToken) <- function(call, env) {
+  "Provide a valid refreshToken argument"
+}
+
+# --- deviceToken
+
+is_deviceCode <- function(x) {
+  is.character(x) && length(x) == 1 && nchar(x) > 0
+}
+
+on_failure(is_deviceCode) <- function(call, env) {
+  "Provide a valid deviceCode argument"
+}
+
 # --- vm_name
 
 is_vm_name <- function(x) {
@@ -284,4 +304,54 @@ on_failure(is_valid_permission) <- function(call, env) {
   paste("Permission string must be 3 in length",
         "and use numbers between 0 to 7 only.",
         sep = "\n")
+}
+
+# --- auth type
+
+is_authType <- function(x) {
+  is.character(x) && length(x) == 1 && nchar(x) > 0 && assert_that(is_valid_authType(x))
+}
+
+on_failure(is_authType) <- function(call, env) {
+  "Provide a valid authType string"
+}
+
+is_valid_authType <- function(x) {
+  x == "ClientCredential" || x == "DeviceCode" || x == "RefreshToken"
+}
+
+on_failure(is_valid_authType) <- function(call, env) {
+  paste("authType string must be a string",
+        "and should be one of \"ClientCredential\", \"DeviceCode\" or \"RefreshToken\".",
+        sep = "\n")
+}
+
+# --- resource
+
+is_resource <- function(x) {
+  is.character(x) && length(x) == 1 && nchar(x) > 0 && assert_that(is_valid_resource(x))
+}
+
+on_failure(is_resource) <- function(call, env) {
+  "Provide a valid resource string"
+}
+
+is_valid_resource <- function(x) {
+  grepl("^(https?:\\/\\/)?([\\da-z\\.-]+)\\.([a-z\\.]{2,6})([\\/\\w \\.-]*)*\\/?$", x)
+}
+
+on_failure(is_valid_resource) <- function(call, env) {
+  paste("resource must be a string",
+        "and should be in a valid URL format.",
+        sep = "\n")
+}
+
+# --- content
+
+is_content <- function(x) {
+  is.character(x) && length(x) == 1 && nchar(x) >= 0
+}
+
+on_failure(is_content) <- function(call, env) {
+  "Provide a valid non-null content with 0 or more length"
 }

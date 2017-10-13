@@ -4,7 +4,7 @@
 \alias{createAzureContext}
 \title{Create an Azure Context.}
 \usage{
-createAzureContext(tenantID, clientID, authKey, configFile)
+createAzureContext(tenantID, clientID, authKey, configFile, authType, resource)
 }
 \arguments{
 \item{tenantID}{The tenant ID provided during creation of the Active Directory application / service principal}
@@ -14,6 +14,10 @@ createAzureContext(tenantID, clientID, authKey, configFile)
 \item{authKey}{The authentication key provided during creation of the Active Directory application / service principal}
 
 \item{configFile}{location of file that contains configuration in JSON format. By default, this location is at \code{getOption("AzureSMR.config")}}
+
+\item{authType}{Auth type for getting token: "ClientCredential", "DeviceCode"}
+
+\item{resource}{Resource to use for getting token}
 }
 \value{
 An \code{azureActiveContext} object

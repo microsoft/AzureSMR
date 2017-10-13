@@ -1,4 +1,26 @@
+#' ------------------------------------------------------------------------
+#' Sample config.json file for ADLS tests to run:
+#' Create and place the file in the below specified location
+#' ------------------------------------------------------------------------
+#' 
+#' {
+#' "authType": "ClientCredential",
+#' "resource": "https://datalake.azure.net/",
+#' "tenantID": "72f988bf-blah-41af-blah-2d7cd011blah",
+#' "clientID": "1d604733-blah-4b37-blah-98fca981blah",
+#' "authKey": "zTw5blah+IN+yIblahrKv2K8dM2/BLah4FogBLAH/ME=",
+#' "azureDataLakeAccount": "azuresmrtestadls"
+#' }
+#' 
+#' ------------------------------------------------------------------------
+#' NOTE:
+#' ** authType can be one of "ClientCredential" (default), "DeviceCode" or "RefreshToken" (currently used internally by "DeviceCode" flow to refresh expired access tokens using available refresh token).
+#' ** authType = "DeviceCode" cannot be used in automated tests, since its a manual process.
+#' ------------------------------------------------------------------------
+
+
 if(interactive()) library("testthat")
+
 settingsfile <- find_config_json()
 config <- read.AzureSMR.config(settingsfile)
 
@@ -8,9 +30,9 @@ context("Data Lake Store")
 
 asc <- createAzureContext()
 with(config,
-     setAzureContext(asc, tenantID = tenantID, clientID = clientID, authKey = authKey)
+     setAzureContext(asc, tenantID = tenantID, clientID = clientID, authKey = authKey, authType = authType, resource = resource)
 )
-azureAuthenticate(asc)
+azureAuthenticateOnAuthType(asc)
 
 # NOTE: make sure to provide the azureDataLakeAccount name in the config file.
 azureDataLakeAccount <- config$azureDataLakeAccount
