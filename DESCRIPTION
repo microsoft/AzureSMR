@@ -8,10 +8,14 @@ Type: Package
 Version: 0.2.7
 Date: 2017-09-26
 Authors@R: c(
-      person(family="Microsoft Corporation", role="cph"),
-      person("Alan", "Weaver", role=c("aut"), email="alanwe@microsoft.com"),
-      person("Andrie", "de Vries", role=c("aut", "cre"), email="adevries@microsoft.com")
-    )
+  person(family="Microsoft Corporation", role="cph"),
+  person("Rich", "Calaway", role="cre", email="richcala@microsoft.com", comment = "maintainer from Nov 2017"),
+  person("Andrie", "de Vries", role="aut", email="apdevries@gmail.com", comment = "main author and maintainer until Oct 2017"),
+  person("Alan", "Weaver", role="aut", email="alanwe@microsoft.com", comment = "original author"),
+  person("Omkar", "Aradhya", role="aut", email="omarad@microsoft.com", comment = "contributed ADLS code"),
+  person("Le", "Zhang", role="aut", email="zhled@microsoft.com", comment = "contributed DSVM and rate card code"),
+  person("Brian", "Hoang", role="aut", email="brhoan@microsoft.com", comment = "contributed Azure Batch code")
+)
 Copyright: Microsoft
 License: MIT + file LICENSE
 URL: https://github.com/Microsoft/AzureSMR
