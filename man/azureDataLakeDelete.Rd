@@ -2,33 +2,40 @@
 % Please edit documentation in R/AzureDataLake.R
 \name{azureDataLakeDelete}
 \alias{azureDataLakeDelete}
-\title{Azure Data Lake DELETE for specified relativePath of an azure data lake account.}
+\title{Delete a file/directory.}
 \usage{
 azureDataLakeDelete(azureActiveContext, azureDataLakeAccount, relativePath,
   recursive = FALSE, verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{Provide an \code{azureActiveContext} object used for authentication.}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
 
-\item{azureDataLakeAccount}{Provide the name of the Azure Data Lake account.}
+\item{azureDataLakeAccount}{Name of the Azure Data Lake account.}
 
-\item{relativePath}{Provide a relative path of the directory.}
+\item{relativePath}{Relative path of a file/directory.}
 
-\item{recursive}{Provide recursive delete option.}
+\item{recursive}{If path is a directory, recursively delete contents and directory (default FALSE).}
 
 \item{verbose}{Print tracing information (default FALSE).}
 }
 \value{
-Returns a boolean.
+true if delete is successful else false.
 }
 \description{
-Azure Data Lake DELETE for specified relativePath of an azure data lake account.
+Delete a file/directory.
+}
+\references{
+\url{https://docs.microsoft.com/en-us/azure/data-lake-store/data-lake-store-data-operations-rest-api#delete-a-file}
 }
 \seealso{
+\url{https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/WebHDFS.html#Recursive}
+
+\url{https://hadoop.apache.org/docs/current/api/org/apache/hadoop/fs/FileSystem.html#delete-org.apache.hadoop.fs.Path-boolean-}
+
 Other Azure Data Lake Store functions: \code{\link{azureDataLakeAppend}},
   \code{\link{azureDataLakeCreate}},
   \code{\link{azureDataLakeGetFileStatus}},
   \code{\link{azureDataLakeListStatus}},
   \code{\link{azureDataLakeMkdirs}},
-  \code{\link{azureDataLakeOpen}}
+  \code{\link{azureDataLakeRead}}
 }

@@ -2,30 +2,44 @@
 % Please edit documentation in R/AzureDataLake.R
 \name{azureDataLakeAppend}
 \alias{azureDataLakeAppend}
-\title{Azure Data Lake APPEND for specified relativePath of an azure data lake account.}
+\title{Append to an existing file.}
 \usage{
 azureDataLakeAppend(azureActiveContext, azureDataLakeAccount, relativePath,
-  contents = "", verbose = FALSE)
+  bufferSize, contents, verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{Provide an \code{azureActiveContext} object used for authentication.}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
 
-\item{azureDataLakeAccount}{Provide the name of the Azure Data Lake account.}
+\item{azureDataLakeAccount}{Name of the Azure Data Lake account.}
 
-\item{relativePath}{Provide a relative path of the directory.}
+\item{relativePath}{Relative path of a file.}
 
-\item{contents}{Provide contents to write to \code{relativePath}}
+\item{bufferSize}{Size of the buffer to be used.}
+
+\item{contents}{raw contents to be written to the file.}
 
 \item{verbose}{Print tracing information (default FALSE).}
 }
+\value{
+NULL (void)
+}
 \description{
-Azure Data Lake APPEND for specified relativePath of an azure data lake account.
+Append to an existing file.
+}
+\references{
+\url{https://docs.microsoft.com/en-us/azure/data-lake-store/data-lake-store-data-operations-rest-api#upload-data}
 }
 \seealso{
+\url{https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/WebHDFS.html#Append_to_a_File}
+
+\url{https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/WebHDFS.html#Buffer_Size}
+
+\url{https://hadoop.apache.org/docs/current/api/org/apache/hadoop/fs/FileSystem.html#append-org.apache.hadoop.fs.Path-int-org.apache.hadoop.util.Progressable-}
+
 Other Azure Data Lake Store functions: \code{\link{azureDataLakeCreate}},
   \code{\link{azureDataLakeDelete}},
   \code{\link{azureDataLakeGetFileStatus}},
   \code{\link{azureDataLakeListStatus}},
   \code{\link{azureDataLakeMkdirs}},
-  \code{\link{azureDataLakeOpen}}
+  \code{\link{azureDataLakeRead}}
 }

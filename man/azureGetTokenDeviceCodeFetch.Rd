@@ -14,6 +14,8 @@ azureGetTokenDeviceCodeFetch(azureActiveContext, tenantID, clientID, deviceCode,
 
 \item{clientID}{The client ID provided during creation of the Active Directory application / service principal}
 
+\item{deviceCode}{Provide the device code obtained in the previous request}
+
 \item{resource}{Specify the resource with which the toke is obtained}
 
 \item{verbose}{Print Tracing information (Default False)}

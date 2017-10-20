@@ -12,9 +12,9 @@ azureGetTokenRefreshToken(azureActiveContext, tenantID, refreshToken,
 
 \item{tenantID}{The tenant ID provided during creation of the Active Directory application / service principal}
 
-\item{verbose}{Print Tracing information (Default False)}
+\item{refreshToken}{Provide the previously obtained refreshToken}
 
-\item{resource}{Specify the resource with which the token is obtained}
+\item{verbose}{Print Tracing information (Default False)}
 }
 \value{
 If successful, returns TRUE

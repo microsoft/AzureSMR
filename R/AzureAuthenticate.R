@@ -208,6 +208,7 @@ showDeviceCodeMessageToUser <- function(jsonResponseObject) {
 #' Get Azure token using device_code
 #'
 #' @inheritParams setAzureContext
+#' @param deviceCode Provide the device code obtained in the previous request 
 #' @param resource Specify the resource with which the toke is obtained
 #' @param verbose Print Tracing information (Default False)
 #'
@@ -269,7 +270,7 @@ azureGetTokenDeviceCodeFetch <- function(azureActiveContext, tenantID, clientID,
 #' Get Azure token using RefreshToken
 #'
 #' @inheritParams setAzureContext
-#' @param resource Specify the resource with which the token is obtained
+#' @param refreshToken Provide the previously obtained refreshToken
 #' @param verbose Print Tracing information (Default False)
 #'
 #' @note See \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group-create-service-principal-portal/} for instructions to set up an Active Directory application
@@ -286,7 +287,6 @@ azureGetTokenRefreshToken <- function(azureActiveContext, tenantID, refreshToken
   if (missing(refreshToken)) refreshToken <- azureActiveContext$RefreshToken
 
   assert_that(is_tenant_id(tenantID))
-  assert_that(is_client_id(clientID))
   assert_that(is_refreshToken(refreshToken))
 
   verbosity <- set_verbosity(verbose)
@@ -309,7 +309,6 @@ azureGetTokenRefreshToken <- function(azureActiveContext, tenantID, refreshToken
 
   azureActiveContext$Token  <- azToken
   azureActiveContext$tenantID    <- tenantID
-  azureActiveContext$clientID    <- clientID
   azureActiveContext$EXPIRY <- Sys.time() + 3598
   azureActiveContext$RefreshToken <- azRefreshToken
   return(TRUE)

@@ -286,6 +286,16 @@ on_failure(is_ssh_password) <- function(call, env) {
   "Provide an sshPassword"
 }
 
+# --- relativePath
+
+is_relativePath <- function(x) {
+  !missing(x) && !is.null(x) && is.character(x) && length(x) == 1
+}
+
+on_failure(is_relativePath) <- function(call, env) {
+  "Provide a valid relativePath string"
+}
+
 # --- permission
 
 is_permission <- function(x) {
@@ -304,6 +314,56 @@ on_failure(is_valid_permission) <- function(call, env) {
   paste("Permission string must be 3 in length",
         "and use numbers between 0 to 7 only.",
         sep = "\n")
+}
+
+# --- bufferSize
+
+is_bufferSize <- function(x) {
+  is.integer(x) && length(x) == 1 && x > 0
+}
+
+on_failure(is_bufferSize) <- function(call, env) {
+  "Provide a valid integer bufferSize. e.g., 4194304L, 1048576L, 1024L, 128L"
+}
+
+# --- replication
+
+is_replication <- function(x) {
+  is.integer(x) && length(x) == 1 && x > 0
+}
+
+on_failure(is_replication) <- function(call, env) {
+  "Provide a valid integer replication. e.g., 1L, 3L, 5L"
+}
+
+# --- blockSize
+
+is_blockSize <- function(x) {
+  is.integer(x) && length(x) == 1 && x > 0
+}
+
+on_failure(is_blockSize) <- function(call, env) {
+  "Provide a valid integer blockSize. e.g., 67108864L, 134217728L, 268435456L"
+}
+
+# --- offset
+
+is_offset <- function(x) {
+  is.integer(x) && x >= 0
+}
+
+on_failure(is_offset) <- function(call, env) {
+  "Provide a valid integer offset that is >= 0. e.g., 4194304L, 67108864L"
+}
+
+# --- length
+
+is_length <- function(x) {
+  is.integer(x) && x >= 0
+}
+
+on_failure(is_length) <- function(call, env) {
+  "Provide a valid integer length that is >=0. e.g., 4194304L, 134217728L"
 }
 
 # --- auth type
@@ -349,9 +409,9 @@ on_failure(is_valid_resource) <- function(call, env) {
 # --- content
 
 is_content <- function(x) {
-  is.character(x) && length(x) == 1 && nchar(x) >= 0
+  is.raw(x) && getContentSize(x) >= 0
 }
 
 on_failure(is_content) <- function(call, env) {
-  "Provide a valid non-null content with 0 or more length"
+  "Provide a valid non-null raw content"
 }
