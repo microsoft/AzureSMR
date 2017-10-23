@@ -119,17 +119,6 @@ callAzureDataLakeApi <- function(url, verb = "GET", azureActiveContext,
                                 content = raw(0), contenttype = "text/plain; charset=UTF-8",
                                 verbose = FALSE) {
   verbosity <- set_verbosity(verbose)
-  # TODO: COmmon: 
-  # 1. Introduce rawConnection() ?
-  # TODO: Request: There are couple of things to do here:
-  # 1. Add "User-Agent" ?
-  # 2. Add "x-ms-client-request-id" ?
-  # 3. Add "x-ms-adl-client-latency" ?
-  # 4. Add "x-ms-tracking-info" ?
-  # TODO: Response: Things to do for response:
-  # 1. "x-ms-request-id"
-  # 2. "x-ms-append-offset"
-  # 3. "Content-Length"
   resHttp <- switch(verb,
          "GET" = GET(url,
                      add_headers(.headers = c(Authorization = azureActiveContext$Token,
