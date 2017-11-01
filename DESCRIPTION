@@ -14,8 +14,7 @@ Authors@R: c(
   person("Alan", "Weaver", role="aut", email="alanwe@microsoft.com", comment = "original author"),
   person("Omkar", "Aradhya", role="aut", email="omarad@microsoft.com", comment = "contributed ADLS code"),
   person("Le", "Zhang", role="aut", email="zhled@microsoft.com", comment = "contributed DSVM and rate card code"),
-  person("Brian", "Hoang", role="aut", email="brhoan@microsoft.com", comment = "contributed Azure Batch code")
-)
+  person("Brian", "Hoang", role="aut", email="brhoan@microsoft.com", comment = "contributed Azure Batch code"))
 Copyright: Microsoft
 License: MIT + file LICENSE
 URL: https://github.com/Microsoft/AzureSMR
