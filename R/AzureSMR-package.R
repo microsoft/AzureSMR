@@ -41,6 +41,14 @@
 #'   - [azureDataConsumption()]
 #'   - [azurePricingRates()]
 #'   - [azureExpenseCalculator()]
+#' * Azure Data Lake Store functions:
+#'   - [azureDataLakeListStatus()]
+#'   - [azureDataLakeGetFileStatus()]
+#'   - [azureDataLakeMkdirs()]
+#'   - [azureDataLakeCreate()]
+#'   - [azureDataLakeAppend()]
+#'   - [azureDataLakeRead()]
+#'   - [azureDataLakeDelete()]
 #'
 #' @name AzureSMR
 #' @aliases AzureSMR-package
