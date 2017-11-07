@@ -102,6 +102,26 @@ on_failure(is_authKey) <- function(call, env) {
   "Provide a valid autkKeyID argument, or set using createAzureContext()"
 }
 
+# --- refreshToken
+
+is_refreshToken <- function(x) {
+  is.character(x) && length(x) == 1 && nchar(x) > 0
+}
+
+on_failure(is_refreshToken) <- function(call, env) {
+  "Provide a valid refreshToken argument"
+}
+
+# --- deviceToken
+
+is_deviceCode <- function(x) {
+  is.character(x) && length(x) == 1 && nchar(x) > 0
+}
+
+on_failure(is_deviceCode) <- function(call, env) {
+  "Provide a valid deviceCode argument"
+}
+
 # --- vm_name
 
 is_vm_name <- function(x) {
@@ -266,6 +286,16 @@ on_failure(is_ssh_password) <- function(call, env) {
   "Provide an sshPassword"
 }
 
+# --- relativePath
+
+is_relativePath <- function(x) {
+  !missing(x) && !is.null(x) && is.character(x) && length(x) == 1
+}
+
+on_failure(is_relativePath) <- function(call, env) {
+  "Provide a valid relativePath string"
+}
+
 # --- permission
 
 is_permission <- function(x) {
@@ -284,4 +314,104 @@ on_failure(is_valid_permission) <- function(call, env) {
   paste("Permission string must be 3 in length",
         "and use numbers between 0 to 7 only.",
         sep = "\n")
+}
+
+# --- bufferSize
+
+is_bufferSize <- function(x) {
+  is.integer(x) && length(x) == 1 && x > 0
+}
+
+on_failure(is_bufferSize) <- function(call, env) {
+  "Provide a valid integer bufferSize. e.g., 4194304L, 1048576L, 1024L, 128L"
+}
+
+# --- replication
+
+is_replication <- function(x) {
+  is.integer(x) && length(x) == 1 && x > 0
+}
+
+on_failure(is_replication) <- function(call, env) {
+  "Provide a valid integer replication. e.g., 1L, 3L, 5L"
+}
+
+# --- blockSize
+
+is_blockSize <- function(x) {
+  is.integer(x) && length(x) == 1 && x > 0
+}
+
+on_failure(is_blockSize) <- function(call, env) {
+  "Provide a valid integer blockSize. e.g., 67108864L, 134217728L, 268435456L"
+}
+
+# --- offset
+
+is_offset <- function(x) {
+  is.integer(x) && x >= 0
+}
+
+on_failure(is_offset) <- function(call, env) {
+  "Provide a valid integer offset that is >= 0. e.g., 4194304L, 67108864L"
+}
+
+# --- length
+
+is_length <- function(x) {
+  is.integer(x) && x >= 0
+}
+
+on_failure(is_length) <- function(call, env) {
+  "Provide a valid integer length that is >=0. e.g., 4194304L, 134217728L"
+}
+
+# --- auth type
+
+is_authType <- function(x) {
+  is.character(x) && length(x) == 1 && nchar(x) > 0 && assert_that(is_valid_authType(x))
+}
+
+on_failure(is_authType) <- function(call, env) {
+  "Provide a valid authType string"
+}
+
+is_valid_authType <- function(x) {
+  x == "ClientCredential" || x == "DeviceCode" || x == "RefreshToken"
+}
+
+on_failure(is_valid_authType) <- function(call, env) {
+  paste("authType string must be a string",
+        "and should be one of \"ClientCredential\", \"DeviceCode\" or \"RefreshToken\".",
+        sep = "\n")
+}
+
+# --- resource
+
+is_resource <- function(x) {
+  is.character(x) && length(x) == 1 && nchar(x) > 0 && assert_that(is_valid_resource(x))
+}
+
+on_failure(is_resource) <- function(call, env) {
+  "Provide a valid resource string"
+}
+
+is_valid_resource <- function(x) {
+  grepl("^(https?:\\/\\/)?([\\da-z\\.-]+)\\.([a-z\\.]{2,6})([\\/\\w \\.-]*)*\\/?$", x)
+}
+
+on_failure(is_valid_resource) <- function(call, env) {
+  paste("resource must be a string",
+        "and should be in a valid URL format.",
+        sep = "\n")
+}
+
+# --- content
+
+is_content <- function(x) {
+  is.raw(x) && getContentSize(x) >= 0
+}
+
+on_failure(is_content) <- function(call, env) {
+  "Provide a valid non-null raw content"
 }

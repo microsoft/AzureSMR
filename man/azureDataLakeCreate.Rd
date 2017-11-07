@@ -2,34 +2,61 @@
 % Please edit documentation in R/AzureDataLake.R
 \name{azureDataLakeCreate}
 \alias{azureDataLakeCreate}
-\title{Azure Data Lake CREATE for specified relativePath of an azure data lake account.}
+\title{Create and write to a file.}
 \usage{
 azureDataLakeCreate(azureActiveContext, azureDataLakeAccount, relativePath,
-  overwrite = FALSE, permission = NULL, contents = "", verbose = FALSE)
+  permission, overwrite = FALSE, bufferSize, replication, blockSize,
+  contents = raw(0), verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{Provide an \code{azureActiveContext} object used for authentication.}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
 
-\item{azureDataLakeAccount}{Provide the name of the Azure Data Lake account.}
+\item{azureDataLakeAccount}{Name of the Azure Data Lake account.}
 
-\item{relativePath}{Provide a relative path of the directory.}
+\item{relativePath}{Relative path of a file.}
 
-\item{overwrite}{Overwrite existing files (default FALSE).}
+\item{permission}{Permission to be set for file (default 644).}
 
-\item{permission}{Provide the permission to be set for the directory.}
+\item{overwrite}{Whether to overwrite existing files with same name (default FALSE).}
 
-\item{contents}{Provide contents to write to \code{relativePath}}
+\item{bufferSize}{Size of the buffer to be used.}
+
+\item{replication}{Required block replication for a file.}
+
+\item{blockSize}{Block size of the file.}
+
+\item{contents}{raw contents to be written to the newly created file (default raw(0)).}
 
 \item{verbose}{Print tracing information (default FALSE).}
 }
+\value{
+NULL (void)
+}
 \description{
-Azure Data Lake CREATE for specified relativePath of an azure data lake account.
+Create and write to a file.
+}
+\references{
+\url{https://docs.microsoft.com/en-us/azure/data-lake-store/data-lake-store-data-operations-rest-api#upload-data}
 }
 \seealso{
+\url{https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/WebHDFS.html#Create_and_Write_to_a_File}
+
+\url{https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/WebHDFS.html#Overwrite}
+
+\url{https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/WebHDFS.html#Block_Size}
+
+\url{https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/WebHDFS.html#Replication}
+
+\url{https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/WebHDFS.html#Permission}
+
+\url{https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/WebHDFS.html#Buffer_Size}
+
+\url{https://hadoop.apache.org/docs/current/api/org/apache/hadoop/fs/FileSystem.html#create-org.apache.hadoop.fs.Path-org.apache.hadoop.fs.permission.FsPermission-boolean-int-short-long-org.apache.hadoop.util.Progressable-}
+
 Other Azure Data Lake Store functions: \code{\link{azureDataLakeAppend}},
   \code{\link{azureDataLakeDelete}},
   \code{\link{azureDataLakeGetFileStatus}},
   \code{\link{azureDataLakeListStatus}},
   \code{\link{azureDataLakeMkdirs}},
-  \code{\link{azureDataLakeOpen}}
+  \code{\link{azureDataLakeRead}}
 }

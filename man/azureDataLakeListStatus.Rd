@@ -2,31 +2,42 @@
 % Please edit documentation in R/AzureDataLake.R
 \name{azureDataLakeListStatus}
 \alias{azureDataLakeListStatus}
-\title{List status for specified relative path of an azure data lake account.}
+\title{List the statuses of the files/directories in the given path.}
 \usage{
-azureDataLakeListStatus(azureActiveContext, azureDataLakeAccount,
-  relativePath = "", verbose = FALSE)
+azureDataLakeListStatus(azureActiveContext, azureDataLakeAccount, relativePath,
+  verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{Provide an \code{azureActiveContext} object used for authentication.}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
 
-\item{azureDataLakeAccount}{Provide the name of the Azure Data Lake account.}
+\item{azureDataLakeAccount}{Name of the Azure Data Lake Store account.}
 
-\item{relativePath}{Provide a relative path of the directory.}
+\item{relativePath}{Relative path of a file/directory.}
 
 \item{verbose}{Print tracing information (default FALSE).}
 }
 \value{
-Returns a data frame.
+Returns a FileStatuses data frame with a row for each directory element.
+Each row has 11 columns (12 in case of a file):
+FileStatuses.FileStatus.(accessTime, modificationTime, replication, permission, owner, group, aclBit, msExpirationtime (in case of file))
 }
 \description{
-List status for specified relative path of an azure data lake account.
+List the statuses of the files/directories in the given path.
+}
+\references{
+\url{https://docs.microsoft.com/en-us/azure/data-lake-store/data-lake-store-data-operations-rest-api#list-folders}
 }
 \seealso{
+\url{https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/WebHDFS.html#List_a_Directory}
+
+\url{https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/WebHDFS.html#List_a_File}
+
+\url{https://hadoop.apache.org/docs/current/api/org/apache/hadoop/fs/FileSystem.html#listStatus-org.apache.hadoop.fs.Path-}
+
 Other Azure Data Lake Store functions: \code{\link{azureDataLakeAppend}},
   \code{\link{azureDataLakeCreate}},
   \code{\link{azureDataLakeDelete}},
   \code{\link{azureDataLakeGetFileStatus}},
   \code{\link{azureDataLakeMkdirs}},
-  \code{\link{azureDataLakeOpen}}
+  \code{\link{azureDataLakeRead}}
 }

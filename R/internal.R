@@ -106,17 +106,20 @@ azure_storage_header <- function(shared_key, date = x_ms_date(), content_length 
   add_headers(.headers = headers)
 }
 
+getAzureDataLakeBasePath <- function(azureDataLakeAccount) {
+  basePath <- paste0("https://", azureDataLakeAccount, ".azuredatalakestore.net/webhdfs/v1/")
+  return(basePath)
+}
+
+getAzureDataLakeApiVersion <- function() {
+  return("&api-version=2016-11-01")
+}
+
 callAzureDataLakeApi <- function(url, verb = "GET", azureActiveContext,
-                                headers = NULL, CMD, 
-                                content = NULL, contenttype = "text/plain; charset=UTF-8",
+                                content = raw(0), contenttype = "text/plain; charset=UTF-8",
                                 verbose = FALSE) {
-  dateStamp <- httr::http_date(Sys.time())
-
   verbosity <- set_verbosity(verbose)
-
-  if (missing(CMD) || is.null(CMD)) CMD <- extractUrlArguments(url)
-
-  switch(verb,
+  resHttp <- switch(verb,
          "GET" = GET(url,
                      add_headers(.headers = c(Authorization = azureActiveContext$Token,
                                               `Content-Length` = "0"
@@ -127,7 +130,7 @@ callAzureDataLakeApi <- function(url, verb = "GET", azureActiveContext,
          "PUT" = PUT(url,
                      add_headers(.headers = c(Authorization = azureActiveContext$Token,
                                               `Transfer-Encoding` = "chunked",
-                                              `Content-Length` = nchar(content),
+                                              `Content-Length` = getContentSize(content),
                                               `Content-type` = contenttype
                                               )
                                  ),
@@ -137,7 +140,7 @@ callAzureDataLakeApi <- function(url, verb = "GET", azureActiveContext,
          "POST" = POST(url,
                      add_headers(.headers = c(Authorization = azureActiveContext$Token,
                                               `Transfer-Encoding` = "chunked",
-                                              `Content-Length` = nchar(content),
+                                              `Content-Length` = getContentSize(content),
                                               `Content-type` = contenttype
                                               )
                                  ),
@@ -152,6 +155,12 @@ callAzureDataLakeApi <- function(url, verb = "GET", azureActiveContext,
                      verbosity
                      )
          )
+  # Print the response body in case verbose is enabled.
+  if (verbose) {
+    resJsonStr <- content(resHttp, "text", encoding = "UTF-8")
+    print(resJsonStr)
+  }
+  return(resHttp)
 }
 
 getSig <- function(azureActiveContext, url, verb, key, storageAccount,

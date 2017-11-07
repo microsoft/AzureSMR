@@ -11,12 +11,11 @@
 #' @seealso [setAzureContext()], [azureAuthenticate()], [read.AzureSMR.config)]
 #' @return An `azureActiveContext` object
 #' @export
-createAzureContext <- function(tenantID, clientID, authKey, configFile){
+createAzureContext <- function(tenantID, clientID, authKey, configFile, authType, resource){
   azEnv <- new.env(parent = emptyenv())
   azEnv <- as.azureActiveContext(azEnv)
-
   list2env(
-    list(tenantID = "", clientID = "", authKey = ""),
+    list(tenantID = "", clientID = "", authKey = "", authType = "", resource = ""),
     envir = azEnv
   )
   if (!missing(configFile)) {
@@ -27,7 +26,9 @@ createAzureContext <- function(tenantID, clientID, authKey, configFile){
     if (!missing(tenantID)) azEnv$tenantID <- tenantID
     if (!missing(clientID)) azEnv$clientID <- clientID
     if (!missing(authKey)) azEnv$authKey <- authKey
-    if (!missing(tenantID) && !missing(clientID) && !missing(authKey)) {
+    if (!missing(authType)) azEnv$authType <- authType
+    if (!missing(resource)) azEnv$resource <- resource
+    if (!missing(tenantID) && !missing(clientID)) {
       azureAuthenticate(azEnv)
     }
   }
@@ -42,6 +43,8 @@ createAzureContext <- function(tenantID, clientID, authKey, configFile){
 #' @param azureActiveContext A container used for caching variables used by `AzureSMR`, created by [createAzureContext()]
 #' @param tenantID The tenant ID provided during creation of the Active Directory application / service principal
 #' @param clientID The client ID provided during creation of the Active Directory application / service principal
+#' @param authType Auth type for getting token: "ClientCredential", "DeviceCode"
+#' @param resource Resource to use for getting token
 #' @param authKey The authentication key provided during creation of the Active Directory application / service principal
 #' @param subscriptionID Subscription ID.  This is obtained automatically by [azureAuthenticate()] when only a single subscriptionID is available via Active Directory
 #' @param resourceGroup Name of the resource group
@@ -63,7 +66,7 @@ setAzureContext <- function(azureActiveContext, tenantID, clientID, authKey,
                             storageKey, storageAccount,
                             container, blob,
                             vmName,
-                            hdiAdmin, hdiPassword, clustername, kind, sessionID)
+                            hdiAdmin, hdiPassword, clustername, kind, sessionID, authType, resource)
 {
   if (!missing(tenantID)) azureActiveContext$tenantID <- tenantID
   if (!missing(clientID)) azureActiveContext$clientID <- clientID
@@ -104,4 +107,7 @@ setAzureContext <- function(azureActiveContext, tenantID, clientID, authKey,
   if (!missing(hdiPassword)) azureActiveContext$hdiPassword  <- hdiPassword
   if (!missing(kind)) azureActiveContext$kind <- kind
   if (!missing(sessionID)) azureActiveContext$sessionID <- sessionID
+
+  if (!missing(authType)) azureActiveContext$authType <- authType
+  if (!missing(resource)) azureActiveContext$resource <- resource
 }

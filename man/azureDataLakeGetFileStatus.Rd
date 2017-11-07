@@ -2,31 +2,40 @@
 % Please edit documentation in R/AzureDataLake.R
 \name{azureDataLakeGetFileStatus}
 \alias{azureDataLakeGetFileStatus}
-\title{Azure Data Lake GETFILESTATUS for specified relativePath of an azure data lake account.}
+\title{Get the status of a file/directory in the given path.}
 \usage{
 azureDataLakeGetFileStatus(azureActiveContext, azureDataLakeAccount,
-  relativePath = "", verbose = FALSE)
+  relativePath, verbose = FALSE)
 }
 \arguments{
-\item{azureActiveContext}{Provide an \code{azureActiveContext} object used for authentication.}
+\item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
 
-\item{azureDataLakeAccount}{Provide the name of the Azure Data Lake account.}
+\item{azureDataLakeAccount}{Name of the Azure Data Lake account.}
 
-\item{relativePath}{Provide a relative path of the directory.}
+\item{relativePath}{Relative path of a file/directory.}
 
 \item{verbose}{Print tracing information (default FALSE).}
 }
 \value{
-Returns a data frame.
+Returns a FileStatus data frame with one row for directory element.
+The row has 11 columns (12 in case of a \link{file}):
+FileStatuses.FileStatus.(accessTime, modificationTime, replication, permission, owner, group, aclBit, msExpirationtime (in case of file))
 }
 \description{
-Azure Data Lake GETFILESTATUS for specified relativePath of an azure data lake account.
+Get the status of a file/directory in the given path.
+}
+\references{
+\url{https://docs.microsoft.com/en-us/azure/data-lake-store/data-lake-store-data-operations-rest-api}
 }
 \seealso{
+\url{https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/WebHDFS.html#Status_of_a_File.2FDirectory}
+
+\url{https://hadoop.apache.org/docs/current/api/org/apache/hadoop/fs/FileSystem.html#getFileStatus-org.apache.hadoop.fs.Path-}
+
 Other Azure Data Lake Store functions: \code{\link{azureDataLakeAppend}},
   \code{\link{azureDataLakeCreate}},
   \code{\link{azureDataLakeDelete}},
   \code{\link{azureDataLakeListStatus}},
   \code{\link{azureDataLakeMkdirs}},
-  \code{\link{azureDataLakeOpen}}
+  \code{\link{azureDataLakeRead}}
 }

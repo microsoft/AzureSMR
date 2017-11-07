@@ -11,9 +11,9 @@ vignette: >
 
 ## Configuration instructions
 
-To use the `AzureSMR` package, you must create an Azure Active Directory application with permisssions.  This vignette contains instructions to do this.
+To use the `AzureSMR` package, you must create an Azure Active Directory application with permisssions. This vignette contains instructions to do this.
 
-You must collect three pieces of information to authenticate with the `createAzureContect()` function:
+You must collect three pieces of information to authenticate with the `createAzureContext()` function:
 
 * tenant ID (`tenantID`)
 * application ID, previously known as client ID (`clientID`)
@@ -95,6 +95,15 @@ That is all.  You can test this by trying:
 
 ```{r, eval = FALSE}
 sc <- createAzureContext(tenantID = "{TID}", clientID = "{CID}", authKey= "{KEY}")
+rgs <- azureListRG(sc)
+rgs
+```
+
+or using the "DeviceCode" flow if supported by that resource by trying:
+
+```{r, eval = FALSE}
+sc <- createAzureContext(tenantID = "{TID}", clientID = "{CID}", authType= "DeviceCode")
+# Manually authenicate using DeviceCode flow
 rgs <- azureListRG(sc)
 rgs
 ```
