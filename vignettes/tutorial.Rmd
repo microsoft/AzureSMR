@@ -64,7 +64,7 @@ or using the "DeviceCode" flow if supported by that resource by trying:
 
 ```{r, eval = FALSE}
 sc <- createAzureContext(tenantID = "{TID}", clientID = "{CID}", authType= "DeviceCode")
-# Manually authenicate using DeviceCode flow
+# Manually authenticate using DeviceCode flow
 rgs <- azureListRG(sc)
 rgs
 ```
