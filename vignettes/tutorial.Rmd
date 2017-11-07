@@ -33,7 +33,7 @@ library(AzureSMR)
 - Azure HDI: List and Scale Azure HDInsight Clusters
 - Azure Hive: Run Hive queries against a HDInsight Cluster
 - Azure Spark: List and create Spark jobs/Sessions against a HDInsight Cluster(Livy) - EXPERIMENTAL
-- Azure Data Lake: ListStatus, GetFileStatus, MkDirs, Create (file), Append (file), Read (file), Delete
+- Azure Data Lake Store: ListStatus, GetFileStatus, MkDirs, Create (file), Append (file), Read (file), Delete
 
 
 For a detailed list of `AzureSMR` functions and their syntax please refer to the Help pages.
@@ -322,25 +322,25 @@ azureSparkCMD(sc, clustername = "smrhdi", CMD = "cat(HW)", sessionID = "2")
 
 ## Accessing Azure Data Lake Store using the `azureActiveContext`
 
-To access Azure Data Lake you need to generate an access token using either "ClientCredential" (default) or "DeviceCode" AuthType use `createAzureContext()`.
+To access Azure Data Lake Store you need to generate an access token using either "ClientCredential" (default) or "DeviceCode" AuthType use `createAzureContext()`.
 ```{r, eval=FALSE}
 asc <- createAzureContext(tenantID = "{TID}", clientID = "{CID}", authKey= "{KEY}")
 ```
 
-To create directories in an azure datalake store account use `azureDataLakeMkdirs()`
+To create directories in Azure Data Lake Store use `azureDataLakeMkdirs()`
 
 ```{r, eval=FALSE}
 azureDataLakeMkdirs(asc, azureDataLakeAccount, "tempfolder")
 ```
 
-To list items in an azure datalake store account use `azureDataLakeListStatus()`
+To list items in Azure Data Lake Store use `azureDataLakeListStatus()`
 
 ```{r, eval=FALSE}
 azureDataLakeListStatus(asc, azureDataLakeAccount, "")
 azureDataLakeListStatus(asc, azureDataLakeAccount, "tempfolder")
 ```
 
-To create a file and optionally write data to the new file in an azure data lake storage account use `azureDataLakeCreate()`
+To create a file and optionally write data to the new file in Azure Data Lake Store use `azureDataLakeCreate()`
 
 ```{r, eval=FALSE}
 azureDataLakeCreate(asc, azureDataLakeAccount, "tempfolder/tempfile00.txt", 
@@ -349,20 +349,20 @@ azureDataLakeCreate(asc, azureDataLakeAccount, "tempfolder/tempfile00.txt",
                     charToRaw("abcd"))
 ```
 
-To append to a file in an azure data lake storage account use `azureDataLakeAppend()`
+To append to a file in Azure Data Lake Store use `azureDataLakeAppend()`
 
 ```{r, eval=FALSE}
 azureDataLakeAppend(asc, azureDataLakeAccount, "tempfolder/tempfile00.txt", 4194304L, charToRaw("stuv"))
 ```
 
-To read a file in azure datalake store account use `azureDataLakeRead()`
+To read a file in Azure Data Lake Store use `azureDataLakeRead()`
 
 ```{r, eval=FALSE}
 azureDataLakeRead(asc, azureDataLakeAccount, "tempfolder/tempfile00.txt", 
                   length = 2L, bufferSize = 4194304L)
 ```
 
-To delete item(s) in azure datalake store account use `azureDataLakeDelete()`
+To delete item(s) in Azure Data Lake Store use `azureDataLakeDelete()`
 
 ```{r, eval=FALSE}
 azureDataLakeDelete(asc, azureDataLakeAccount, "tempfolder", TRUE)
