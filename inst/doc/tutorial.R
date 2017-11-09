@@ -11,6 +11,12 @@
 #  sc <- createAzureContext(tenantID = "{TID}", clientID = "{CID}", authKey= "{KEY}")
 #  sc
 
+## ---- eval = FALSE-------------------------------------------------------
+#  sc <- createAzureContext(tenantID = "{TID}", clientID = "{CID}", authType= "DeviceCode")
+#  # Manually authenticate using DeviceCode flow
+#  rgs <- azureListRG(sc)
+#  rgs
+
 ## ---- eval=FALSE---------------------------------------------------------
 #  azureListSubscriptions(sc)
 
@@ -158,4 +164,30 @@
 #                       kind = "sparkr")
 #  azureSparkCMD(sc, clustername = "smrhdi", CMD = "HW<-'hello R'", sessionID = "2")
 #  azureSparkCMD(sc, clustername = "smrhdi", CMD = "cat(HW)", sessionID = "2")
+
+## ---- eval=FALSE---------------------------------------------------------
+#  asc <- createAzureContext(tenantID = "{TID}", clientID = "{CID}", authKey= "{KEY}")
+
+## ---- eval=FALSE---------------------------------------------------------
+#  azureDataLakeMkdirs(asc, azureDataLakeAccount, "tempfolder")
+
+## ---- eval=FALSE---------------------------------------------------------
+#  azureDataLakeListStatus(asc, azureDataLakeAccount, "")
+#  azureDataLakeListStatus(asc, azureDataLakeAccount, "tempfolder")
+
+## ---- eval=FALSE---------------------------------------------------------
+#  azureDataLakeCreate(asc, azureDataLakeAccount, "tempfolder/tempfile00.txt",
+#                      "755", FALSE,
+#                      4194304L, 3L, 268435456L,
+#                      charToRaw("abcd"))
+
+## ---- eval=FALSE---------------------------------------------------------
+#  azureDataLakeAppend(asc, azureDataLakeAccount, "tempfolder/tempfile00.txt", 4194304L, charToRaw("stuv"))
+
+## ---- eval=FALSE---------------------------------------------------------
+#  azureDataLakeRead(asc, azureDataLakeAccount, "tempfolder/tempfile00.txt",
+#                    length = 2L, bufferSize = 4194304L)
+
+## ---- eval=FALSE---------------------------------------------------------
+#  azureDataLakeDelete(asc, azureDataLakeAccount, "tempfolder", TRUE)
 
