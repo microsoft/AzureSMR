@@ -63,6 +63,16 @@ This enables you to use and change many Azure resources. The following is an inc
 \item \code{\link[=azurePricingRates]{azurePricingRates()}}
 \item \code{\link[=azureExpenseCalculator]{azureExpenseCalculator()}}
 }
+\item Azure Data Lake Store functions:
+\itemize{
+\item \code{\link[=azureDataLakeListStatus]{azureDataLakeListStatus()}}
+\item \code{\link[=azureDataLakeGetFileStatus]{azureDataLakeGetFileStatus()}}
+\item \code{\link[=azureDataLakeMkdirs]{azureDataLakeMkdirs()}}
+\item \code{\link[=azureDataLakeCreate]{azureDataLakeCreate()}}
+\item \code{\link[=azureDataLakeAppend]{azureDataLakeAppend()}}
+\item \code{\link[=azureDataLakeRead]{azureDataLakeRead()}}
+\item \code{\link[=azureDataLakeDelete]{azureDataLakeDelete()}}
+}
 }
 }
 \keyword{package}
