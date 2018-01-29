@@ -106,6 +106,21 @@ azure_storage_header <- function(shared_key, date = x_ms_date(), content_length 
   add_headers(.headers = headers)
 }
 
+getAzureDataLakeSDKVersion <- function() {
+  return("1.0.0.0")
+}
+
+getAzureDataLakeSDKUserAgent <- function() {
+  adlsUA <- paste0("ADLSRSDK"
+                   , "-", getAzureDataLakeSDKVersion()
+                   , "/", Sys.info()[1], "-", Sys.info()[2] #sysname-release
+                   , "-", Sys.info()[3] #version
+                   , "-", Sys.info()[5] #machine
+                   , "/", R.version$version.string
+  )
+  return(adlsUA)
+}
+
 getAzureDataLakeBasePath <- function(azureDataLakeAccount) {
   basePath <- paste0("https://", azureDataLakeAccount, ".azuredatalakestore.net/webhdfs/v1/")
   return(basePath)
@@ -119,37 +134,41 @@ callAzureDataLakeApi <- function(url, verb = "GET", azureActiveContext,
                                 content = raw(0), contenttype = "text/plain; charset=UTF-8",
                                 verbose = FALSE) {
   verbosity <- set_verbosity(verbose)
+  commonHeaders <- c(Authorization = azureActiveContext$Token
+                     , `User-Agent` = getAzureDataLakeSDKUserAgent()
+                     , `x-ms-client-request-id` = uuid()
+                     )
   resHttp <- switch(verb,
          "GET" = GET(url,
-                     add_headers(.headers = c(Authorization = azureActiveContext$Token,
-                                              `Content-Length` = "0"
+                     add_headers(.headers = c(commonHeaders
+                                              , `Content-Length` = "0"
                                               )
                                  ),
                      verbosity
                      ),
          "PUT" = PUT(url,
-                     add_headers(.headers = c(Authorization = azureActiveContext$Token,
-                                              `Transfer-Encoding` = "chunked",
-                                              `Content-Length` = getContentSize(content),
-                                              `Content-type` = contenttype
+                     add_headers(.headers = c(commonHeaders
+                                              , `Transfer-Encoding` = "chunked"
+                                              , `Content-Length` = getContentSize(content)
+                                              , `Content-type` = contenttype
                                               )
                                  ),
                      body = content,
                      verbosity
                      ),
          "POST" = POST(url,
-                     add_headers(.headers = c(Authorization = azureActiveContext$Token,
-                                              `Transfer-Encoding` = "chunked",
-                                              `Content-Length` = getContentSize(content),
-                                              `Content-type` = contenttype
+                     add_headers(.headers = c(commonHeaders
+                                              , `Transfer-Encoding` = "chunked"
+                                              , `Content-Length` = getContentSize(content)
+                                              , `Content-type` = contenttype
                                               )
                                  ),
                      body = content,
                      verbosity
                      ),
          "DELETE" = DELETE(url,
-                     add_headers(.headers = c(Authorization = azureActiveContext$Token,
-                                              `Content-Length` = "0"
+                     add_headers(.headers = c(commonHeaders
+                                              , `Content-Length` = "0"
                                               )
                                  ),
                      verbosity
@@ -243,4 +262,24 @@ updateAzureActiveContext <- function(x, storageAccount, storageKey, resourceGrou
     if (!missing(directory)) x$directory <- directory
   }
   TRUE
+}
+
+## https://gist.github.com/cbare/5979354
+## Version 4 UUIDs have the form xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx
+## where x is any hexadecimal digit and y is one of 8, 9, A, or B
+## e.g., f47ac10b-58cc-4372-a567-0e02b2c3d479
+uuid <- function(uppercase=FALSE) {
+  
+  hex_digits <- c(as.character(0:9), letters[1:6])
+  hex_digits <- if (uppercase) toupper(hex_digits) else hex_digits
+  
+  y_digits <- hex_digits[9:12]
+  
+  paste(
+    paste0(sample(hex_digits, 8, replace=TRUE), collapse=''),
+    paste0(sample(hex_digits, 4, replace=TRUE), collapse=''),
+    paste0('4', paste0(sample(hex_digits, 3, replace=TRUE), collapse=''), collapse=''),
+    paste0(sample(y_digits,1), paste0(sample(hex_digits, 3, replace=TRUE), collapse=''), collapse=''),
+    paste0(sample(hex_digits, 12, replace=TRUE), collapse=''),
+    sep='-')
 }
