@@ -29,6 +29,58 @@ azureListSA <- function(azureActiveContext, resourceGroup, subscriptionID,
   z
 }
 
+#' Get specified storage account
+#'
+#' @inheritParams setAzureContext
+#' @inheritParams azureAuthenticate
+#' @inheritParams azureSAGetKey
+
+#' @family Storage account functions
+#' @export
+azureGetStorageAccount <- function(azureActiveContext,
+                                   resourceGroup,
+                                   subscriptionID,
+                                   storageAccount,
+                                   verbose = FALSE) {
+  if (missing(resourceGroup)) {
+    resourceGroup <- azureActiveContext$resourceGroup
+  } 
+  
+  if (missing(subscriptionID)) {
+    subscriptionID <- azureActiveContext$subscriptionID
+  } 
+  if (!length(subscriptionID)) {
+    stop("Error: No subscriptionID provided: Use SUBID argument or set in AzureContext")
+  }
+  
+  verbosity <- if (verbose) httr::verbose(TRUE) else NULL
+  
+  SA <- if(missing(resourceGroup)) {
+    azureListAllResources(azureActiveContext,
+                          type = "Microsoft.Storage/storageAccounts")
+  } else {
+    azureListAllResources(azureActiveContext,
+                          type = "Microsoft.Storage/storageAccounts",
+                          resourceGroup = resourceGroup)
+    
+  }
+  
+  idx <- which(SA$name == storageAccount)
+  if (identical(idx, integer(0))) {
+    stop(sprintf("Storage account '%s' was not found in subscription '%s'.",
+                 storageAccount,
+                 subscriptionID))
+  }
+  
+  list(
+    name = SA$name[idx],
+    type = SA$type[idx],
+    location = SA$location[idx],
+    id = SA$id[idx],
+    resourceGroup = SA$resourceGroup[idx],
+    subscriptionID = SA$subscriptionID[idx]
+  )
+}
 
 #' Get the Storage Keys for Specified Storage Account.
 #'
