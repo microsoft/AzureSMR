@@ -25,6 +25,40 @@ azureListBatchAccounts <- function(azureActiveContext, resourceGroup, subscripti
   z
 }
 
+#' Get the specified Batch Account.
+#'
+#' @inheritParams setAzureContext
+#' @inheritParams azureAuthenticate
+#'
+#' @family Batch account functions
+#' @export
+azureGetBatchAccount <- function(azureActiveContext, batchAccount, 
+                                 resourceGroup, subscriptionID, verbose = FALSE) {
+  assert_that(is.azureActiveContext(azureActiveContext))
+  
+  if (missing(resourceGroup)) resourceGroup <- azureActiveContext$resourceGroup
+  if (missing(subscriptionID)) subscriptionID <- azureActiveContext$subscriptionID
+  
+  assert_that(is_storage_account(batchAccount))
+  assert_that(is_resource_group(resourceGroup))
+  assert_that(is_subscription_id(subscriptionID))
+  
+  uri <- paste0("https://management.azure.com/subscriptions/", subscriptionID,
+                "/resourceGroups/", resourceGroup, 
+                "/providers/Microsoft.Batch/batchAccounts/", batchAccount, 
+                "?api-version=2017-05-01")
+  
+  r <- call_azure_sm(azureActiveContext, uri = uri,
+                     verb = "GET", verbose = verbose)
+  stopWithAzureError(r)
+  
+  rl <- content(r, "text", encoding = "UTF-8")
+  df <- fromJSON(rl)
+  azureActiveContext$batchAccount  <- batchAccount
+  azureActiveContext$resourceGroup   <- resourceGroup
+  
+  return(df)
+}
 
 #' Create an azure batch account.
 #'

@@ -27,5 +27,6 @@ https://docs.microsoft.com/en-us/rest/api/batchmanagement/batchaccount#BatchAcco
 \seealso{
 Other Batch account functions: \code{\link{azureBatchGetKey}},
   \code{\link{azureCreateBatchAccount}},
+  \code{\link{azureGetBatchAccount}},
   \code{\link{azureListBatchAccounts}}
 }
