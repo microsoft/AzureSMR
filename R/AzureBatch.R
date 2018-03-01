@@ -54,8 +54,6 @@ azureGetBatchAccount <- function(azureActiveContext, batchAccount,
   
   rl <- content(r, "text", encoding = "UTF-8")
   df <- fromJSON(rl)
-  azureActiveContext$batchAccount  <- batchAccount
-  azureActiveContext$resourceGroup   <- resourceGroup
   
   return(df)
 }
