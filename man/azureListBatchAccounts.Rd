@@ -22,5 +22,6 @@ List batch accounts.
 \seealso{
 Other Batch account functions: \code{\link{azureBatchGetKey}},
   \code{\link{azureCreateBatchAccount}},
-  \code{\link{azureDeleteBatchAccount}}
+  \code{\link{azureDeleteBatchAccount}},
+  \code{\link{azureGetBatchAccount}}
 }

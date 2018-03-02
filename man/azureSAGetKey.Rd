@@ -24,5 +24,6 @@ Get the Storage Keys for Specified Storage Account.
 \seealso{
 Other Storage account functions: \code{\link{azureCreateStorageAccount}},
   \code{\link{azureDeletestorageAccount}},
+  \code{\link{azureGetStorageAccount}},
   \code{\link{azureListSA}}
 }

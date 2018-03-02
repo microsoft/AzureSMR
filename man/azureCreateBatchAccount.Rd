@@ -32,5 +32,6 @@ https://docs.microsoft.com/en-us/rest/api/batchmanagement/batchaccount
 \seealso{
 Other Batch account functions: \code{\link{azureBatchGetKey}},
   \code{\link{azureDeleteBatchAccount}},
+  \code{\link{azureGetBatchAccount}},
   \code{\link{azureListBatchAccounts}}
 }

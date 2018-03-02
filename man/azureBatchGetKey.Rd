@@ -24,5 +24,6 @@ Get the Batch Keys for Specified Batch Account.
 \seealso{
 Other Batch account functions: \code{\link{azureCreateBatchAccount}},
   \code{\link{azureDeleteBatchAccount}},
+  \code{\link{azureGetBatchAccount}},
   \code{\link{azureListBatchAccounts}}
 }

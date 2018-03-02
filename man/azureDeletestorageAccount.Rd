@@ -23,5 +23,6 @@ Delete an Azure Storage Account.
 }
 \seealso{
 Other Storage account functions: \code{\link{azureCreateStorageAccount}},
+  \code{\link{azureGetStorageAccount}},
   \code{\link{azureListSA}}, \code{\link{azureSAGetKey}}
 }
