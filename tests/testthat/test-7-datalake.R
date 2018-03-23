@@ -179,6 +179,27 @@ test_that("Can append and read using buffered IO streams from files in an azure 
   expect_equal(res[[1]], 2097152)
   expect_equal(res[[2]], binData)
   res <- adlFileInputStreamClose(adlFIS, TRUE)
+  # OPEN(SEEK, READ_BUFFERED) - test2MB.bin
+  adlFIS <- azureDataLakeOpenBIS(asc, azureDataLakeAccount, "tempfolder1/test2MB.bin")
+  res <- adlFileInputStreamSeek(adlFIS, 1048576)
+  expect_null(res)
+  res <- adlFileInputStreamGetPos(adlFIS)
+  expect_equal(res, 1048576)
+  buffer <- raw(1048576)
+  res <- adlFileInputStreamReadBuffered(adlFIS, buffer, 1L, 1048576L, TRUE)
+  expect_equal(res[[1]], 1048576)
+  expect_equal(res[[2]], binData[1048577:2097152])
+  res <- adlFileInputStreamClose(adlFIS, TRUE)
+  # OPEN(SKIP, READ_BUFFERED) - test2MB.bin
+  adlFIS <- azureDataLakeOpenBIS(asc, azureDataLakeAccount, "tempfolder1/test2MB.bin")
+  res <- adlFileInputStreamSkip(adlFIS, 1048576)
+  expect_equal(res, 1048576)
+  adlFileInputStreamGetPos(adlFIS)
+  buffer <- raw(1048576)
+  res <- adlFileInputStreamReadBuffered(adlFIS, buffer, 1L, 1048576L, TRUE)
+  expect_equal(res[[1]], 1048576)
+  expect_equal(res[[2]], binData[1048577:2097152])
+  res <- adlFileInputStreamClose(adlFIS, TRUE)
 
   # CREATE
   res <- azureDataLakeCreate(asc, azureDataLakeAccount, "tempfolder1/test4MB.bin", "755")

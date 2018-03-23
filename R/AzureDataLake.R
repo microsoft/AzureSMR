@@ -906,13 +906,17 @@ adlFileInputStreamSeek <- function(adlFileInputStream, n) {
   #invalidate buffer
   adlFileInputStream$limit = 0;
   adlFileInputStream$bCursor = 0;
+  
+  return(NULL)
 }
 
 #' Skip to given position in stream.
 #'
 #' @param adlFileInputStream adlFileInputStream of the file
 #' @param n position to seek to
-#' @return NULL
+#' @return Skips over and discards n bytes of data from the input stream. 
+#'     The skip method may, for a variety of reasons, end up skipping over some smaller 
+#'     number of bytes, possibly 0. The actual number of bytes skipped is returned.
 #' Exception IOException if there is an error
 #' Exception EOFException if attempting to seek past end of file
 #'
@@ -935,7 +939,7 @@ adlFileInputStreamSkip <- function(adlFileInputStream, n) {
     newPos <- adlFileInputStream$directoryEntry$FileStatus.length
     n <- newPos - currentPos
   }
-  seek(newPos)
+  adlFileInputStreamSeek(adlFileInputStream, newPos)
   return(n)
 }
 
