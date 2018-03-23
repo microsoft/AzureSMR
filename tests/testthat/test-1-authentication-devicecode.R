@@ -14,7 +14,7 @@
 #' "authType": "DeviceCode",
 #' "resource": "https://datalake.azure.net/",
 #' "tenantID": "72fblahf-blah-41af-blah-2d7cBLAHdb47",
-#' "clientID": "2d302a05-86f0-4e0a-a8f6-ae4d28a035df",
+#' "clientID": "2dblah05-blah-4e0a-blah-ae4d2BLAH5df",
 #' }
 #' -----------------------------------------------------------------------------
 

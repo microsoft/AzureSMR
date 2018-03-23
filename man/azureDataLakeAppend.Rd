@@ -5,7 +5,7 @@
 \title{Append to an existing file.}
 \usage{
 azureDataLakeAppend(azureActiveContext, azureDataLakeAccount, relativePath,
-  bufferSize, contents, verbose = FALSE)
+  bufferSize, contents, contentSize = -1L, verbose = FALSE)
 }
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
@@ -18,10 +18,13 @@ azureDataLakeAppend(azureActiveContext, azureDataLakeAccount, relativePath,
 
 \item{contents}{raw contents to be written to the file.}
 
+\item{contentSize}{size of \code{contents} to be written to the file.}
+
 \item{verbose}{Print tracing information (default FALSE).}
 }
 \value{
 NULL (void)
+Exception IOException
 }
 \description{
 Append to an existing file.
@@ -36,10 +39,31 @@ Append to an existing file.
 
 \url{https://hadoop.apache.org/docs/current/api/org/apache/hadoop/fs/FileSystem.html#append-org.apache.hadoop.fs.Path-int-org.apache.hadoop.util.Progressable-}
 
-Other Azure Data Lake Store functions: \code{\link{azureDataLakeCreate}},
+Other Azure Data Lake Store functions: \code{\link{adlFileInputStreamAvailable}},
+  \code{\link{adlFileInputStreamClose}},
+  \code{\link{adlFileInputStreamGetPos}},
+  \code{\link{adlFileInputStreamLength}},
+  \code{\link{adlFileInputStreamMarkSupported}},
+  \code{\link{adlFileInputStreamMark}},
+  \code{\link{adlFileInputStreamReadBuffered}},
+  \code{\link{adlFileInputStreamRead}},
+  \code{\link{adlFileInputStreamReset}},
+  \code{\link{adlFileInputStreamSeek}},
+  \code{\link{adlFileInputStreamSkip}},
+  \code{\link{adlFileOutputStreamClose}},
+  \code{\link{adlFileOutputStreamFlush}},
+  \code{\link{adlFileOutputStreamWrite}},
+  \code{\link{azureDataLakeAppendBOS}},
+  \code{\link{azureDataLakeAppendCore}},
+  \code{\link{azureDataLakeCreate}},
   \code{\link{azureDataLakeDelete}},
   \code{\link{azureDataLakeGetFileStatus}},
   \code{\link{azureDataLakeListStatus}},
   \code{\link{azureDataLakeMkdirs}},
-  \code{\link{azureDataLakeRead}}
+  \code{\link{azureDataLakeOpenBIS}},
+  \code{\link{azureDataLakeReadCore}},
+  \code{\link{azureDataLakeRead}},
+  \code{\link{createAdlFileInputStream}},
+  \code{\link{createAdlFileOutputStream}},
+  \code{\link{readFromService}}
 }

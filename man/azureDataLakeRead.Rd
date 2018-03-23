@@ -18,12 +18,13 @@ azureDataLakeRead(azureActiveContext, azureDataLakeAccount, relativePath,
 
 \item{length}{Provide length of data to read.}
 
-\item{bufferSize}{Size of the buffer to be used.}
+\item{bufferSize}{Size of the buffer to be used. (not honoured).}
 
 \item{verbose}{Print tracing information (default FALSE).}
 }
 \value{
 raw contents of the file.
+Exception IOException
 }
 \description{
 Open and read a file.
@@ -42,10 +43,31 @@ Open and read a file.
 
 \url{https://hadoop.apache.org/docs/current/api/org/apache/hadoop/fs/FileSystem.html#open-org.apache.hadoop.fs.Path-int-}
 
-Other Azure Data Lake Store functions: \code{\link{azureDataLakeAppend}},
+Other Azure Data Lake Store functions: \code{\link{adlFileInputStreamAvailable}},
+  \code{\link{adlFileInputStreamClose}},
+  \code{\link{adlFileInputStreamGetPos}},
+  \code{\link{adlFileInputStreamLength}},
+  \code{\link{adlFileInputStreamMarkSupported}},
+  \code{\link{adlFileInputStreamMark}},
+  \code{\link{adlFileInputStreamReadBuffered}},
+  \code{\link{adlFileInputStreamRead}},
+  \code{\link{adlFileInputStreamReset}},
+  \code{\link{adlFileInputStreamSeek}},
+  \code{\link{adlFileInputStreamSkip}},
+  \code{\link{adlFileOutputStreamClose}},
+  \code{\link{adlFileOutputStreamFlush}},
+  \code{\link{adlFileOutputStreamWrite}},
+  \code{\link{azureDataLakeAppendBOS}},
+  \code{\link{azureDataLakeAppendCore}},
+  \code{\link{azureDataLakeAppend}},
   \code{\link{azureDataLakeCreate}},
   \code{\link{azureDataLakeDelete}},
   \code{\link{azureDataLakeGetFileStatus}},
   \code{\link{azureDataLakeListStatus}},
-  \code{\link{azureDataLakeMkdirs}}
+  \code{\link{azureDataLakeMkdirs}},
+  \code{\link{azureDataLakeOpenBIS}},
+  \code{\link{azureDataLakeReadCore}},
+  \code{\link{createAdlFileInputStream}},
+  \code{\link{createAdlFileOutputStream}},
+  \code{\link{readFromService}}
 }

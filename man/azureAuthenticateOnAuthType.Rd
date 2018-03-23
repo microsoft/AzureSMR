@@ -23,7 +23,9 @@ If successful, returns TRUE
 Switch based on auth types.
 }
 \seealso{
-Other Azure resource functions: \code{\link{azureAuthenticate}},
+Other Azure resource functions: \code{\link{adlFileInputStreamCheck}},
+  \code{\link{adlFileOutputStreamCheck}},
+  \code{\link{azureAuthenticate}},
   \code{\link{azureCheckToken}},
   \code{\link{azureGetTokenClientCredential}},
   \code{\link{azureGetTokenDeviceCodeFetch}},
