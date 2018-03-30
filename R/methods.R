@@ -2,8 +2,7 @@
 #'
 #' Functions for creating and displaying information about azureActiveContext objects.
 #'
-#' @param x Object to create, test or print
-#' @param ... Ignored
+#' @param x the Object to create, test or print
 #'
 #' @seealso [createAzureContext()]
 #' @export
@@ -326,6 +325,16 @@ on_failure(is_bufferSize) <- function(call, env) {
   "Provide a valid integer bufferSize. e.g., 4194304L, 1048576L, 1024L, 128L"
 }
 
+# --- contentSize
+
+is_contentSize <- function(x) {
+  is.integer(x) && length(x) == 1 && x >= -1
+}
+
+on_failure(is_contentSize) <- function(call, env) {
+  "Provide a valid integer contentSize. e.g., 4194304L, 1048576L, 1024L, 128L"
+}
+
 # --- replication
 
 is_replication <- function(x) {
@@ -364,6 +373,16 @@ is_length <- function(x) {
 
 on_failure(is_length) <- function(call, env) {
   "Provide a valid integer length that is >=0. e.g., 4194304L, 134217728L"
+}
+
+# --- position (remote file cursor)
+
+is_position <- function(x) {
+  is.integer(x) && x >= 0
+}
+
+on_failure(is_position) <- function(call, env) {
+  "Provide a valid integer position that is >=0. e.g., 4194304L, 134217728L"
 }
 
 # --- auth type
@@ -414,4 +433,105 @@ is_content <- function(x) {
 
 on_failure(is_content) <- function(call, env) {
   "Provide a valid non-null raw content"
+}
+
+#' adlFileOutputStream object.
+#'
+#' Functions for creating and displaying information about adlFileOutputStream objects.
+#'
+#' @seealso [createAdlFileOutputStream()]
+#' @export
+#' @rdname Internal
+as.adlFileOutputStream <- function(x){
+  if(!is.environment(x)) stop("Expecting an environment as input")
+  class(x) <- "adlFileOutputStream"
+  x
+}
+
+#' @export
+#' @rdname Internal
+is.adlFileOutputStream <- function(x){
+  inherits(x, "adlFileOutputStream")
+}
+
+on_failure(is.adlFileOutputStream) <- function(call, env) {
+  "Provide a valid adlFileOutputStream. See createAdlFileOutputStream()"
+}
+
+#' @export
+print.adlFileOutputStream <- function(x, ...){
+  cat("AzureSMR adlFileOutputStream\n")
+  #cat("Tenant ID :", x$tenantID, "\n")
+  #cat("Subscription ID :", x$subscriptionID, "\n")
+}
+
+#' @export
+str.adlFileOutputStream <- function(object, ...){
+  cat(("AzureSMR adlFileOutputStream with elements:\n"))
+  ls.str(object, all.names = TRUE)
+}
+
+#' Check for proper adlFileOutputStream.
+#'
+#' @inheritParams createAdlFileOutputStream
+#' @param adlFileOutputStream the adlFileOutputStream object to check
+#' @family Azure resource functions
+#' @export
+adlFileOutputStreamCheck <- function(adlFileOutputStream) {
+  if (missing(adlFileOutputStream) || is.null(adlFileOutputStream)) return(FALSE)
+  if (adlFileOutputStream$streamClosed) {
+    stop("IOException: Attempting to write to a closed stream")
+  }
+  return(TRUE)
+}
+
+
+#' adlFileInputStream object.
+#'
+#' Functions for creating and displaying information about adlFileInputStream objects.
+#'
+#' @seealso [createAdlFileInputStream()]
+#' @export
+#' @rdname Internal
+as.adlFileInputStream <- function(x){
+  if(!is.environment(x)) stop("Expecting an environment as input")
+  class(x) <- "adlFileInputStream"
+  x
+}
+
+#' @export
+#' @rdname Internal
+is.adlFileInputStream <- function(x){
+  inherits(x, "adlFileInputStream")
+}
+
+on_failure(is.adlFileInputStream) <- function(call, env) {
+  "Provide a valid adlFileInputStream. See createAdlFileInputStream()"
+}
+
+#' @export
+print.adlFileInputStream <- function(x, ...){
+  cat("AzureSMR adlFileInputStream\n")
+  #cat("Tenant ID :", x$tenantID, "\n")
+  #cat("Subscription ID :", x$subscriptionID, "\n")
+}
+
+#' @export
+str.adlFileInputStream <- function(object, ...){
+  cat(("AzureSMR adlFileInputStream with elements:\n"))
+  ls.str(object, all.names = TRUE)
+}
+
+#' Check for proper adlFileInputStream.
+#'
+#' @inheritParams createAdlFileInputStream
+#' @param adlFileInputStream the adlFileInputStream object to check
+#' @family Azure resource functions
+#' @export
+adlFileInputStreamCheck <- function(adlFileInputStream) {
+  if (missing(adlFileInputStream) || is.null(adlFileInputStream)) return(FALSE)
+  if (adlFileInputStream$streamClosed) {
+    stop("IOException: Attempting to read from a closed stream")
+  }
+  return(TRUE)
 }

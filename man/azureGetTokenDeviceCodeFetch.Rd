@@ -33,7 +33,9 @@ See \url{https://azure.microsoft.com/en-us/documentation/articles/resource-group
 \url{https://azure.microsoft.com/en-us/resources/samples/active-directory-dotnet-deviceprofile/}
 }
 \seealso{
-Other Azure resource functions: \code{\link{azureAuthenticateOnAuthType}},
+Other Azure resource functions: \code{\link{adlFileInputStreamCheck}},
+  \code{\link{adlFileOutputStreamCheck}},
+  \code{\link{azureAuthenticateOnAuthType}},
   \code{\link{azureAuthenticate}},
   \code{\link{azureCheckToken}},
   \code{\link{azureGetTokenClientCredential}},

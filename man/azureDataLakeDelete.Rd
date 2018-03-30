@@ -20,6 +20,7 @@ azureDataLakeDelete(azureActiveContext, azureDataLakeAccount, relativePath,
 }
 \value{
 true if delete is successful else false.
+Exception IOException
 }
 \description{
 Delete a file/directory.
@@ -32,10 +33,31 @@ Delete a file/directory.
 
 \url{https://hadoop.apache.org/docs/current/api/org/apache/hadoop/fs/FileSystem.html#delete-org.apache.hadoop.fs.Path-boolean-}
 
-Other Azure Data Lake Store functions: \code{\link{azureDataLakeAppend}},
+Other Azure Data Lake Store functions: \code{\link{adlFileInputStreamAvailable}},
+  \code{\link{adlFileInputStreamClose}},
+  \code{\link{adlFileInputStreamGetPos}},
+  \code{\link{adlFileInputStreamLength}},
+  \code{\link{adlFileInputStreamMarkSupported}},
+  \code{\link{adlFileInputStreamMark}},
+  \code{\link{adlFileInputStreamReadBuffered}},
+  \code{\link{adlFileInputStreamRead}},
+  \code{\link{adlFileInputStreamReset}},
+  \code{\link{adlFileInputStreamSeek}},
+  \code{\link{adlFileInputStreamSkip}},
+  \code{\link{adlFileOutputStreamClose}},
+  \code{\link{adlFileOutputStreamFlush}},
+  \code{\link{adlFileOutputStreamWrite}},
+  \code{\link{azureDataLakeAppendBOS}},
+  \code{\link{azureDataLakeAppendCore}},
+  \code{\link{azureDataLakeAppend}},
   \code{\link{azureDataLakeCreate}},
   \code{\link{azureDataLakeGetFileStatus}},
   \code{\link{azureDataLakeListStatus}},
   \code{\link{azureDataLakeMkdirs}},
-  \code{\link{azureDataLakeRead}}
+  \code{\link{azureDataLakeOpenBIS}},
+  \code{\link{azureDataLakeReadCore}},
+  \code{\link{azureDataLakeRead}},
+  \code{\link{createAdlFileInputStream}},
+  \code{\link{createAdlFileOutputStream}},
+  \code{\link{readFromService}}
 }

@@ -20,6 +20,8 @@ azureDataLakeListStatus(azureActiveContext, azureDataLakeAccount, relativePath,
 Returns a FileStatuses data frame with a row for each directory element.
 Each row has 11 columns (12 in case of a file):
 FileStatuses.FileStatus.(accessTime, modificationTime, replication, permission, owner, group, aclBit, msExpirationtime (in case of file))
+Exception FileNotFoundException
+Exception IOException
 }
 \description{
 List the statuses of the files/directories in the given path.
@@ -34,10 +36,31 @@ List the statuses of the files/directories in the given path.
 
 \url{https://hadoop.apache.org/docs/current/api/org/apache/hadoop/fs/FileSystem.html#listStatus-org.apache.hadoop.fs.Path-}
 
-Other Azure Data Lake Store functions: \code{\link{azureDataLakeAppend}},
+Other Azure Data Lake Store functions: \code{\link{adlFileInputStreamAvailable}},
+  \code{\link{adlFileInputStreamClose}},
+  \code{\link{adlFileInputStreamGetPos}},
+  \code{\link{adlFileInputStreamLength}},
+  \code{\link{adlFileInputStreamMarkSupported}},
+  \code{\link{adlFileInputStreamMark}},
+  \code{\link{adlFileInputStreamReadBuffered}},
+  \code{\link{adlFileInputStreamRead}},
+  \code{\link{adlFileInputStreamReset}},
+  \code{\link{adlFileInputStreamSeek}},
+  \code{\link{adlFileInputStreamSkip}},
+  \code{\link{adlFileOutputStreamClose}},
+  \code{\link{adlFileOutputStreamFlush}},
+  \code{\link{adlFileOutputStreamWrite}},
+  \code{\link{azureDataLakeAppendBOS}},
+  \code{\link{azureDataLakeAppendCore}},
+  \code{\link{azureDataLakeAppend}},
   \code{\link{azureDataLakeCreate}},
   \code{\link{azureDataLakeDelete}},
   \code{\link{azureDataLakeGetFileStatus}},
   \code{\link{azureDataLakeMkdirs}},
-  \code{\link{azureDataLakeRead}}
+  \code{\link{azureDataLakeOpenBIS}},
+  \code{\link{azureDataLakeReadCore}},
+  \code{\link{azureDataLakeRead}},
+  \code{\link{createAdlFileInputStream}},
+  \code{\link{createAdlFileOutputStream}},
+  \code{\link{readFromService}}
 }

@@ -20,6 +20,7 @@ azureDataLakeMkdirs(azureActiveContext, azureDataLakeAccount, relativePath,
 }
 \value{
 Returns true if the directory creation succeeds; false otherwise.
+Exception IOException
 }
 \description{
 Create a directory with the provided permission.
@@ -32,10 +33,31 @@ Create a directory with the provided permission.
 
 \url{https://hadoop.apache.org/docs/current/api/org/apache/hadoop/fs/FileSystem.html#mkdirs-org.apache.hadoop.fs.FileSystem-org.apache.hadoop.fs.Path-org.apache.hadoop.fs.permission.FsPermission-}
 
-Other Azure Data Lake Store functions: \code{\link{azureDataLakeAppend}},
+Other Azure Data Lake Store functions: \code{\link{adlFileInputStreamAvailable}},
+  \code{\link{adlFileInputStreamClose}},
+  \code{\link{adlFileInputStreamGetPos}},
+  \code{\link{adlFileInputStreamLength}},
+  \code{\link{adlFileInputStreamMarkSupported}},
+  \code{\link{adlFileInputStreamMark}},
+  \code{\link{adlFileInputStreamReadBuffered}},
+  \code{\link{adlFileInputStreamRead}},
+  \code{\link{adlFileInputStreamReset}},
+  \code{\link{adlFileInputStreamSeek}},
+  \code{\link{adlFileInputStreamSkip}},
+  \code{\link{adlFileOutputStreamClose}},
+  \code{\link{adlFileOutputStreamFlush}},
+  \code{\link{adlFileOutputStreamWrite}},
+  \code{\link{azureDataLakeAppendBOS}},
+  \code{\link{azureDataLakeAppendCore}},
+  \code{\link{azureDataLakeAppend}},
   \code{\link{azureDataLakeCreate}},
   \code{\link{azureDataLakeDelete}},
   \code{\link{azureDataLakeGetFileStatus}},
   \code{\link{azureDataLakeListStatus}},
-  \code{\link{azureDataLakeRead}}
+  \code{\link{azureDataLakeOpenBIS}},
+  \code{\link{azureDataLakeReadCore}},
+  \code{\link{azureDataLakeRead}},
+  \code{\link{createAdlFileInputStream}},
+  \code{\link{createAdlFileOutputStream}},
+  \code{\link{readFromService}}
 }

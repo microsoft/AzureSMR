@@ -107,15 +107,16 @@ azure_storage_header <- function(shared_key, date = x_ms_date(), content_length 
 }
 
 getAzureDataLakeSDKVersion <- function() {
-  return("1.0.0.0")
+  return("1.1.0")
 }
 
 getAzureDataLakeSDKUserAgent <- function() {
+  sysInf <- as.list(strsplit(Sys.info(), "\t"))
   adlsUA <- paste0("ADLSRSDK"
                    , "-", getAzureDataLakeSDKVersion()
-                   , "/", Sys.info()[1], "-", Sys.info()[2] #sysname-release
-                   , "-", Sys.info()[3] #version
-                   , "-", Sys.info()[5] #machine
+                   , "/", sysInf$sysname, "-", sysInf$release
+                   , "-", sysInf$version
+                   , "-", sysInf$machine
                    , "/", R.version$version.string
   )
   return(adlsUA)
@@ -127,11 +128,27 @@ getAzureDataLakeBasePath <- function(azureDataLakeAccount) {
 }
 
 getAzureDataLakeApiVersion <- function() {
-  return("&api-version=2016-11-01")
+  return("&api-version=2017-08-01")
+}
+
+getAzureDataLakeDefaultBufferSize <- function() {
+  return(as.integer(4 * 1024 * 1024))
+}
+
+getAzureDataLakeURLEncodedString <- function(strToEncode) {
+  strToEncode <- URLencode(strToEncode, reserved = TRUE, repeated = TRUE)
+  return(strToEncode)
+}
+
+# Global variables required for Azure Data Lake Store
+{
+  # create a syncFlagEnum object used by the Azure Data Lake Store functions.
+  syncFlagEnum <- list("DATA", "METADATA", "CLOSE", "PIPELINE")
+  names(syncFlagEnum) <- syncFlagEnum
 }
 
 callAzureDataLakeApi <- function(url, verb = "GET", azureActiveContext,
-                                content = raw(0), contenttype = "text/plain; charset=UTF-8",
+                                content = raw(0), contenttype = NULL, #"application/octet-stream",
                                 verbose = FALSE) {
   verbosity <- set_verbosity(verbose)
   commonHeaders <- c(Authorization = azureActiveContext$Token
@@ -148,9 +165,9 @@ callAzureDataLakeApi <- function(url, verb = "GET", azureActiveContext,
                      ),
          "PUT" = PUT(url,
                      add_headers(.headers = c(commonHeaders
-                                              , `Transfer-Encoding` = "chunked"
+                                              #, `Transfer-Encoding` = "chunked"
                                               , `Content-Length` = getContentSize(content)
-                                              , `Content-type` = contenttype
+                                              , `Content-Type` = contenttype
                                               )
                                  ),
                      body = content,
@@ -158,9 +175,9 @@ callAzureDataLakeApi <- function(url, verb = "GET", azureActiveContext,
                      ),
          "POST" = POST(url,
                      add_headers(.headers = c(commonHeaders
-                                              , `Transfer-Encoding` = "chunked"
+                                              #, `Transfer-Encoding` = "chunked"
                                               , `Content-Length` = getContentSize(content)
-                                              , `Content-type` = contenttype
+                                              , `Content-Type` = contenttype
                                               )
                                  ),
                      body = content,
@@ -204,14 +221,12 @@ getSig <- function(azureActiveContext, url, verb, key, storageAccount,
                    )
   }
 
-
-stopWithAzureError <- function(r) {
-  if (status_code(r) < 300) return()
+getAzureErrorMessage <- function(r) {
   msg <- paste0(as.character(sys.call(1))[1], "()") # Name of calling fucntion
   addToMsg <- function(x) {
     if (!is.null(x)) x <- strwrap(x)
     if(is.null(x)) msg else c(msg, x)
-    }
+  }
   if(inherits(content(r), "xml_document")){
     rr <- XML::xmlToList(XML::xmlParse(content(r)))
     msg <- addToMsg(rr$Code)
@@ -230,6 +245,12 @@ stopWithAzureError <- function(r) {
   }
   msg <- addToMsg(paste0("Return code: ", status_code(r)))
   msg <- paste(msg, collapse = "\n")
+  return(msg)
+}
+
+stopWithAzureError <- function(r) {
+  if (status_code(r) < 300) return()
+  msg <- getAzureErrorMessage(r)
   stop(msg, call. = FALSE)
 }
 
