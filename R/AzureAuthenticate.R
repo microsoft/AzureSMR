@@ -125,7 +125,7 @@ azureGetTokenDeviceCode <- function(azureActiveContext, tenantID, clientID, reso
   assert_that(is.azureActiveContext(azureActiveContext))
 
   if (missing(tenantID)) tenantID <- azureActiveContext$tenantID
-  if (missing(clientID)) clientID <- "2d302a05-86f0-4e0a-a8f6-ae4d28a035df"
+  if (missing(clientID)) clientID <- azureActiveContext$clientID
   if (missing(resource)) resource <- azureActiveContext$resource
 
   assert_that(is_tenant_id(tenantID))
