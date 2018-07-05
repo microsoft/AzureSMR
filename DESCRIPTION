@@ -37,7 +37,8 @@ Depends:
 Suggests:
     knitr,
     rmarkdown,
-    testthat
+    testthat,
+    mockery
 VignetteBuilder: knitr
 LazyData: TRUE
 RoxygenNote: 6.0.1

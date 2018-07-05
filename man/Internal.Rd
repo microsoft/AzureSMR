@@ -7,6 +7,8 @@
 \alias{is.adlFileOutputStream}
 \alias{as.adlFileInputStream}
 \alias{is.adlFileInputStream}
+\alias{as.adlRetryPolicy}
+\alias{is.adlRetryPolicy}
 \title{azureActiveContext object.}
 \usage{
 as.azureActiveContext(x)
@@ -20,6 +22,10 @@ is.adlFileOutputStream(x)
 as.adlFileInputStream(x)
 
 is.adlFileInputStream(x)
+
+as.adlRetryPolicy(x)
+
+is.adlRetryPolicy(x)
 }
 \arguments{
 \item{x}{the Object to create, test or print}
@@ -30,11 +36,15 @@ Functions for creating and displaying information about azureActiveContext objec
 Functions for creating and displaying information about adlFileOutputStream objects.
 
 Functions for creating and displaying information about adlFileInputStream objects.
+
+Functions for creating and displaying information about adlRetryPolicy objects.
 }
 \seealso{
 \code{\link[=createAzureContext]{createAzureContext()}}
 
 \code{\link[=createAdlFileOutputStream]{createAdlFileOutputStream()}}
+
+\code{\link[=createAdlFileInputStream]{createAdlFileInputStream()}}
 
 \code{\link[=createAdlFileInputStream]{createAdlFileInputStream()}}
 }

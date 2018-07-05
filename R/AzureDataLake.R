@@ -1,3 +1,6 @@
+
+# ADLS Metadata APIs ----
+
 #' List the statuses of the files/directories in the given path.
 #'
 #' @inheritParams setAzureContext
@@ -30,8 +33,10 @@ azureDataLakeListStatus <- function(azureActiveContext, azureDataLakeAccount, re
     "?op=LISTSTATUS",
     getAzureDataLakeApiVersion()
     )
+  retryPolicy <- createAdlRetryPolicy(azureActiveContext, verbose = verbose)
   resHttp <- callAzureDataLakeApi(URL,
                                   azureActiveContext = azureActiveContext,
+                                  adlRetryPolicy = retryPolicy,
                                   verbose = verbose)
   stopWithAzureError(resHttp)
   resJsonStr <- content(resHttp, "text", encoding = "UTF-8")
@@ -90,8 +95,10 @@ azureDataLakeGetFileStatus <- function(azureActiveContext, azureDataLakeAccount,
     "?op=GETFILESTATUS",
     getAzureDataLakeApiVersion()
   )
+  retryPolicy <- createAdlRetryPolicy(azureActiveContext, verbose = verbose)
   resHttp <- callAzureDataLakeApi(URL,
                                   azureActiveContext = azureActiveContext,
+                                  adlRetryPolicy = retryPolicy,
                                   verbose = verbose)
   stopWithAzureError(resHttp)
   resJsonStr <- content(resHttp, "text", encoding = "UTF-8")
@@ -150,8 +157,10 @@ azureDataLakeMkdirs <- function(azureActiveContext, azureDataLakeAccount, relati
     getAzureDataLakeApiVersion()
   )
   if (!missing(permission) && !is.null(permission)) URL <- paste0(URL, "&permission=", permission)
+  retryPolicy <- createAdlRetryPolicy(azureActiveContext, verbose = verbose)
   resHttp <- callAzureDataLakeApi(URL, verb = "PUT",
                                   azureActiveContext = azureActiveContext,
+                                  adlRetryPolicy = retryPolicy,
                                   verbose = verbose)
   stopWithAzureError(resHttp)
   resJsonStr <- content(resHttp, "text", encoding = "UTF-8")
@@ -212,14 +221,65 @@ azureDataLakeCreate <- function(azureActiveContext, azureDataLakeAccount, relati
   if (!missing(bufferSize) && !is.null(bufferSize)) URL <- paste0(URL, "&buffersize=", bufferSize)
   if (!missing(replication) && !is.null(replication)) URL <- paste0(URL, "&replication=", replication)
   if (!missing(blockSize) && !is.null(blockSize)) URL <- paste0(URL, "&blocksize=", blockSize)
+  retryPolicy <- NULL
+  if(overwrite) {
+    retryPolicy <- createAdlRetryPolicy(azureActiveContext, verbose = verbose)
+  } else {
+    retryPolicy <- createAdlRetryPolicy(azureActiveContext, retryPolicyEnum$NONIDEMPOTENT, verbose = verbose)
+  }
   resHttp <- callAzureDataLakeApi(URL, verb = "PUT",
                                   azureActiveContext = azureActiveContext,
+                                  adlRetryPolicy = retryPolicy,
                                   content = contents,
                                   verbose = verbose)
   stopWithAzureError(resHttp)
   # return a NULL (void)
   return(NULL)
 }
+
+#' Delete a file/directory.
+#'
+#' @inheritParams setAzureContext
+#' @param azureDataLakeAccount Name of the Azure Data Lake account.
+#' @param relativePath Relative path of a file/directory.
+#' @param recursive If path is a directory, recursively delete contents and directory (default FALSE).
+#' @param verbose Print tracing information (default FALSE).
+#' @return true if delete is successful else false.
+#' Exception IOException
+#'
+#' @family Azure Data Lake Store functions
+#' @export
+#'
+#' @references \url{https://docs.microsoft.com/en-us/azure/data-lake-store/data-lake-store-data-operations-rest-api#delete-a-file}
+#' @seealso \url{https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/WebHDFS.html#Recursive}
+#' @seealso \url{https://hadoop.apache.org/docs/current/api/org/apache/hadoop/fs/FileSystem.html#delete-org.apache.hadoop.fs.Path-boolean-}
+azureDataLakeDelete <- function(azureActiveContext, azureDataLakeAccount, relativePath, recursive = FALSE, verbose = FALSE) {
+  if (!missing(azureActiveContext) && !is.null(azureActiveContext)) {
+    assert_that(is.azureActiveContext(azureActiveContext))
+    azureCheckToken(azureActiveContext)
+  }
+  assert_that(is_storage_account(azureDataLakeAccount))
+  assert_that(is_relativePath(relativePath))
+  URL <- paste0(
+    getAzureDataLakeBasePath(azureDataLakeAccount),
+    getAzureDataLakeURLEncodedString(relativePath),
+    "?op=DELETE",
+    getAzureDataLakeApiVersion()
+  )
+  if (!missing(recursive)  && !is.null(recursive)) URL <- paste0(URL, "&recursive=", recursive)
+  retryPolicy <- createAdlRetryPolicy(azureActiveContext, verbose = verbose)
+  resHttp <- callAzureDataLakeApi(URL, verb = "DELETE",
+                                  azureActiveContext = azureActiveContext,
+                                  adlRetryPolicy = retryPolicy,
+                                  verbose = verbose)
+  stopWithAzureError(resHttp)
+  resJsonStr <- content(resHttp, "text", encoding = "UTF-8")
+  resJsonObj <- jsonlite::fromJSON(resJsonStr)
+  resDf <- as.data.frame(resJsonObj)
+  return(resDf$boolean)
+}
+
+# ADLS Ingress APIs ----
 
 #' Append to an existing file.
 #'
@@ -340,12 +400,16 @@ azureDataLakeAppendCore <- function(azureActiveContext, azureDataLakeAccount, re
   if (!is.null(sessionId)) URL <- paste0(URL, "&filesessionid=", sessionId)
   if (!is.null(syncFlag)) URL <- paste0(URL, "&syncFlag=", syncFlag)
   if (offsetToAppendTo >= 0) URL <- paste0(URL, "&offset=", offsetToAppendTo)
+  retryPolicy <- createAdlRetryPolicy(azureActiveContext, verbose = verbose)
   resHttp <- callAzureDataLakeApi(URL, verb = "POST",
                                   azureActiveContext = azureActiveContext,
+                                  adlRetryPolicy = retryPolicy,
                                   content = contents[1:contentSize],
                                   verbose = verbose)
   return(resHttp)
 }
+
+# ADLS Egress APIs ----
 
 #' Open and read a file.
 #'
@@ -457,54 +521,15 @@ azureDataLakeReadCore <- function(azureActiveContext,
   if (!missing(offset) && !is.null(offset)) URL <- paste0(URL, "&offset=", offset)
   if (!missing(length) && !is.null(length)) URL <- paste0(URL, "&length=", length)
   if (!missing(bufferSize) && !is.null(bufferSize)) URL <- paste0(URL, "&buffersize=", bufferSize)
+  retryPolicy <- createAdlRetryPolicy(azureActiveContext, verbose = verbose)
   resHttp <- callAzureDataLakeApi(URL,
                                   azureActiveContext = azureActiveContext,
+                                  adlRetryPolicy = retryPolicy,
                                   verbose = verbose)
   return(resHttp)
 }
 
-#' Delete a file/directory.
-#'
-#' @inheritParams setAzureContext
-#' @param azureDataLakeAccount Name of the Azure Data Lake account.
-#' @param relativePath Relative path of a file/directory.
-#' @param recursive If path is a directory, recursively delete contents and directory (default FALSE).
-#' @param verbose Print tracing information (default FALSE).
-#' @return true if delete is successful else false.
-#' Exception IOException
-#'
-#' @family Azure Data Lake Store functions
-#' @export
-#'
-#' @references \url{https://docs.microsoft.com/en-us/azure/data-lake-store/data-lake-store-data-operations-rest-api#delete-a-file}
-#' @seealso \url{https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/WebHDFS.html#Recursive}
-#' @seealso \url{https://hadoop.apache.org/docs/current/api/org/apache/hadoop/fs/FileSystem.html#delete-org.apache.hadoop.fs.Path-boolean-}
-azureDataLakeDelete <- function(azureActiveContext, azureDataLakeAccount, relativePath, recursive = FALSE, verbose = FALSE) {
-  if (!missing(azureActiveContext) && !is.null(azureActiveContext)) {
-    assert_that(is.azureActiveContext(azureActiveContext))
-    azureCheckToken(azureActiveContext)
-  }
-  assert_that(is_storage_account(azureDataLakeAccount))
-  assert_that(is_relativePath(relativePath))
-  URL <- paste0(
-    getAzureDataLakeBasePath(azureDataLakeAccount),
-    getAzureDataLakeURLEncodedString(relativePath),
-    "?op=DELETE",
-    getAzureDataLakeApiVersion()
-  )
-  if (!missing(recursive)  && !is.null(recursive)) URL <- paste0(URL, "&recursive=", recursive)
-  resHttp <- callAzureDataLakeApi(URL, verb = "DELETE",
-                                  azureActiveContext = azureActiveContext,
-                                  verbose = verbose)
-  stopWithAzureError(resHttp)
-  resJsonStr <- content(resHttp, "text", encoding = "UTF-8")
-  resJsonObj <- jsonlite::fromJSON(resJsonStr)
-  resDf <- as.data.frame(resJsonObj)
-  return(resDf$boolean)
-}
-
-
-
+# ADLS Ingress - AdlFileOutputStream ---- 
 
 #' Create an adlFileOutputStream.
 #' Create a container (`adlFileOutputStream`) for holding variables used by the Azure Data Lake Store data functions.
@@ -665,6 +690,7 @@ adlFileOutputStreamClose <- function(adlFileOutputStream,
   return(NULL)
 }
 
+# ADLS Egress - AdlFileInputStream ---- 
 
 #' Create an createAdlFileInputStream
 #' Create a container (`adlFileInputStream`) for holding variables used by the Azure Data Lake Store data functions.

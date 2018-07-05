@@ -42,7 +42,13 @@ Other Azure Data Lake Store functions: \code{\link{adlFileInputStreamAvailable}}
   \code{\link{azureDataLakeOpenBIS}},
   \code{\link{azureDataLakeReadCore}},
   \code{\link{azureDataLakeRead}},
+  \code{\link{createAdlExponentialBackoffRetryPolicy}},
   \code{\link{createAdlFileInputStream}},
   \code{\link{createAdlFileOutputStream}},
-  \code{\link{readFromService}}
+  \code{\link{createAdlNonIdempotentRetryPolicy}},
+  \code{\link{createAdlRetryPolicy}},
+  \code{\link{readFromService}},
+  \code{\link{shouldRetry.adlExponentialBackoffRetryPolicy}},
+  \code{\link{shouldRetry.adlNonIdempotentRetryPolicy}},
+  \code{\link{shouldRetry}}
 }

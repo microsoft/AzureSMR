@@ -1,3 +1,4 @@
+
 azureApiHeaders <- function(token) {
   headers <- c(Host = "management.azure.com",
                Authorization = token,
@@ -106,99 +107,6 @@ azure_storage_header <- function(shared_key, date = x_ms_date(), content_length 
   add_headers(.headers = headers)
 }
 
-getAzureDataLakeSDKVersion <- function() {
-  return("1.1.0")
-}
-
-getAzureDataLakeSDKUserAgent <- function() {
-  sysInf <- as.list(strsplit(Sys.info(), "\t"))
-  adlsUA <- paste0("ADLSRSDK"
-                   , "-", getAzureDataLakeSDKVersion()
-                   , "/", sysInf$sysname, "-", sysInf$release
-                   , "-", sysInf$version
-                   , "-", sysInf$machine
-                   , "/", R.version$version.string
-  )
-  return(adlsUA)
-}
-
-getAzureDataLakeBasePath <- function(azureDataLakeAccount) {
-  basePath <- paste0("https://", azureDataLakeAccount, ".azuredatalakestore.net/webhdfs/v1/")
-  return(basePath)
-}
-
-getAzureDataLakeApiVersion <- function() {
-  return("&api-version=2017-08-01")
-}
-
-getAzureDataLakeDefaultBufferSize <- function() {
-  return(as.integer(4 * 1024 * 1024))
-}
-
-getAzureDataLakeURLEncodedString <- function(strToEncode) {
-  strToEncode <- URLencode(strToEncode, reserved = TRUE, repeated = TRUE)
-  return(strToEncode)
-}
-
-# Global variables required for Azure Data Lake Store
-{
-  # create a syncFlagEnum object used by the Azure Data Lake Store functions.
-  syncFlagEnum <- list("DATA", "METADATA", "CLOSE", "PIPELINE")
-  names(syncFlagEnum) <- syncFlagEnum
-}
-
-callAzureDataLakeApi <- function(url, verb = "GET", azureActiveContext,
-                                content = raw(0), contenttype = NULL, #"application/octet-stream",
-                                verbose = FALSE) {
-  verbosity <- set_verbosity(verbose)
-  commonHeaders <- c(Authorization = azureActiveContext$Token
-                     , `User-Agent` = getAzureDataLakeSDKUserAgent()
-                     , `x-ms-client-request-id` = uuid()
-                     )
-  resHttp <- switch(verb,
-         "GET" = GET(url,
-                     add_headers(.headers = c(commonHeaders
-                                              , `Content-Length` = "0"
-                                              )
-                                 ),
-                     verbosity
-                     ),
-         "PUT" = PUT(url,
-                     add_headers(.headers = c(commonHeaders
-                                              #, `Transfer-Encoding` = "chunked"
-                                              , `Content-Length` = getContentSize(content)
-                                              , `Content-Type` = contenttype
-                                              )
-                                 ),
-                     body = content,
-                     verbosity
-                     ),
-         "POST" = POST(url,
-                     add_headers(.headers = c(commonHeaders
-                                              #, `Transfer-Encoding` = "chunked"
-                                              , `Content-Length` = getContentSize(content)
-                                              , `Content-Type` = contenttype
-                                              )
-                                 ),
-                     body = content,
-                     verbosity
-                     ),
-         "DELETE" = DELETE(url,
-                     add_headers(.headers = c(commonHeaders
-                                              , `Content-Length` = "0"
-                                              )
-                                 ),
-                     verbosity
-                     )
-         )
-  # Print the response body in case verbose is enabled.
-  if (verbose) {
-    resJsonStr <- content(resHttp, "text", encoding = "UTF-8")
-    print(resJsonStr)
-  }
-  return(resHttp)
-}
-
 getSig <- function(azureActiveContext, url, verb, key, storageAccount,
                    headers = NULL, container = NULL, CMD = NULL, size = NULL, contenttype = NULL,
                    date = x_ms_date(), verbose = FALSE) {
@@ -303,4 +211,365 @@ uuid <- function(uppercase=FALSE) {
     paste0(sample(y_digits,1), paste0(sample(hex_digits, 3, replace=TRUE), collapse=''), collapse=''),
     paste0(sample(hex_digits, 12, replace=TRUE), collapse=''),
     sep='-')
+}
+
+## https://stackoverflow.com/questions/40059573/r-get-current-time-in-milliseconds
+## R function to get current time in nanoseconds
+getCurrentTimeInNanos <- function() {
+  return(as.numeric(Sys.time())*10^9)
+}
+
+# ADLS Global variables ----
+
+{
+  # create a syncFlagEnum object used by the Azure Data Lake Store functions.
+  syncFlagEnum <- list("DATA", "METADATA", "CLOSE", "PIPELINE")
+  names(syncFlagEnum) <- syncFlagEnum
+  # create a retryPolicyEnum object used by the Azure Data Lake Store functions.
+  retryPolicyEnum <- list("EXPONENTIALBACKOFF", "NONIDEMPOTENT")
+  names(retryPolicyEnum) <- retryPolicyEnum
+}
+
+# ADLS Helper Functions ----
+
+getAzureDataLakeSDKVersion <- function() {
+  return("1.1.0")
+}
+
+getAzureDataLakeSDKUserAgent <- function() {
+  sysInf <- as.list(strsplit(Sys.info(), "\t"))
+  adlsUA <- paste0("ADLSRSDK"
+                   , "-", getAzureDataLakeSDKVersion()
+                   , "/", sysInf$sysname, "-", sysInf$release
+                   , "-", sysInf$version
+                   , "-", sysInf$machine
+                   , "/", R.version$version.string
+  )
+  return(adlsUA)
+}
+
+getAzureDataLakeBasePath <- function(azureDataLakeAccount) {
+  basePath <- paste0("https://", azureDataLakeAccount, ".azuredatalakestore.net/webhdfs/v1/")
+  return(basePath)
+}
+
+getAzureDataLakeApiVersion <- function() {
+  return("&api-version=2017-08-01")
+}
+
+getAzureDataLakeDefaultBufferSize <- function() {
+  return(as.integer(4 * 1024 * 1024))
+}
+
+getAzureDataLakeURLEncodedString <- function(strToEncode) {
+  strToEncode <- URLencode(strToEncode, reserved = TRUE, repeated = TRUE)
+  return(strToEncode)
+}
+
+# log printer for Azure Data Lake Store
+printADLSMessage <- function(fileName, functionName, message, error = NULL) {
+  msg <- paste0(Sys.time()
+    , " [", fileName, "]"
+    , " ", functionName
+    , ": message=", message
+    , ", error=", error 
+  )
+  print(msg)
+}
+
+# ADLS Retry Policies ----
+
+#' Create adlRetryPolicy.
+#' Create a adlRetryPolicy (`adlRetryPolicy`) for holding variables used by the Azure Data Lake Store data functions.
+#'
+#' @inheritParams setAzureContext
+#' @param retryPolicyType the type of retryPlociy object to create.
+#' @param verbose Print tracing information (default FALSE).
+#' @return An `adlRetryPolicy` object
+#'
+#' @family Azure Data Lake Store functions
+#'
+#' @references \url{https://github.com/Azure/azure-data-lake-store-java/blob/master/src/main/java/com/microsoft/azure/datalake/store/retrypolicies/RetryPolicy.java}
+createAdlRetryPolicy <- function(azureActiveContext, retryPolicyType = retryPolicyEnum$EXPONENTIALBACKOFF, verbose = FALSE) {
+  azEnv <- new.env(parent = emptyenv())
+  azEnv <- as.adlRetryPolicy(azEnv)
+  list2env(
+    list(azureActiveContext = ""),
+    envir = azEnv
+  )
+  if (!missing(azureActiveContext)) azEnv$azureActiveContext <- azureActiveContext
+  # init the azEnv (adlRetryPolicy) with the right params
+  azEnv$retryPolicyType <- retryPolicyType
+  if(retryPolicyType == retryPolicyEnum$EXPONENTIALBACKOFF) {
+    return(createAdlExponentialBackoffRetryPolicy(azEnv, verbose))
+  } else if(retryPolicyType == retryPolicyEnum$NONIDEMPOTENT) {
+    return(createAdlNonIdempotentRetryPolicy(azEnv, verbose))
+  } else {
+    printADLSMessage("internal.R", "createAdlRetryPolicy", 
+                     paste0("UndefinedRetryPolicyTypeError: ", azEnv$retryPolicyType),
+                     NULL)
+    return(NULL)
+  }
+}
+
+#' Create an adlExponentialBackoffRetryPolicy.
+#'
+#' @param adlRetryPolicy the retrypolicy object to initialize.
+#' @param verbose Print tracing information (default FALSE).
+#' @return An `adlRetryPolicy` object
+#'
+#' @family Azure Data Lake Store functions
+#'
+#' @references \url{https://github.com/Azure/azure-data-lake-store-java/blob/master/src/main/java/com/microsoft/azure/datalake/store/retrypolicies/ExponentialBackoffPolicy.java}
+createAdlExponentialBackoffRetryPolicy <- function(adlRetryPolicy, verbose = FALSE) {
+  adlRetryPolicy$retryCount <- 0
+  adlRetryPolicy$maxRetries <- 4
+  adlRetryPolicy$exponentialRetryInterval <- 1000 # in milliseconds
+  adlRetryPolicy$exponentialFactor <- 4
+  adlRetryPolicy$lastAttemptStartTime <- getCurrentTimeInNanos() # in nanoseconds
+  return(adlRetryPolicy)
+}
+
+#' Create an adlNonIdempotentRetryPolicy.
+#'
+#' @param adlRetryPolicy the retrypolicy object to initialize.
+#' @param verbose Print tracing information (default FALSE).
+#' @return An `adlRetryPolicy` object
+#'
+#' @family Azure Data Lake Store functions
+#'
+#' @references \url{https://github.com/Azure/azure-data-lake-store-java/blob/master/src/main/java/com/microsoft/azure/datalake/store/retrypolicies/NonIdempotentRetryPolicy.java}
+createAdlNonIdempotentRetryPolicy <- function(adlRetryPolicy, verbose = FALSE) {
+  adlRetryPolicy$retryCount401 <- 0
+  adlRetryPolicy$waitInterval <- 100
+  adlRetryPolicy$retryCount429 <- 0
+  adlRetryPolicy$maxRetries <- 4
+  adlRetryPolicy$exponentialRetryInterval <- 1000 # in milliseconds
+  adlRetryPolicy$exponentialFactor <- 4
+  return(adlRetryPolicy)
+}
+
+#' Check if retry should be done based on `adlRetryPolicy`.
+#'
+#' @param adlRetryPolicy the policy object to chek for retry
+#' @param httpResponseCode the account name
+#' @param lastException exception that was reported with failure
+#' @param verbose Print tracing information (default FALSE)
+#' @return TRUE for retry and FALSE otherwise
+#'
+#' @family Azure Data Lake Store functions
+shouldRetry <- function(adlRetryPolicy, 
+                        httpResponseCode, lastException, 
+                        verbose = FALSE) {
+  if(adlRetryPolicy$retryPolicyType == retryPolicyEnum$EXPONENTIALBACKOFF) {
+    return(
+      shouldRetry.adlExponentialBackoffRetryPolicy(
+        adlRetryPolicy, httpResponseCode, lastException, verbose))
+  } else if(adlRetryPolicy$retryPolicyType == retryPolicyEnum$NONIDEMPOTENT) {
+    return(
+      shouldRetry.adlNonIdempotentRetryPolicy(
+        adlRetryPolicy, httpResponseCode, lastException, verbose))
+  } else {
+    printADLSMessage("internal.R", "shouldRetry", 
+                     paste0("UndefinedRetryPolicyTypeError: ", adlRetryPolicy$retryPolicyType),
+                     NULL)
+    return(NULL)
+  }
+}
+
+#' Check if retry should be done based on `adlRetryPolicy` (adlExponentialBackoffRetryPolicy).
+#'
+#' @param adlRetryPolicy the policy object to chek for retry
+#' @param httpResponseCode the account name
+#' @param lastException exception that was reported with failure
+#' @param verbose Print tracing information (default FALSE)
+#' @return TRUE for retry and FALSE otherwise
+#'
+#' @family Azure Data Lake Store functions
+shouldRetry.adlExponentialBackoffRetryPolicy <- function(adlRetryPolicy, 
+                        httpResponseCode, lastException, 
+                        verbose = FALSE) {
+  if (missing(adlRetryPolicy) || missing(httpResponseCode)) {
+    return(FALSE)
+  }
+  # Non-retryable error
+  if ((
+    httpResponseCode >= 300 && httpResponseCode < 500 # 3xx and 4xx, except specific ones below
+    && httpResponseCode != 408
+    && httpResponseCode != 429
+    && httpResponseCode != 401
+  )
+  || (httpResponseCode == 501) # Not Implemented
+  || (httpResponseCode == 505) # Version Not Supported
+  ) {
+    return(FALSE)
+  }
+  # Retryable error, retry with exponential backoff
+  if (!is.null(lastException)
+      || httpResponseCode >= 500 # exception or 5xx, + specific ones below
+      || httpResponseCode == 408
+      || httpResponseCode == 429
+      || httpResponseCode == 401) {
+    if (adlRetryPolicy$retryCount < adlRetryPolicy$maxRetries) {
+      timeSpentInMillis <- as.integer((getCurrentTimeInNanos() - adlRetryPolicy$lastAttemptStartTime) / 1000000)
+      wait(adlRetryPolicy$exponentialRetryInterval - timeSpentInMillis)
+      adlRetryPolicy$exponentialRetryInterval <- (adlRetryPolicy$exponentialRetryInterval * adlRetryPolicy$exponentialFactor)
+      adlRetryPolicy$retryCount <- adlRetryPolicy$retryCount + 1
+      adlRetryPolicy$lastAttemptStartTime <- getCurrentTimeInNanos()
+      return(TRUE)
+    } else {
+      return(FALSE) # max # of retries exhausted
+    }
+  }
+  # these are not errors - this method should never have been called with this
+  if (httpResponseCode >= 100 && httpResponseCode < 300) {
+    return(FALSE)
+  }
+  # Dont know what happened - we should never get here
+  return(FALSE)
+}
+
+#' Check if retry should be done based on `adlRetryPolicy` (adlNonIdempotentRetryPolicy).
+#'
+#' @param adlRetryPolicy the policy object to chek for retry
+#' @param httpResponseCode the account name
+#' @param lastException exception that was reported with failure
+#' @param verbose Print tracing information (default FALSE)
+#' @return TRUE for retry and FALSE otherwise
+#'
+#' @family Azure Data Lake Store functions
+shouldRetry.adlNonIdempotentRetryPolicy <- function(adlRetryPolicy,
+                                                    httpResponseCode, lastException, 
+                                                    verbose = FALSE) {
+  if (httpResponseCode == 401 && adlRetryPolicy$retryCount401 == 0) {
+    # this could be because of call delay. Just retry once, in hope of token being renewed by now
+    wait(adlRetryPolicy$waitInterval)
+    adlRetryPolicy$retryCount401 <- (adlRetryPolicy$retryCount401 + 1)
+    return(TRUE)
+  }
+
+  if (httpResponseCode == 429) {
+    # 429 means that the backend did not change any state.
+    if (adlRetryPolicy$retryCount429 < adlRetryPolicy$maxRetries) {
+      wait(adlRetryPolicy$exponentialRetryInterval)
+      adlRetryPolicy$exponentialRetryInterval <- (adlRetryPolicy$exponentialRetryInterval * adlRetryPolicy$exponentialFactor)
+      adlRetryPolicy$retryCount429 <- (adlRetryPolicy$retryCount429 + 1)
+      return(TRUE)
+    } else {
+      return(FALSE)  # max # of retries exhausted
+    }
+  }
+
+  return(FALSE)
+}
+
+wait <- function(waitTimeInMilliSeconds, verbose = FALSE) {
+  if (waitTimeInMilliSeconds <= 0) {
+    return(NULL)
+  }
+  tryCatch(
+    {
+      if(verbose) {
+        printADLSMessage("internal.R", "wait", 
+                         paste0("going into wait for waitTimeInMilliSeconds=", waitTimeInMilliSeconds),
+                         NULL)
+      }
+      Sys.sleep(waitTimeInMilliSeconds/1000)
+    }, interrupt = function(e) {
+      if (verbose) {
+        printADLSMessage("internal.R", "wait", "interrupted while wait during retry", e)
+      }
+    }, error = function(e) {
+      if (verbose) {
+        printADLSMessage("internal.R", "wait", "error while wait during retry", e)
+      }
+    }
+  )
+  return(NULL)
+}
+
+isSuccessfulResponse <- function(resHttp, op) {
+  #if (http_error(resHttp)) return(FALSE)
+  #if (http_status(resHttp)$category != "Success") return(FALSE)
+  if (status_code(resHttp) >= 100 && status_code(resHttp) < 300) return(TRUE) # 1xx and 2xx return codes
+  return(FALSE) # anything else
+}
+
+# ADLS Rest Calls ----
+
+callAzureDataLakeApi <- function(url, verb = "GET", azureActiveContext, adlRetryPolicy = NULL,
+                                 content = raw(0), contenttype = NULL, #"application/octet-stream",
+                                 verbose = FALSE) {
+  resHttp <- NULL
+  repeat {
+    resHttp <- callAzureDataLakeRestEndPoint(url, verb, azureActiveContext,
+                                  content, contenttype,
+                                  verbose)
+    if (!isSuccessfulResponse(resHttp) 
+        && shouldRetry(adlRetryPolicy, status_code(resHttp), NULL)) {
+      if (verbose) {
+        msg <- paste0("retry request: "
+                      , " status=", http_status(resHttp)$message
+                      , ", url=", url, ", verb=", verb
+                      , ", adlsRetryPolicy=", as.character.adlRetryPolicy(adlRetryPolicy))
+        printADLSMessage("internal.R", "callAzureDataLakeApi", msg, NULL)
+      }
+      next # continue trying till succeeded or retries exceeded
+    } else {
+      break # break on success or all planned retries failed
+    }
+  }
+  return(resHttp)
+}
+
+callAzureDataLakeRestEndPoint <- function(url, verb = "GET", azureActiveContext,
+                                 content = raw(0), contenttype = NULL, #"application/octet-stream",
+                                 verbose = FALSE) {
+  verbosity <- set_verbosity(verbose)
+  commonHeaders <- c(Authorization = azureActiveContext$Token
+                     , `User-Agent` = getAzureDataLakeSDKUserAgent()
+                     , `x-ms-client-request-id` = uuid()
+  )
+  resHttp <- switch(verb,
+                    "GET" = GET(url,
+                                add_headers(.headers = c(commonHeaders
+                                                         , `Content-Length` = "0"
+                                )
+                                ),
+                                verbosity
+                    ),
+                    "PUT" = PUT(url,
+                                add_headers(.headers = c(commonHeaders
+                                                         #, `Transfer-Encoding` = "chunked"
+                                                         , `Content-Length` = getContentSize(content)
+                                                         , `Content-Type` = contenttype
+                                )
+                                ),
+                                body = content,
+                                verbosity
+                    ),
+                    "POST" = POST(url,
+                                  add_headers(.headers = c(commonHeaders
+                                                           #, `Transfer-Encoding` = "chunked"
+                                                           , `Content-Length` = getContentSize(content)
+                                                           , `Content-Type` = contenttype
+                                  )
+                                  ),
+                                  body = content,
+                                  verbosity
+                    ),
+                    "DELETE" = DELETE(url,
+                                      add_headers(.headers = c(commonHeaders
+                                                               , `Content-Length` = "0"
+                                      )
+                                      ),
+                                      verbosity
+                    )
+  )
+  # Print the response body in case verbose is enabled.
+  if (verbose) {
+    resJsonStr <- content(resHttp, "text", encoding = "UTF-8")
+    printADLSMessage("internal.R", "callAzureDataLakeRestEndPoint", resJsonStr, NULL)
+  }
+  return(resHttp)
 }
