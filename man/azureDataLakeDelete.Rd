@@ -20,10 +20,12 @@ azureDataLakeDelete(azureActiveContext, azureDataLakeAccount, relativePath,
 }
 \value{
 true if delete is successful else false.
-Exception IOException
 }
 \description{
 Delete a file/directory.
+}
+\details{
+Exceptions - IOException
 }
 \references{
 \url{https://docs.microsoft.com/en-us/azure/data-lake-store/data-lake-store-data-operations-rest-api#delete-a-file}
@@ -50,6 +52,7 @@ Other Azure Data Lake Store functions: \code{\link{adlFileInputStreamAvailable}}
   \code{\link{azureDataLakeAppendBOS}},
   \code{\link{azureDataLakeAppendCore}},
   \code{\link{azureDataLakeAppend}},
+  \code{\link{azureDataLakeConcat}},
   \code{\link{azureDataLakeCreate}},
   \code{\link{azureDataLakeGetFileStatus}},
   \code{\link{azureDataLakeListStatus}},
@@ -57,6 +60,7 @@ Other Azure Data Lake Store functions: \code{\link{adlFileInputStreamAvailable}}
   \code{\link{azureDataLakeOpenBIS}},
   \code{\link{azureDataLakeReadCore}},
   \code{\link{azureDataLakeRead}},
+  \code{\link{azureDataLakeRename}},
   \code{\link{createAdlExponentialBackoffRetryPolicy}},
   \code{\link{createAdlFileInputStream}},
   \code{\link{createAdlFileOutputStream}},

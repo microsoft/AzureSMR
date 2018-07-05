@@ -20,10 +20,12 @@ azureDataLakeMkdirs(azureActiveContext, azureDataLakeAccount, relativePath,
 }
 \value{
 Returns true if the directory creation succeeds; false otherwise.
-Exception IOException
 }
 \description{
 Create a directory with the provided permission.
+}
+\details{
+Exceptions - IOException
 }
 \references{
 \url{https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/WebHDFS.html#Make_a_Directory}
@@ -50,6 +52,7 @@ Other Azure Data Lake Store functions: \code{\link{adlFileInputStreamAvailable}}
   \code{\link{azureDataLakeAppendBOS}},
   \code{\link{azureDataLakeAppendCore}},
   \code{\link{azureDataLakeAppend}},
+  \code{\link{azureDataLakeConcat}},
   \code{\link{azureDataLakeCreate}},
   \code{\link{azureDataLakeDelete}},
   \code{\link{azureDataLakeGetFileStatus}},
@@ -57,6 +60,7 @@ Other Azure Data Lake Store functions: \code{\link{adlFileInputStreamAvailable}}
   \code{\link{azureDataLakeOpenBIS}},
   \code{\link{azureDataLakeReadCore}},
   \code{\link{azureDataLakeRead}},
+  \code{\link{azureDataLakeRename}},
   \code{\link{createAdlExponentialBackoffRetryPolicy}},
   \code{\link{createAdlFileInputStream}},
   \code{\link{createAdlFileOutputStream}},

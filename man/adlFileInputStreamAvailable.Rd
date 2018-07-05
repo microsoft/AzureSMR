@@ -12,11 +12,13 @@ adlFileInputStreamAvailable(adlFileInputStream)
 }
 \value{
 the number of bytes availabel
-Exception IOException throws \code{ADLException} if call fails
 }
 \description{
 returns the remaining number of bytes available to read from the buffer, without having to call
 the server
+}
+\details{
+Exceptions - IOException
 }
 \seealso{
 Other Azure Data Lake Store functions: \code{\link{adlFileInputStreamClose}},
@@ -35,6 +37,7 @@ Other Azure Data Lake Store functions: \code{\link{adlFileInputStreamClose}},
   \code{\link{azureDataLakeAppendBOS}},
   \code{\link{azureDataLakeAppendCore}},
   \code{\link{azureDataLakeAppend}},
+  \code{\link{azureDataLakeConcat}},
   \code{\link{azureDataLakeCreate}},
   \code{\link{azureDataLakeDelete}},
   \code{\link{azureDataLakeGetFileStatus}},
@@ -43,6 +46,7 @@ Other Azure Data Lake Store functions: \code{\link{adlFileInputStreamClose}},
   \code{\link{azureDataLakeOpenBIS}},
   \code{\link{azureDataLakeReadCore}},
   \code{\link{azureDataLakeRead}},
+  \code{\link{azureDataLakeRename}},
   \code{\link{createAdlExponentialBackoffRetryPolicy}},
   \code{\link{createAdlFileInputStream}},
   \code{\link{createAdlFileOutputStream}},

@@ -18,10 +18,12 @@ azureDataLakeAppendBOS(azureActiveContext, azureDataLakeAccount, relativePath,
 }
 \value{
 adlFileOutputStream object.
-Exception IOException
 }
 \description{
 AppendBOS to an existing file.
+}
+\details{
+Exceptions - IOException
 }
 \references{
 \url{https://docs.microsoft.com/en-us/azure/data-lake-store/data-lake-store-data-operations-rest-api#upload-data}
@@ -49,6 +51,7 @@ Other Azure Data Lake Store functions: \code{\link{adlFileInputStreamAvailable}}
   \code{\link{adlFileOutputStreamWrite}},
   \code{\link{azureDataLakeAppendCore}},
   \code{\link{azureDataLakeAppend}},
+  \code{\link{azureDataLakeConcat}},
   \code{\link{azureDataLakeCreate}},
   \code{\link{azureDataLakeDelete}},
   \code{\link{azureDataLakeGetFileStatus}},
@@ -57,6 +60,7 @@ Other Azure Data Lake Store functions: \code{\link{adlFileInputStreamAvailable}}
   \code{\link{azureDataLakeOpenBIS}},
   \code{\link{azureDataLakeReadCore}},
   \code{\link{azureDataLakeRead}},
+  \code{\link{azureDataLakeRename}},
   \code{\link{createAdlExponentialBackoffRetryPolicy}},
   \code{\link{createAdlFileInputStream}},
   \code{\link{createAdlFileOutputStream}},

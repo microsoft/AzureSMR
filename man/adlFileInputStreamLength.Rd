@@ -13,12 +13,14 @@ adlFileInputStreamLength(adlFileInputStream)
 }
 \value{
 length of the file.
-Exception IOException if the stream is closed
 }
 \description{
 Returns the length of the file that this stream refers to. Note that the length returned is the length
 as of the time the Stream was opened. Specifically, if there have been subsequent appends to the file,
 they wont be reflected in the returned length.
+}
+\details{
+Exceptions - IOException if the stream is closed
 }
 \seealso{
 Other Azure Data Lake Store functions: \code{\link{adlFileInputStreamAvailable}},
@@ -37,6 +39,7 @@ Other Azure Data Lake Store functions: \code{\link{adlFileInputStreamAvailable}}
   \code{\link{azureDataLakeAppendBOS}},
   \code{\link{azureDataLakeAppendCore}},
   \code{\link{azureDataLakeAppend}},
+  \code{\link{azureDataLakeConcat}},
   \code{\link{azureDataLakeCreate}},
   \code{\link{azureDataLakeDelete}},
   \code{\link{azureDataLakeGetFileStatus}},
@@ -45,6 +48,7 @@ Other Azure Data Lake Store functions: \code{\link{adlFileInputStreamAvailable}}
   \code{\link{azureDataLakeOpenBIS}},
   \code{\link{azureDataLakeReadCore}},
   \code{\link{azureDataLakeRead}},
+  \code{\link{azureDataLakeRename}},
   \code{\link{createAdlExponentialBackoffRetryPolicy}},
   \code{\link{createAdlFileInputStream}},
   \code{\link{createAdlFileOutputStream}},

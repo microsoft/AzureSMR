@@ -4,13 +4,15 @@
 \alias{azureDataLakeAppendCore}
 \title{The Core Append API.}
 \usage{
-azureDataLakeAppendCore(azureActiveContext, azureDataLakeAccount, relativePath,
-  bufferSize, contents, contentSize = -1L, leaseId = NULL,
-  sessionId = NULL, syncFlag = NULL, offsetToAppendTo = -1,
-  verbose = FALSE)
+azureDataLakeAppendCore(azureActiveContext, adlFileOutputStream = NULL,
+  azureDataLakeAccount, relativePath, bufferSize, contents, contentSize = -1L,
+  leaseId = NULL, sessionId = NULL, syncFlag = NULL,
+  offsetToAppendTo = -1, verbose = FALSE)
 }
 \arguments{
 \item{azureActiveContext}{A container used for caching variables used by \code{AzureSMR}, created by \code{\link[=createAzureContext]{createAzureContext()}}}
+
+\item{adlFileOutputStream}{The adlFileOutputStream object to operate with.}
 
 \item{azureDataLakeAccount}{Name of the Azure Data Lake account.}
 
@@ -44,10 +46,12 @@ To let the server choose offset, pass \code{-1}.}
 }
 \value{
 response object
-Exception IOException
 }
 \description{
 The Core Append API.
+}
+\details{
+Exceptions - IOException
 }
 \references{
 \url{https://docs.microsoft.com/en-us/azure/data-lake-store/data-lake-store-data-operations-rest-api#upload-data}
@@ -75,6 +79,7 @@ Other Azure Data Lake Store functions: \code{\link{adlFileInputStreamAvailable}}
   \code{\link{adlFileOutputStreamWrite}},
   \code{\link{azureDataLakeAppendBOS}},
   \code{\link{azureDataLakeAppend}},
+  \code{\link{azureDataLakeConcat}},
   \code{\link{azureDataLakeCreate}},
   \code{\link{azureDataLakeDelete}},
   \code{\link{azureDataLakeGetFileStatus}},
@@ -83,6 +88,7 @@ Other Azure Data Lake Store functions: \code{\link{adlFileInputStreamAvailable}}
   \code{\link{azureDataLakeOpenBIS}},
   \code{\link{azureDataLakeReadCore}},
   \code{\link{azureDataLakeRead}},
+  \code{\link{azureDataLakeRename}},
   \code{\link{createAdlExponentialBackoffRetryPolicy}},
   \code{\link{createAdlFileInputStream}},
   \code{\link{createAdlFileOutputStream}},

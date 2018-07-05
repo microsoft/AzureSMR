@@ -11,10 +11,12 @@ adlFileInputStreamGetPos(adlFileInputStream)
 }
 \value{
 position of the cursor
-Exception IOException
 }
 \description{
 gets the position of the cursor within the file
+}
+\details{
+Exceptions - IOException
 }
 \seealso{
 Other Azure Data Lake Store functions: \code{\link{adlFileInputStreamAvailable}},
@@ -33,6 +35,7 @@ Other Azure Data Lake Store functions: \code{\link{adlFileInputStreamAvailable}}
   \code{\link{azureDataLakeAppendBOS}},
   \code{\link{azureDataLakeAppendCore}},
   \code{\link{azureDataLakeAppend}},
+  \code{\link{azureDataLakeConcat}},
   \code{\link{azureDataLakeCreate}},
   \code{\link{azureDataLakeDelete}},
   \code{\link{azureDataLakeGetFileStatus}},
@@ -41,6 +44,7 @@ Other Azure Data Lake Store functions: \code{\link{adlFileInputStreamAvailable}}
   \code{\link{azureDataLakeOpenBIS}},
   \code{\link{azureDataLakeReadCore}},
   \code{\link{azureDataLakeRead}},
+  \code{\link{azureDataLakeRename}},
   \code{\link{createAdlExponentialBackoffRetryPolicy}},
   \code{\link{createAdlFileInputStream}},
   \code{\link{createAdlFileOutputStream}},

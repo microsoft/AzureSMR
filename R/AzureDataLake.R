@@ -10,8 +10,7 @@
 #' @return Returns a FileStatuses data frame with a row for each directory element. 
 #'         Each row has 11 columns (12 in case of a file):
 #'         FileStatuses.FileStatus.(accessTime, modificationTime, replication, permission, owner, group, aclBit, msExpirationtime (in case of file))
-#' Exception FileNotFoundException
-#' Exception IOException
+#' @details Exceptions - FileNotFoundException, IOException
 #'
 #' @family Azure Data Lake Store functions
 #' @export
@@ -25,7 +24,7 @@ azureDataLakeListStatus <- function(azureActiveContext, azureDataLakeAccount, re
     assert_that(is.azureActiveContext(azureActiveContext))
     azureCheckToken(azureActiveContext)
   }
-  assert_that(is_storage_account(azureDataLakeAccount))
+  assert_that(is_adls_account(azureDataLakeAccount))
   assert_that(is_relativePath(relativePath))
   URL <- paste0(
     getAzureDataLakeBasePath(azureDataLakeAccount),
@@ -43,6 +42,28 @@ azureDataLakeListStatus <- function(azureActiveContext, azureDataLakeAccount, re
   resJsonObj <- jsonlite::fromJSON(resJsonStr)
   if (length(resJsonObj$FileStatuses$FileStatus) == 0) {
     # Return empty data frame in case of an empty directory
+    #
+    # LISTSTATUS on a ROOT (api-version=2018-05-01):
+    # {\"FileStatuses\":
+    # {\"FileStatus\":[
+    # {\"length\":0,\"pathSuffix\":\"tempfolder1?1文件夹1\",\"type\":\"DIRECTORY\",\"blockSize\":0,\"accessTime\":1529649111352,\"modificationTime\":1529649111352,\"replication\":0,\"permission\":\"770\",\"owner\":\"c1717280-f74e-4e59-9efc-12432daa51e9\",\"group\":\"b7c7db8c-3117-43cc-870d-946f3add73c9\",\"aclBit\":false}
+    # ,
+    # {\"length\":0,\"pathSuffix\":\"testfolder\",\"type\":\"DIRECTORY\",\"blockSize\":0,\"accessTime\":1489143030207,\"modificationTime\":1489143030207,\"replication\":0,\"permission\":\"770\",\"owner\":\"b7c7db8c-3117-43cc-870d-946f3add73c9\",\"group\":\"b7c7db8c-3117-43cc-870d-946f3add73c9\",\"aclBit\":true}
+    # ]}}
+    #
+    # LISTSTATUS on a FOLDER (api-version=2018-05-01):
+    # {\"FileStatuses\":
+    # {\"FileStatus\":[
+    # {\"length\":4,\"pathSuffix\":\"tempfile01.txt\",\"type\":\"FILE\",\"blockSize\":268435456,\"accessTime\":1529649112231,\"modificationTime\":1529649112363,\"replication\":1,\"permission\":\"755\",\"owner\":\"c1717280-f74e-4e59-9efc-12432daa51e9\",\"group\":\"b7c7db8c-3117-43cc-870d-946f3add73c9\",\"msExpirationTime\":0,\"aclBit\":false}
+    # ,
+    # {\"length\":4,\"pathSuffix\":\"tempfile02.txt\",\"type\":\"FILE\",\"blockSize\":268435456,\"accessTime\":1529649113270,\"modificationTime\":1529649113348,\"replication\":1,\"permission\":\"755\",\"owner\":\"c1717280-f74e-4e59-9efc-12432daa51e9\",\"group\":\"b7c7db8c-3117-43cc-870d-946f3add73c9\",\"msExpirationTime\":0,\"aclBit\":false}
+    # ]}}
+    #
+    # LISTSTATUS on a FILE (api-version=2018-05-01):
+    # {\"FileStatuses\":
+    # {\"FileStatus\":[
+    # {\"length\":4,\"pathSuffix\":\"\",\"type\":\"FILE\",\"blockSize\":268435456,\"accessTime\":1529649112231,\"modificationTime\":1529649112363,\"replication\":1,\"permission\":\"755\",\"owner\":\"c1717280-f74e-4e59-9efc-12432daa51e9\",\"group\":\"b7c7db8c-3117-43cc-870d-946f3add73c9\",\"msExpirationTime\":0,\"aclBit\":false}
+    # ]}}
     return(
       data.frame(
         FileStatuses.FileStatus.length = character(0),
@@ -55,7 +76,8 @@ azureDataLakeListStatus <- function(azureActiveContext, azureDataLakeAccount, re
         FileStatuses.FileStatus.permission = character(0),
         FileStatuses.FileStatus.owner = character(0),
         FileStatuses.FileStatus.group = character(0),
-        # NOTE: There is an additional msExpirationTime for files
+        # msExpirationTime is present only for "type":"FILE"
+        #FileStatuses.FileStatus.msExpirationTime = character(0),
         FileStatuses.FileStatus.aclBit = character(0)
       )
     )
@@ -73,8 +95,7 @@ azureDataLakeListStatus <- function(azureActiveContext, azureDataLakeAccount, re
 #' @return Returns a FileStatus data frame with one row for directory element. 
 #'         The row has 11 columns (12 in case of a [file]):
 #'         FileStatuses.FileStatus.(accessTime, modificationTime, replication, permission, owner, group, aclBit, msExpirationtime (in case of file))
-#' Exception FileNotFoundException
-#' Exception IOException
+#' @details Exceptions - FileNotFoundException, IOException
 #'
 #' @family Azure Data Lake Store functions
 #' @export
@@ -87,7 +108,7 @@ azureDataLakeGetFileStatus <- function(azureActiveContext, azureDataLakeAccount,
     assert_that(is.azureActiveContext(azureActiveContext))
     azureCheckToken(azureActiveContext)
   }
-  assert_that(is_storage_account(azureDataLakeAccount))
+  assert_that(is_adls_account(azureDataLakeAccount))
   assert_that(is_relativePath(relativePath))
   URL <- paste0(
     getAzureDataLakeBasePath(azureDataLakeAccount),
@@ -105,6 +126,16 @@ azureDataLakeGetFileStatus <- function(azureActiveContext, azureDataLakeAccount,
   resJsonObj <- jsonlite::fromJSON(resJsonStr)
   if (length(resJsonObj$FileStatus) == 0) {
     # Return empty data frame in case of an empty directory
+    #
+    # GETFILESTATUS on a FOLDER (api-version=2018-05-01):
+    # {\"FileStatus\":
+    # {\"length\":0,\"pathSuffix\":\"\",\"type\":\"DIRECTORY\",\"blockSize\":0,\"accessTime\":1489142850467,\"modificationTime\":1529652246462,\"replication\":0,\"permission\":\"770\",\"owner\":\"b7c7db8c-3117-43cc-870d-946f3add73c9\",\"group\":\"b7c7db8c-3117-43cc-870d-946f3add73c9\",\"aclBit\":true}
+    # }
+    #
+    # GETFILESTATUS on a FILE (api-version=2018-05-01):
+    # {\"FileStatus\":
+    # {\"length\":4,\"pathSuffix\":\"\",\"type\":\"FILE\",\"blockSize\":268435456,\"accessTime\":1529652247451,\"modificationTime\":1529652247542,\"replication\":1,\"permission\":\"755\",\"owner\":\"c1717280-f74e-4e59-9efc-12432daa51e9\",\"group\":\"b7c7db8c-3117-43cc-870d-946f3add73c9\",\"msExpirationTime\":0,\"aclBit\":false}
+    # }
     return(
       data.frame(
         FileStatuses.FileStatus.length = character(0),
@@ -117,7 +148,8 @@ azureDataLakeGetFileStatus <- function(azureActiveContext, azureDataLakeAccount,
         FileStatuses.FileStatus.permission = character(0),
         FileStatuses.FileStatus.owner = character(0),
         FileStatuses.FileStatus.group = character(0),
-        # NOTE: There is an additional msExpirationTime for files
+        # msExpirationTime is present only for "type":"FILE"
+        #FileStatuses.FileStatus.msExpirationTime = character(0),
         FileStatuses.FileStatus.aclBit = character(0)
       )
     )
@@ -134,7 +166,7 @@ azureDataLakeGetFileStatus <- function(azureActiveContext, azureDataLakeAccount,
 #' @param permission Permission to be set for the directory (default is 755).
 #' @param verbose Print tracing information (default FALSE).
 #' @return Returns true if the directory creation succeeds; false otherwise.
-#' Exception IOException
+#' @details Exceptions - IOException
 #'
 #' @family Azure Data Lake Store functions
 #' @export
@@ -147,7 +179,7 @@ azureDataLakeMkdirs <- function(azureActiveContext, azureDataLakeAccount, relati
     assert_that(is.azureActiveContext(azureActiveContext))
     azureCheckToken(azureActiveContext)
   }
-  assert_that(is_storage_account(azureDataLakeAccount))
+  assert_that(is_adls_account(azureDataLakeAccount))
   assert_that(is_relativePath(relativePath))
   if (!missing(permission) && !is.null(permission)) assert_that(is_permission(permission))
   URL <- paste0(
@@ -182,7 +214,7 @@ azureDataLakeMkdirs <- function(azureActiveContext, azureDataLakeAccount, relati
 #' @param contents raw contents to be written to the newly created file (default raw(0)).
 #' @param verbose Print tracing information (default FALSE).
 #' @return NULL (void)
-#' Exception IOException
+#' @details Exceptions - IOException
 #'
 #' @family Azure Data Lake Store functions
 #' @export
@@ -203,7 +235,7 @@ azureDataLakeCreate <- function(azureActiveContext, azureDataLakeAccount, relati
     assert_that(is.azureActiveContext(azureActiveContext))
     azureCheckToken(azureActiveContext)
   }
-  assert_that(is_storage_account(azureDataLakeAccount))
+  assert_that(is_adls_account(azureDataLakeAccount))
   assert_that(is_relativePath(relativePath))
   if (!missing(permission) && !is.null(permission)) assert_that(is_permission(permission))
   if (!missing(bufferSize) && !is.null(bufferSize)) assert_that(is_bufferSize(bufferSize))
@@ -245,7 +277,7 @@ azureDataLakeCreate <- function(azureActiveContext, azureDataLakeAccount, relati
 #' @param recursive If path is a directory, recursively delete contents and directory (default FALSE).
 #' @param verbose Print tracing information (default FALSE).
 #' @return true if delete is successful else false.
-#' Exception IOException
+#' @details Exceptions - IOException
 #'
 #' @family Azure Data Lake Store functions
 #' @export
@@ -258,7 +290,7 @@ azureDataLakeDelete <- function(azureActiveContext, azureDataLakeAccount, relati
     assert_that(is.azureActiveContext(azureActiveContext))
     azureCheckToken(azureActiveContext)
   }
-  assert_that(is_storage_account(azureDataLakeAccount))
+  assert_that(is_adls_account(azureDataLakeAccount))
   assert_that(is_relativePath(relativePath))
   URL <- paste0(
     getAzureDataLakeBasePath(azureDataLakeAccount),
@@ -279,6 +311,112 @@ azureDataLakeDelete <- function(azureActiveContext, azureDataLakeAccount, relati
   return(resDf$boolean)
 }
 
+#' Rename a file/folder.
+#'
+#' @inheritParams setAzureContext
+#' @param azureDataLakeAccount Name of the Azure Data Lake account.
+#' @param relativePath Relative path of source file/folder.
+#' @param destinationRelativePath Relative path of destination file/folder.
+#' @param overwrite Whether to overwrite existing files with same name (default FALSE).
+#' @param verbose Print tracing information (default FALSE).
+#' @return TRUE if successful, FALSE otherwise
+#' @details Exceptions - FileNotFoundException, FileAlreadyExistsException, ParentNotDirectoryException, IOException
+#'
+#' @family Azure Data Lake Store functions
+#' @export
+#'
+#' @references \url{https://docs.microsoft.com/en-us/azure/data-lake-store/data-lake-store-data-operations-rest-api#rename-a-file}
+#' @seealso \url{https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/WebHDFS.html#Rename_a_FileDirectory}
+#' @seealso \url{https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/WebHDFS.html#Destination}
+#' @seealso \url{https://hadoop.apache.org/docs/current/api/org/apache/hadoop/fs/FileSystem.html#rename(org.apache.hadoop.fs.Path,%20org.apache.hadoop.fs.Path,%20org.apache.hadoop.fs.Options.Rename...)}
+azureDataLakeRename <- function(azureActiveContext, azureDataLakeAccount, relativePath,
+                                destinationRelativePath, overwrite = FALSE,
+                                verbose = FALSE) {
+  if (!missing(azureActiveContext) && !is.null(azureActiveContext)) {
+    assert_that(is.azureActiveContext(azureActiveContext))
+    azureCheckToken(azureActiveContext)
+  }
+  assert_that(is_adls_account(azureDataLakeAccount))
+  assert_that(is_relativePath(relativePath))
+  assert_that(is_destinationRelativePath(destinationRelativePath))
+  URL <- paste0(
+    getAzureDataLakeBasePath(azureDataLakeAccount),
+    getAzureDataLakeURLEncodedString(relativePath),
+    "?op=RENAME",
+    getAzureDataLakeApiVersion()
+  )
+  URL <- paste0(URL, "&destination=", getAzureDataLakeURLEncodedString(destinationRelativePath))
+  if (overwrite) URL <- paste0(URL, "&renameoptions=", "OVERWRITE")
+  # TODO: Shouldn't we use NONIDEMPOTENTRETRYPOLICY like CREATE API?
+  retryPolicy <- createAdlRetryPolicy(azureActiveContext, verbose = verbose)
+  resHttp <- callAzureDataLakeApi(URL, verb = "PUT",
+                                  azureActiveContext = azureActiveContext,
+                                  adlRetryPolicy = retryPolicy,
+                                  verbose = verbose)
+  stopWithAzureError(resHttp)
+  resJsonStr <- content(resHttp, "text", encoding = "UTF-8")
+  resJsonObj <- jsonlite::fromJSON(resJsonStr)
+  resDf <- as.data.frame(resJsonObj)
+  return(resDf$boolean)
+}
+
+#' Concat existing files together. (MSCONCAT).
+#'
+#' @inheritParams setAzureContext
+#' @param azureDataLakeAccount Name of the Azure Data Lake account.
+#' @param relativePath Relative path of a destination file.
+#' @param sourceRelativePaths Simple vector of relative paths of source files to be concatenated.
+#' @param verbose Print tracing information (default FALSE).
+#' @return NULL (void)
+#' @details Exceptions - IOException, UnsupportedOperationException
+#'
+#' @family Azure Data Lake Store functions
+#' @export
+#'
+#' @references \url{https://docs.microsoft.com/en-us/azure/data-lake-store/data-lake-store-data-operations-rest-api}
+#' @seealso \url{https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/WebHDFS.html#Concat_Files}
+#' @seealso \url{https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/WebHDFS.html#Sources}
+#' @seealso \url{https://hadoop.apache.org/docs/current/api/org/apache/hadoop/fs/FileSystem.html#concat(org.apache.hadoop.fs.Path,%20org.apache.hadoop.fs.Path[])}
+azureDataLakeConcat <- function(azureActiveContext, azureDataLakeAccount, relativePath,
+                                sourceRelativePaths, 
+                                verbose = FALSE) {
+  if (!missing(azureActiveContext) && !is.null(azureActiveContext)) {
+    assert_that(is.azureActiveContext(azureActiveContext))
+    azureCheckToken(azureActiveContext)
+  }
+  assert_that(is_adls_account(azureDataLakeAccount))
+  assert_that(is_relativePath(relativePath))
+  assert_that(is_sourceRelativePaths(sourceRelativePaths))
+  # verify and url encode each of the source paths
+  i <- 1
+  for(sourceRelativePath in sourceRelativePaths) {
+    assert_that(is_sourceRelativePath(sourceRelativePath))
+    if(substr(sourceRelativePath, 1, 1) != "/") sourceRelativePath <- paste0("/", sourceRelativePath)
+    # DONT encode the sourceRelativePath, it will go as is in the body
+    sourceRelativePaths[i] <- sourceRelativePath
+    i <- (i + 1)
+  }
+  # json format the source paths
+  sourceRelativePaths <- paste0("{\"sources\":", jsonlite::toJSON(sourceRelativePaths), "}")
+  URL <- paste0(
+    getAzureDataLakeBasePath(azureDataLakeAccount),
+    getAzureDataLakeURLEncodedString(relativePath),
+    "?op=MSCONCAT", # use MSCONCAT instead of CONCAT
+    getAzureDataLakeApiVersionForConcat()
+  )
+  retryPolicy <- createAdlRetryPolicy(azureActiveContext, verbose = verbose)
+  resHttp <- callAzureDataLakeApi(URL, verb = "POST",
+                                  azureActiveContext = azureActiveContext,
+                                  adlRetryPolicy = retryPolicy,
+                                  content = charToRaw(sourceRelativePaths),
+                                  # MUST specify content type for latest implementation of MSCONCAT
+                                  contenttype = "application/json",
+                                  verbose = verbose)
+  stopWithAzureError(resHttp)
+  # return a NULL (void)
+  return(NULL)
+}
+
 # ADLS Ingress APIs ----
 
 #' Append to an existing file.
@@ -291,7 +429,7 @@ azureDataLakeDelete <- function(azureActiveContext, azureDataLakeAccount, relati
 #' @param contentSize size of `contents` to be written to the file.
 #' @param verbose Print tracing information (default FALSE).
 #' @return NULL (void)
-#' Exception IOException
+#' @details Exceptions - IOException
 #' 
 #' @family Azure Data Lake Store functions
 #' @export
@@ -302,7 +440,7 @@ azureDataLakeDelete <- function(azureActiveContext, azureDataLakeAccount, relati
 #' @seealso \url{https://hadoop.apache.org/docs/current/api/org/apache/hadoop/fs/FileSystem.html#append-org.apache.hadoop.fs.Path-int-org.apache.hadoop.util.Progressable-}
 azureDataLakeAppend <- function(azureActiveContext, azureDataLakeAccount, relativePath, 
                                 bufferSize, contents, contentSize = -1L, verbose = FALSE) {
-  resHttp <- azureDataLakeAppendCore(azureActiveContext, azureDataLakeAccount, relativePath,
+  resHttp <- azureDataLakeAppendCore(azureActiveContext, NULL, azureDataLakeAccount, relativePath,
                                      bufferSize, contents, contentSize, verbose = verbose)
   stopWithAzureError(resHttp)
   # retrun a NULL (void)
@@ -316,7 +454,7 @@ azureDataLakeAppend <- function(azureActiveContext, azureDataLakeAccount, relati
 #' @param relativePath Relative path of a file.
 #' @param verbose Print tracing information (default FALSE).
 #' @return adlFileOutputStream object.
-#' Exception IOException
+#' @details Exceptions - IOException
 #'
 #' @family Azure Data Lake Store functions
 #' @export
@@ -330,7 +468,7 @@ azureDataLakeAppendBOS <- function(azureActiveContext, azureDataLakeAccount, rel
     assert_that(is.azureActiveContext(azureActiveContext))
     azureCheckToken(azureActiveContext)
   }
-  assert_that(is_storage_account(azureDataLakeAccount))
+  assert_that(is_adls_account(azureDataLakeAccount))
   assert_that(is_relativePath(relativePath))
   adlFOS <- createAdlFileOutputStream(azureActiveContext, azureDataLakeAccount, relativePath, verbose)
   return(adlFOS)
@@ -340,6 +478,7 @@ azureDataLakeAppendBOS <- function(azureActiveContext, azureDataLakeAccount, rel
 #'
 #' @inheritParams setAzureContext
 #' @param azureDataLakeAccount Name of the Azure Data Lake account.
+#' @param adlFileOutputStream The adlFileOutputStream object to operate with.
 #' @param relativePath Relative path of a file.
 #' @param bufferSize Size of the buffer to be used.
 #' @param contents raw contents to be written to the file.
@@ -363,7 +502,7 @@ azureDataLakeAppendBOS <- function(azureActiveContext, azureDataLakeAccount, rel
 #'     To let the server choose offset, pass `-1`.
 #' @param verbose Print tracing information (default FALSE).
 #' @return response object
-#' Exception IOException
+#' @details Exceptions - IOException
 #' 
 #' @family Azure Data Lake Store functions
 #' 
@@ -371,7 +510,7 @@ azureDataLakeAppendBOS <- function(azureActiveContext, azureDataLakeAccount, rel
 #' @seealso \url{https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/WebHDFS.html#Append_to_a_File}
 #' @seealso \url{https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/WebHDFS.html#Buffer_Size}
 #' @seealso \url{https://hadoop.apache.org/docs/current/api/org/apache/hadoop/fs/FileSystem.html#append-org.apache.hadoop.fs.Path-int-org.apache.hadoop.util.Progressable-}
-azureDataLakeAppendCore <- function(azureActiveContext, azureDataLakeAccount, relativePath, bufferSize, 
+azureDataLakeAppendCore <- function(azureActiveContext, adlFileOutputStream = NULL, azureDataLakeAccount, relativePath, bufferSize, 
                                     contents, contentSize = -1L, 
                                     leaseId = NULL, sessionId = NULL, syncFlag = NULL, 
                                     offsetToAppendTo = -1,
@@ -380,7 +519,7 @@ azureDataLakeAppendCore <- function(azureActiveContext, azureDataLakeAccount, re
     assert_that(is.azureActiveContext(azureActiveContext))
     azureCheckToken(azureActiveContext)
   }
-  assert_that(is_storage_account(azureDataLakeAccount))
+  assert_that(is_adls_account(azureDataLakeAccount))
   assert_that(is_relativePath(relativePath))
   assert_that(is_bufferSize(bufferSize))
   assert_that(is_content(contents))
@@ -406,6 +545,10 @@ azureDataLakeAppendCore <- function(azureActiveContext, azureDataLakeAccount, re
                                   adlRetryPolicy = retryPolicy,
                                   content = contents[1:contentSize],
                                   verbose = verbose)
+  # update retry count - required for bad offset handling
+  if (!is.null(adlFileOutputStream)) {
+    adlFileOutputStream$numRetries <- retryPolicy$retryCount
+  }
   return(resHttp)
 }
 
@@ -421,7 +564,7 @@ azureDataLakeAppendCore <- function(azureActiveContext, azureDataLakeAccount, re
 #' @param bufferSize Size of the buffer to be used. (not honoured).
 #' @param verbose Print tracing information (default FALSE).
 #' @return raw contents of the file.
-#' Exception IOException
+#' @details Exceptions - IOException
 #'
 #' @family Azure Data Lake Store functions
 #' @export
@@ -453,7 +596,7 @@ azureDataLakeRead <- function(azureActiveContext,
 #' @param bufferSize Size of the buffer to be used. (not honoured).
 #' @param verbose Print tracing information (default FALSE).
 #' @return an object of adlFileInputStream.
-#' Exception IOException
+#' @details Exceptions - IOException
 #'
 #' @family Azure Data Lake Store functions
 #' @export
@@ -471,7 +614,7 @@ azureDataLakeOpenBIS <- function(azureActiveContext, azureDataLakeAccount,
     assert_that(is.azureActiveContext(azureActiveContext))
     azureCheckToken(azureActiveContext)
   }
-  assert_that(is_storage_account(azureDataLakeAccount))
+  assert_that(is_adls_account(azureDataLakeAccount))
   assert_that(is_relativePath(relativePath))
   if (!missing(bufferSize) && !is.null(bufferSize)) assert_that(is_bufferSize(bufferSize))
   adlFIS <- createAdlFileInputStream(azureActiveContext, azureDataLakeAccount, relativePath, verbose)
@@ -489,7 +632,7 @@ azureDataLakeOpenBIS <- function(azureActiveContext, azureDataLakeAccount,
 #' @param bufferSize Size of the buffer to be used. (not honoured).
 #' @param verbose Print tracing information (default FALSE).
 #' @return raw contents of the file.
-#' Exception IOException
+#' @details Exceptions - IOException
 #'
 #' @family Azure Data Lake Store functions
 #'
@@ -507,7 +650,7 @@ azureDataLakeReadCore <- function(azureActiveContext,
     assert_that(is.azureActiveContext(azureActiveContext))
     azureCheckToken(azureActiveContext)
   }
-  assert_that(is_storage_account(azureDataLakeAccount))
+  assert_that(is_adls_account(azureDataLakeAccount))
   assert_that(is_relativePath(relativePath))
   if (!missing(offset) && !is.null(offset)) assert_that(is_offset(offset))
   if (!missing(length) && !is.null(length)) assert_that(is_length(length))
@@ -561,6 +704,9 @@ createAdlFileOutputStream <- function(azureActiveContext, accountName, relativeP
   azEnv$remoteCursor <- as.integer(res$FileStatus.length) # this remote cursor starts from 0
   azEnv$streamClosed <- FALSE
   azEnv$lastFlushUpdatedMetadata <- FALSE
+
+  # additional param required to implement bad offset handling
+  azEnv$numRetries <- 0
 
   return(azEnv)
 }
@@ -633,6 +779,17 @@ addToBuffer <- function(adlFileOutputStream, contents, off, len) {
   adlFileOutputStream$cursor <- as.integer(cursor + len)
 }
 
+doZeroLengthAppend <- function(adlFileOutputStream, azureDataLakeAccount, relativePath, offset, verbose = FALSE) {
+  resHttp <- azureDataLakeAppendCore(adlFileOutputStream$azureActiveContext, adlFileOutputStream,
+                                     azureDataLakeAccount, relativePath,
+                                     4194304L, contents = raw(0), contentSize = 0L,
+                                     leaseId = adlFileOutputStream$leaseId, sessionId = adlFileOutputStream$leaseId,
+                                     syncFlag = syncFlagEnum$METADATA, offsetToAppendTo = 0, verbose = verbose)
+  stopWithAzureError(resHttp)
+  # retrun a NULL (void)
+  return(TRUE)
+}
+
 #' Flush an adlFileOutputStream.
 #'
 #' @param adlFileOutputStream adlFileOutputStream of the file
@@ -659,13 +816,45 @@ adlFileOutputStreamFlush <- function(adlFileOutputStream, syncFlag = syncFlagEnu
       && (syncFlag == syncFlagEnum$METADATA)) {
     return(NULL)
   }
-  resHttp <- azureDataLakeAppendCore(adlFileOutputStream$azureActiveContext, 
+  resHttp <- azureDataLakeAppendCore(adlFileOutputStream$azureActiveContext, adlFileOutputStream,
                              adlFileOutputStream$accountName, adlFileOutputStream$relativePath, 4194304L, 
                              adlFileOutputStream$buffer, as.integer(adlFileOutputStream$cursor - 1), 
                              adlFileOutputStream$leaseId, adlFileOutputStream$leaseId, syncFlag, 
                              adlFileOutputStream$remoteCursor,
                              verbose)
-  # TODO: implement - retry/error recovery (?)
+  if(!isSuccessfulResponse(resHttp)) {
+    errMessage <- content(resHttp, "text", encoding = "UTF-8")
+    if (adlFileOutputStream$numRetries > 0 && status_code(resHttp) == 400
+        && grepl("BadOffsetException", errMessage, ignore.case = TRUE)) {
+      # if this was a retry and we get bad offset, then this might be because we got a transient
+      # failure on first try, but request succeeded on back-end. In that case, the retry would fail
+      # with bad offset. To detect that, we check if there was a retry done, and if the current error we
+      # have is bad offset.
+      # If so, do a zero-length append at the current expected Offset, and if that succeeds,
+      # then the file length must be good - swallow the error. If this append fails, then the last append
+      # did not succeed and we have some other offset on server - bubble up the error.
+      expectedRemoteLength <- (adlFileOutputStream$remoteCursor + adlFileOutputStream$cursor)
+      append0Succeeded <- doZeroLengthAppend(adlFileOutputStream, 
+                                             adlFileOutputStream$accountName, 
+                                             adlFileOutputStream$relativePath, 
+                                             expectedRemoteLength)
+      if (append0Succeeded) {
+        printADLSMessage("AzureDataLake.R", "adlFileOutputStreamFlush", 
+                         paste0("zero-length append succeeded at expected offset (", expectedRemoteLength, "), ",
+                                " ignoring BadOffsetException for session: ", adlFileOutputStream$leaseId,
+                                ", file: ", adlFileOutputStream$relativePath))
+        adlFileOutputStream$remoteCursor <- (adlFileOutputStream$remoteCursor + adlFileOutputStream$cursor)
+        adlFileOutputStream$cursor <- 0
+        adlFileOutputStream$lastFlushUpdatedMetadata <- FALSE
+        return(NULL)
+      } else {
+        printADLSMessage("AzureDataLake.R", "adlFileOutputStreamFlush", 
+                         paste0("Append failed at expected offset(", expectedRemoteLength,
+                                "). Bubbling exception up for session: ", adlFileOutputStream$leaseId,
+                                ", file: ", adlFileOutputStream$relativePath))
+      }
+    }
+  }
   stopWithAzureError(resHttp)
   adlFileOutputStream$remoteCursor <- (adlFileOutputStream$remoteCursor + (adlFileOutputStream$cursor - 1))
   adlFileOutputStream$cursor <- 1L
@@ -906,8 +1095,7 @@ slurpFullFile <- function(adlFileInputStream, verbose = FALSE) {
 #' @param adlFileInputStream adlFileInputStream of the file
 #' @param n position to seek to
 #' @return NULL (void)
-#' Exception IOException if there is an error
-#' Exception EOFException if attempting to seek past end of file
+#' @details Exceptions, EOFException
 #'
 #' @family Azure Data Lake Store functions
 #' @export
@@ -943,8 +1131,7 @@ adlFileInputStreamSeek <- function(adlFileInputStream, n) {
 #' @return Skips over and discards n bytes of data from the input stream. 
 #'     The skip method may, for a variety of reasons, end up skipping over some smaller 
 #'     number of bytes, possibly 0. The actual number of bytes skipped is returned.
-#' Exception IOException if there is an error
-#' Exception EOFException if attempting to seek past end of file
+#' @details Exceptions - IOException, EOFException
 #'
 #' @family Azure Data Lake Store functions
 #' @export
@@ -974,7 +1161,7 @@ adlFileInputStreamSkip <- function(adlFileInputStream, n) {
 #'
 #' @param adlFileInputStream adlFileInputStream of the file
 #' @return the number of bytes availabel
-#' Exception IOException throws `ADLException` if call fails
+#' @details Exceptions - IOException
 #'
 #' @family Azure Data Lake Store functions
 #' @export
@@ -994,7 +1181,7 @@ adlFileInputStreamAvailable <- function(adlFileInputStream) {
 #'
 #' @param adlFileInputStream adlFileInputStream of the file
 #' @return length of the file.
-#' Exception IOException if the stream is closed
+#' @details Exceptions - IOException if the stream is closed
 #' 
 #' @family Azure Data Lake Store functions
 #' @export
@@ -1012,7 +1199,7 @@ adlFileInputStreamLength <- function(adlFileInputStream) {
 #'
 #' @param adlFileInputStream adlFileInputStream of the file
 #' @return position of the cursor
-#' Exception IOException
+#' @details Exceptions - IOException
 #'
 #' @family Azure Data Lake Store functions
 #' @export

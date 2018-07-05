@@ -233,7 +233,7 @@ getCurrentTimeInNanos <- function() {
 # ADLS Helper Functions ----
 
 getAzureDataLakeSDKVersion <- function() {
-  return("1.1.0")
+  return("1.3.0")
 }
 
 getAzureDataLakeSDKUserAgent <- function() {
@@ -254,7 +254,11 @@ getAzureDataLakeBasePath <- function(azureDataLakeAccount) {
 }
 
 getAzureDataLakeApiVersion <- function() {
-  return("&api-version=2017-08-01")
+  return("&api-version=2018-02-01")
+}
+
+getAzureDataLakeApiVersionForConcat <- function() {
+  return("&api-version=2018-05-01")
 }
 
 getAzureDataLakeDefaultBufferSize <- function() {
@@ -262,8 +266,8 @@ getAzureDataLakeDefaultBufferSize <- function() {
 }
 
 getAzureDataLakeURLEncodedString <- function(strToEncode) {
-  strToEncode <- URLencode(strToEncode, reserved = TRUE, repeated = TRUE)
-  return(strToEncode)
+  strEncoded <- URLencode(strToEncode, reserved = TRUE, repeated = TRUE)
+  return(strEncoded)
 }
 
 # log printer for Azure Data Lake Store
@@ -278,6 +282,10 @@ printADLSMessage <- function(fileName, functionName, message, error = NULL) {
 }
 
 # ADLS Retry Policies ----
+
+#' NOTE: Folowing points on ADLS AdlsRetryPolicy:
+#' 1. Not implemented speculative reads hence not implemented `NoRetryPolicy`.
+#' 2. Not implemented ExponentialBackoffPolicyforMSI as its not used even in the JDK.
 
 #' Create adlRetryPolicy.
 #' Create a adlRetryPolicy (`adlRetryPolicy`) for holding variables used by the Azure Data Lake Store data functions.

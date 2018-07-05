@@ -294,6 +294,36 @@ on_failure(is_relativePath) <- function(call, env) {
   "Provide a valid relativePath string"
 }
 
+# --- destinationRelativePath
+
+is_destinationRelativePath <- function(x) {
+  !missing(x) && !is.null(x) && is.character(x) && length(x) == 1
+}
+
+on_failure(is_destinationRelativePath) <- function(call, env) {
+  "Provide a valid destinationRelativePath string"
+}
+
+# --- sourceRelativePaths
+
+is_sourceRelativePaths <- function(x) {
+  !missing(x) && !is.null(x) && is.character(x) && length(x) > 0
+}
+
+on_failure(is_sourceRelativePaths) <- function(call, env) {
+  "Provide a non empty vector of sourceRelativePath paths"
+}
+
+# --- sourceRelativePath
+
+is_sourceRelativePath <- function(x) {
+  !missing(x) && !is.null(x) && is.character(x) && length(x) == 1
+}
+
+on_failure(is_sourceRelativePath) <- function(call, env) {
+  "Provide a valid sourceRelativePath string"
+}
+
 # --- permission
 
 is_permission <- function(x) {
@@ -434,6 +464,26 @@ on_failure(is_content) <- function(call, env) {
   "Provide a valid non-null raw content"
 }
 
+# adlsAccount ----
+
+is_adls_account <- function(x) {
+  is.character(x) && length(x) == 1 && assert_that(is_valid_adls_account(x))
+}
+
+on_failure(is_adls_account) <- function(call, env) {
+  "Provide a valid adls account, or set using createAzureContext()"
+}
+
+is_valid_adls_account <- function(x) {
+  nchar(x) >= 3 && nchar(x) <= 24 && grepl("^[a-z0-9-]*$", x)
+}
+
+on_failure(is_valid_storage_account) <- function(call, env) {
+  paste("ADLS account name must be between 3 and 24 characters in length",
+        "and use numbers and lower-case letters and '-' only.",
+        sep = "\n")
+}
+
 # adlFileOutputStream ----
 
 #' adlFileOutputStream object.
@@ -540,7 +590,7 @@ adlFileInputStreamCheck <- function(adlFileInputStream) {
   return(TRUE)
 }
 
-# ADLS Retry Policies ----
+# adlRetryPolicy ----
 
 #' adlRetryPolicy object.
 #'

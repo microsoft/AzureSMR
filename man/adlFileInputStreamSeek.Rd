@@ -13,11 +13,12 @@ adlFileInputStreamSeek(adlFileInputStream, n)
 }
 \value{
 NULL (void)
-Exception IOException if there is an error
-Exception EOFException if attempting to seek past end of file
 }
 \description{
 Seek to given position in stream.
+}
+\details{
+Exceptions, EOFException
 }
 \seealso{
 Other Azure Data Lake Store functions: \code{\link{adlFileInputStreamAvailable}},
@@ -36,6 +37,7 @@ Other Azure Data Lake Store functions: \code{\link{adlFileInputStreamAvailable}}
   \code{\link{azureDataLakeAppendBOS}},
   \code{\link{azureDataLakeAppendCore}},
   \code{\link{azureDataLakeAppend}},
+  \code{\link{azureDataLakeConcat}},
   \code{\link{azureDataLakeCreate}},
   \code{\link{azureDataLakeDelete}},
   \code{\link{azureDataLakeGetFileStatus}},
@@ -44,6 +46,7 @@ Other Azure Data Lake Store functions: \code{\link{adlFileInputStreamAvailable}}
   \code{\link{azureDataLakeOpenBIS}},
   \code{\link{azureDataLakeReadCore}},
   \code{\link{azureDataLakeRead}},
+  \code{\link{azureDataLakeRename}},
   \code{\link{createAdlExponentialBackoffRetryPolicy}},
   \code{\link{createAdlFileInputStream}},
   \code{\link{createAdlFileOutputStream}},

@@ -20,11 +20,12 @@ azureDataLakeGetFileStatus(azureActiveContext, azureDataLakeAccount,
 Returns a FileStatus data frame with one row for directory element.
 The row has 11 columns (12 in case of a \link{file}):
 FileStatuses.FileStatus.(accessTime, modificationTime, replication, permission, owner, group, aclBit, msExpirationtime (in case of file))
-Exception FileNotFoundException
-Exception IOException
 }
 \description{
 Get the status of a file/directory in the given path.
+}
+\details{
+Exceptions - FileNotFoundException, IOException
 }
 \references{
 \url{https://docs.microsoft.com/en-us/azure/data-lake-store/data-lake-store-data-operations-rest-api}
@@ -51,6 +52,7 @@ Other Azure Data Lake Store functions: \code{\link{adlFileInputStreamAvailable}}
   \code{\link{azureDataLakeAppendBOS}},
   \code{\link{azureDataLakeAppendCore}},
   \code{\link{azureDataLakeAppend}},
+  \code{\link{azureDataLakeConcat}},
   \code{\link{azureDataLakeCreate}},
   \code{\link{azureDataLakeDelete}},
   \code{\link{azureDataLakeListStatus}},
@@ -58,6 +60,7 @@ Other Azure Data Lake Store functions: \code{\link{adlFileInputStreamAvailable}}
   \code{\link{azureDataLakeOpenBIS}},
   \code{\link{azureDataLakeReadCore}},
   \code{\link{azureDataLakeRead}},
+  \code{\link{azureDataLakeRename}},
   \code{\link{createAdlExponentialBackoffRetryPolicy}},
   \code{\link{createAdlFileInputStream}},
   \code{\link{createAdlFileOutputStream}},
