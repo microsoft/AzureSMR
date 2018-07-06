@@ -169,25 +169,41 @@
 #  asc <- createAzureContext(tenantID = "{TID}", clientID = "{CID}", authKey= "{KEY}")
 
 ## ---- eval=FALSE---------------------------------------------------------
-#  azureDataLakeMkdirs(asc, azureDataLakeAccount, "tempfolder")
+#  adls.mkdir(asc, azureDataLakeAccount, "tempfolder")
 
 ## ---- eval=FALSE---------------------------------------------------------
-#  azureDataLakeListStatus(asc, azureDataLakeAccount, "")
-#  azureDataLakeListStatus(asc, azureDataLakeAccount, "tempfolder")
+#  adls.ls(asc, azureDataLakeAccount, "")
+#  adls.ls(asc, azureDataLakeAccount, "tempfolder")
 
 ## ---- eval=FALSE---------------------------------------------------------
-#  azureDataLakeCreate(asc, azureDataLakeAccount, "tempfolder/tempfile00.txt",
+#  adls.create(asc, azureDataLakeAccount, "tempfolder/tempfile00.txt",
 #                      "755", FALSE,
 #                      4194304L, 3L, 268435456L,
 #                      charToRaw("abcd"))
 
 ## ---- eval=FALSE---------------------------------------------------------
-#  azureDataLakeAppend(asc, azureDataLakeAccount, "tempfolder/tempfile00.txt", 4194304L, charToRaw("stuv"))
+#  adls.rename(asc, azureDataLakeAccount, 
+#              "tempfolder/tempfile00.txt", # src
+#              "tempfolder/tempfile01.txt", # dest
+#              overwrite = TRUE)
 
 ## ---- eval=FALSE---------------------------------------------------------
-#  azureDataLakeRead(asc, azureDataLakeAccount, "tempfolder/tempfile00.txt",
-#                    length = 2L, bufferSize = 4194304L)
+#  adls.concat(asc, azureDataLakeAccount, testFileConcatDest,
+#              c("tempfolder/tempfile01.txt", "tempfolder/tempfile02.txt", "tempfolder/tempfile03.txt"))
 
 ## ---- eval=FALSE---------------------------------------------------------
-#  azureDataLakeDelete(asc, azureDataLakeAccount, "tempfolder", TRUE)
+#  datafile2MB <- paste0(getwd(), "/data/test2MB.bin")
+#  binData <- readBin(con = datafile2MB, what = "raw", n = 2097152)
+#  adlFOS <- adls.append(asc, azureDataLakeAccount, "tempfolder/tempfile00.txt")
+#  adls.fileoutputstream.write(adlFOS, binData, 1, 2097152L)
+#  adls.fileoutputstream.close(adlFOS)
 
+## ---- eval=FALSE---------------------------------------------------------
+#  adlFIS <- adls.read(asc, azureDataLakeAccount, "tempfolder/tempfile00.txt")
+#  buffer <- raw(2097152)
+#  res <- adls.fileinputstream.read(adlFIS, buffer, 1L, 2097152L)
+#  print(res[[1]]) # length of data read
+#  print(res[[2]]) # the data read
+
+## ---- eval=FALSE---------------------------------------------------------
+#  adls.delete(asc, azureDataLakeAccount, "tempfolder", TRUE)

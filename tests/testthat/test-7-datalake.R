@@ -77,27 +77,27 @@ test_that("Can create, list, get, update and delete items in R SDK for azure dat
 
   # cleanup the account before starting tests!
   try(
-    azureDataLakeDelete(asc, azureDataLakeAccount, testFolder, TRUE, verbose = verbose)
+    adls.delete(asc, azureDataLakeAccount, testFolder, TRUE, verbose = verbose)
   )
   try(
-    azureDataLakeDelete(asc, azureDataLakeAccount, testFolderRename, TRUE, verbose = verbose)
+    adls.delete(asc, azureDataLakeAccount, testFolderRename, TRUE, verbose = verbose)
   )
   try(
-    azureDataLakeDelete(asc, azureDataLakeAccount, testFolderConcat, TRUE, verbose = verbose)
+    adls.delete(asc, azureDataLakeAccount, testFolderConcat, TRUE, verbose = verbose)
   )
 
   # now start the tests
 
   # LISTSTATUS on non-existent test directory
-  expect_error(azureDataLakeListStatus(asc, azureDataLakeAccount, testFolder, verbose = verbose))
+  expect_error(adls.ls(asc, azureDataLakeAccount, testFolder, verbose = verbose))
   # GETFILESTATUS on non-existent test directory
-  expect_error(azureDataLakeGetFileStatus(asc, azureDataLakeAccount, testFolder, verbose = verbose))
+  expect_error(adls.file.info(asc, azureDataLakeAccount, testFolder, verbose = verbose))
 
   # MKDIRS
-  res <- azureDataLakeMkdirs(asc, azureDataLakeAccount, testFolder, verbose = verbose)
+  res <- adls.mkdir(asc, azureDataLakeAccount, testFolder, verbose = verbose)
   expect_true(res)
   # MKDIRS - check 1 - LISTSTATUS
-  res <- azureDataLakeListStatus(asc, azureDataLakeAccount, "", verbose = verbose)
+  res <- adls.ls(asc, azureDataLakeAccount, "", verbose = verbose)
   expect_is(res, "data.frame")
   expect_gte(nrow(res), 1)
   expect_equal(ncol(res), 11)
@@ -106,7 +106,7 @@ test_that("Can create, list, get, update and delete items in R SDK for azure dat
   expect_true(nchar(res$FileStatuses.FileStatus.pathSuffix[1]) > 1)
   #expect_equal(res$FileStatuses.FileStatus.pathSuffix[1] == testFolder, TRUE)
   # MKDIRS - check 2 - GETFILESTATUS
-  res <- azureDataLakeGetFileStatus(asc, azureDataLakeAccount, "", verbose = verbose)
+  res <- adls.file.info(asc, azureDataLakeAccount, "", verbose = verbose)
   expect_is(res, "data.frame")
   expect_gte(nrow(res), 1)
   expect_equal(ncol(res), 11)
@@ -114,19 +114,19 @@ test_that("Can create, list, get, update and delete items in R SDK for azure dat
   expect_equal(res$FileStatus.pathSuffix == "", TRUE)
 
   # CREATE
-  res <- azureDataLakeCreate(asc, azureDataLakeAccount, paste0(testFolder, "/", testFile1), "755", FALSE, 4194304L, 3L, 268435456L, charToRaw("abcd"), verbose = verbose)
+  res <- adls.create(asc, azureDataLakeAccount, paste0(testFolder, "/", testFile1), "755", FALSE, 4194304L, 3L, 268435456L, charToRaw("abcd"), verbose = verbose)
   expect_null(res)
-  res <- azureDataLakeCreate(asc, azureDataLakeAccount, paste0(testFolder, "/", testFile2), "755", FALSE, 4194304L, 3L, 268435456L, charToRaw("efgh"), verbose = verbose)
+  res <- adls.create(asc, azureDataLakeAccount, paste0(testFolder, "/", testFile2), "755", FALSE, 4194304L, 3L, 268435456L, charToRaw("efgh"), verbose = verbose)
   expect_null(res)
   # CREATE - check
-  res <- azureDataLakeListStatus(asc, azureDataLakeAccount, testFolder, verbose = verbose)
+  res <- adls.ls(asc, azureDataLakeAccount, testFolder, verbose = verbose)
   expect_is(res, "data.frame")
   expect_equal(nrow(res), 2)
   expect_equal(ncol(res), 12)
   expect_equal(res$FileStatuses.FileStatus.pathSuffix, c(testFile1, testFile2))
   expect_equal(res$FileStatuses.FileStatus.length, c(4, 4))
   # CREATE - check 2
-  res <- azureDataLakeGetFileStatus(asc, azureDataLakeAccount, paste0(testFolder, "/", testFile1), verbose = verbose)
+  res <- adls.file.info(asc, azureDataLakeAccount, paste0(testFolder, "/", testFile1), verbose = verbose)
   expect_is(res, "data.frame")
   expect_equal(nrow(res), 1)
   expect_equal(ncol(res), 12)
@@ -134,7 +134,7 @@ test_that("Can create, list, get, update and delete items in R SDK for azure dat
   expect_equal(res$FileStatus.pathSuffix == "", TRUE)
   expect_equal(res$FileStatus.length, 4)
   # CREATE - check 3 - LS on a file
-  res <- azureDataLakeListStatus(asc, azureDataLakeAccount, paste0(testFolder, "/", testFile1), verbose = verbose)
+  res <- adls.ls(asc, azureDataLakeAccount, paste0(testFolder, "/", testFile1), verbose = verbose)
   expect_is(res, "data.frame")
   expect_equal(nrow(res), 1)
   expect_equal(ncol(res), 12)
@@ -143,45 +143,45 @@ test_that("Can create, list, get, update and delete items in R SDK for azure dat
   expect_equal(res$FileStatuses.FileStatus.length, c(4))
 
   # READ (OPEN) # CREATE - check 3
-  res <- azureDataLakeRead(asc, azureDataLakeAccount, paste0(testFolder, "/", testFile1), length = 2L, bufferSize = 4194304L, verbose = verbose)
+  res <- adls.read.direct(asc, azureDataLakeAccount, paste0(testFolder, "/", testFile1), length = 2L, bufferSize = 4194304L, verbose = verbose)
   expect_equal(rawToChar(res), "ab")
-  res <- azureDataLakeRead(asc, azureDataLakeAccount, paste0(testFolder, "/", testFile2), 2L, 2L, 4194304L, verbose = verbose)
+  res <- adls.read.direct(asc, azureDataLakeAccount, paste0(testFolder, "/", testFile2), 2L, 2L, 4194304L, verbose = verbose)
   expect_equal(rawToChar(res), "gh")
 
   # APPEND
-  res <- azureDataLakeAppend(asc, azureDataLakeAccount, paste0(testFolder, "/", testFile1), 4194304L, charToRaw("stuv"), verbose = verbose)
+  res <- adls.append.direct(asc, azureDataLakeAccount, paste0(testFolder, "/", testFile1), 4194304L, charToRaw("stuv"), verbose = verbose)
   expect_null(res)
-  res <- azureDataLakeAppend(asc, azureDataLakeAccount, paste0(testFolder, "/", testFile2), 4194304L, charToRaw("wxyz"), verbose = verbose)
+  res <- adls.append.direct(asc, azureDataLakeAccount, paste0(testFolder, "/", testFile2), 4194304L, charToRaw("wxyz"), verbose = verbose)
   expect_null(res)
   # APPEND - check
-  res <- azureDataLakeListStatus(asc, azureDataLakeAccount, testFolder, verbose = verbose)
+  res <- adls.ls(asc, azureDataLakeAccount, testFolder, verbose = verbose)
   expect_is(res, "data.frame")
   expect_equal(nrow(res), 2)
   expect_equal(ncol(res), 12)
   expect_equal(res$FileStatuses.FileStatus.pathSuffix, c(testFile1, testFile2))
   expect_equal(res$FileStatuses.FileStatus.length, c(8, 8))
   # APPEND - check 2 - READ (OPEN)
-  res <- azureDataLakeRead(asc, azureDataLakeAccount, paste0(testFolder, "/", testFile1), verbose = verbose)
+  res <- adls.read.direct(asc, azureDataLakeAccount, paste0(testFolder, "/", testFile1), verbose = verbose)
   expect_equal(rawToChar(res), "abcdstuv")
-  res <- azureDataLakeRead(asc, azureDataLakeAccount, paste0(testFolder, "/", testFile2), verbose = verbose)
+  res <- adls.read.direct(asc, azureDataLakeAccount, paste0(testFolder, "/", testFile2), verbose = verbose)
   expect_equal(rawToChar(res), "efghwxyz")
 
   # RENAME 1 (file, overwrite = false)
-  res <- azureDataLakeRename(asc, azureDataLakeAccount, 
+  res <- adls.rename(asc, azureDataLakeAccount, 
                       paste0(testFolder, "/", testFile1), # src
                       paste0(testFolder, "/", testFile2), # dest
                       verbose = verbose)
   expect_false(res)
 
   # RENAME 2 (file, overwrite = true)
-  res <- azureDataLakeRename(asc, azureDataLakeAccount, 
+  res <- adls.rename(asc, azureDataLakeAccount, 
                              paste0(testFolder, "/", testFile1), # src
                              paste0(testFolder, "/", testFile2), # dest
                              overwrite = TRUE,
                              verbose = verbose)
   expect_true(res)
   # RENAME 2 - check
-  res <- azureDataLakeGetFileStatus(asc, azureDataLakeAccount, paste0(testFolder, "/", testFile2), verbose = verbose)
+  res <- adls.file.info(asc, azureDataLakeAccount, paste0(testFolder, "/", testFile2), verbose = verbose)
   expect_is(res, "data.frame")
   expect_equal(nrow(res), 1)
   expect_equal(ncol(res), 12)
@@ -190,48 +190,48 @@ test_that("Can create, list, get, update and delete items in R SDK for azure dat
   expect_equal(res$FileStatus.length, 8)
 
   # RENAME 3 (folder)
-  res <- azureDataLakeRename(asc, azureDataLakeAccount, 
+  res <- adls.rename(asc, azureDataLakeAccount, 
                              testFolder,       # src
                              testFolderRename, # dest
                              verbose = verbose)
   expect_true(res)
   # RENAME 3 - check
-  res <- azureDataLakeGetFileStatus(asc, azureDataLakeAccount, testFolderRename, verbose = verbose)
+  res <- adls.file.info(asc, azureDataLakeAccount, testFolderRename, verbose = verbose)
   expect_is(res, "data.frame")
   expect_gte(nrow(res), 1)
   expect_equal(ncol(res), 11)
 
   # RENAME 4 (folder rename back to same name)
-  res <- azureDataLakeRename(asc, azureDataLakeAccount, 
+  res <- adls.rename(asc, azureDataLakeAccount, 
                              testFolderRename, # src
                              testFolder,       # dest
                              verbose = verbose)
   expect_true(res)
   # RENAME 4 - check
-  res <- azureDataLakeGetFileStatus(asc, azureDataLakeAccount, testFolder, verbose = verbose)
+  res <- adls.file.info(asc, azureDataLakeAccount, testFolder, verbose = verbose)
   expect_is(res, "data.frame")
   expect_gte(nrow(res), 1)
   expect_equal(ncol(res), 11)
 
   # MSCONCAT
-  res <- azureDataLakeCreate(asc, azureDataLakeAccount, testFileConcatDest,
+  res <- adls.create(asc, azureDataLakeAccount, testFileConcatDest,
                              "755", FALSE, 4194304L, 3L, 268435456L, charToRaw("1234"), verbose = verbose)
   expect_null(res)
-  res <- azureDataLakeCreate(asc, azureDataLakeAccount, testFileConcatSrc1,
+  res <- adls.create(asc, azureDataLakeAccount, testFileConcatSrc1,
                              "755", FALSE, 4194304L, 3L, 268435456L, charToRaw("abcd"), verbose = verbose)
   expect_null(res)
-  res <- azureDataLakeCreate(asc, azureDataLakeAccount, testFileConcatSrc2,
+  res <- adls.create(asc, azureDataLakeAccount, testFileConcatSrc2,
                              "755", FALSE, 4194304L, 3L, 268435456L, charToRaw("efgh"), verbose = verbose)
   expect_null(res)
-  res <- azureDataLakeCreate(asc, azureDataLakeAccount, testFileConcatSrc3,
+  res <- adls.create(asc, azureDataLakeAccount, testFileConcatSrc3,
                              "755", FALSE, 4194304L, 3L, 268435456L, charToRaw("ijkl"), verbose = verbose)
   expect_null(res)
-  res <- azureDataLakeConcat(asc, azureDataLakeAccount, testFileConcatDest,
+  res <- adls.concat(asc, azureDataLakeAccount, testFileConcatDest,
                              c(testFileConcatSrc1, testFileConcatSrc2, testFileConcatSrc3),
                              verbose = verbose)
   expect_null(res)
   # MSCONCAT - check - 1 - GFS
-  res <- azureDataLakeGetFileStatus(asc, azureDataLakeAccount, testFileConcatDest, verbose = verbose)
+  res <- adls.file.info(asc, azureDataLakeAccount, testFileConcatDest, verbose = verbose)
   expect_is(res, "data.frame")
   expect_equal(nrow(res), 1)
   expect_equal(ncol(res), 12)
@@ -239,15 +239,15 @@ test_that("Can create, list, get, update and delete items in R SDK for azure dat
   expect_equal(res$FileStatus.pathSuffix == "", TRUE)
   expect_equal(res$FileStatus.length, 16)
   # MSCONCAT - check - 2 - contents of concatenated file
-  res <- azureDataLakeRead(asc, azureDataLakeAccount, testFileConcatDest, verbose = verbose)
+  res <- adls.read.direct(asc, azureDataLakeAccount, testFileConcatDest, verbose = verbose)
   expect_equal(rawToChar(res), "1234abcdefghijkl")
   # MSCONCAT - check - 3 - src files are deleted
-  expect_error(azureDataLakeGetFileStatus(asc, azureDataLakeAccount, testFileConcatSrc1, verbose = verbose))
-  expect_error(azureDataLakeGetFileStatus(asc, azureDataLakeAccount, testFileConcatSrc2, verbose = verbose))
-  expect_error(azureDataLakeGetFileStatus(asc, azureDataLakeAccount, testFileConcatSrc3, verbose = verbose))
+  expect_error(adls.file.info(asc, azureDataLakeAccount, testFileConcatSrc1, verbose = verbose))
+  expect_error(adls.file.info(asc, azureDataLakeAccount, testFileConcatSrc2, verbose = verbose))
+  expect_error(adls.file.info(asc, azureDataLakeAccount, testFileConcatSrc3, verbose = verbose))
 
   # DELETE
-  res <- azureDataLakeDelete(asc, azureDataLakeAccount, testFolder, TRUE, verbose = verbose)
+  res <- adls.delete(asc, azureDataLakeAccount, testFolder, TRUE, verbose = verbose)
   expect_true(res)
 })
 
@@ -267,7 +267,7 @@ test_that("Encoding special characters in R SDK for azure data lake account", {
 
   # cleanup the account before starting tests!
   try(
-    azureDataLakeDelete(asc, azureDataLakeAccount, testFolder, TRUE, verbose = verbose)
+    adls.delete(asc, azureDataLakeAccount, testFolder, TRUE, verbose = verbose)
   )
 
   # Generate test data
@@ -334,19 +334,19 @@ test_that("Encoding special characters in R SDK for azure data lake account", {
   )
 
   # Start Tests
-  res <- azureDataLakeMkdirs(asc, azureDataLakeAccount, testFolder, verbose = verbose)
+  res <- adls.mkdir(asc, azureDataLakeAccount, testFolder, verbose = verbose)
   expect_true(res)
   for (testFolderEnc in uploadContentData) {
     Encoding(testFolderEnc) <- "UTF-8"
     if(verbose) printADLSMessage("test-7-datalake.R"
                                  , "test_that(\"Encoding special characters in R SDK for azure data lake account\""
                                  , paste0("testFolderEnc=", testFolderEnc), NULL)
-    res <- azureDataLakeMkdirs(asc, azureDataLakeAccount, paste0(testFolder, "/", testFolderEnc), verbose = TRUE)
+    res <- adls.mkdir(asc, azureDataLakeAccount, paste0(testFolder, "/", testFolderEnc), verbose = TRUE)
     expect_true(res)
   }
 
   # DELETE
-  res <- azureDataLakeDelete(asc, azureDataLakeAccount, testFolder, TRUE, verbose = verbose)
+  res <- adls.delete(asc, azureDataLakeAccount, testFolder, TRUE, verbose = verbose)
   expect_true(res)
 })
 
@@ -367,26 +367,26 @@ test_that("Can append and read using buffered IO streams from files in R SDK for
 
   # cleanup the account before starting tests!
   try(
-    azureDataLakeDelete(asc, azureDataLakeAccount, "tempfolder1", TRUE, verbose = verbose)
+    adls.delete(asc, azureDataLakeAccount, "tempfolder1", TRUE, verbose = verbose)
   )
 
   # MKDIRS
-  res <- azureDataLakeMkdirs(asc, azureDataLakeAccount, "tempfolder1", verbose = verbose)
+  res <- adls.mkdir(asc, azureDataLakeAccount, "tempfolder1", verbose = verbose)
   expect_true(res)
 
   # CREATE
-  res <- azureDataLakeCreate(asc, azureDataLakeAccount, "tempfolder1/test2MB.bin", "755", verbose = verbose)
+  res <- adls.create(asc, azureDataLakeAccount, "tempfolder1/test2MB.bin", "755", verbose = verbose)
   expect_null(res)
   # APPEND - test2MB.bin
   binData <- readBin(con = datafile2MB, what = "raw", n = 2097152)
-  adlFOS <- azureDataLakeAppendBOS(asc, azureDataLakeAccount, "tempfolder1/test2MB.bin", verbose = verbose)
+  adlFOS <- adls.append(asc, azureDataLakeAccount, "tempfolder1/test2MB.bin", verbose = verbose)
   expect_is(adlFOS, "adlFileOutputStream")
-  res <- adlFileOutputStreamWrite(adlFOS, binData, 1, 2097152L, verbose = verbose)
+  res <- adls.fileoutputstream.write(adlFOS, binData, 1, 2097152L, verbose = verbose)
   expect_null(res)
-  res <- adlFileOutputStreamClose(adlFOS)
+  res <- adls.fileoutputstream.close(adlFOS)
   expect_null(res)
   # APPEND - test2MB.bin - check
-  res <- azureDataLakeGetFileStatus(asc, azureDataLakeAccount, "tempfolder1/test2MB.bin", verbose = verbose)
+  res <- adls.file.info(asc, azureDataLakeAccount, "tempfolder1/test2MB.bin", verbose = verbose)
   expect_is(res, "data.frame")
   expect_equal(nrow(res), 1)
   expect_equal(ncol(res), 12)
@@ -394,54 +394,54 @@ test_that("Can append and read using buffered IO streams from files in R SDK for
   expect_equal(res$FileStatus.pathSuffix == "", TRUE)
   expect_equal(res$FileStatus.length, 2097152)
   # OPEN(READ) - test2MB.bin
-  adlFIS <- azureDataLakeOpenBIS(asc, azureDataLakeAccount, "tempfolder1/test2MB.bin", verbose = verbose)
+  adlFIS <- adls.read(asc, azureDataLakeAccount, "tempfolder1/test2MB.bin", verbose = verbose)
   buffer <- raw(2097152)
-  res <- adlFileInputStreamRead(adlFIS, 0L, buffer, 1L, 2097152L, verbose = verbose)
+  res <- adls.fileinputstream.readfully(adlFIS, 0L, buffer, 1L, 2097152L, verbose = verbose)
   expect_equal(res[[1]], 2097152)
   expect_equal(res[[2]], binData)
-  res <- adlFileInputStreamClose(adlFIS, verbose = verbose)
+  res <- adls.fileinputstream.close(adlFIS, verbose = verbose)
   # OPEN(READ_BUFFERED) - test2MB.bin
-  adlFIS <- azureDataLakeOpenBIS(asc, azureDataLakeAccount, "tempfolder1/test2MB.bin")
+  adlFIS <- adls.read(asc, azureDataLakeAccount, "tempfolder1/test2MB.bin")
   buffer <- raw(2097152)
-  res <- adlFileInputStreamReadBuffered(adlFIS, buffer, 1L, 2097152L, verbose = verbose)
+  res <- adls.fileinputstream.read(adlFIS, buffer, 1L, 2097152L, verbose = verbose)
   expect_equal(res[[1]], 2097152)
   expect_equal(res[[2]], binData)
-  res <- adlFileInputStreamClose(adlFIS, verbose = verbose)
+  res <- adls.fileinputstream.close(adlFIS, verbose = verbose)
   # OPEN(SEEK, READ_BUFFERED) - test2MB.bin
-  adlFIS <- azureDataLakeOpenBIS(asc, azureDataLakeAccount, "tempfolder1/test2MB.bin", verbose = verbose)
-  res <- adlFileInputStreamSeek(adlFIS, 1048576)
+  adlFIS <- adls.read(asc, azureDataLakeAccount, "tempfolder1/test2MB.bin", verbose = verbose)
+  res <- adls.fileinputstream.seek(adlFIS, 1048576)
   expect_null(res)
-  res <- adlFileInputStreamGetPos(adlFIS)
+  res <- adls.fileinputstream.getpos(adlFIS)
   expect_equal(res, 1048576)
   buffer <- raw(1048576)
-  res <- adlFileInputStreamReadBuffered(adlFIS, buffer, 1L, 1048576L, verbose = verbose)
+  res <- adls.fileinputstream.read(adlFIS, buffer, 1L, 1048576L, verbose = verbose)
   expect_equal(res[[1]], 1048576)
   expect_equal(res[[2]], binData[1048577:2097152])
-  res <- adlFileInputStreamClose(adlFIS, verbose = verbose)
+  res <- adls.fileinputstream.close(adlFIS, verbose = verbose)
   # OPEN(SKIP, READ_BUFFERED) - test2MB.bin
-  adlFIS <- azureDataLakeOpenBIS(asc, azureDataLakeAccount, "tempfolder1/test2MB.bin", verbose = verbose)
-  res <- adlFileInputStreamSkip(adlFIS, 1048576)
+  adlFIS <- adls.read(asc, azureDataLakeAccount, "tempfolder1/test2MB.bin", verbose = verbose)
+  res <- adls.fileinputstream.skip(adlFIS, 1048576)
   expect_equal(res, 1048576)
-  adlFileInputStreamGetPos(adlFIS)
+  adls.fileinputstream.getpos(adlFIS)
   buffer <- raw(1048576)
-  res <- adlFileInputStreamReadBuffered(adlFIS, buffer, 1L, 1048576L, verbose = verbose)
+  res <- adls.fileinputstream.read(adlFIS, buffer, 1L, 1048576L, verbose = verbose)
   expect_equal(res[[1]], 1048576)
   expect_equal(res[[2]], binData[1048577:2097152])
-  res <- adlFileInputStreamClose(adlFIS, verbose = verbose)
+  res <- adls.fileinputstream.close(adlFIS, verbose = verbose)
 
   # CREATE
-  res <- azureDataLakeCreate(asc, azureDataLakeAccount, "tempfolder1/test4MB.bin", "755", verbose = verbose)
+  res <- adls.create(asc, azureDataLakeAccount, "tempfolder1/test4MB.bin", "755", verbose = verbose)
   expect_null(res)
   # APPEND - test4MB.bin
   binData <- readBin(con = datafile4MB, what = "raw", n = 4194304)
-  adlFOS <- azureDataLakeAppendBOS(asc, azureDataLakeAccount, "tempfolder1/test4MB.bin", verbose = verbose)
+  adlFOS <- adls.append(asc, azureDataLakeAccount, "tempfolder1/test4MB.bin", verbose = verbose)
   expect_is(adlFOS, "adlFileOutputStream")
-  res <- adlFileOutputStreamWrite(adlFOS, binData, 1, 4194304L, verbose = verbose)
+  res <- adls.fileoutputstream.write(adlFOS, binData, 1, 4194304L, verbose = verbose)
   expect_null(res)
-  res <- adlFileOutputStreamClose(adlFOS, verbose = verbose)
+  res <- adls.fileoutputstream.close(adlFOS, verbose = verbose)
   expect_null(res)
   # APPEND - test4MB.bin - check
-  res <- azureDataLakeGetFileStatus(asc, azureDataLakeAccount, "tempfolder1/test4MB.bin", verbose = verbose)
+  res <- adls.file.info(asc, azureDataLakeAccount, "tempfolder1/test4MB.bin", verbose = verbose)
   expect_is(res, "data.frame")
   expect_equal(nrow(res), 1)
   expect_equal(ncol(res), 12)
@@ -449,33 +449,33 @@ test_that("Can append and read using buffered IO streams from files in R SDK for
   expect_equal(res$FileStatus.pathSuffix == "", TRUE)
   expect_equal(res$FileStatus.length, 4194304)
   # OPEN(READ) - test4MB.bin
-  adlFIS <- azureDataLakeOpenBIS(asc, azureDataLakeAccount, "tempfolder1/test4MB.bin", verbose = verbose)
+  adlFIS <- adls.read(asc, azureDataLakeAccount, "tempfolder1/test4MB.bin", verbose = verbose)
   buffer <- raw(4194304)
-  res <- adlFileInputStreamRead(adlFIS, 0L, buffer, 1L, 4194304L, verbose = verbose)
+  res <- adls.fileinputstream.readfully(adlFIS, 0L, buffer, 1L, 4194304L, verbose = verbose)
   expect_equal(res[[1]], 4194304)
   expect_equal(res[[2]], binData)
-  res <- adlFileInputStreamClose(adlFIS, verbose = verbose)
+  res <- adls.fileinputstream.close(adlFIS, verbose = verbose)
   # OPEN(READ_BUFFERED) - test4MB.bin
-  adlFIS <- azureDataLakeOpenBIS(asc, azureDataLakeAccount, "tempfolder1/test4MB.bin", verbose = verbose)
+  adlFIS <- adls.read(asc, azureDataLakeAccount, "tempfolder1/test4MB.bin", verbose = verbose)
   buffer <- raw(4194304)
-  res <- adlFileInputStreamReadBuffered(adlFIS, buffer, 1L, 4194304L, verbose = verbose)
+  res <- adls.fileinputstream.read(adlFIS, buffer, 1L, 4194304L, verbose = verbose)
   expect_equal(res[[1]], 4194304)
   expect_equal(res[[2]], binData)
-  res <- adlFileInputStreamClose(adlFIS, verbose = verbose)
+  res <- adls.fileinputstream.close(adlFIS, verbose = verbose)
 
   # CREATE
-  res <- azureDataLakeCreate(asc, azureDataLakeAccount, "tempfolder1/test6MB.bin", "755", verbose = verbose)
+  res <- adls.create(asc, azureDataLakeAccount, "tempfolder1/test6MB.bin", "755", verbose = verbose)
   expect_null(res)
   # APPEND - test6MB.bin
   binData <- readBin(con = datafile6MB, what = "raw", n = 6291456)
-  adlFOS <- azureDataLakeAppendBOS(asc, azureDataLakeAccount, "tempfolder1/test6MB.bin", verbose = verbose)
+  adlFOS <- adls.append(asc, azureDataLakeAccount, "tempfolder1/test6MB.bin", verbose = verbose)
   expect_is(adlFOS, "adlFileOutputStream")
-  res <- adlFileOutputStreamWrite(adlFOS, binData, 1, 6291456L, verbose = verbose)
+  res <- adls.fileoutputstream.write(adlFOS, binData, 1, 6291456L, verbose = verbose)
   expect_null(res)
-  res <- adlFileOutputStreamClose(adlFOS, verbose = verbose)
+  res <- adls.fileoutputstream.close(adlFOS, verbose = verbose)
   expect_null(res)
   # APPEND - test6MB.bin - check
-  res <- azureDataLakeGetFileStatus(asc, azureDataLakeAccount, "tempfolder1/test6MB.bin", verbose = verbose)
+  res <- adls.file.info(asc, azureDataLakeAccount, "tempfolder1/test6MB.bin", verbose = verbose)
   expect_is(res, "data.frame")
   expect_equal(nrow(res), 1)
   expect_equal(ncol(res), 12)
@@ -483,34 +483,34 @@ test_that("Can append and read using buffered IO streams from files in R SDK for
   expect_equal(res$FileStatus.pathSuffix == "", TRUE)
   expect_equal(res$FileStatus.length, 6291456)
   # OPEN(READ) - test6MB.bin
-  adlFIS <- azureDataLakeOpenBIS(asc, azureDataLakeAccount, "tempfolder1/test6MB.bin", verbose = verbose)
+  adlFIS <- adls.read(asc, azureDataLakeAccount, "tempfolder1/test6MB.bin", verbose = verbose)
   buffer <- raw(6291456)
-  res <- adlFileInputStreamRead(adlFIS, 0L, buffer, 1L, 6291456L, verbose = verbose)
+  res <- adls.fileinputstream.readfully(adlFIS, 0L, buffer, 1L, 6291456L, verbose = verbose)
   expect_equal(res[[1]], 6291456)
   expect_equal(res[[2]], binData)
-  res <- adlFileInputStreamClose(adlFIS, verbose = verbose)
+  res <- adls.fileinputstream.close(adlFIS, verbose = verbose)
   # OPEN(READ_BUFFERED) - test6MB.bin
-  adlFIS <- azureDataLakeOpenBIS(asc, azureDataLakeAccount, "tempfolder1/test6MB.bin", verbose = verbose)
+  adlFIS <- adls.read(asc, azureDataLakeAccount, "tempfolder1/test6MB.bin", verbose = verbose)
   buffer <- raw(6291456)
-  res <- adlFileInputStreamReadBuffered(adlFIS, buffer, 1L, 6291456L, verbose = verbose)
+  res <- adls.fileinputstream.read(adlFIS, buffer, 1L, 6291456L, verbose = verbose)
   expect_equal(res[[1]], 4194304)
   expect_equal(res[[2]][1:4194304], binData[1:4194304])
-  res <- adlFileInputStreamClose(adlFIS, verbose = verbose)
+  res <- adls.fileinputstream.close(adlFIS, verbose = verbose)
 
   # CREATE
-  res <- azureDataLakeCreate(asc, azureDataLakeAccount, "tempfolder1/test6MBWA.bin", "755", verbose = verbose)
+  res <- adls.create(asc, azureDataLakeAccount, "tempfolder1/test6MBWA.bin", "755", verbose = verbose)
   expect_null(res)
   # **** APPEND - 2MB to test6MBWA.bin
   binData <- readBin(con = datafile2MB, what = "raw", n = 2097152)
   binDataWA <- binData
-  adlFOS <- azureDataLakeAppendBOS(asc, azureDataLakeAccount, "tempfolder1/test6MBWA.bin", verbose = verbose)
+  adlFOS <- adls.append(asc, azureDataLakeAccount, "tempfolder1/test6MBWA.bin", verbose = verbose)
   expect_is(adlFOS, "adlFileOutputStream")
-  res <- adlFileOutputStreamWrite(adlFOS, binData, 1, 2097152L, verbose = verbose)
+  res <- adls.fileoutputstream.write(adlFOS, binData, 1, 2097152L, verbose = verbose)
   expect_null(res)
-  res <- adlFileOutputStreamClose(adlFOS, verbose = verbose)
+  res <- adls.fileoutputstream.close(adlFOS, verbose = verbose)
   expect_null(res)
   # CHECK - APPEND - 2MB to test6MBWA.bin
-  res <- azureDataLakeGetFileStatus(asc, azureDataLakeAccount, "tempfolder1/test6MBWA.bin", verbose = verbose)
+  res <- adls.file.info(asc, azureDataLakeAccount, "tempfolder1/test6MBWA.bin", verbose = verbose)
   expect_is(res, "data.frame")
   expect_equal(nrow(res), 1)
   expect_equal(ncol(res), 12)
@@ -520,14 +520,14 @@ test_that("Can append and read using buffered IO streams from files in R SDK for
   # **** APPEND - 4MB to test6MBWA.bin
   binData <- readBin(con = datafile4MB, what = "raw", n = 4194304)
   binDataWA[2097153:6291456] <- binData[1:4194304]
-  adlFOS <- azureDataLakeAppendBOS(asc, azureDataLakeAccount, "tempfolder1/test6MBWA.bin", verbose = verbose)
+  adlFOS <- adls.append(asc, azureDataLakeAccount, "tempfolder1/test6MBWA.bin", verbose = verbose)
   expect_is(adlFOS, "adlFileOutputStream")
-  res <- adlFileOutputStreamWrite(adlFOS, binData, 1, 4194304L, verbose = verbose)
+  res <- adls.fileoutputstream.write(adlFOS, binData, 1, 4194304L, verbose = verbose)
   expect_null(res)
-  res <- adlFileOutputStreamClose(adlFOS, verbose = verbose)
+  res <- adls.fileoutputstream.close(adlFOS, verbose = verbose)
   expect_null(res)
   # CHECK - APPEND - 4MB to test6MBWA.bin
-  res <- azureDataLakeGetFileStatus(asc, azureDataLakeAccount, "tempfolder1/test6MBWA.bin", verbose = verbose)
+  res <- adls.file.info(asc, azureDataLakeAccount, "tempfolder1/test6MBWA.bin", verbose = verbose)
   expect_is(res, "data.frame")
   expect_equal(nrow(res), 1)
   expect_equal(ncol(res), 12)
@@ -535,29 +535,29 @@ test_that("Can append and read using buffered IO streams from files in R SDK for
   expect_equal(res$FileStatus.pathSuffix == "", TRUE)
   expect_equal(res$FileStatus.length, 6291456)
   # OPEN(READ) - test6MBWA.bin
-  adlFIS <- azureDataLakeOpenBIS(asc, azureDataLakeAccount, "tempfolder1/test6MBWA.bin", verbose = verbose)
+  adlFIS <- adls.read(asc, azureDataLakeAccount, "tempfolder1/test6MBWA.bin", verbose = verbose)
   buffer <- raw(6291456)
-  res <- adlFileInputStreamRead(adlFIS, 0L, buffer, 1L, 6291456L, verbose = verbose)
+  res <- adls.fileinputstream.readfully(adlFIS, 0L, buffer, 1L, 6291456L, verbose = verbose)
   expect_equal(res[[1]], 6291456)
   expect_equal(res[[2]], binDataWA)
-  res <- adlFileInputStreamClose(adlFIS, verbose = verbose)
+  res <- adls.fileinputstream.close(adlFIS, verbose = verbose)
   # OPEN(READ) - test6MBWA.bin- check with offset
-  adlFIS <- azureDataLakeOpenBIS(asc, azureDataLakeAccount, "tempfolder1/test6MBWA.bin", verbose = verbose)
+  adlFIS <- adls.read(asc, azureDataLakeAccount, "tempfolder1/test6MBWA.bin", verbose = verbose)
   buffer <- raw(6291456)
-  res <- adlFileInputStreamRead(adlFIS, 2097152L, buffer, 2097153L, 4194304L, verbose = verbose)
+  res <- adls.fileinputstream.readfully(adlFIS, 2097152L, buffer, 2097153L, 4194304L, verbose = verbose)
   expect_equal(res[[1]], 4194304)
   expect_equal(res[[2]][2097153:6291456], binData)
-  res <- adlFileInputStreamClose(adlFIS, verbose = verbose)
+  res <- adls.fileinputstream.close(adlFIS, verbose = verbose)
   # OPEN(READ_BUFFERED) - test6MBWA.bin
-  adlFIS <- azureDataLakeOpenBIS(asc, azureDataLakeAccount, "tempfolder1/test6MBWA.bin", verbose = verbose)
+  adlFIS <- adls.read(asc, azureDataLakeAccount, "tempfolder1/test6MBWA.bin", verbose = verbose)
   buffer <- raw(6291456)
-  res <- adlFileInputStreamReadBuffered(adlFIS, buffer, 1L, 6291456L, verbose = verbose)
+  res <- adls.fileinputstream.read(adlFIS, buffer, 1L, 6291456L, verbose = verbose)
   expect_equal(res[[1]], 4194304)
   expect_equal(res[[2]][1:4194304], binDataWA[1:4194304])
-  res <- adlFileInputStreamClose(adlFIS, verbose = verbose)
+  res <- adls.fileinputstream.close(adlFIS, verbose = verbose)
 
   # DELETE
-  res <- azureDataLakeDelete(asc, azureDataLakeAccount, "tempfolder1", TRUE, verbose = verbose)
+  res <- adls.delete(asc, azureDataLakeAccount, "tempfolder1", TRUE, verbose = verbose)
   expect_true(res)
 })
 
@@ -587,11 +587,11 @@ test_that("Different retry policies for various APIs in R SDK for azure data lak
   # NOTE: Stubbing is not a good idea as it may create complications for the rest of the tests.
   # Moreover it doesnt seem to be working as expected in R!
   # Instead use with_mock().
-  #stub(azureDataLakeMkdirs, 'callAzureDataLakeRestEndPoint', mockCallAzureDataLakeRestEndPoint, depth = 2)
+  #stub(adls.mkdir, 'callAzureDataLakeRestEndPoint', mockCallAzureDataLakeRestEndPoint, depth = 2)
   with_mock(
     # use fully qualified name of function to be mocked, else this doesnt work
     "AzureSMR:::callAzureDataLakeRestEndPoint" = mockCallAzureDataLakeRestEndPoint,
-    res <- azureDataLakeMkdirs(asc, azureDataLakeAccount, testFolder, verbose = verbose),
+    res <- adls.mkdir(asc, azureDataLakeAccount, testFolder, verbose = verbose),
     expect_called(mockCallAzureDataLakeRestEndPoint, 5)
   )
   expect_true(res)
@@ -612,7 +612,7 @@ test_that("Different retry policies for various APIs in R SDK for azure data lak
     cycle = FALSE)
   with_mock(
     "AzureSMR:::callAzureDataLakeRestEndPoint" = mockCallAzureDataLakeRestEndPoint,
-    expect_error(azureDataLakeMkdirs(asc, azureDataLakeAccount, testFolder, verbose = verbose)),
+    expect_error(adls.mkdir(asc, azureDataLakeAccount, testFolder, verbose = verbose)),
     expect_called(mockCallAzureDataLakeRestEndPoint, 5)
   )
 
@@ -641,10 +641,10 @@ test_that("Different retry policies for various APIs in R SDK for azure data lak
     )
   with_mock(
     "AzureSMR:::callAzureDataLakeRestEndPoint" = mockCallAzureDataLakeRestEndPoint,
-    expect_error(azureDataLakeGetFileStatus(asc, azureDataLakeAccount, testFolder, verbose = verbose)),
+    expect_error(adls.file.info(asc, azureDataLakeAccount, testFolder, verbose = verbose)),
     expect_called(mockCallAzureDataLakeRestEndPoint, 1)
   )
-  
+
   # CREATE (overwrite = TRUE) - mock with 2 fail and 3rd success response.
   # This will be an ExponentialBackoffRetryPolicy. 
   # This should PASS because the 2nd retry succeeded.
@@ -656,11 +656,11 @@ test_that("Different retry policies for various APIs in R SDK for azure data lak
   with_mock(
     # use fully qualified name of function to be mocked, else this doesnt work
     "AzureSMR:::callAzureDataLakeRestEndPoint" = mockCallAzureDataLakeRestEndPoint,
-    res <- azureDataLakeCreate(asc, azureDataLakeAccount, testFolder, overwrite = TRUE, verbose = verbose),
+    res <- adls.create(asc, azureDataLakeAccount, testFolder, overwrite = TRUE, verbose = verbose),
     expect_called(mockCallAzureDataLakeRestEndPoint, 3)
   )
   expect_null(res)
-  
+
   # CREATE (overwrite = FALSE) - mock with 2 fail and 3rd success response.
   # This will be NonIdempotentRetryPolicy. 
   # This should FAIL because the 2rd retry in non-retriable.
@@ -672,7 +672,7 @@ test_that("Different retry policies for various APIs in R SDK for azure data lak
   with_mock(
     # use fully qualified name of function to be mocked, else this doesnt work
     "AzureSMR:::callAzureDataLakeRestEndPoint" = mockCallAzureDataLakeRestEndPoint,
-    expect_error(azureDataLakeCreate(asc, azureDataLakeAccount, testFolder, overwrite = FALSE, verbose = verbose)),
+    expect_error(adls.create(asc, azureDataLakeAccount, testFolder, overwrite = FALSE, verbose = verbose)),
     expect_called(mockCallAzureDataLakeRestEndPoint, 3)
   )
 })
@@ -692,23 +692,23 @@ test_that("Bad offset error handling for appends in R SDK for azure data lake ac
 
   # cleanup the account before starting tests!
   try(
-    azureDataLakeDelete(asc, azureDataLakeAccount, testFolder, TRUE, verbose = verbose)
+    adls.delete(asc, azureDataLakeAccount, testFolder, TRUE, verbose = verbose)
   )
 
   # MKDIRS
-  res <- azureDataLakeMkdirs(asc, azureDataLakeAccount, testFolder, verbose = verbose)
+  res <- adls.mkdir(asc, azureDataLakeAccount, testFolder, verbose = verbose)
   expect_true(res)
 
   # CREATE
-  res <- azureDataLakeCreate(asc, azureDataLakeAccount, paste0(testFolder, "/", testFile), "755", verbose = verbose)
+  res <- adls.create(asc, azureDataLakeAccount, paste0(testFolder, "/", testFile), "755", verbose = verbose)
   expect_null(res)
 
   # APPEND - test2MB.bin
   binData <- readBin(con = datafile2MB, what = "raw", n = 2097152)
-  adlFOS <- azureDataLakeAppendBOS(asc, azureDataLakeAccount, paste0(testFolder, "/", testFile), verbose = verbose)
+  adlFOS <- adls.append(asc, azureDataLakeAccount, paste0(testFolder, "/", testFile), verbose = verbose)
   expect_is(adlFOS, "adlFileOutputStream")
   # Write to the stream
-  res <- adlFileOutputStreamWrite(adlFOS, binData, 1, 2097152L, verbose = verbose)
+  res <- adls.fileoutputstream.write(adlFOS, binData, 1, 2097152L, verbose = verbose)
   expect_null(res)
 
   # MKDIR - mock with 4 fail and 5th success response.
@@ -734,12 +734,12 @@ test_that("Bad offset error handling for appends in R SDK for azure data lake ac
   with_mock(
     # use fully qualified name of function to be mocked, else this doesnt work
     "AzureSMR:::callAzureDataLakeRestEndPoint" = mockCallAzureDataLakeRestEndPoint,
-    res <- adlFileOutputStreamClose(adlFOS), # close flushes the buffered data as 4MB chunks
+    res <- adls.fileoutputstream.close(adlFOS), # close flushes the buffered data as 4MB chunks
     expect_called(mockCallAzureDataLakeRestEndPoint, 4)
   )
   expect_null(res)
 
   # DELETE
-  res <- azureDataLakeDelete(asc, azureDataLakeAccount, testFolder, TRUE, verbose = verbose)
+  res <- adls.delete(asc, azureDataLakeAccount, testFolder, TRUE, verbose = verbose)
   expect_true(res)
 })

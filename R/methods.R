@@ -478,7 +478,7 @@ is_valid_adls_account <- function(x) {
   nchar(x) >= 3 && nchar(x) <= 24 && grepl("^[a-z0-9-]*$", x)
 }
 
-on_failure(is_valid_storage_account) <- function(call, env) {
+on_failure(is_valid_adls_account) <- function(call, env) {
   paste("ADLS account name must be between 3 and 24 characters in length",
         "and use numbers and lower-case letters and '-' only.",
         sep = "\n")
@@ -490,7 +490,7 @@ on_failure(is_valid_storage_account) <- function(call, env) {
 #'
 #' Functions for creating and displaying information about adlFileOutputStream objects.
 #'
-#' @seealso [createAdlFileOutputStream()]
+#' @seealso [adls.fileoutputstream.create()]
 #' @export
 #' @rdname Internal
 as.adlFileOutputStream <- function(x){
@@ -507,7 +507,7 @@ is.adlFileOutputStream <- function(x){
 
 #' @export
 on_failure(is.adlFileOutputStream) <- function(call, env) {
-  "Provide a valid adlFileOutputStream. See createAdlFileOutputStream()"
+  "Provide a valid adlFileOutputStream. See adls.fileoutputstream.create()"
 }
 
 #' @export
@@ -525,7 +525,7 @@ str.adlFileOutputStream <- function(object, ...){
 
 #' Check for proper adlFileOutputStream.
 #'
-#' @inheritParams createAdlFileOutputStream
+#' @inheritParams adls.fileoutputstream.create
 #' @param adlFileOutputStream the adlFileOutputStream object to check
 #' @family Azure resource functions
 #' @export
@@ -543,7 +543,7 @@ adlFileOutputStreamCheck <- function(adlFileOutputStream) {
 #'
 #' Functions for creating and displaying information about adlFileInputStream objects.
 #'
-#' @seealso [createAdlFileInputStream()]
+#' @seealso [adls.fileinputstream.create()]
 #' @export
 #' @rdname Internal
 as.adlFileInputStream <- function(x){
@@ -560,7 +560,7 @@ is.adlFileInputStream <- function(x){
 
 #' @export
 on_failure(is.adlFileInputStream) <- function(call, env) {
-  "Provide a valid adlFileInputStream. See createAdlFileInputStream()"
+  "Provide a valid adlFileInputStream. See adls.fileinputstream.create()"
 }
 
 #' @export
@@ -578,7 +578,7 @@ str.adlFileInputStream <- function(object, ...){
 
 #' Check for proper adlFileInputStream.
 #'
-#' @inheritParams createAdlFileInputStream
+#' @inheritParams adls.fileinputstream.create
 #' @param adlFileInputStream the adlFileInputStream object to check
 #' @family Azure resource functions
 #' @export
@@ -596,7 +596,7 @@ adlFileInputStreamCheck <- function(adlFileInputStream) {
 #'
 #' Functions for creating and displaying information about adlRetryPolicy objects.
 #'
-#' @seealso [createAdlFileInputStream()]
+#' @seealso [adls.fileinputstream.create()]
 #' @export
 #' @rdname Internal
 as.adlRetryPolicy <- function(x){

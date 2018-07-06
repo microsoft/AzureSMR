@@ -42,9 +42,9 @@ Functions for creating and displaying information about adlRetryPolicy objects.
 \seealso{
 \code{\link[=createAzureContext]{createAzureContext()}}
 
-\code{\link[=createAdlFileOutputStream]{createAdlFileOutputStream()}}
+\code{\link[=adls.fileoutputstream.create]{adls.fileoutputstream.create()}}
 
-\code{\link[=createAdlFileInputStream]{createAdlFileInputStream()}}
+\code{\link[=adls.fileinputstream.create]{adls.fileinputstream.create()}}
 
-\code{\link[=createAdlFileInputStream]{createAdlFileInputStream()}}
+\code{\link[=adls.fileinputstream.create]{adls.fileinputstream.create()}}
 }

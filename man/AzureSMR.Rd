@@ -65,13 +65,25 @@ This enables you to use and change many Azure resources. The following is an inc
 }
 \item Azure Data Lake Store functions:
 \itemize{
-\item \code{\link[=azureDataLakeListStatus]{azureDataLakeListStatus()}}
-\item \code{\link[=azureDataLakeGetFileStatus]{azureDataLakeGetFileStatus()}}
-\item \code{\link[=azureDataLakeMkdirs]{azureDataLakeMkdirs()}}
-\item \code{\link[=azureDataLakeCreate]{azureDataLakeCreate()}}
-\item \code{\link[=azureDataLakeAppend]{azureDataLakeAppend()}}
-\item \code{\link[=azureDataLakeRead]{azureDataLakeRead()}}
-\item \code{\link[=azureDataLakeDelete]{azureDataLakeDelete()}}
+\item \code{\link[=adls.ls]{adls.ls()}}
+\item \code{\link[=adls.file.info]{adls.file.info()}}
+\item \code{\link[=adls.mkdir]{adls.mkdir()}}
+\item \code{\link[=adls.create]{adls.create()}}
+\item \code{\link[=adls.delete]{adls.delete()}}
+\item \code{\link[=adls.rename]{adls.rename()}}
+\item \code{\link[=adls.concat]{adls.concat()}}
+\item \code{\link[=adls.append]{adls.append()}}
+\item \code{\link[=adls.fileoutputstream.write]{adls.fileoutputstream.write()}}
+\item \code{\link[=adls.fileoutputstream.flush]{adls.fileoutputstream.flush()}}
+\item \code{\link[=adls.fileoutputstream.close]{adls.fileoutputstream.close()}}
+\item \code{\link[=adls.read]{adls.read()}}
+\item \code{\link[=adls.fileinputstream.read]{adls.fileinputstream.read()}}
+\item \code{\link[=adls.fileinputstream.seek]{adls.fileinputstream.seek()}}
+\item \code{\link[=adls.fileinputstream.skip]{adls.fileinputstream.skip()}}
+\item \code{\link[=adls.fileinputstream.available]{adls.fileinputstream.available()}}
+\item \code{\link[=adls.fileinputstream.length]{adls.fileinputstream.length()}}
+\item \code{\link[=adls.fileinputstream.getpos]{adls.fileinputstream.getpos()}}
+\item \code{\link[=adls.fileinputstream.close]{adls.fileinputstream.close()}}
 }
 }
 }

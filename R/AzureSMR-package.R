@@ -42,13 +42,26 @@
 #'   - [azurePricingRates()]
 #'   - [azureExpenseCalculator()]
 #' * Azure Data Lake Store functions:
-#'   - [azureDataLakeListStatus()]
-#'   - [azureDataLakeGetFileStatus()]
-#'   - [azureDataLakeMkdirs()]
-#'   - [azureDataLakeCreate()]
-#'   - [azureDataLakeAppend()]
-#'   - [azureDataLakeRead()]
-#'   - [azureDataLakeDelete()]
+#'   - [adls.ls()]
+#'   - [adls.file.info()]
+#'   - [adls.mkdir()]
+#'   - [adls.create()]
+#'   - [adls.delete()]
+#'   - [adls.rename()]
+#'   - [adls.concat()]
+#'   - [adls.append()]
+#'   - [adls.fileoutputstream.write()]
+#'   - [adls.fileoutputstream.flush()]
+#'   - [adls.fileoutputstream.close()]
+#'   - [adls.read()]
+#'   - [adls.fileinputstream.read()]
+#'   - [adls.fileinputstream.seek()]
+#'   - [adls.fileinputstream.skip()]
+#'   - [adls.fileinputstream.available()]
+#'   - [adls.fileinputstream.length()]
+#'   - [adls.fileinputstream.getpos()]
+#'   - [adls.fileinputstream.close()]
+#'
 #'
 #' @name AzureSMR
 #' @aliases AzureSMR-package
