@@ -1,3 +1,6 @@
+
+# azureActiveContext ----
+
 #' azureActiveContext object.
 #'
 #' Functions for creating and displaying information about azureActiveContext objects.
@@ -38,8 +41,6 @@ on_failure(is.azureActiveContext) <- function(call, env) {
   "Provide a valid azureActiveContext. See createAzureContext()"
 }
 
-#--------------------------------------------------------------------------
-
 #' @importFrom assertthat assert_that on_failure<-
 is_resource_group <- function(x) {
   is.character(x) && length(x) == 1 && nchar(x) > 0
@@ -48,7 +49,6 @@ is_resource_group <- function(x) {
 on_failure(is_resource_group) <- function(call, env) {
   "Provide a valid resourceGroup argument, or set using createAzureContext()"
 }
-
 
 # --- subscription ID
 
@@ -69,7 +69,6 @@ is_location <- function(x) {
 on_failure(is_location) <- function(call, env) {
   "Provide a valid location (Azure region, e.g. 'South Central US')"
 }
-
 
 # --- tenant ID
 
@@ -295,6 +294,36 @@ on_failure(is_relativePath) <- function(call, env) {
   "Provide a valid relativePath string"
 }
 
+# --- destinationRelativePath
+
+is_destinationRelativePath <- function(x) {
+  !missing(x) && !is.null(x) && is.character(x) && length(x) == 1
+}
+
+on_failure(is_destinationRelativePath) <- function(call, env) {
+  "Provide a valid destinationRelativePath string"
+}
+
+# --- sourceRelativePaths
+
+is_sourceRelativePaths <- function(x) {
+  !missing(x) && !is.null(x) && is.character(x) && length(x) > 0
+}
+
+on_failure(is_sourceRelativePaths) <- function(call, env) {
+  "Provide a non empty vector of sourceRelativePath paths"
+}
+
+# --- sourceRelativePath
+
+is_sourceRelativePath <- function(x) {
+  !missing(x) && !is.null(x) && is.character(x) && length(x) == 1
+}
+
+on_failure(is_sourceRelativePath) <- function(call, env) {
+  "Provide a valid sourceRelativePath string"
+}
+
 # --- permission
 
 is_permission <- function(x) {
@@ -435,11 +464,33 @@ on_failure(is_content) <- function(call, env) {
   "Provide a valid non-null raw content"
 }
 
+# adlsAccount ----
+
+is_adls_account <- function(x) {
+  is.character(x) && length(x) == 1 && assert_that(is_valid_adls_account(x))
+}
+
+on_failure(is_adls_account) <- function(call, env) {
+  "Provide a valid adls account, or set using createAzureContext()"
+}
+
+is_valid_adls_account <- function(x) {
+  nchar(x) >= 3 && nchar(x) <= 24 && grepl("^[a-z0-9-]*$", x)
+}
+
+on_failure(is_valid_adls_account) <- function(call, env) {
+  paste("ADLS account name must be between 3 and 24 characters in length",
+        "and use numbers and lower-case letters and '-' only.",
+        sep = "\n")
+}
+
+# adlFileOutputStream ----
+
 #' adlFileOutputStream object.
 #'
 #' Functions for creating and displaying information about adlFileOutputStream objects.
 #'
-#' @seealso [createAdlFileOutputStream()]
+#' @seealso [adls.fileoutputstream.create()]
 #' @export
 #' @rdname Internal
 as.adlFileOutputStream <- function(x){
@@ -454,8 +505,9 @@ is.adlFileOutputStream <- function(x){
   inherits(x, "adlFileOutputStream")
 }
 
+#' @export
 on_failure(is.adlFileOutputStream) <- function(call, env) {
-  "Provide a valid adlFileOutputStream. See createAdlFileOutputStream()"
+  "Provide a valid adlFileOutputStream. See adls.fileoutputstream.create()"
 }
 
 #' @export
@@ -473,7 +525,7 @@ str.adlFileOutputStream <- function(object, ...){
 
 #' Check for proper adlFileOutputStream.
 #'
-#' @inheritParams createAdlFileOutputStream
+#' @inheritParams adls.fileoutputstream.create
 #' @param adlFileOutputStream the adlFileOutputStream object to check
 #' @family Azure resource functions
 #' @export
@@ -485,12 +537,13 @@ adlFileOutputStreamCheck <- function(adlFileOutputStream) {
   return(TRUE)
 }
 
+# adlFileInputStream ----
 
 #' adlFileInputStream object.
 #'
 #' Functions for creating and displaying information about adlFileInputStream objects.
 #'
-#' @seealso [createAdlFileInputStream()]
+#' @seealso [adls.fileinputstream.create()]
 #' @export
 #' @rdname Internal
 as.adlFileInputStream <- function(x){
@@ -505,8 +558,9 @@ is.adlFileInputStream <- function(x){
   inherits(x, "adlFileInputStream")
 }
 
+#' @export
 on_failure(is.adlFileInputStream) <- function(call, env) {
-  "Provide a valid adlFileInputStream. See createAdlFileInputStream()"
+  "Provide a valid adlFileInputStream. See adls.fileinputstream.create()"
 }
 
 #' @export
@@ -524,7 +578,7 @@ str.adlFileInputStream <- function(object, ...){
 
 #' Check for proper adlFileInputStream.
 #'
-#' @inheritParams createAdlFileInputStream
+#' @inheritParams adls.fileinputstream.create
 #' @param adlFileInputStream the adlFileInputStream object to check
 #' @family Azure resource functions
 #' @export
@@ -534,4 +588,66 @@ adlFileInputStreamCheck <- function(adlFileInputStream) {
     stop("IOException: Attempting to read from a closed stream")
   }
   return(TRUE)
+}
+
+# adlRetryPolicy ----
+
+#' adlRetryPolicy object.
+#'
+#' Functions for creating and displaying information about adlRetryPolicy objects.
+#'
+#' @seealso [adls.fileinputstream.create()]
+#' @export
+#' @rdname Internal
+as.adlRetryPolicy <- function(x){
+  if(!is.environment(x)) stop("Expecting an environment as input")
+  class(x) <- "adlRetryPolicy"
+  x
+}
+
+#' @export
+#' @rdname Internal
+is.adlRetryPolicy <- function(x){
+  inherits(x, "adlRetryPolicy")
+}
+
+#' @export
+on_failure(is.adlRetryPolicy) <- function(call, env) {
+  "Provide a valid adlRetryPolicy. See createAdlRetryPolicy()"
+}
+
+#' @export
+print.adlRetryPolicy <- function(x, ...){
+  cat("AzureSMR adlRetryPolicy\n")
+  cat("Retry count :", x$retryCount, "\n")
+  cat("Max retries :", x$maxRetries, "\n")
+  cat("Exponential retry interval :", x$exponentialRetryInterval, "\n")
+  cat("Exponential factor :", x$exponentialFactor, "\n")
+  cat("Last attempt start time :", x$lastAttemptStartTime, "\n")
+}
+
+#' @export
+as.character.adlRetryPolicy <- function(x, ...) {
+  xStr <- paste0("AzureSMR adlRetryPolicy:\n"
+         , " Retry policy type: ", x$retryPolicyType, "\n"
+         , " Max retries: ", x$maxRetries, "\n"
+         , " Exponential retry interval: ", x$exponentialRetryInterval, "\n"
+         , " Exponential factor: ", x$exponentialFactor, "\n"
+  )
+  if(x$retryPolicyType == retryPolicyEnum$EXPONENTIALBACKOFF) {
+    xStr <- paste0(xStr
+                   , " Retry count: ", x$retryCount, "\n")
+  } else if(x$retryPolicyType == retryPolicyEnum$NONIDEMPOTENT) {
+    xStr <- paste0(xStr
+                   , " Retry count 401: ", x$retryCount401, "\n"
+                   , " Retry count 429: ", x$retryCount429, "\n"
+                   )
+  }
+  return(xStr)
+}
+
+#' @export
+str.adlRetryPolicy <- function(object, ...){
+  cat(("AzureSMR adlRetryPolicy with elements:\n"))
+  ls.str(object, all.names = TRUE)
 }
