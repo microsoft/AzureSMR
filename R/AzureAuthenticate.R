@@ -33,8 +33,8 @@ azureAuthenticate <- function(azureActiveContext, tenantID, clientID, authKey, a
 azureAuthenticateOnAuthType <- function(azureActiveContext, authType, resource, verbose = FALSE) {
   assert_that(is.azureActiveContext(azureActiveContext))
 
-  if (missing(authType)) authType <- azureActiveContext$authType
-  if (missing(resource)) resource <- azureActiveContext$resource
+  if (!missing(azureActiveContext$authType)) authType <- azureActiveContext$authType
+  if (!missing(azureActiveContext$resource)) resource <- azureActiveContext$resource
 
   assert_that(is_authType(authType))
   assert_that(is_resource(resource))
