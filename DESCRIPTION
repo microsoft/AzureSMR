@@ -6,10 +6,10 @@ Description: Helps users to manage Azure Services and objects from within an
     Azure Active Directory application and service principal in the Azure portal.
 Type: Package
 Version: 0.2.7
-Date: 2017-09-26
 Authors@R: c(
   person(family="Microsoft Corporation", role="cph"),
-  person("Rich", "Calaway", role="cre", email="richcala@microsoft.com", comment = "maintainer from Nov 2017"),
+  person("Hong", "Ooi", role="cre", email="hongooi@microsoft.com", comment = "maintainer from Jul 2019"),
+  person("Rich", "Calaway", role="aut", email="richcala@microsoft.com", comment = "maintainer from Nov 2017 to Jul 2019"),
   person("Andrie", "de Vries", role="aut", email="apdevries@gmail.com", comment = "main author and maintainer until Oct 2017"),
   person("Alan", "Weaver", role="aut", email="alanwe@microsoft.com", comment = "original author"),
   person("Omkar", "Aradhya", role="aut", email="omarad@microsoft.com", comment = "contributed ADLS code"),
